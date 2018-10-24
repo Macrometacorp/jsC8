@@ -1,33 +1,41 @@
 import { expect } from "chai";
-import { c8ql, Database } from "../jsC8";
+import { c8ql, Fabric } from "../jsC8";
 import { ArrayCursor } from "../cursor";
 import { C8Error } from "../error";
+import { getDCListString } from "../util/helper";
 
-describe("C8QL queries", function() {
-  // create database takes 11s in a standard cluster
+describe("C8QL queries", function () {
+  // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
   let name = `testdb_${Date.now()}`;
-  let db: Database;
+  let fabric: Fabric;
+  const testUrl = process.env.TEST_C8_URL || "http://localhost:8529";
+
+  let dcList: string;
   before(async () => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: Number(process.env.ARANGO_VERSION || 30400)
+    fabric = new Fabric({
+      url: testUrl,
+      c8Version: Number(process.env.C8_VERSION || 30400)
     });
-    await db.createDatabase(name);
-    db.useDatabase(name);
+
+    const response = await fabric.getAllEdgeLocations();
+    dcList = getDCListString(response);
+
+    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    fabric.useFabric(name);
   });
   after(async () => {
     try {
-      db.useDatabase("_system");
-      await db.dropDatabase(name);
+      fabric.useFabric("_system");
+      await fabric.dropFabric(name);
     } finally {
-      db.close();
+      fabric.close();
     }
   });
-  describe("database.query", () => {
+  describe("fabric.query", () => {
     it("returns a cursor for the query result", done => {
-      db.query("RETURN 23")
+      fabric.query("RETURN 23")
         .then(cursor => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           done();
@@ -35,7 +43,7 @@ describe("C8QL queries", function() {
         .catch(done);
     });
     it("throws an exception on error", done => {
-      db.query("FOR i IN no RETURN i")
+      fabric.query("FOR i IN no RETURN i")
         .then(() => {
           expect.fail();
           done();
@@ -49,7 +57,7 @@ describe("C8QL queries", function() {
     });
     it("throws an exception on error (async await)", async () => {
       try {
-        await db.query("FOR i IN no RETURN i");
+        await fabric.query("FOR i IN no RETURN i");
         expect.fail();
       } catch (err) {
         expect(err).is.instanceof(C8Error);
@@ -58,7 +66,7 @@ describe("C8QL queries", function() {
       }
     });
     it("supports bindVars", done => {
-      db.query("RETURN @x", { x: 5 })
+      fabric.query("RETURN @x", { x: 5 })
         .then(cursor => cursor.next())
         .then(value => {
           expect(value).to.equal(5);
@@ -67,7 +75,7 @@ describe("C8QL queries", function() {
         .catch(done);
     });
     it("supports options", done => {
-      db.query("FOR x IN 1..10 RETURN x", undefined, {
+      fabric.query("FOR x IN 1..10 RETURN x", undefined, {
         batchSize: 2,
         count: true
       })
@@ -79,7 +87,7 @@ describe("C8QL queries", function() {
         .catch(done);
     });
     it("supports AQB queries", done => {
-      db.query({ toC8QL: () => "RETURN 42" })
+      fabric.query({ toC8QL: () => "RETURN 42" })
         .then(cursor => cursor.next())
         .then(value => {
           expect(value).to.equal(42);
@@ -88,7 +96,7 @@ describe("C8QL queries", function() {
         .catch(done);
     });
     it("supports query objects", done => {
-      db.query({ query: "RETURN 1337", bindVars: {} })
+      fabric.query({ query: "RETURN 1337", bindVars: {} })
         .then(cursor => cursor.next())
         .then(value => {
           expect(value).to.equal(1337);
@@ -97,7 +105,7 @@ describe("C8QL queries", function() {
         .catch(done);
     });
     it("supports compact queries", done => {
-      db.query({ query: "RETURN @potato", bindVars: { potato: "tomato" } })
+      fabric.query({ query: "RETURN @potato", bindVars: { potato: "tomato" } })
         .then(cursor => cursor.next())
         .then(value => {
           expect(value).to.equal("tomato");
@@ -110,7 +118,7 @@ describe("C8QL queries", function() {
         query: "FOR x IN RANGE(1, @max) RETURN x",
         bindVars: { max: 10 }
       };
-      db.query(query, { batchSize: 2, count: true })
+      fabric.query(query, { batchSize: 2, count: true })
         .then(cursor => {
           expect(cursor.count).to.equal(10);
           expect((cursor as any)._hasMore).to.equal(true);
@@ -137,10 +145,10 @@ describe("C8QL queries", function() {
       let query = c8ql`
         A ${values[0]} B ${values[1]} C ${values[2]} D ${values[3]} E ${
         values[4]
-      } F ${values[5]}
+        } F ${values[5]}
         G ${values[6]} H ${values[7]} I ${values[8]} J ${values[9]} K ${
         values[10]
-      } EOF
+        } EOF
       `;
       expect(query.query).to.equal(`
         A @value0 B @value1 C @value2 D @value3 E @value4 F @value5
@@ -165,7 +173,7 @@ describe("C8QL queries", function() {
       expect(bindVarNames.map(k => query.bindVars[k])).to.eql(values);
     });
     it("correctly handles jsC8 collection parameters", () => {
-      let collection = db.collection("potato");
+      let collection = fabric.collection("potato");
       let query = c8ql`${collection}`;
       expect(query.query).to.equal("@@value0");
       expect(Object.keys(query.bindVars)).to.eql(["@value0"]);

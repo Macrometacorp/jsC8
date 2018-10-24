@@ -25,8 +25,8 @@ Retrieves the document with the given _documentHandle_ from the collection.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('my-docs');
+const fabric = new Fabric();
+const collection = fabric.collection('my-docs');
 
 try {
   const doc = await collection.document('some-key');
@@ -75,8 +75,8 @@ Checks whether the document with the given _documentHandle_ exists.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('my-docs');
+const fabric = new Fabric();
+const collection = fabric.collection('my-docs');
 
 const exists = await collection.documentExists('some-key');
 if (exists === false) {
@@ -136,8 +136,8 @@ For more information on the _opts_ object, see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('my-docs');
+const fabric = new Fabric();
+const collection = fabric.collection('my-docs');
 const data = {some: 'data'};
 const info = await collection.save(data);
 assert.equal(info._id, 'my-docs/' + info._key);
@@ -148,8 +148,8 @@ assert.equal(doc2.some, data.some);
 
 // -- or --
 
-const db = new Database();
-const collection = db.collection('my-docs');
+const fabric = new Fabric();
+const collection = fabric.collection('my-docs');
 const data = {some: 'data'};
 const opts = {returnNew: true};
 const doc = await collection.save(data, opts)

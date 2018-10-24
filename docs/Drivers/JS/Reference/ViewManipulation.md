@@ -12,8 +12,8 @@ Checks whether the view exists.
 **Examples**
 
 ```js
-const db = new Database();
-const view = db.c8SearchView('some-view');
+const fabric = new Fabric();
+const view = fabric.c8SearchView('some-view');
 const result = await view.exists();
 // result indicates whether the view exists
 ```
@@ -27,8 +27,8 @@ Retrieves general information about the view.
 **Examples**
 
 ```js
-const db = new Database();
-const view = db.c8SearchView('some-view');
+const fabric = new Fabric();
+const view = fabric.c8SearchView('some-view');
 const data = await view.get();
 // data contains general information about the view
 ```
@@ -42,8 +42,8 @@ Retrieves the view's properties.
 **Examples**
 
 ```js
-const db = new Database();
-const view = db.c8SearchView('some-view');
+const fabric = new Fabric();
+const view = fabric.c8SearchView('some-view');
 const data = await view.properties();
 // data contains the view's properties
 ```
@@ -65,8 +65,8 @@ then returns the server response.
 **Examples**
 
 ```js
-const db = new Database();
-const view = db.c8SearchView('potatoes');
+const fabric = new Fabric();
+const view = fabric.c8SearchView('potatoes');
 await view.create()
 // the c8Search view "potatoes" now exists
 ```
@@ -87,8 +87,8 @@ Updates the properties of the view.
 **Examples**
 
 ```js
-const db = new Database();
-const view = db.c8SearchView('some-view');
+const fabric = new Fabric();
+const view = fabric.c8SearchView('some-view');
 const result = await view.setProperties({ locale: "C" })
 assert.equal(result.locale, "C");
 ```
@@ -109,8 +109,8 @@ Replaces the properties of the view.
 **Examples**
 
 ```js
-const db = new Database();
-const view = db.c8SearchView('some-view');
+const fabric = new Fabric();
+const view = fabric.c8SearchView('some-view');
 const result = await view.replaceProperties({ locale: "C" })
 assert.equal(result.locale, "C");
 ```
@@ -125,8 +125,8 @@ name when the rename succeeds.
 **Examples**
 
 ```js
-const db = new Database();
-const view = db.c8SearchView('some-view');
+const fabric = new Fabric();
+const view = fabric.c8SearchView('some-view');
 const result = await view.rename('new-view-name')
 assert.equal(result.name, 'new-view-name');
 assert.equal(view.name, result.name);
@@ -137,13 +137,13 @@ assert.equal(view.name, result.name);
 
 `async view.drop(): Object`
 
-Deletes the view from the database.
+Deletes the view from the fabric.
 
 **Examples**
 
 ```js
-const db = new Database();
-const view = db.c8SearchView('some-view');
+const fabric = new Fabric();
+const view = fabric.c8SearchView('some-view');
 await view.drop();
 // the view "some-view" no longer exists
 ```

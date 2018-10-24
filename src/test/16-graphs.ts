@@ -1,15 +1,16 @@
 import { expect } from "chai";
-import { Database } from "../jsC8";
+import { Fabric } from "../jsC8";
 import { Graph } from "../graph";
+import { getDCListString } from "../util/helper";
 
 const range = (n: number): number[] => Array.from(Array(n).keys());
 
-function createCollections(db: Database) {
+function createCollections(fabric: Fabric) {
   let vertexCollectionNames = range(2).map(i => `vc_${Date.now()}_${i}`);
   let edgeCollectionNames = range(2).map(i => `ec_${Date.now()}_${i}`);
   return Promise.all([
-    ...vertexCollectionNames.map(name => db.collection(name).create()),
-    ...edgeCollectionNames.map(name => db.edgeCollection(name).create())
+    ...vertexCollectionNames.map(name => fabric.collection(name).create()),
+    ...edgeCollectionNames.map(name => fabric.edgeCollection(name).create())
   ]).then(() => [vertexCollectionNames, edgeCollectionNames]);
 }
 
@@ -27,34 +28,41 @@ function createGraph(
   });
 }
 
-describe("Graph API", function() {
-  // create database takes 11s in a standard cluster
+describe("Graph API", function () {
+  // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
-  let db: Database;
-  let name = `testdb_${Date.now()}`;
+  let fabric: Fabric;
+  const testUrl = process.env.TEST_C8_URL || "http://localhost:8529";
+
+  let dcList: string;
+  let name = `testfabric_${Date.now()}`;
   before(async () => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: Number(process.env.ARANGO_VERSION || 30400)
+    fabric = new Fabric({
+      url: testUrl,
+      c8Version: Number(process.env.C8_VERSION || 30400)
     });
-    await db.createDatabase(name);
-    db.useDatabase(name);
+
+    const response = await fabric.getAllEdgeLocations();
+    dcList = getDCListString(response);
+
+    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    fabric.useFabric(name);
   });
   after(async () => {
     try {
-      db.useDatabase("_system");
-      await db.dropDatabase(name);
+      fabric.useFabric("_system");
+      await fabric.dropFabric(name);
     } finally {
-      db.close();
+      fabric.close();
     }
   });
   describe("graph.get", () => {
     let graph: Graph;
     let collectionNames: string[];
     before(done => {
-      graph = db.graph(`g_${Date.now()}`);
-      createCollections(db)
+      graph = fabric.graph(`g_${Date.now()}`);
+      createCollections(fabric)
         .then(names => {
           collectionNames = names.reduce((a, b) => a.concat(b));
           return createGraph(graph, names[0], names[1]);
@@ -66,7 +74,7 @@ describe("Graph API", function() {
       graph
         .drop()
         .then(() =>
-          Promise.all(collectionNames.map(name => db.collection(name).drop()))
+          Promise.all(collectionNames.map(name => fabric.collection(name).drop()))
         )
         .then(() => void done())
         .catch(done);
@@ -85,7 +93,7 @@ describe("Graph API", function() {
     let edgeCollectionNames: string[];
     let vertexCollectionNames: string[];
     before(done => {
-      createCollections(db)
+      createCollections(fabric)
         .then(names => {
           [vertexCollectionNames, edgeCollectionNames] = names;
           done();
@@ -95,14 +103,14 @@ describe("Graph API", function() {
     after(done => {
       Promise.all(
         [...edgeCollectionNames, ...vertexCollectionNames].map(name =>
-          db.collection(name).drop()
+          fabric.collection(name).drop()
         )
       )
         .then(() => void done())
         .catch(done);
     });
     it("creates the graph", done => {
-      let graph = db.graph(`g_${Date.now()}`);
+      let graph = fabric.graph(`g_${Date.now()}`);
       graph
         .create({
           edgeDefinitions: edgeCollectionNames.map(name => ({
@@ -124,8 +132,8 @@ describe("Graph API", function() {
     let edgeCollectionNames: string[];
     let vertexCollectionNames: string[];
     beforeEach(done => {
-      graph = db.graph(`g_${Date.now()}`);
-      createCollections(db)
+      graph = fabric.graph(`g_${Date.now()}`);
+      createCollections(fabric)
         .then(names => {
           [vertexCollectionNames, edgeCollectionNames] = names;
           return createGraph(graph, names[0], names[1]);
@@ -136,7 +144,7 @@ describe("Graph API", function() {
     afterEach(done => {
       Promise.all(
         [...edgeCollectionNames, ...vertexCollectionNames].map(name =>
-          db
+          fabric
             .collection(name)
             .drop()
             .catch(() => null)
@@ -156,7 +164,7 @@ describe("Graph API", function() {
               () => undefined
             )
         )
-        .then(() => db.listCollections())
+        .then(() => fabric.listCollections())
         .then(collections => {
           expect(collections.map((c: any) => c.name)).to.include.members([
             ...edgeCollectionNames,
@@ -177,7 +185,7 @@ describe("Graph API", function() {
               () => undefined
             )
         )
-        .then(() => db.listCollections())
+        .then(() => fabric.listCollections())
         .then(collections => {
           expect(collections.map((c: any) => c.name)).not.to.include.members([
             ...edgeCollectionNames,

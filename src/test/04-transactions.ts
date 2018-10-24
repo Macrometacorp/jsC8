@@ -1,20 +1,20 @@
 import { expect } from "chai";
-import { Database } from "../jsC8";
+import { Fabric } from "../jsC8";
 
 describe("Transactions", () => {
-  let db: Database;
+  let fabric: Fabric;
   before(() => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: Number(process.env.ARANGO_VERSION || 30400)
+    fabric = new Fabric({
+      url: process.env.TEST_C8_URL  || "http://localhost:8529",
+      c8Version: Number(process.env.C8_VERSION || 30400)
     });
   });
   after(() => {
-    db.close();
+    fabric.close();
   });
-  describe("database.transaction", () => {
+  describe("fabric.transaction", () => {
     it("should execute a transaction and return the result", async () => {
-      const result = await db.transaction(
+      const result = await fabric.transaction(
         [],
         "function (params) {return params;}",
         "test"

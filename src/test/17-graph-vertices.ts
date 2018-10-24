@@ -1,17 +1,18 @@
 import { expect } from "chai";
-import { Database } from "../jsC8";
+import { Fabric } from "../jsC8";
 import { BaseCollection } from "../collection";
 import { C8Error } from "../error";
 import { Graph, GraphVertexCollection } from "../graph";
+import { getDCListString } from "../util/helper";
 
 const range = (n: number): number[] => Array.from(Array(n).keys());
 
-function createCollections(db: Database) {
+function createCollections(fabric: Fabric) {
   let vertexCollectionNames = range(2).map(i => `vc_${Date.now()}_${i}`);
   let edgeCollectionNames = range(2).map(i => `ec_${Date.now()}_${i}`);
   return Promise.all([
-    ...vertexCollectionNames.map(name => db.collection(name).create()),
-    ...edgeCollectionNames.map(name => db.edgeCollection(name).create())
+    ...vertexCollectionNames.map(name => fabric.collection(name).create()),
+    ...edgeCollectionNames.map(name => fabric.edgeCollection(name).create())
   ]).then(() => [vertexCollectionNames, edgeCollectionNames]);
 }
 
@@ -29,33 +30,40 @@ function createGraph(
   });
 }
 
-describe("Manipulating graph vertices", function() {
-  // create database takes 11s in a standard cluster
+describe("Manipulating graph vertices", function () {
+  // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
-  let db: Database;
-  let name = `testdb_${Date.now()}`;
+  let fabric: Fabric;
+  const testUrl = process.env.TEST_C8_URL || "http://localhost:8529";
+
+  let dcList: string;
+  let name = `testfabric_${Date.now()}`;
   let graph: Graph;
   let collectionNames: string[];
   before(async () => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: Number(process.env.ARANGO_VERSION || 30400)
+    fabric = new Fabric({
+      url: testUrl,
+      c8Version: Number(process.env.C8_VERSION || 30400)
     });
-    await db.createDatabase(name);
-    db.useDatabase(name);
+
+    const response = await fabric.getAllEdgeLocations();
+    dcList = getDCListString(response);
+
+    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    fabric.useFabric(name);
   });
   after(async () => {
     try {
-      db.useDatabase("_system");
-      await db.dropDatabase(name);
+      fabric.useFabric("_system");
+      await fabric.dropFabric(name);
     } finally {
-      db.close();
+      fabric.close();
     }
   });
   beforeEach(done => {
-    graph = db.graph(`g_${Date.now()}`);
-    createCollections(db)
+    graph = fabric.graph(`g_${Date.now()}`);
+    createCollections(fabric)
       .then(names => {
         collectionNames = names.reduce((a, b) => a.concat(b));
         return createGraph(graph, names[0], names[1]);
@@ -67,7 +75,7 @@ describe("Manipulating graph vertices", function() {
     graph
       .drop()
       .then(() =>
-        Promise.all(collectionNames.map(name => db.collection(name).drop()))
+        Promise.all(collectionNames.map(name => fabric.collection(name).drop()))
       )
       .then(() => void done())
       .catch(done);
@@ -85,7 +93,7 @@ describe("Manipulating graph vertices", function() {
   describe("graph.addVertexCollection", () => {
     let vertexCollection: BaseCollection;
     beforeEach(done => {
-      vertexCollection = db.collection(`xc_${Date.now()}`);
+      vertexCollection = fabric.collection(`xc_${Date.now()}`);
       vertexCollection
         .create()
         .then(() => void done())
@@ -110,7 +118,7 @@ describe("Manipulating graph vertices", function() {
   describe("graph.removeVertexCollection", () => {
     let vertexCollection: BaseCollection;
     beforeEach(done => {
-      vertexCollection = db.collection(`xc_${Date.now()}`);
+      vertexCollection = fabric.collection(`xc_${Date.now()}`);
       vertexCollection
         .create()
         .then(() => graph.addVertexCollection(vertexCollection.name))

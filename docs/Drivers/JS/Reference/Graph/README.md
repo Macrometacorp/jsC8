@@ -1,7 +1,7 @@
 # Graph API
 
 These functions implement the
-[HTTP API for manipulating graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Gharial/index.html).
+[HTTP API for manipulating graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Graph/index.html).
 
 ## graph.exists
 
@@ -12,8 +12,8 @@ Checks whether the graph exists.
 **Examples**
 
 ```js
-const db = new Database();
-const graph = db.graph('some-graph');
+const fabric = new Fabric();
+const graph = fabric.graph('some-graph');
 const result = await graph.exists();
 // result indicates whether the graph exists
 ```
@@ -27,8 +27,8 @@ Retrieves general information about the graph.
 **Examples**
 
 ```js
-const db = new Database();
-const graph = db.graph('some-graph');
+const fabric = new Fabric();
+const graph = fabric.graph('some-graph');
 const data = await graph.get();
 // data contains general information about the graph
 ```
@@ -45,13 +45,13 @@ the server response.
 - **properties**: `Object`
 
   For more information on the _properties_ object, see
-  [the HTTP API documentation for creating graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Gharial/Management.html).
+  [the HTTP API documentation for creating graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Graph/Management.html).
 
 **Examples**
 
 ```js
-const db = new Database();
-const graph = db.graph('some-graph');
+const fabric = new Fabric();
+const graph = fabric.graph('some-graph');
 const info = await graph.create({
   edgeDefinitions: [{
     collection: 'edges',
@@ -66,7 +66,7 @@ const info = await graph.create({
 
 `async graph.drop([dropCollections]): Object`
 
-Deletes the graph from the database.
+Deletes the graph from the fabric.
 
 **Arguments**
 
@@ -78,8 +78,8 @@ Deletes the graph from the database.
 **Examples**
 
 ```js
-const db = new Database();
-const graph = db.graph('some-graph');
+const fabric = new Fabric();
+const graph = fabric.graph('some-graph');
 await graph.drop();
 // the graph "some-graph" no longer exists
 ```

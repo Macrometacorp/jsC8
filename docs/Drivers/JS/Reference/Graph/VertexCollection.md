@@ -20,7 +20,7 @@ Deletes the vertex with the given _documentHandle_ from the collection.
 **Examples**
 
 ```js
-const graph = db.graph('some-graph');
+const graph = fabric.graph('some-graph');
 const collection = graph.vertexCollection('vertices');
 
 await collection.remove('some-key')
@@ -49,7 +49,7 @@ Checks whether the vertex with the given _documentHandle_ exists.
 **Examples**
 
 ```js
-const graph = db.graph('some-graph');
+const graph = fabric.graph('some-graph');
 const collection = graph.vertexCollection('vertices');
 
 const exists = await collection.documentExists('some-key');
@@ -82,7 +82,7 @@ Retrieves the vertex with the given _documentHandle_ from the collection.
 **Examples**
 
 ```js
-const graph = db.graph('some-graph');
+const graph = fabric.graph('some-graph');
 const collection = graph.vertexCollection('vertices');
 
 const doc = await collection.document('some-key');
@@ -120,8 +120,8 @@ Creates a new vertex with the given _data_.
 **Examples**
 
 ```js
-const db = new Database();
-const graph = db.graph('some-graph');
+const fabric = new Fabric();
+const graph = fabric.graph('some-graph');
 const collection = graph.vertexCollection('vertices');
 const doc = await collection.save({some: 'data'});
 assert.equal(doc._id, 'vertices/' + doc._key);

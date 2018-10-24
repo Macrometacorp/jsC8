@@ -3,23 +3,23 @@
 These functions implement the
 [HTTP API for managing C8QL user functions](https://docs.macrometa.io/jsC8/latest/HTTP/C8QLUserFunctions/index.html).
 
-## database.listFunctions
+## fabric.listFunctions
 
-`async database.listFunctions(): Array<Object>`
+`async fabric.listFunctions(): Array<Object>`
 
-Fetches a list of all C8QL user functions registered with the database.
+Fetches a list of all C8QL user functions registered with the fabric.
 
 **Examples**
 
 ```js
-const db = new Database();
-const functions = db.listFunctions();
+const fabric = new Fabric();
+const functions = fabric.listFunctions();
 // functions is a list of function descriptions
 ```
 
-## database.createFunction
+## fabric.createFunction
 
-`async database.createFunction(name, code): Object`
+`async fabric.createFunction(name, code): Object`
 
 Creates an C8QL user function with the given _name_ and _code_ if it does not
 already exist or replaces it if a function with the same name already existed.
@@ -38,15 +38,15 @@ already exist or replaces it if a function with the same name already existed.
 **Examples**
 
 ```js
-const db = new Database();
-await db.createFunction(
+const fabric = new Fabric();
+await fabric.createFunction(
   'ACME::ACCOUNTING::CALCULATE_VAT',
   String(function (price) {
     return price * 0.19;
   })
 );
 // Use the new function in an C8QL query with template handler:
-const cursor = await db.query(c8ql`
+const cursor = await fabric.query(c8ql`
   FOR product IN products
   RETURN MERGE(
     {vat: ACME::ACCOUNTING::CALCULATE_VAT(product.price)},
@@ -56,11 +56,11 @@ const cursor = await db.query(c8ql`
 // cursor is a cursor for the query result
 ```
 
-## database.dropFunction
+## fabric.dropFunction
 
-`async database.dropFunction(name, [group]): Object`
+`async fabric.dropFunction(name, [group]): Object`
 
-Deletes the C8QL user function with the given name from the database.
+Deletes the C8QL user function with the given name from the fabric.
 
 **Arguments**
 
@@ -76,7 +76,7 @@ Deletes the C8QL user function with the given name from the database.
 **Examples**
 
 ```js
-const db = new Database();
-await db.dropFunction('ACME::ACCOUNTING::CALCULATE_VAT');
+const fabric = new Fabric();
+await fabric.dropFunction('ACME::ACCOUNTING::CALCULATE_VAT');
 // the function no longer exists
 ```

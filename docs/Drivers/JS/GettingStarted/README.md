@@ -59,7 +59,7 @@ npm run dist
 For production use jsC8 can be installed with Yarn or NPM like any other dependency. Just use jsC8 like you would in your server code:
 
 ```js
-import { Database } from "jsC8";
+import { Fabric } from "jsC8";
 // -- or --
 var jsC8 = require("jsC8");
 ```
@@ -76,8 +76,8 @@ You can also use [unpkg](https://unpkg.com) during development:
 < !-- note the path includes the version number (e.g. 6.0.0) -- >
 <script src="https://unpkg.com/jsC8/lib/web.js"></script>
 <script>
-var db = new jsC8.Database();
-db.listCollections().then(function (collections) {
+var fabric = new jsC8.Fabric();
+fabric.listCollections().then(function (collections) {
   alert("Your collections: " + collections.map(function (collection) {
     return collection.name;
   }).join(", "));
@@ -101,12 +101,12 @@ When loading the browser build with a script tag make sure to load the polyfill 
 
 ```js
 // Modern JavaScript
-import { Database, c8ql } from "jsC8";
-const db = new Database();
+import { Fabric, c8ql } from "jsC8";
+const fabric = new Fabric();
 (async function() {
   const now = Date.now();
   try {
-    const cursor = await db.query(c8ql`
+    const cursor = await fabric.query(c8ql`
       RETURN ${now}
     `);
     const result = await cursor.next();
@@ -118,9 +118,9 @@ const db = new Database();
 
 // or plain old Node-style
 var jsC8 = require("jsC8");
-var db = new jsC8.Database();
+var fabric = new jsC8.Fabric();
 var now = Date.now();
-db.query({
+fabric.query({
   query: "RETURN @value",
   bindVars: { value: now }
 })
@@ -133,29 +133,29 @@ db.query({
     // ...
   });
 
-// Using different databases
-const db = new Database({
+// Using different fabrics
+const fabric = new Fabric({
   url: "http://localhost:8529"
 });
-db.useDatabase("pancakes");
-db.useBasicAuth("root", "");
-// The database can be swapped at any time
-db.useDatabase("waffles");
-db.useBasicAuth("admin", "maplesyrup");
+fabric.useFabric("pancakes");
+fabric.useBasicAuth("root", "");
+// The fabric can be swapped at any time
+fabric.useFabric("waffles");
+fabric.useBasicAuth("admin", "maplesyrup");
 
 // Using C8 behind a reverse proxy
-const db = new Database({
+const fabric = new Fabric({
   url: "http://myproxy.local:8000",
-  isAbsolute: true // don't automatically append database path to URL
+  isAbsolute: true // don't automatically append fabric path to URL
 });
 
 // Trigger C8 2.8 compatibility mode
-const db = new Database({
-  arangoVersion: 20800
+const fabric = new Fabric({
+  c8Version: 20800
 });
 ```
 
-For C8QL please check out the [c8ql template tag](../Reference/Database/Queries.md#c8ql) for writing parametrized
+For C8QL please check out the [c8ql template tag](../Reference/Fabric/Queries.md#c8ql) for writing parametrized
 C8QL queries without making your code vulnerable to injection attacks.
 
 ## Error responses
@@ -179,16 +179,16 @@ If the request failed at a network level or the connection was closed without re
 ```js
 // Using async/await
 try {
-  const info = await db.createDatabase("mydb");
-  // database created
+  const info = await fabric.createFabric("mydb");
+  // fabric created
 } catch (err) {
   console.error(err.stack);
 }
 
 // Using promises with arrow functions
-db.createDatabase("mydb").then(
+fabric.createFabric("mydb").then(
   info => {
-    // database created
+    // fabric created
   },
   err => console.error(err.stack)
 );

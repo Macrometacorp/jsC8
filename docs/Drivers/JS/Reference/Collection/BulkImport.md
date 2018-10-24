@@ -111,8 +111,8 @@ For more information on the _opts_ object, see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection("users");
+const fabric = new Fabric();
+const collection = fabric.collection("users");
 
 const result = await collection.import(
   [

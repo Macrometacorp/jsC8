@@ -16,8 +16,8 @@ with the given name for this graph.
 **Examples**
 
 ```js
-const db = new Database();
-const graph = db.graph("some-graph");
+const fabric = new Fabric();
+const graph = fabric.graph("some-graph");
 const collection = graph.vertexCollection("vertices");
 assert.equal(collection.name, "vertices");
 // collection is a GraphVertexCollection
@@ -38,7 +38,7 @@ Fetches all vertex collections from the graph and returns an array of collection
 **Examples**
 
 ```js
-const graph = db.graph('some-graph');
+const graph = fabric.graph('some-graph');
 
 const collections = await graph.listVertexCollections();
 // collections is an array of collection descriptions
@@ -55,7 +55,7 @@ const collections = await graph.listVertexCollections(true);
 
 `async graph.vertexCollections([excludeOrphans]): Array<Collection>`
 
-Fetches all vertex collections from the database and returns an array of _GraphVertexCollection_ instances for the collections.
+Fetches all vertex collections from the fabric and returns an array of _GraphVertexCollection_ instances for the collections.
 
 **Arguments**
 
@@ -66,7 +66,7 @@ Fetches all vertex collections from the database and returns an array of _GraphV
 **Examples**
 
 ```js
-const graph = db.graph('some-graph');
+const graph = fabric.graph('some-graph');
 
 const collections = await graph.vertexCollections()
 // collections is an array of GraphVertexCollection
@@ -95,8 +95,8 @@ collections.
 **Examples**
 
 ```js
-const db = new Database();
-const graph = db.graph('some-graph');
+const fabric = new Fabric();
+const graph = fabric.graph('some-graph');
 await graph.addVertexCollection('vertices');
 // the collection "vertices" has been added to the graph
 ```
@@ -115,13 +115,13 @@ Removes the vertex collection with the given _collectionName_ from the graph.
 
 * **dropCollection**: `boolean` (optional)
 
-  If set to `true`, the collection will also be deleted from the database.
+  If set to `true`, the collection will also be deleted from the fabric.
 
 **Examples**
 
 ```js
-const db = new Database();
-const graph = db.graph('some-graph');
+const fabric = new Fabric();
+const graph = fabric.graph('some-graph');
 await graph.removeVertexCollection('vertices')
 // collection "vertices" has been removed from the graph
 
@@ -129,6 +129,6 @@ await graph.removeVertexCollection('vertices')
 
 await graph.removeVertexCollection('vertices', true)
 // collection "vertices" has been removed from the graph
-// the collection has also been dropped from the database
+// the collection has also been dropped from the fabric
 // this may have been a bad idea
 ```

@@ -5,11 +5,11 @@ This function implements the
 
 For collection-specific queries see [simple queries](../Collection/SimpleQueries.md).
 
-## database.query
+## fabric.query
 
-`async database.query(query, [bindVars,] [opts]): Cursor`
+`async fabric.query(query, [bindVars,] [opts]): Cursor`
 
-Performs a database query using the given _query_ and _bindVars_, then returns a
+Performs a fabric query using the given _query_ and _bindVars_, then returns a
 [new _Cursor_ instance](../Cursor.md) for the result list.
 
 **Arguments**
@@ -39,11 +39,11 @@ used as the values of the respective arguments instead.
 **Examples**
 
 ```js
-const db = new Database();
+const fabric = new Fabric();
 const active = true;
 
 // Using the c8ql template tag
-const cursor = await db.query(c8ql`
+const cursor = await fabric.query(c8ql`
   FOR u IN _users
   FILTER u.authData.active == ${active}
   RETURN u.user
@@ -53,7 +53,7 @@ const cursor = await db.query(c8ql`
 // -- or --
 
 // Old-school JS with explicit bindVars:
-db.query(
+fabric.query(
   'FOR u IN _users ' +
   'FILTER u.authData.active == @active ' +
   'RETURN u.user',
@@ -68,19 +68,19 @@ db.query(
 `c8ql(strings, ...args): Object`
 
 Template string handler (aka template tag) for C8QL queries. Converts a template
-string to an object that can be passed to `database.query` by converting
+string to an object that can be passed to `fabric.query` by converting
 arguments to bind variables.
 
 **Note**: If you want to pass a collection name as a bind variable, you need to
 pass a _Collection_ instance (e.g. what you get by passing the collection name
-to `db.collection`) instead. If you see the error `"array expected as operand to
+to `fabric.collection`) instead. If you see the error `"array expected as operand to
 FOR loop"`, you're likely passing a collection name instead of a collection
 instance.
 
 **Examples**
 
 ```js
-const userCollection = db.collection("_users");
+const userCollection = fabric.collection("_users");
 const role = "admin";
 
 const query = c8ql`

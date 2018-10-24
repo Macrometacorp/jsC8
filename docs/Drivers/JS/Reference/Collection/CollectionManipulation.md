@@ -20,14 +20,14 @@ then returns the server response.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('potatoes');
+const fabric = new Fabric();
+const collection = fabric.collection('potatoes');
 await collection.create()
 // the document collection "potatoes" now exists
 
 // -- or --
 
-const collection = db.edgeCollection('friends');
+const collection = fabric.edgeCollection('friends');
 await collection.create({
   waitForSync: true // always sync document changes to disk
 });
@@ -50,8 +50,8 @@ Tells the server to load the collection into memory.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 await collection.load(false)
 // the collection has now been loaded into memory
 ```
@@ -65,8 +65,8 @@ Tells the server to remove the collection from memory.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 await collection.unload()
 // the collection has now been unloaded from memory
 ```
@@ -87,8 +87,8 @@ Replaces the properties of the collection.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 const result = await collection.setProperties({waitForSync: true})
 assert.equal(result.waitForSync, true);
 // the collection will now wait for data being written to disk
@@ -105,8 +105,8 @@ name when the rename succeeds.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 const result = await collection.rename('new-collection-name')
 assert.equal(result.name, 'new-collection-name');
 assert.equal(collection.name, result.name);
@@ -122,8 +122,8 @@ Rotates the journal of the collection.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 const data = await collection.rotate();
 // data.result will be true if rotation succeeded
 ```
@@ -132,13 +132,13 @@ const data = await collection.rotate();
 
 `async collection.truncate(): Object`
 
-Deletes **all documents** in the collection in the database.
+Deletes **all documents** in the collection in the fabric.
 
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 await collection.truncate();
 // the collection "some-collection" is now empty
 ```
@@ -147,7 +147,7 @@ await collection.truncate();
 
 `async collection.drop([properties]): Object`
 
-Deletes the collection from the database.
+Deletes the collection from the fabric.
 
 **Arguments**
 
@@ -166,8 +166,8 @@ Deletes the collection from the database.
   **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 await collection.drop();
 // the collection "some-collection" no longer exists
 ```

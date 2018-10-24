@@ -1,35 +1,43 @@
 import { expect } from "chai";
-import { Database } from "../jsC8";
+import { Fabric } from "../jsC8";
 import { DocumentCollection } from "../collection";
+import { getDCListString } from "../util/helper";
 
-const ARANGO_VERSION = Number(process.env.ARANGO_VERSION || 30400);
-const it3x = ARANGO_VERSION >= 30000 ? it : it.skip;
+const C8_VERSION = Number(process.env.C8_VERSION || 30400);
+const it3x = C8_VERSION >= 30000 ? it : it.skip;
 
-describe("DocumentCollection API", function() {
-  // create database takes 11s in a standard cluster
+describe("DocumentCollection API", function () {
+  // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
   let name = `testdb_${Date.now()}`;
-  let db: Database;
+  let fabric: Fabric;
+  const testUrl = process.env.TEST_C8_URL || "http://localhost:8529";
+
+  let dcList: string;
   let collection: DocumentCollection;
   before(async () => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: ARANGO_VERSION
+    fabric = new Fabric({
+      url: testUrl,
+      c8Version: C8_VERSION
     });
-    await db.createDatabase(name);
-    db.useDatabase(name);
+
+    const response = await fabric.getAllEdgeLocations();
+    dcList = getDCListString(response);
+
+    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    fabric.useFabric(name);
   });
   after(async () => {
     try {
-      db.useDatabase("_system");
-      await db.dropDatabase(name);
+      fabric.useFabric("_system");
+      await fabric.dropFabric(name);
     } finally {
-      db.close();
+      fabric.close();
     }
   });
   beforeEach(done => {
-    collection = db.collection(`c_${Date.now()}`);
+    collection = fabric.collection(`c_${Date.now()}`);
     collection
       .create()
       .then(() => void done())
@@ -75,7 +83,7 @@ describe("DocumentCollection API", function() {
       expect(exists).to.equal(false);
     });
     it("returns false if the collection does not exist", async () => {
-      const exists = await db
+      const exists = await fabric
         .collection("does-not-exist")
         .documentExists("lol");
       expect(exists).to.equal(false);

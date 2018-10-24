@@ -65,7 +65,7 @@ export abstract class BaseCollection implements C8Collection {
     this.name = name;
     this._idPrefix = `${this.name}/`;
     this._connection = connection;
-    if (this._connection.arangoMajor >= 3) {
+    if (this._connection.c8Major >= 3) {
       this.first = undefined!;
       this.last = undefined!;
       this.createCapConstraint = undefined!;
@@ -107,7 +107,7 @@ export abstract class BaseCollection implements C8Collection {
 
   protected _get(path: string, qs?: any) {
     return this._connection.request(
-      { path: `/_api/collection/${this.name}/${path}`, qs },
+      { path: `/collection/${this.name}/${path}`, qs },
       res => res.body
     );
   }
@@ -116,7 +116,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/_api/collection/${this.name}/${path}`,
+        path: `/collection/${this.name}/${path}`,
         body
       },
       res => res.body
@@ -125,7 +125,7 @@ export abstract class BaseCollection implements C8Collection {
 
   get() {
     return this._connection.request(
-      { path: `/_api/collection/${this.name}` },
+      { path: `/collection/${this.name}` },
       res => res.body
     );
   }
@@ -146,7 +146,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/collection",
+        path: "/collection",
         body: {
           ...properties,
           name: this.name,
@@ -196,7 +196,7 @@ export abstract class BaseCollection implements C8Collection {
     const result = await this._connection.request(
       {
         method: "PUT",
-        path: `/_api/collection/${this.name}/rename`,
+        path: `/collection/${this.name}/rename`,
         body: { name }
       },
       res => res.body
@@ -218,7 +218,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/_api/collection/${this.name}`,
+        path: `/collection/${this.name}`,
         qs: opts
       },
       res => res.body
@@ -230,7 +230,7 @@ export abstract class BaseCollection implements C8Collection {
       .request(
         {
           method: "HEAD",
-          path: `/_api/${this._documentPath(documentHandle)}`
+          path: `/${this._documentPath(documentHandle)}`
         },
         () => true
       )
@@ -247,7 +247,7 @@ export abstract class BaseCollection implements C8Collection {
     graceful: boolean = false
   ): Promise<any> {
     const result = this._connection.request(
-      { path: `/_api/${this._documentPath(documentHandle)}` },
+      { path: `/${this._documentPath(documentHandle)}` },
       res => res.body
     );
     if (!graceful) return result;
@@ -264,7 +264,7 @@ export abstract class BaseCollection implements C8Collection {
     if (typeof opts === "string") {
       opts = { rev: opts };
     }
-    if (opts.rev && this._connection.arangoMajor >= 3) {
+    if (opts.rev && this._connection.c8Major >= 3) {
       let rev: string;
       ({ rev, ...opts } = opts);
       headers["if-match"] = rev;
@@ -272,7 +272,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/_api/${this._documentPath(documentHandle)}`,
+        path: `/${this._documentPath(documentHandle)}`,
         body: newValue,
         qs: opts,
         headers
@@ -286,7 +286,7 @@ export abstract class BaseCollection implements C8Collection {
     if (typeof opts === "string") {
       opts = { rev: opts };
     }
-    if (opts.rev && this._connection.arangoMajor >= 3) {
+    if (opts.rev && this._connection.c8Major >= 3) {
       let rev: string;
       ({ rev, ...opts } = opts);
       headers["if-match"] = rev;
@@ -294,7 +294,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PATCH",
-        path: `/_api/${this._documentPath(documentHandle)}`,
+        path: `/${this._documentPath(documentHandle)}`,
         body: newValue,
         qs: opts,
         headers
@@ -307,7 +307,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PATCH",
-        path: `/_api/document/${this.name}`,
+        path: `/document/${this.name}`,
         body: newValues,
         qs: opts
       },
@@ -320,7 +320,7 @@ export abstract class BaseCollection implements C8Collection {
     if (typeof opts === "string") {
       opts = { rev: opts };
     }
-    if (opts.rev && this._connection.arangoMajor >= 3) {
+    if (opts.rev && this._connection.c8Major >= 3) {
       let rev: string;
       ({ rev, ...opts } = opts);
       headers["if-match"] = rev;
@@ -328,7 +328,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/_api/${this._documentPath(documentHandle)}`,
+        path: `/${this._documentPath(documentHandle)}`,
         qs: opts,
         headers
       },
@@ -337,10 +337,10 @@ export abstract class BaseCollection implements C8Collection {
   }
 
   list(type: string = "id") {
-    if (this._connection.arangoMajor <= 2) {
+    if (this._connection.c8Major <= 2) {
       return this._connection.request(
         {
-          path: "/_api/document",
+          path: "/document",
           qs: { type, collection: this.name }
         },
         res => res.body.documents
@@ -350,7 +350,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/all-keys",
+        path: "/simple/all-keys",
         body: { type, collection: this.name }
       },
       res => res.body.result
@@ -361,7 +361,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/all",
+        path: "/simple/all",
         body: {
           ...opts,
           collection: this.name
@@ -375,7 +375,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/any",
+        path: "/simple/any",
         body: { collection: this.name }
       },
       res => res.body.document
@@ -389,7 +389,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/first",
+        path: "/simple/first",
         body: {
           ...opts,
           collection: this.name
@@ -406,7 +406,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/last",
+        path: "/simple/last",
         body: {
           ...opts,
           collection: this.name
@@ -420,7 +420,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/by-example",
+        path: "/simple/by-example",
         body: {
           ...opts,
           example,
@@ -435,7 +435,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/first-example",
+        path: "/simple/first-example",
         body: {
           example,
           collection: this.name
@@ -449,7 +449,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/remove-by-example",
+        path: "/simple/remove-by-example",
         body: {
           ...opts,
           example,
@@ -464,7 +464,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/replace-by-example",
+        path: "/simple/replace-by-example",
         body: {
           ...opts,
           example,
@@ -480,7 +480,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/update-by-example",
+        path: "/simple/update-by-example",
         body: {
           ...opts,
           example,
@@ -496,7 +496,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/lookup-by-keys",
+        path: "/simple/lookup-by-keys",
         body: {
           keys,
           collection: this.name
@@ -510,7 +510,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/remove-by-keys",
+        path: "/simple/remove-by-keys",
         body: {
           options,
           keys,
@@ -531,7 +531,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/import",
+        path: "/import",
         body: data,
         isBinary: true,
         qs: {
@@ -547,7 +547,7 @@ export abstract class BaseCollection implements C8Collection {
   indexes() {
     return this._connection.request(
       {
-        path: "/_api/index",
+        path: "/index",
         qs: { collection: this.name }
       },
       res => res.body.indexes
@@ -556,7 +556,7 @@ export abstract class BaseCollection implements C8Collection {
 
   index(indexHandle: IndexHandle) {
     return this._connection.request(
-      { path: `/_api/index/${this._indexHandle(indexHandle)}` },
+      { path: `/index/${this._indexHandle(indexHandle)}` },
       res => res.body
     );
   }
@@ -565,7 +565,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/index",
+        path: "/index",
         body: details,
         qs: { collection: this.name }
       },
@@ -577,7 +577,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/_api/index/${this._indexHandle(indexHandle)}`
+        path: `/index/${this._indexHandle(indexHandle)}`
       },
       res => res.body
     );
@@ -590,7 +590,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/index",
+        path: "/index",
         body: { ...opts, type: "cap" },
         qs: { collection: this.name }
       },
@@ -608,7 +608,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/index",
+        path: "/index",
         body: { unique: false, ...opts, type: "hash", fields: fields },
         qs: { collection: this.name }
       },
@@ -626,7 +626,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/index",
+        path: "/index",
         body: { unique: false, ...opts, type: "skiplist", fields: fields },
         qs: { collection: this.name }
       },
@@ -644,7 +644,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/index",
+        path: "/index",
         body: { unique: false, ...opts, type: "persistent", fields: fields },
         qs: { collection: this.name }
       },
@@ -659,7 +659,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/index",
+        path: "/index",
         body: { ...opts, fields, type: "geo" },
         qs: { collection: this.name }
       },
@@ -674,7 +674,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/index",
+        path: "/index",
         body: { fields, minLength, type: "fulltext" },
         qs: { collection: this.name }
       },
@@ -687,7 +687,7 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: "/_api/simple/fulltext",
+        path: "/simple/fulltext",
         body: {
           ...opts,
           attribute,
@@ -719,11 +719,11 @@ export class DocumentCollection extends BaseCollection {
       opts = { returnNew: opts };
     }
 
-    if (this._connection.arangoMajor <= 2) {
+    if (this._connection.c8Major <= 2) {
       return this._connection.request(
         {
           method: "POST",
-          path: "/_api/document",
+          path: "/document",
           body: data,
           qs: {
             ...opts,
@@ -737,7 +737,7 @@ export class DocumentCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "POST",
-        path: `/_api/document/${this.name}`,
+        path: `/document/${this.name}`,
         body: data,
         qs: opts
       },
@@ -754,7 +754,7 @@ export class EdgeCollection extends BaseCollection {
   }
 
   protected _documentPath(documentHandle: DocumentHandle) {
-    if (this._connection.arangoMajor < 3) {
+    if (this._connection.c8Major < 3) {
       return `edge/${this._documentHandle(documentHandle)}`;
     }
     return `document/${this._documentHandle(documentHandle)}`;
@@ -789,11 +789,11 @@ export class EdgeCollection extends BaseCollection {
     if (typeof opts === "boolean") {
       opts = { returnNew: opts };
     }
-    if (this._connection.arangoMajor <= 2) {
+    if (this._connection.c8Major <= 2) {
       return this._connection.request(
         {
           method: "POST",
-          path: "/_api/edge",
+          path: "/edge",
           body: data,
           qs: {
             ...opts,
@@ -809,7 +809,7 @@ export class EdgeCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/document",
+        path: "/document",
         body: data,
         qs: {
           ...opts,
@@ -823,7 +823,7 @@ export class EdgeCollection extends BaseCollection {
   protected _edges(documentHandle: DocumentHandle, direction: any) {
     return this._connection.request(
       {
-        path: `/_api/edges/${this.name}`,
+        path: `/edges/${this.name}`,
         qs: {
           direction,
           vertex: this._documentHandle(documentHandle)
@@ -849,7 +849,7 @@ export class EdgeCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/traversal",
+        path: "/traversal",
         body: {
           ...opts,
           startVertex,

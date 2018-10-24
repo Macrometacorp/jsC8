@@ -25,12 +25,12 @@ npm run dist
 
 ```js
 // Modern JavaScript
-import { Database, c8ql } from "jsC8";
-const db = new Database();
+import { Fabric, c8ql } from "jsC8";
+const fabric = new Fabric();
 (async function() {
   const now = Date.now();
   try {
-    const cursor = await db.query(c8ql`RETURN ${now}`);
+    const cursor = await fabric.query(c8ql`RETURN ${now}`);
     const result = await cursor.next();
     // ...
   } catch (err) {
@@ -40,9 +40,9 @@ const db = new Database();
 
 // or plain old Node-style
 var jsC8 = require("jsC8");
-var db = new jsC8.Database();
+var fabric = new jsC8.Fabric();
 var now = Date.now();
-db.query({
+fabric.query({
   query: "RETURN @value",
   bindVars: { value: now }
 })
@@ -72,29 +72,29 @@ npm test
 
 By default the tests will be run against a server listening on
 `http://localhost:8529` (using username `root` with no password). To
-override this, you can set the environment variable `TEST_C8DB_URL` to
+override this, you can set the environment variable `TEST_C8_URL` to
 something different:
 
 ```sh
-TEST_C8DB_URL=http://myserver.local:8530 yarn test
+TEST_C8_URL=http://myserver.local:8530 yarn test
 # - or -
-TEST_C8DB_URL=http://myserver.local:8530 npm test
+TEST_C8_URL=http://myserver.local:8530 npm test
 ```
 
 To run the resilience/failover tests you need to set the environment variables
-`RESILIENCE_C8_BASEPATH` (to use a local build of C8DB) or
+`RESILIENCE_C8_BASEPATH` (to use a local build of C8) or
 `RESILIENCE_DOCKER_IMAGE` (to use a docker image by name):
 
 ```sh
-RESILIENCE_C8_BASEPATH=../c8db yarn test
+RESILIENCE_C8_BASEPATH=../c8 yarn test
 # - or -
-RESILIENCE_C8_BASEPATH=../c8db npm test
+RESILIENCE_C8_BASEPATH=../c8 npm test
 ```
 
 This runs only the resilience/failover tests, without running any other tests.
 
 Note that these tests are generally a lot slower than the regular test suite
-because they involve shutting down and restarting individual C8DB server
+because they involve shutting down and restarting individual C8 server
 instances.
 
 ## License
