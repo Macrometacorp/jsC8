@@ -26,9 +26,9 @@ If you are getting weird errors or functions seem to be missing, make sure you a
 
 ```sh
 # for version 4.x.x
-yarn add jsC8@4
+yarn add jsc8
 # - or -
-npm install --save jsC8@4
+npm install --save jsc8
 ```
 
 You can find the documentation for each version by clicking on the corresponding
@@ -40,9 +40,9 @@ date on the left in
 ### With Yarn or NPM
 
 ```sh
-yarn add jsC8
+yarn add jsc8
 # - or -
-npm install --save jsC8
+npm install --save jsc8
 ```
 
 ### From source

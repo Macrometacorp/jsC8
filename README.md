@@ -7,9 +7,9 @@ The official C8 low-level JavaScript client.
 ### With Yarn or NPM
 
 ```sh
-yarn add jsC8
+yarn add jsc8
 ## - or -
-npm install --save jsC8
+npm install --save jsc8
 ```
 
 ### From source
@@ -25,7 +25,7 @@ npm run dist
 
 ```js
 // Modern JavaScript
-import { Fabric, c8ql } from "jsC8";
+import { Fabric, c8ql } from "jsc8";
 const fabric = new Fabric();
 (async function() {
   const now = Date.now();
@@ -39,7 +39,7 @@ const fabric = new Fabric();
 })();
 
 // or plain old Node-style
-var jsC8 = require("jsC8");
+var jsC8 = require("jsc8");
 var fabric = new jsC8.Fabric();
 var now = Date.now();
 fabric.query({
