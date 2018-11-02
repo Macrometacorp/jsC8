@@ -1,22 +1,30 @@
 import { expect } from "chai";
-import { Database } from "../jsC8";
+import { Fabric } from "../jsC8";
 import { GraphEdgeCollection } from "../graph";
+import { getDCListString } from "../util/helper";
 
-describe("GraphEdgeCollection API", function() {
-  // create database takes 11s in a standard cluster
+describe("GraphEdgeCollection API", function () {
+  // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
   const dbName = `testdb_${Date.now()}`;
-  let db: Database;
+  let fabric: Fabric;
+  const testUrl = process.env.TEST_C8_URL || "http://localhost:8529";
+
+  let dcList: string;
   let collection: GraphEdgeCollection;
   before(async () => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: Number(process.env.ARANGO_VERSION || 30400)
+    fabric = new Fabric({
+      url: testUrl,
+      c8Version: Number(process.env.C8_VERSION || 30400)
     });
-    await db.createDatabase(dbName);
-    db.useDatabase(dbName);
-    const graph = db.graph(`testgraph_${Date.now()}`);
+
+    const response = await fabric.getAllEdgeLocations();
+    dcList = getDCListString(response);
+
+    await fabric.createFabric(dbName, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    fabric.useFabric(dbName);
+    const graph = fabric.graph(`testgraph_${Date.now()}`);
     await graph.create({
       edgeDefinitions: [
         {
@@ -39,10 +47,10 @@ describe("GraphEdgeCollection API", function() {
   });
   after(async () => {
     try {
-      db.useDatabase("_system");
-      await db.dropDatabase(dbName);
+      fabric.useFabric("_system");
+      await fabric.dropFabric(dbName);
     } finally {
-      db.close();
+      fabric.close();
     }
   });
   beforeEach(done => {

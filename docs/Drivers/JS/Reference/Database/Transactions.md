@@ -3,9 +3,9 @@
 This function implements the
 [HTTP API for transactions](https://docs.macrometa.io/jsC8/latest/HTTP/Transaction/index.html).
 
-## database.transaction
+## fabric.transaction
 
-`async database.transaction(collections, action, [params, [options]]):
+`async fabric.transaction(collections, action, [params, [options]]):
 Object`
 
 Performs a server-side transaction and returns its return value.
@@ -30,7 +30,7 @@ Performs a server-side transaction and returns its return value.
 
   A string evaluating to a JavaScript function to be executed on the server.
 
-  **Note**: For accessing the database from within C8, see
+  **Note**: For accessing the fabric from within C8, see
   [the documentation for the `@c8` module in C8](https://docs.macrometa.io/jsC8/latest/Manual/Appendix/JavaScriptModules/C8.html).
 
 * **params**: `Object` (optional)
@@ -44,7 +44,7 @@ Performs a server-side transaction and returns its return value.
 
   * **lockTimeout**: `number` (optional)
 
-    Determines how long the database will wait while attempting to gain locks on
+    Determines how long the fabric will wait while attempting to gain locks on
     collections used by the transaction before timing out.
 
   * **waitForSync**: `boolean` (optional)
@@ -79,18 +79,18 @@ For more information on transactions, see
 **Examples**
 
 ```js
-const db = new Database();
+const fabric = new Fabric();
 const action = String(function (params) {
   // This code will be executed inside C8!
-  const db = require('@c8').db;
-  return db._query(c8ql`
+  const fabric = require('@c8').fabric;
+  return fabric._query(c8ql`
     FOR user IN _users
     FILTER user.age > ${params.age}
     RETURN u.user
   `).toArray();
 });
 
-const result = await db.transaction(
+const result = await fabric.transaction(
   {read: '_users'},
   action,
   {age: 12}

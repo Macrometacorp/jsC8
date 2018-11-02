@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { Database } from "../jsC8";
+import { Fabric } from "../jsC8";
 import { ArrayCursor } from "../cursor";
 
 const c8qlQuery = "FOR i In 0..10 RETURN i";
@@ -14,19 +14,19 @@ function sleep(ms: number) {
 }
 
 describe("Cursor API", () => {
-  let db: Database;
+  let fabric: Fabric;
   let cursor: ArrayCursor;
   before(() => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: Number(process.env.ARANGO_VERSION || 30400)
+    fabric = new Fabric({
+      url: process.env.TEST_C8_URL  || "http://localhost:8529",
+      c8Version: Number(process.env.C8_VERSION || 30400)
     });
   });
   after(() => {
-    db.close();
+    fabric.close();
   });
   beforeEach(async () => {
-    cursor = await db.query(c8qlQuery);
+    cursor = await fabric.query(c8qlQuery);
   });
   describe("cursor.all", () => {
     it("returns an Array of all results", done => {
@@ -75,7 +75,7 @@ describe("Cursor API", () => {
         .catch(done);
     });
     it("returns true after first batch is consumed", done => {
-      db.query(c8qlQuery, {}, { batchSize: 1 })
+      fabric.query(c8qlQuery, {}, { batchSize: 1 })
         .then(cursor => {
           expect((cursor as any)._result.length).to.equal(1);
           cursor.next();
@@ -86,7 +86,7 @@ describe("Cursor API", () => {
         .catch(done);
     });
     it("returns false after last batch is consumed", done => {
-      db.query("FOR i In 0..1 RETURN i", {}, { batchSize: 1 })
+      fabric.query("FOR i In 0..1 RETURN i", {}, { batchSize: 1 })
         .then(cursor => {
           expect(cursor.hasNext()).to.equal(true);
           expect((cursor as any)._result.length).to.equal(1);
@@ -108,7 +108,7 @@ describe("Cursor API", () => {
         .catch(done);
     });
     it("returns false after last result is consumed", done => {
-      db.query("FOR i In 0..1 RETURN i")
+      fabric.query("FOR i In 0..1 RETURN i")
         .then(cursor => {
           expect(cursor.hasNext()).to.equal(true);
           expect((cursor as any)._result.length).to.equal(2);
@@ -130,7 +130,7 @@ describe("Cursor API", () => {
         .catch(done);
     });
     it.skip("returns 404 after timeout", done => {
-      db.query("FOR i In 0..1 RETURN i", {}, { batchSize: 1, ttl: 1 })
+      fabric.query("FOR i In 0..1 RETURN i", {}, { batchSize: 1, ttl: 1 })
         .then(cursor => {
           expect(cursor.hasNext()).to.equal(true);
           expect((cursor as any)._result.length).to.equal(1);
@@ -166,7 +166,7 @@ describe("Cursor API", () => {
           })
           .catch(done);
       };
-      db.query(`FOR i In 1..${EXPECTED_LENGTH} RETURN i`)
+      fabric.query(`FOR i In 1..${EXPECTED_LENGTH} RETURN i`)
         .then(cursor => loadMore(cursor, 0))
         .catch(done);
     });

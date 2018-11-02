@@ -1,39 +1,39 @@
 # Accessing graphs
 
 These functions implement the
-[HTTP API for accessing general graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Gharial/index.html).
+[HTTP API for accessing general graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Graph/index.html).
 
-## database.graph
+## fabric.graph
 
-`database.graph(graphName): Graph`
+`fabric.graph(graphName): Graph`
 
 Returns a _Graph_ instance representing the graph with the given graph name.
 
-## database.listGraphs
+## fabric.listGraphs
 
-`async database.listGraphs(): Array<Object>`
+`async fabric.listGraphs(): Array<Object>`
 
-Fetches all graphs from the database and returns an array of graph descriptions.
+Fetches all graphs from the fabric and returns an array of graph descriptions.
 
 **Examples**
 
 ```js
-const db = new Database();
-const graphs = await db.listGraphs();
+const fabric = new Fabric();
+const graphs = await fabric.listGraphs();
 // graphs is an array of graph descriptions
 ```
 
-## database.graphs
+## fabric.graphs
 
-`async database.graphs(): Array<Graph>`
+`async fabric.graphs(): Array<Graph>`
 
-Fetches all graphs from the database and returns an array of _Graph_ instances
+Fetches all graphs from the fabric and returns an array of _Graph_ instances
 for the graphs.
 
 **Examples**
 
 ```js
-const db = new Database();
-const graphs = await db.graphs();
+const fabric = new Fabric();
+const graphs = await fabric.graphs();
 // graphs is an array of Graph instances
 ```

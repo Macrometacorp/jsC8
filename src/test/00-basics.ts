@@ -1,26 +1,26 @@
 import { expect } from "chai";
 import * as http from "http";
 import * as https from "https";
-import jsC8, { Database } from "../jsC8";
+import jsC8, { Fabric } from "../jsC8";
 import { Connection } from "../connection";
 
-describe("Creating a Database", () => {
+describe("Creating a Fabric", () => {
   describe("using the factory", () => {
-    const db = jsC8({ arangoVersion: 54321 });
-    it("returns a Database instance", () => {
-      expect(db).to.be.an.instanceof(Database);
+    const fabric = jsC8({ c8Version: 54321 });
+    it("returns a Fabric instance", () => {
+      expect(fabric).to.be.an.instanceof(Fabric);
     });
     it("passes any configs to the connection", () => {
-      expect((db as any)._connection).to.have.property("_arangoVersion", 54321);
+      expect((fabric as any)._connection).to.have.property("_c8Version", 54321);
     });
   });
   describe("using the constructor", () => {
-    const db = new Database({ arangoVersion: 43210 });
-    it("returns a Database instance", () => {
-      expect(db).to.be.an.instanceof(Database);
+    const fabric = new Fabric({ c8Version: 43210 });
+    it("returns a Fabric instance", () => {
+      expect(fabric).to.be.an.instanceof(Fabric);
     });
     it("passes any configs to the connection", () => {
-      expect((db as any)._connection).to.have.property("_arangoVersion", 43210);
+      expect((fabric as any)._connection).to.have.property("_c8Version", 43210);
     });
   });
 });
@@ -48,19 +48,19 @@ describe("Configuring the driver", () => {
           done();
         }
       ];
-      conn.request({ headers: {} }, () => {});
+      conn.request({ headers: {} }, () => { });
     });
   });
-  describe("with an arangoVersion", () => {
-    it("sets the x-arango-version header", done => {
-      const conn = new Connection({ arangoVersion: 99999 });
+  describe("with an c8Version", () => {
+    it("sets the x-c8-version header", done => {
+      const conn = new Connection({ c8Version: 99999 });
       (conn as any)._hosts = [
         ({ headers }: any) => {
-          expect(headers).to.have.property("x-arango-version", "99999");
+          expect(headers).to.have.property("x-c8-version", "99999");
           done();
         }
       ];
-      conn.request({ headers: {} }, () => {});
+      conn.request({ headers: {} }, () => { });
     });
   });
   describe("with agentOptions", () => {
@@ -74,7 +74,7 @@ describe("Configuring the driver", () => {
     });
     before(() => {
       let Agent = (ptcl: any) =>
-        function(opts: any) {
+        function (opts: any) {
           protocol = ptcl;
           options = opts;
           return () => null;
@@ -133,28 +133,28 @@ describe("Configuring the driver", () => {
       let agent = Symbol("agent");
       let conn;
       conn = new Connection({ agent }); // default: http
-      conn.request({ headers: {} }, () => {});
+      conn.request({ headers: {} }, () => { });
       expect(options).to.have.property("agent", agent);
       agent = Symbol("agent");
       conn = new Connection({ agent, url: "https://localhost:8529" });
-      conn.request({ headers: {} }, () => {});
+      conn.request({ headers: {} }, () => { });
       expect(options).to.have.property("agent", agent);
       agent = Symbol("agent");
       conn = new Connection({ agent, url: "http://localhost:8529" });
-      conn.request({ headers: {} }, () => {});
+      conn.request({ headers: {} }, () => { });
       expect(options).to.have.property("agent", agent);
     });
     it("uses the request function for the protocol", () => {
       const agent = Symbol("agent");
       let conn;
       conn = new Connection({ agent }); // default: http
-      conn.request({ headers: {} }, () => {});
+      conn.request({ headers: {} }, () => { });
       expect(protocol).to.equal("http");
       conn = new Connection({ agent, url: "https://localhost:8529" });
-      conn.request({ headers: {} }, () => {});
+      conn.request({ headers: {} }, () => { });
       expect(protocol).to.equal("https");
       conn = new Connection({ agent, url: "http://localhost:8529" });
-      conn.request({ headers: {} }, () => {});
+      conn.request({ headers: {} }, () => { });
       expect(protocol).to.equal("http");
     });
     it("calls Agent#destroy when the connection is closed", () => {

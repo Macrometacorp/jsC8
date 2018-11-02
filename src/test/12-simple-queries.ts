@@ -1,38 +1,46 @@
 import { expect } from "chai";
-import { Database } from "../jsC8";
+import { Fabric } from "../jsC8";
 import { DocumentCollection } from "../collection";
 import { ArrayCursor } from "../cursor";
+import { getDCListString } from "../util/helper";
 
 const range = (n: number): number[] => Array.from(Array(n).keys());
 const alpha = (i: number): string => String.fromCharCode("a".charCodeAt(0) + i);
-const ARANGO_VERSION = Number(process.env.ARANGO_VERSION || 30400);
-const describe2x = ARANGO_VERSION < 30000 ? describe : describe.skip;
+const C8_VERSION = Number(process.env.C8_VERSION || 30400);
+const describe2x = C8_VERSION < 30000 ? describe : describe.skip;
 
-describe("Simple queries", function() {
-  // create database takes 11s in a standard cluster
+describe("Simple queries", function () {
+  // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
   let name = `testdb_${Date.now()}`;
-  let db: Database;
+  let fabric: Fabric;
+  const testUrl = process.env.TEST_C8_URL || "http://localhost:8529";
+
+  let dcList: string;
   let collection: DocumentCollection;
   before(async () => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: ARANGO_VERSION
+    fabric = new Fabric({
+      url: testUrl,
+      c8Version: C8_VERSION
     });
-    await db.createDatabase(name);
-    db.useDatabase(name);
+
+    const response = await fabric.getAllEdgeLocations();
+    dcList = getDCListString(response);
+
+    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    fabric.useFabric(name);
   });
   after(async () => {
     try {
-      db.useDatabase("_system");
-      await db.dropDatabase(name);
+      fabric.useFabric("_system");
+      await fabric.dropFabric(name);
     } finally {
-      db.close();
+      fabric.close();
     }
   });
   beforeEach(done => {
-    collection = db.collection(`c_${Date.now()}`);
+    collection = fabric.collection(`c_${Date.now()}`);
     collection
       .create()
       .then(() =>
@@ -51,7 +59,7 @@ describe("Simple queries", function() {
       .then(() => void done())
       .catch(done);
   });
-  afterEach(function(done) {
+  afterEach(function (done) {
     this.timeout(10000);
     collection
       .drop()
@@ -94,7 +102,7 @@ describe("Simple queries", function() {
       collection
         .any()
         .then(doc => {
-          expect(doc).to.have.keys("_key", "_id", "_rev", "value", "group");
+          expect(doc).to.have.keys("$actorId", "$conflicts", "$objectId", "$objects", "$state", "_key", "_id", "_rev", "value", "group");
           expect(doc._key).to.equal(alpha(doc.value - 1));
           expect(doc._id).to.equal(`${collection.name}/${doc._key}`);
           expect(doc.value).to.be.within(1, 10);
@@ -170,7 +178,7 @@ describe("Simple queries", function() {
         .catch(done);
     });
   });
-  if (ARANGO_VERSION >= 20600) {
+  if (C8_VERSION >= 20600) {
     describe2x("collection.lookupByKeys", () => {
       it("returns the documents with the given keys", done => {
         collection

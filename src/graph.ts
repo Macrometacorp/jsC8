@@ -26,7 +26,7 @@ export class GraphVertexCollection extends BaseCollection {
   ): Promise<any> {
     const result = this._connection.request(
       {
-        path: `/_api/gharial/${this.graph.name}/vertex/${this._documentHandle(
+        path: `/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
         )}`
       },
@@ -52,7 +52,7 @@ export class GraphVertexCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "POST",
-        path: `/_api/gharial/${this.graph.name}/vertex/${this.name}`,
+        path: `/graph/${this.graph.name}/vertex/${this.name}`,
         body: data,
         qs: opts
       },
@@ -73,7 +73,7 @@ export class GraphVertexCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/_api/gharial/${this.graph.name}/vertex/${this._documentHandle(
+        path: `/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
         )}`,
         body: newValue,
@@ -97,7 +97,7 @@ export class GraphVertexCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "PATCH",
-        path: `/_api/gharial/${this.graph.name}/vertex/${this._documentHandle(
+        path: `/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
         )}`,
         body: newValue,
@@ -121,7 +121,7 @@ export class GraphVertexCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/_api/gharial/${this.graph.name}/vertex/${this._documentHandle(
+        path: `/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
         )}`,
         qs: opts,
@@ -149,7 +149,7 @@ export class GraphEdgeCollection extends EdgeCollection {
   ): Promise<any> {
     const result = this._connection.request(
       {
-        path: `/_api/gharial/${this.graph.name}/edge/${this._documentHandle(
+        path: `/graph/${this.graph.name}/edge/${this._documentHandle(
           documentHandle
         )}`
       },
@@ -188,7 +188,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     return this._connection.request(
       {
         method: "POST",
-        path: `/_api/gharial/${this.graph.name}/edge/${this.name}`,
+        path: `/graph/${this.graph.name}/edge/${this.name}`,
         body: data,
         qs: opts
       },
@@ -209,7 +209,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/_api/gharial/${this.graph.name}/edge/${this._documentHandle(
+        path: `/graph/${this.graph.name}/edge/${this._documentHandle(
           documentHandle
         )}`,
         body: newValue,
@@ -233,7 +233,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     return this._connection.request(
       {
         method: "PATCH",
-        path: `/_api/gharial/${this.graph.name}/edge/${this._documentHandle(
+        path: `/graph/${this.graph.name}/edge/${this._documentHandle(
           documentHandle
         )}`,
         body: newValue,
@@ -257,7 +257,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/_api/gharial/${this.graph.name}/edge/${this._documentHandle(
+        path: `/graph/${this.graph.name}/edge/${this._documentHandle(
           documentHandle
         )}`,
         qs: opts,
@@ -281,7 +281,7 @@ export class Graph {
 
   get() {
     return this._connection.request(
-      { path: `/_api/gharial/${this.name}` },
+      { path: `/_api/graph/${this.name}` },
       res => res.body.graph
     );
   }
@@ -302,7 +302,7 @@ export class Graph {
     return this._connection.request(
       {
         method: "POST",
-        path: "/_api/gharial",
+        path: "/_api/graph",
         body: {
           ...properties,
           name: this.name
@@ -317,7 +317,7 @@ export class Graph {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/_api/gharial/${this.name}`,
+        path: `/_api/graph/${this.name}`,
         qs: { dropCollections }
       },
       res => res.body.removed
@@ -330,7 +330,7 @@ export class Graph {
 
   listVertexCollections(opts?: { excludeOrphans?: boolean }) {
     return this._connection.request(
-      { path: `/_api/gharial/${this.name}/vertex`, qs: opts },
+      { path: `/_api/graph/${this.name}/vertex`, qs: opts },
       res => res.body.collections
     );
   }
@@ -349,7 +349,7 @@ export class Graph {
     return this._connection.request(
       {
         method: "POST",
-        path: `/_api/gharial/${this.name}/vertex`,
+        path: `/_api/graph/${this.name}/vertex`,
         body: { collection }
       },
       res => res.body.graph
@@ -366,7 +366,7 @@ export class Graph {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/_api/gharial/${this.name}/vertex/${collection}`,
+        path: `/_api/graph/${this.name}/vertex/${collection}`,
         qs: {
           dropCollection
         }
@@ -381,7 +381,7 @@ export class Graph {
 
   listEdgeCollections() {
     return this._connection.request(
-      { path: `/_api/gharial/${this.name}/edge` },
+      { path: `/_api/graph/${this.name}/edge` },
       res => res.body.collections
     );
   }
@@ -397,7 +397,7 @@ export class Graph {
     return this._connection.request(
       {
         method: "POST",
-        path: `/_api/gharial/${this.name}/edge`,
+        path: `/_api/graph/${this.name}/edge`,
         body: definition
       },
       res => res.body.graph
@@ -408,7 +408,7 @@ export class Graph {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/_api/gharial/${this.name}/edge/${definitionName}`,
+        path: `/_api/graph/${this.name}/edge/${definitionName}`,
         body: definition
       },
       res => res.body.graph
@@ -422,7 +422,7 @@ export class Graph {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/_api/gharial/${this.name}/edge/${definitionName}`,
+        path: `/_api/graph/${this.name}/edge/${definitionName}`,
         qs: {
           dropCollection
         }

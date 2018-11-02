@@ -1,10 +1,10 @@
-# Database API
+# Fabric API
 
-## new Database
+## new Fabric
 
-`new Database([config]): Database`
+`new Fabric([config]): Fabric`
 
-Creates a new _Database_ instance.
+Creates a new _Fabric_ instance.
 
 If _config_ is a string, it will be interpreted as _config.url_.
 
@@ -19,7 +19,7 @@ If _config_ is a string, it will be interpreted as _config.url_.
     Base URL of the C8 server or list of server URLs.
 
     When working with a cluster or a single server with leader/follower failover,
-    [the method `db.acquireHostList`](DatabaseManipulation.md#databaseacquirehostlist)
+    [the method `fabric.acquireHostList`](DatabaseManipulation.md#databaseacquirehostlist)
     can be used to automatically pick up additional coordinators/followers at
     any point.
 
@@ -44,13 +44,13 @@ If _config_ is a string, it will be interpreted as _config.url_.
   - **isAbsolute**: `boolean` (Default: `false`)
 
     If this option is explicitly set to `true`, the _url_ will be treated as the
-    absolute database path. This is an escape hatch to allow using jsC8 with
-    database APIs exposed with a reverse proxy and makes it impossible to switch
+    absolute fabric path. This is an escape hatch to allow using jsC8 with
+    fabric APIs exposed with a reverse proxy and makes it impossible to switch
     databases with _useDatabase_ or using _acquireHostList_.
 
-  - **arangoVersion**: `number` (Default: `30000`)
+  - **c8Version**: `number` (Default: `30000`)
 
-    Value of the `x-arango-version` header. This should match the lowest
+    Value of the `x-c8-version` header. This should match the lowest
     version of C8 you expect to be using. The format is defined as
     `XYYZZ` where `X` is the major version, `Y` is the two-digit minor version
     and `Z` is the two-digit bugfix version.
@@ -133,11 +133,11 @@ If _config_ is a string, it will be interpreted as _config.url_.
     **Note**: Requests bound to a specific server (e.g. fetching query results)
     will never be retried automatically and ignore this setting.
 
-## database.close
+## fabric.close
 
-`database.close(): void`
+`fabric.close(): void`
 
-Closes all active connections of the database instance.
+Closes all active connections of the fabric instance.
 Can be used to clean up idling connections during longer periods of inactivity.
 
 **Note**: This method currently has no effect in the browser version of jsC8.
@@ -145,16 +145,16 @@ Can be used to clean up idling connections during longer periods of inactivity.
 **Examples**
 
 ```js
-const db = new Database();
-const sessions = db.collection("sessions");
+const fabric = new Fabric();
+const sessions = fabric.collection("sessions");
 // Clean up expired sessions once per hour
 setInterval(async () => {
-  await db.query(c8ql`
+  await fabric.query(c8ql`
     FOR session IN ${sessions}
     FILTER session.expires < DATE_NOW()
     REMOVE session IN ${sessions}
   `);
   // Make sure to close the connections because they're no longer used
-  db.close();
+  fabric.close();
 }, 1000 * 60 * 60);
 ```

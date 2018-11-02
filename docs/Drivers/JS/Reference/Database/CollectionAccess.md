@@ -3,9 +3,9 @@
 These functions implement the
 [HTTP API for accessing collections](https://docs.macrometa.io/jsC8/latest/HTTP/Collection/Getting.html).
 
-## database.collection
+## fabric.collection
 
-`database.collection(collectionName): DocumentCollection`
+`fabric.collection(collectionName): DocumentCollection`
 
 Returns a _DocumentCollection_ instance for the given collection name.
 
@@ -18,13 +18,13 @@ Returns a _DocumentCollection_ instance for the given collection name.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection("potatoes");
+const fabric = new Fabric();
+const collection = fabric.collection("potatoes");
 ```
 
-## database.edgeCollection
+## fabric.edgeCollection
 
-`database.edgeCollection(collectionName): EdgeCollection`
+`fabric.edgeCollection(collectionName): EdgeCollection`
 
 Returns an _EdgeCollection_ instance for the given collection name.
 
@@ -37,15 +37,15 @@ Returns an _EdgeCollection_ instance for the given collection name.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.edgeCollection("potatoes");
+const fabric = new Fabric();
+const collection = fabric.edgeCollection("potatoes");
 ```
 
-## database.listCollections
+## fabric.listCollections
 
-`async database.listCollections([excludeSystem]): Array<Object>`
+`async fabric.listCollections([excludeSystem]): Array<Object>`
 
-Fetches all collections from the database and returns an array of collection
+Fetches all collections from the fabric and returns an array of collection
 descriptions.
 
 **Arguments**
@@ -57,24 +57,24 @@ descriptions.
 **Examples**
 
 ```js
-const db = new Database();
+const fabric = new Fabric();
 
-const collections = await db.listCollections();
+const collections = await fabric.listCollections();
 // collections is an array of collection descriptions
 // not including system collections
 
 // -- or --
 
-const collections = await db.listCollections(false);
+const collections = await fabric.listCollections(false);
 // collections is an array of collection descriptions
 // including system collections
 ```
 
-## database.collections
+## fabric.collections
 
-`async database.collections([excludeSystem]): Array<Collection>`
+`async fabric.collections([excludeSystem]): Array<Collection>`
 
-Fetches all collections from the database and returns an array of
+Fetches all collections from the fabric and returns an array of
 _DocumentCollection_ and _EdgeCollection_ instances for the collections.
 
 **Arguments**
@@ -86,16 +86,16 @@ _DocumentCollection_ and _EdgeCollection_ instances for the collections.
 **Examples**
 
 ```js
-const db = new Database();
+const fabric = new Fabric();
 
-const collections = await db.collections()
+const collections = await fabric.collections()
 // collections is an array of DocumentCollection
 // and EdgeCollection instances
 // not including system collections
 
 // -- or --
 
-const collections = await db.collections(false)
+const collections = await fabric.collections(false)
 // collections is an array of DocumentCollection
 // and EdgeCollection instances
 // including system collections

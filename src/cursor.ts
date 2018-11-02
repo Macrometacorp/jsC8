@@ -31,7 +31,7 @@ export class ArrayCursor {
     else {
       const res = await this._connection.request({
         method: "PUT",
-        path: `/_api/cursor/${this._id}`,
+        path: `/cursor/${this._id}`,
         host: this._host
       });
       this._result.push(...res.body.result);

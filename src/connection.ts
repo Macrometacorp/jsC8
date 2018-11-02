@@ -10,7 +10,7 @@ import {
 const LinkedList = require("linkedlist/lib/linkedlist") as typeof Array;
 
 const MIME_JSON = /\/(json|javascript)(\W|$)/;
-const LEADER_ENDPOINT_HEADER = "x-arango-endpoint";
+const LEADER_ENDPOINT_HEADER = "x-c8-endpoint";
 
 export type LoadBalancingStrategy = "NONE" | "ROUND_ROBIN" | "ONE_RANDOM";
 
@@ -67,22 +67,23 @@ export type Config =
   | string
   | string[]
   | Partial<{
-      url: string | string[];
-      isAbsolute: boolean;
-      arangoVersion: number;
-      loadBalancingStrategy: LoadBalancingStrategy;
-      maxRetries: false | number;
-      agent: any;
-      agentOptions: { [key: string]: any };
-      headers: { [key: string]: string };
-    }>;
+    url: string | string[];
+    isAbsolute: boolean;
+    c8Version: number;
+    loadBalancingStrategy: LoadBalancingStrategy;
+    maxRetries: false | number;
+    agent: any;
+    agentOptions: { [key: string]: any };
+    headers: { [key: string]: string };
+  }>;
 
 export class Connection {
   private _activeTasks: number = 0;
   private _agent?: any;
   private _agentOptions: { [key: string]: any };
-  private _arangoVersion: number = 30000;
-  private _databaseName: string | false = "_system";
+  private _c8Version: number = 30000;
+  private _fabricName: string | false = "_system";
+  private _tenantName: string | false = "_mm";
   private _headers: { [key: string]: string };
   private _loadBalancingStrategy: LoadBalancingStrategy;
   private _useFailOver: boolean;
@@ -98,21 +99,22 @@ export class Connection {
     if (typeof config === "string") config = { url: config };
     else if (Array.isArray(config)) config = { url: config };
 
-    if (config.arangoVersion !== undefined) {
-      this._arangoVersion = config.arangoVersion;
+    if (config.c8Version !== undefined) {
+      this._c8Version = config.c8Version;
     }
     if (config.isAbsolute) {
-      this._databaseName = false;
+      this._fabricName = false;
+      this._tenantName = false;
     }
     this._agent = config.agent;
     this._agentOptions = isBrowser
       ? { ...config.agentOptions! }
       : {
-          maxSockets: 3,
-          keepAlive: true,
-          keepAliveMsecs: 1000,
-          ...config.agentOptions
-        };
+        maxSockets: 3,
+        keepAlive: true,
+        keepAliveMsecs: 1000,
+        ...config.agentOptions
+      };
     this._maxTasks = this._agentOptions.maxSockets || 3;
     if (this._agentOptions.keepAlive) this._maxTasks *= 2;
 
@@ -141,8 +143,8 @@ export class Connection {
     }
   }
 
-  private get _databasePath() {
-    return this._databaseName === false ? "" : `/_db/${this._databaseName}`;
+  private get _fabricPath() {
+    return this._fabricName === false ? "" : `/_tenant/${this._tenantName}/_fabric/${this._fabricName}`;
   }
 
   private _runQueue() {
@@ -204,7 +206,7 @@ export class Connection {
     let pathname = "";
     let search;
     if (!absolutePath) {
-      pathname = this._databasePath;
+      pathname = this._fabricPath;
       if (basePath) pathname += basePath;
     }
     if (path) pathname += path;
@@ -235,23 +237,38 @@ export class Connection {
     return cleanUrls.map(url => this._urls.indexOf(url));
   }
 
-  get arangoMajor() {
-    return Math.floor(this._arangoVersion / 10000);
+  get c8Major() {
+    return Math.floor(this._c8Version / 10000);
   }
 
-  getDatabaseName() {
-    return this._databaseName;
+  getFabricName(): string | false {
+    return this._fabricName;
+  }
+
+  getTenantName(): string | false {
+    return this._tenantName;
+  }
+
+  getUrls(): string[] {
+    return this._urls;
   }
 
   getActiveHost() {
     return this._activeHost;
   }
 
-  setDatabaseName(databaseName: string) {
-    if (this._databaseName === false) {
-      throw new Error("Can not change database from absolute URL");
+  setFabricName(fabricName: string) {
+    if (this._fabricName === false) {
+      throw new Error("Can not change fabric from absolute URL");
     }
-    this._databaseName = databaseName;
+    this._fabricName = fabricName;
+  }
+
+  setTenantName(tenantName: string) {
+    if (this._tenantName === false) {
+      throw new Error("Can not change tenant from absolute URL");
+    }
+    this._tenantName = tenantName;
   }
 
   setHeader(key: string, value: string) {
@@ -292,9 +309,8 @@ export class Connection {
       const extraHeaders: { [key: string]: string } = {
         ...this._headers,
         "content-type": contentType,
-        "x-arango-version": String(this._arangoVersion)
+        "x-c8-version": String(this._c8Version)
       };
-
       this._queue.push({
         retries: 0,
         host,

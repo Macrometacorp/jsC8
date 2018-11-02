@@ -1,38 +1,44 @@
 import { expect } from "chai";
-import { Database } from "../jsC8";
+import { Fabric } from "../jsC8";
+import { getDCListString } from "../util/helper";
 
-const ARANGO_VERSION = Number(process.env.ARANGO_VERSION || 30400);
-const it34 = ARANGO_VERSION >= 30400 ? it : it.skip;
+const C8_VERSION = Number(process.env.C8_VERSION || 30400);
+const it34 = C8_VERSION >= 30400 ? it : it.skip;
 
-describe("Managing functions", function() {
-  // create database takes 11s in a standard cluster
+describe("Managing functions", function () {
+  // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
   let name = `testdb_${Date.now()}`;
-  let db: Database;
+  let fabric: Fabric;
+  const testUrl = process.env.TEST_C8_URL || "http://localhost:8529";
+
+  let dcList: string;
   before(async () => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: Number(process.env.ARANGO_VERSION || 30400)
+    fabric = new Fabric({
+      url: testUrl,
+      c8Version: Number(process.env.C8_VERSION || 30400)
     });
-    await db.createDatabase(name);
-    db.useDatabase(name);
+
+    const response = await fabric.getAllEdgeLocations();
+    dcList = getDCListString(response);
+
+    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    fabric.useFabric(name);
   });
   after(async () => {
     try {
-      db.useDatabase("_system");
-      await db.dropDatabase(name);
+      fabric.useFabric("_system");
+      await fabric.dropFabric(name);
     } finally {
-      db.close();
+      fabric.close();
     }
   });
-  describe("database.listFunctions", () => {
+  describe("fabric.listFunctions", () => {
     it34("should be empty per default", done => {
-      db.listFunctions()
+      fabric.listFunctions()
         .then(info => {
-          expect(info).to.have.property("result");
-          expect(info.result).to.be.instanceof(Array);
-          expect(info.result).to.be.empty;
+          expect(info).to.be.instanceof(Array);
         })
         .then(() => done())
         .catch(done);
@@ -40,16 +46,14 @@ describe("Managing functions", function() {
     it34("should include before created function", done => {
       const name = "myfunctions::temperature::celsiustofahrenheit";
       const code = "function (celsius) { return celsius * 1.8 + 32; }";
-      db.createFunction(name, code)
+      fabric.createFunction(name, code)
         .then(() => {
-          return db.listFunctions().then(info => {
-            expect(info).to.have.property("result");
-            expect(info.result).to.be.instanceof(Array);
-            expect(info.result.length).to.equal(1);
-            expect(info.result[0]).to.eql({
+          return fabric.listFunctions().then(info => {
+            expect(info).to.be.instanceof(Array);
+            expect(info.length).to.equal(1);
+            expect(info[0]).to.eql({
               name,
-              code,
-              isDeterministic: false
+              code
             });
           });
         })
@@ -57,9 +61,9 @@ describe("Managing functions", function() {
         .catch(done);
     });
   });
-  describe("database.createFunction", () => {
+  describe("fabric.createFunction", () => {
     it("should create a function", done => {
-      db.createFunction(
+      fabric.createFunction(
         "myfunctions::temperature::celsiustofahrenheit2",
         "function (celsius) { return celsius * 1.8 + 32; }"
       )
@@ -71,21 +75,17 @@ describe("Managing functions", function() {
         .catch(done);
     });
   });
-  describe("database.dropFunction", () => {
-    it("should drop a existing function", done => {
-      const name = "myfunctions::temperature::celsiustofahrenheit";
-      db.createFunction(
+  describe("fabric.dropFunction", () => {
+    const name = "myfunctions::temperature::celsiustofahrenheit";
+    before(async () => {
+      fabric.createFunction(
         name,
         "function (celsius) { return celsius * 1.8 + 32; }"
       )
-        .then(() => {
-          return db.dropFunction(name).then(info => {
-            if (ARANGO_VERSION >= 30400)
-              expect(info).to.have.property("deletedCount", 1);
-          });
-        })
-        .then(() => done())
-        .catch(done);
+    });
+    it("should drop a existing function", async () => {
+      const response = await fabric.dropFunction(name);
+      expect(response.error).to.be.false;
     });
   });
 });

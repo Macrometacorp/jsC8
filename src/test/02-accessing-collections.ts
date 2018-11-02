@@ -1,62 +1,71 @@
 import { expect } from "chai";
-import { Database } from "../jsC8";
+import { Fabric } from "../jsC8";
 import { DocumentCollection, EdgeCollection } from "../collection";
+import { getDCListString } from "../util/helper";
+
 
 const range = (n: number): number[] => Array.from(Array(n).keys());
 
-describe("Accessing collections", function() {
-  // create database takes 11s in a standard cluster
-  this.timeout(20000);
+describe("Accessing collections", function () {
+  // create fabric takes 11s in a standard cluster
+  this.timeout(60000);
 
   let name = `testdb_${Date.now()}`;
-  let db: Database;
+  let fabric: Fabric;
   let builtinSystemCollections: string[];
+  const testUrl: string = process.env.TEST_C8_URL || "http://localhost:8529";
+
+  let dcList: string;
   before(async () => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: Number(process.env.ARANGO_VERSION || 30400)
+    fabric = new Fabric({
+      url: testUrl,
+      c8Version: Number(process.env.C8_VERSION || 30400)
     });
-    await db.createDatabase(name);
-    db.useDatabase(name);
-    const collections = await db.listCollections(false);
+
+    const response = await fabric.getAllEdgeLocations();
+    dcList = getDCListString(response);
+
+    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    fabric.useFabric(name);
+    const collections = await fabric.listCollections(false);
     builtinSystemCollections = collections.map((c: any) => c.name);
   });
   after(async () => {
     try {
-      db.useDatabase("_system");
-      await db.dropDatabase(name);
+      fabric.useFabric("_system");
+      await fabric.dropFabric(name);
     } finally {
-      db.close();
+      fabric.close();
     }
   });
-  describe("database.collection", () => {
+  describe("fabric.collection", () => {
     it("returns a DocumentCollection instance for the collection", () => {
       let name = "potato";
-      let collection = db.collection(name);
+      let collection = fabric.collection(name);
       expect(collection).to.be.an.instanceof(DocumentCollection);
       expect(collection)
         .to.have.property("name")
         .that.equals(name);
     });
   });
-  describe("database.edgeCollection", () => {
+  describe("fabric.edgeCollection", () => {
     it("returns an EdgeCollection instance for the collection", () => {
       let name = "tomato";
-      let collection = db.edgeCollection(name);
+      let collection = fabric.edgeCollection(name);
       expect(collection).to.be.an.instanceof(EdgeCollection);
       expect(collection)
         .to.have.property("name")
         .that.equals(name);
     });
   });
-  describe("database.listCollections", () => {
+  describe("fabric.listCollections", () => {
     let nonSystemCollectionNames = range(4).map(i => `c_${Date.now()}_${i}`);
     let systemCollectionNames = range(4).map(i => `_c_${Date.now()}_${i}`);
     before(done => {
       Promise.all([
-        ...nonSystemCollectionNames.map(name => db.collection(name).create()),
+        ...nonSystemCollectionNames.map(name => fabric.collection(name).create()),
         ...systemCollectionNames.map(name =>
-          db.collection(name).create({ isSystem: true })
+          fabric.collection(name).create({ isSystem: true })
         )
       ])
         .then(() => void done())
@@ -64,16 +73,16 @@ describe("Accessing collections", function() {
     });
     after(done => {
       Promise.all([
-        ...nonSystemCollectionNames.map(name => db.collection(name).drop()),
+        ...nonSystemCollectionNames.map(name => fabric.collection(name).drop()),
         ...systemCollectionNames.map(name =>
-          db.collection(name).drop({ isSystem: true })
+          fabric.collection(name).drop({ isSystem: true })
         )
       ])
         .then(() => void done())
         .catch(done);
     });
     it("fetches information about all non-system collections", done => {
-      db.listCollections()
+      fabric.listCollections()
         .then(collections => {
           expect(collections.length).to.equal(nonSystemCollectionNames.length);
           expect(collections.map((c: any) => c.name).sort()).to.eql(
@@ -84,7 +93,7 @@ describe("Accessing collections", function() {
         .catch(done);
     });
     it("includes system collections if explicitly passed false", done => {
-      db.listCollections(false)
+      fabric.listCollections(false)
         .then(collections => {
           let allCollectionNames = nonSystemCollectionNames
             .concat(systemCollectionNames)
@@ -99,16 +108,16 @@ describe("Accessing collections", function() {
         .catch(done);
     });
   });
-  describe("database.collections", () => {
+  describe("fabric.collections", () => {
     let documentCollectionNames = range(4).map(i => `dc_${Date.now()}_${i}`);
     let edgeCollectionNames = range(4).map(i => `ec_${Date.now()}_${i}`);
     let systemCollectionNames = range(4).map(i => `_c_${Date.now()}_${i}`);
     before(done => {
       Promise.all([
-        ...documentCollectionNames.map(name => db.collection(name).create()),
-        ...edgeCollectionNames.map(name => db.edgeCollection(name).create()),
+        ...documentCollectionNames.map(name => fabric.collection(name).create()),
+        ...edgeCollectionNames.map(name => fabric.edgeCollection(name).create()),
         ...systemCollectionNames.map(name =>
-          db.collection(name).create({ isSystem: true })
+          fabric.collection(name).create({ isSystem: true })
         )
       ])
         .then(() => void done())
@@ -116,17 +125,17 @@ describe("Accessing collections", function() {
     });
     after(done => {
       Promise.all([
-        ...documentCollectionNames.map(name => db.collection(name).drop()),
-        ...edgeCollectionNames.map(name => db.edgeCollection(name).drop()),
+        ...documentCollectionNames.map(name => fabric.collection(name).drop()),
+        ...edgeCollectionNames.map(name => fabric.edgeCollection(name).drop()),
         ...systemCollectionNames.map(name =>
-          db.collection(name).drop({ isSystem: true })
+          fabric.collection(name).drop({ isSystem: true })
         )
       ])
         .then(() => void done())
         .catch(done);
     });
     it("creates DocumentCollection and EdgeCollection instances", done => {
-      db.collections()
+      fabric.collections()
         .then(collections => {
           let documentCollections = collections
             .filter((c: any) => c instanceof DocumentCollection)
@@ -149,7 +158,7 @@ describe("Accessing collections", function() {
         .catch(done);
     });
     it("includes system collections if explicitly passed false", done => {
-      db.collections(false)
+      fabric.collections(false)
         .then(collections => {
           let documentCollections = collections.filter(
             (c: any) => c instanceof DocumentCollection

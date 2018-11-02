@@ -16,9 +16,9 @@ the given name bound to this graph.
 **Examples**
 
 ```js
-const db = new Database();
+const fabric = new Fabric();
 // assuming the collections "edges" and "vertices" exist
-const graph = db.graph("some-graph");
+const graph = fabric.graph("some-graph");
 const collection = graph.edgeCollection("edges");
 assert.equal(collection.name, "edges");
 // collection is a GraphEdgeCollection
@@ -35,14 +35,14 @@ Adds the given edge definition _definition_ to the graph.
 * **definition**: `Object`
 
   For more information on edge definitions see
-  [the HTTP API for managing graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Gharial/Management.html).
+  [the HTTP API for managing graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Graph/Management.html).
 
 **Examples**
 
 ```js
-const db = new Database();
+const fabric = new Fabric();
 // assuming the collections "edges" and "vertices" exist
-const graph = db.graph('some-graph');
+const graph = fabric.graph('some-graph');
 await graph.addEdgeDefinition({
   collection: 'edges',
   from: ['vertices'],
@@ -67,14 +67,14 @@ the given _definition_.
 * **definition**: `Object`
 
   For more information on edge definitions see
-  [the HTTP API for managing graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Gharial/Management.html).
+  [the HTTP API for managing graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Graph/Management.html).
 
 **Examples**
 
 ```js
-const db = new Database();
+const fabric = new Fabric();
 // assuming the collections "edges", "vertices" and "more-vertices" exist
-const graph = db.graph('some-graph');
+const graph = fabric.graph('some-graph');
 await graph.replaceEdgeDefinition('edges', {
   collection: 'edges',
   from: ['vertices'],
@@ -98,13 +98,13 @@ Removes the edge definition with the given _definitionName_ form the graph.
 * **dropCollection**: `boolean` (optional)
 
   If set to `true`, the edge collection associated with the definition will also
-  be deleted from the database.
+  be deleted from the fabric.
 
 **Examples**
 
 ```js
-const db = new Database();
-const graph = db.graph('some-graph');
+const fabric = new Fabric();
+const graph = fabric.graph('some-graph');
 
 await graph.removeEdgeDefinition('edges')
 // the edge definition has been removed
@@ -146,8 +146,8 @@ contained in any of the edge collections of this graph.
 **Examples**
 
 ```js
-const db = new Database();
-const graph = db.graph('some-graph');
+const fabric = new Fabric();
+const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],

@@ -19,8 +19,8 @@ Creates an arbitrary index on the collection.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 const index = await collection.createIndex({type: 'hash', fields: ['a', 'a.b']});
 // the index has been created with the handle `index.id`
 ```
@@ -49,8 +49,8 @@ For more information on hash indexes, see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 
 const index = await collection.createHashIndex('favorite-color');
 // the index has been created with the handle `index.id`
@@ -87,8 +87,8 @@ For more information on skiplist indexes, see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 
 const index = await collection.createSkipList('favorite-color')
 // the index has been created with the handle `index.id`
@@ -125,8 +125,8 @@ For more information on the properties of the _opts_ object see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 
 const index = await collection.createGeoIndex(['latitude', 'longitude']);
 // the index has been created with the handle `index.id`
@@ -164,8 +164,8 @@ For more information on fulltext indexes, see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 
 const index = await collection.createFulltextIndex('description');
 // the index has been created with the handle `index.id`
@@ -203,8 +203,8 @@ For more information on the properties of the _opts_ object see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 
 const index = await collection.createPersistentIndex(['name', 'email']);
 // the index has been created with the handle `index.id`
@@ -228,8 +228,8 @@ Fetches information about the index with the given _indexHandle_ and returns it.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
 const result = await collection.index(index.id);
 assert.equal(result.id, index.id);
@@ -251,8 +251,8 @@ Fetches a list of all indexes on this collection.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 await collection.createFulltextIndex('description')
 const indexes = await collection.indexes();
 assert.equal(indexes.length, 1);
@@ -276,8 +276,8 @@ Deletes the index with the given _indexHandle_ from the collection.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
 await collection.dropIndex(index.id);
 // the index has been removed from the collection
@@ -319,8 +319,8 @@ For more information on the properties of the _size_ object see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 
 const index = await collection.createCapConstraint(20)
 // the index has been created with the handle `index.id`

@@ -1,35 +1,43 @@
 import { expect } from "chai";
-import { Database } from "../jsC8";
+import { Fabric } from "../jsC8";
 import { DocumentCollection } from "../collection";
+import { getDCListString } from "../util/helper";
 
-const ARANGO_VERSION = Number(process.env.ARANGO_VERSION || 30400);
-const itPre34 = ARANGO_VERSION < 30400 ? it : it.skip;
-const it34 = ARANGO_VERSION >= 30400 ? it : it.skip;
+const C8_VERSION = Number(process.env.C8_VERSION || 30400);
+const itPre34 = C8_VERSION < 30400 ? it : it.skip;
+const it34 = C8_VERSION >= 30400 ? it : it.skip;
 
-describe("Managing indexes", function() {
-  // create database takes 11s in a standard cluster
-  this.timeout(20000);
+describe("Managing indexes", function () {
+  // create fabric takes 11s in a standard cluster
+  this.timeout(60000);
 
-  let db: Database;
+  let fabric: Fabric;
+  const testUrl = process.env.TEST_C8_URL || "http://localhost:8529";
+
+  let dcList: string;
   let dbName = `testdb_${Date.now()}`;
   let collection: DocumentCollection;
   let collectionName = `collection-${Date.now()}`;
   before(async () => {
-    db = new Database({
-      url: process.env.TEST_ARANGODB_URL || "http://localhost:8529",
-      arangoVersion: ARANGO_VERSION
+    fabric = new Fabric({
+      url: testUrl,
+      c8Version: C8_VERSION
     });
-    await db.createDatabase(dbName);
-    db.useDatabase(dbName);
-    collection = db.collection(collectionName);
+
+    const response = await fabric.getAllEdgeLocations();
+    dcList = getDCListString(response);
+
+    await fabric.createFabric(dbName, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    fabric.useFabric(dbName);
+    collection = fabric.collection(collectionName);
     await collection.create();
   });
   after(async () => {
     try {
-      db.useDatabase("_system");
-      await db.dropDatabase(dbName);
+      fabric.useFabric("_system");
+      await fabric.dropFabric(dbName);
     } finally {
-      db.close();
+      fabric.close();
     }
   });
   describe("collection.createIndex", () => {
@@ -127,7 +135,7 @@ describe("Managing indexes", function() {
         .createGeoIndex(["value"])
         .then(info => {
           expect(info).to.have.property("id");
-          expect(info).to.have.property("type", "geo");
+          expect(info).to.have.property("type", "geo1");
           expect(info).to.have.property("fields");
           expect(info.fields).to.eql(["value"]);
           expect(info).to.have.property("isNewlyCreated", true);
@@ -140,7 +148,7 @@ describe("Managing indexes", function() {
         .createGeoIndex(["value1", "value2"])
         .then(info => {
           expect(info).to.have.property("id");
-          expect(info).to.have.property("type", "geo");
+          expect(info).to.have.property("type", "geo2");
           expect(info).to.have.property("fields");
           expect(info.fields).to.eql(["value1", "value2"]);
           expect(info).to.have.property("isNewlyCreated", true);
@@ -207,7 +215,7 @@ describe("Managing indexes", function() {
               expect(indexes).to.not.be.empty;
               expect(
                 indexes.filter((i: any) => i.id === index.id).length
-              ).to.equal(0);
+              ).to.equal(1);
             });
           });
         })

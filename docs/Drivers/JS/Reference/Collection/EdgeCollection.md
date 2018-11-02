@@ -27,8 +27,8 @@ Retrieves the edge with the given _documentHandle_ from the collection.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.edgeCollection('edges');
+const fabric = new Fabric();
+const collection = fabric.edgeCollection('edges');
 
 const edge = await collection.document('some-key');
 // the edge exists
@@ -67,8 +67,8 @@ Checks whether the edge with the given _documentHandle_ exists.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.edgeCollection('my-docs');
+const fabric = new Fabric();
+const collection = fabric.edgeCollection('my-docs');
 
 const exists = await collection.documentExists('some-key');
 if (exists === false) {
@@ -93,13 +93,13 @@ _data_ and returns an object containing the edge's metadata.
 - **fromId**: `string` (optional)
 
   The handle of the start vertex of this edge. This can be either the `_id` of a
-  document in the database, the `_key` of an edge in the collection, or a
+  document in the fabric, the `_key` of an edge in the collection, or a
   document (i.e. an object with an `_id` or `_key` property).
 
 - **toId**: `string` (optional)
 
   The handle of the end vertex of this edge. This can be either the `_id` of a
-  document in the database, the `_key` of an edge in the collection, or a
+  document in the fabric, the `_key` of an edge in the collection, or a
   document (i.e. an object with an `_id` or `_key` property).
 
 - **opts**: `Object` (optional)
@@ -138,8 +138,8 @@ the _returnNew_ option.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.edgeCollection('edges');
+const fabric = new Fabric();
+const collection = fabric.edgeCollection('edges');
 const data = {some: 'data'};
 
 const info = await collection.save(
@@ -176,14 +176,14 @@ Retrieves a list of all edges of the document with the given _documentHandle_.
 - **documentHandle**: `string`
 
   The handle of the document to retrieve the edges of. This can be either the
-  `_id` of a document in the database, the `_key` of an edge in the collection,
+  `_id` of a document in the fabric, the `_key` of an edge in the collection,
   or a document (i.e. an object with an `_id` or `_key` property).
 
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.edgeCollection('edges');
+const fabric = new Fabric();
+const collection = fabric.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
   ['x', 'vertices/a', 'vertices/b'],
@@ -207,14 +207,14 @@ _documentHandle_.
 - **documentHandle**: `string`
 
   The handle of the document to retrieve the edges of. This can be either the
-  `_id` of a document in the database, the `_key` of an edge in the collection,
+  `_id` of a document in the fabric, the `_key` of an edge in the collection,
   or a document (i.e. an object with an `_id` or `_key` property).
 
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.edgeCollection('edges');
+const fabric = new Fabric();
+const collection = fabric.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
   ['x', 'vertices/a', 'vertices/b'],
@@ -238,14 +238,14 @@ _documentHandle_.
 - **documentHandle**: `string`
 
   The handle of the document to retrieve the edges of. This can be either the
-  `_id` of a document in the database, the `_key` of an edge in the collection,
+  `_id` of a document in the fabric, the `_key` of an edge in the collection,
   or a document (i.e. an object with an `_id` or `_key` property).
 
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.edgeCollection('edges');
+const fabric = new Fabric();
+const collection = fabric.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
   ['x', 'vertices/a', 'vertices/b'],
@@ -269,7 +269,7 @@ contained in this edge collection.
 - **startVertex**: `string`
 
   The handle of the start vertex. This can be either the `_id` of a document in
-  the database, the `_key` of an edge in the collection, or a document (i.e. an
+  the fabric, the `_key` of an edge in the collection, or a document (i.e. an
   object with an `_id` or `_key` property).
 
 - **opts**: `Object`
@@ -287,8 +287,8 @@ contained in this edge collection.
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.edgeCollection('edges');
+const fabric = new Fabric();
+const collection = fabric.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
   ['x', 'vertices/a', 'vertices/b'],

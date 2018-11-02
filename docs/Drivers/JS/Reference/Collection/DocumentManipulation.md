@@ -55,8 +55,8 @@ For more information on the _opts_ object, see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 const data = {number: 1, hello: 'world'};
 const info1 = await collection.save(data);
 const info2 = await collection.replace(info1, {number: 2});
@@ -149,8 +149,8 @@ For more information on the _opts_ object, see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 const doc = {number: 1, hello: 'world'};
 const doc1 = await collection.save(doc);
 const doc2 = await collection.update(doc1, {number: 2});
@@ -221,8 +221,8 @@ For more information on the _opts_ object, see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 const doc1 = {number: 1, hello: 'world1'};
 const info1 = await collection.save(doc1);
 const doc2 = {number: 2, hello: 'world2'};
@@ -280,8 +280,8 @@ For more information on the _opts_ object, see
 **Examples**
 
 ```js
-const db = new Database();
-const collection = db.collection('some-collection');
+const fabric = new Fabric();
+const collection = fabric.collection('some-collection');
 
 await collection.remove('some-doc');
 // document 'some-collection/some-doc' no longer exists
