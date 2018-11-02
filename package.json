@@ -1,6 +1,6 @@
 {
-  "name": "jsC8",
-  "version": "6.6.0",
+  "name": "jsc8",
+  "version": "0.10.0",
   "license": "Apache-2.0",
   "description": "The official C8 JavaScript driver.",
   "homepage": "https://github.com/macrometacorp/jsC8",

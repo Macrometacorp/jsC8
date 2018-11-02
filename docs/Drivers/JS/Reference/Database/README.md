@@ -23,9 +23,6 @@ If _config_ is a string, it will be interpreted as _config.url_.
     can be used to automatically pick up additional coordinators/followers at
     any point.
 
-    **Note**: As of jsC8 6.0.0 it is no longer possible to pass
-    the username or password from the URL.
-
     If you want to use C8 with authentication, see
     _useBasicAuth_ or _useBearerAuth_ methods.
 
