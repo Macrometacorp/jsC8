@@ -2,7 +2,7 @@
 
 ## Compatibility
 
-jsC8 is compatible with C8 1.0 and later. The yarn/npm distribution of jsC8 is compatible with Node.js versions 9.x (latest), 8.x (LTS) and 6.x (LTS). Node.js version support follows [the official Node.js long-term support schedule](https://github.com/nodejs/LTS).
+The yarn/npm distribution of jsc8 is compatible with Node.js versions 9.x (latest), 8.x (LTS) and 6.x (LTS). Node.js version support follows [the official Node.js long-term support schedule](https://github.com/nodejs/LTS).
 
 The included browser build is compatible with Internet Explorer 11 and recent
 versions of all modern browsers (Edge, Chrome, Firefox and Safari).
@@ -59,22 +59,22 @@ npm run dist
 For production use jsC8 can be installed with Yarn or NPM like any other dependency. Just use jsC8 like you would in your server code:
 
 ```js
-import { Fabric } from "jsC8";
+import { Fabric } from "jsc8";
 // -- or --
-var jsC8 = require("jsC8");
+var jsC8 = require("jsc8");
 ```
 
 Additionally the NPM release comes with a precompiled browser build:
 
 ```js
-var jsC8 = require("jsC8/lib/web");
+var jsC8 = require("jsc8/lib/web");
 ```
 
 You can also use [unpkg](https://unpkg.com) during development:
 
 ```html
-< !-- note the path includes the version number (e.g. 6.0.0) -- >
-<script src="https://unpkg.com/jsC8/lib/web.js"></script>
+< !-- note the path includes the version number (e.g. 0.10.0) -- >
+<script src="https://unpkg.com/jsc8/lib/web.js"></script>
 <script>
 var fabric = new jsC8.Fabric();
 fabric.listCollections().then(function (collections) {
@@ -94,14 +94,14 @@ When loading the browser build with a script tag make sure to load the polyfill 
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.js"></script>
-<script src="https://unpkg.com/jsC8@6.0.0/lib/web.js"></script>
+<script src="https://unpkg.com/jsc8@0.10.0/lib/web.js"></script>
 ```
 
 ## Basic usage example
 
 ```js
 // Modern JavaScript
-import { Fabric, c8ql } from "jsC8";
+import { Fabric, c8ql } from "jsc8";
 const fabric = new Fabric();
 (async function() {
   const now = Date.now();
@@ -117,7 +117,7 @@ const fabric = new Fabric();
 })();
 
 // or plain old Node-style
-var jsC8 = require("jsC8");
+var jsC8 = require("jsc8");
 var fabric = new jsC8.Fabric();
 var now = Date.now();
 fabric.query({
@@ -179,14 +179,14 @@ If the request failed at a network level or the connection was closed without re
 ```js
 // Using async/await
 try {
-  const info = await fabric.createFabric("mydb");
+  const info = await fabric.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1', realTime: false });
   // fabric created
 } catch (err) {
   console.error(err.stack);
 }
 
 // Using promises with arrow functions
-fabric.createFabric("mydb").then(
+fabric.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1', realTime: false }).then(
   info => {
     // fabric created
   },
