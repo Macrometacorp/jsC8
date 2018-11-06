@@ -155,22 +155,17 @@ const fabric = new Fabric({
 });
 ```
 
-For C8QL please check out the [c8ql template tag](../Reference/Fabric/Queries.md#c8ql) for writing parametrized
-C8QL queries without making your code vulnerable to injection attacks.
+For C8QL please check out the [c8ql template tag](https://macrometa.gitbook.io/c8/c8ql/fundamentals/bindparameters) for writing parametrized C8QL queries without making your code vulnerable to injection attacks.
 
 ## Error responses
 
-If jsC8 encounters an API error, it will throw an _C8Error_ with an
-[_errorNum_ as defined in the C8 documentation](https://docs.macrometa.io/jsC8/latest/Manual/Appendix/ErrorCodes.html) as well as a _code_ and _statusCode_ property indicating the intended and actual HTTP status code of the response.
+If jsC8 encounters an API error, it will throw an _C8Error_ with an [_errorNum_ as defined in the C8 documentation](https://macrometa.gitbook.io/c8/appendix/errorcodes) as well as a _code_ and _statusCode_ property indicating the intended and actual HTTP status code of the response.
 
-For any other error responses (4xx/5xx status code), it will throw an
-_HttpError_ error with the status code indicated by the _code_ and _statusCode_ properties.
+For any other error responses (4xx/5xx status code), it will throw an _HttpError_ error with the status code indicated by the _code_ and _statusCode_ properties.
 
-If the server response did not indicate an error but the response body could
-not be parsed, a _SyntaxError_ may be thrown instead.
+If the server response did not indicate an error but the response body could not be parsed, a _SyntaxError_ may be thrown instead.
 
-In all of these cases the error object will additionally have a _response_
-property containing the server response object.
+In all of these cases the error object will additionally have a _response_ property containing the server response object.
 
 If the request failed at a network level or the connection was closed without receiving a response, the underlying error will be thrown instead.
 
@@ -194,7 +189,4 @@ fabric.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1', r
 );
 ```
 
-**Note**: the examples in the remainder of this documentation use async/await
-and other modern language features like multi-line strings and template tags.
-When developing for an environment without support for these language features,
-just use promises instead as in the above example.
+**Note**: the examples in the remainder of this documentation use async/await and other modern language features like multi-line strings and template tags. When developing for an environment without support for these language features, just use promises instead as in the above example.
