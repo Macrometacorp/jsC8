@@ -8,7 +8,6 @@
   - [C8QL User Functions](Database/C8QLUserFunctions.md)
   - [Transactions](Database/Transactions.md)
   - [Graph Access](Database/GraphAccess.md)
-  - [Foxx Services](Database/FoxxServices.md)
   - [HTTP Routes](Database/HttpRoutes.md)
 - [Collection](Collection/README.md)
   - [Collection Manipulation](Collection/CollectionManipulation.md)
