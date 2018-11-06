@@ -58,7 +58,7 @@ fabric.query({
 
 ## Documentation
 
-[Latest Documentation](https://docs.macrometacorp.com/jsC8)
+[Latest Documentation](https://github.com/Macrometacorp/jsC8/tree/master/docs/Drivers/JS)
 
 ## Testing
 
