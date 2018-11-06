@@ -1,7 +1,7 @@
 # C8 JavaScript Driver - Reference
 
 - [Database](Database/README.md)
-  - [Database Manipulation](Database/FabricManipulation.md)
+  - [Fabric Manipulation](Database/FabricManipulation.md)
   - [Collection Access](Database/CollectionAccess.md)
   - [View Access](Database/ViewAccess.md)
   - [Queries](Database/Queries.md)
