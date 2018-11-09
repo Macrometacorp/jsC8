@@ -24,7 +24,7 @@ npm run dist
 ## Basic usage example
 
 ```js
-import { Fabric, STREAM_TYPE } from "jsc8";
+import { Fabric, STREAM_TYPE, c8ql } from "jsc8";
 
 const region = "qa1-us-east-1.ops.aws.macrometa.io";
 const tenantName = "demotenant";
