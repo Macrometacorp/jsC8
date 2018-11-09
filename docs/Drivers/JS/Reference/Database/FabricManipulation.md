@@ -49,7 +49,7 @@ authentication with the given _username_ and _password_, then returns itself.
 
   The username to authenticate with.
 
-- **password**: `string` (Default: `""`)
+- **password**: `string` (Default: `"Macrometa123!@#"`)
 
   The password to authenticate with.
 
@@ -86,7 +86,7 @@ fabric.useBearerAuth("keyboardcat");
 
 ## fabric.login
 
-`async fabric.login([username, [password]]): string`
+`async fabric.login(tenant, [username, [password]]): string`
 
 Validates the given fabric credentials and exchanges them for an
 authentication token, then uses the authentication token for future
@@ -107,7 +107,7 @@ requests and returns it.
 ```js
 const fabric = new Fabric();
 fabric.useFabric("test");
-await fabric.login("admin", "hunter2");
+await fabric.login("_mm", "admin", "hunter2");
 // The fabric instance now uses the fabric "test"
 // with an authentication token for the "admin" user.
 ```
@@ -256,4 +256,32 @@ const fabric = new Fabric();
 
 await fabric.truncate();
 // all non-system collections in this fabric are now empty
+```
+
+## fabric.getAllEdgeLocations
+
+`async fabric.getAllEdgeLocations(): Object`
+
+Return a list of all Edge Locations (AKA Datacenters) deployed in the Macrometa Fabric.
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+
+await fabric.getAllEdgeLocations();
+```
+
+## fabric.getLocalEdgeLocation
+
+`async fabric.getLocalEdgeLocation(): Object`
+
+Fetches data about the local Edge Location specific to this Datacenter/Location.
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+
+await fabric.getLocalEdgeLocation();
 ```

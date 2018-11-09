@@ -128,11 +128,6 @@ export class Fabric {
     return this;
   }
 
-  useTenant(tenantName: string): this {
-    this._connection.setTenantName(tenantName);
-    return this;
-  }
-
   useBearerAuth(token: string): this {
     this._connection.setHeader("authorization", `Bearer ${token}`);
     return this;
@@ -425,6 +420,11 @@ export class Fabric {
 
   // Tenant
 
+  useTenant(tenantName: string): this {
+    this._connection.setTenantName(tenantName);
+    return this;
+  }
+
   tenant(tenantName: string): Tenant {
     return new Tenant(this._connection, tenantName);
   }
@@ -451,6 +451,26 @@ export class Fabric {
       {
         method: "GET",
         path: "/streams",
+      },
+      res => res.body
+    );
+  }
+
+  listPersistentStreams(local: boolean = false) {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/streams/persistent?local=${local}`,
+      },
+      res => res.body
+    );
+  }
+
+  listNonPersistentStream(local: boolean = false) {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/streams/non-persistent?local=${local}`,
       },
       res => res.body
     );

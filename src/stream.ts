@@ -48,16 +48,6 @@ export class Stream {
         );
     }
 
-    // deleteStream() {
-    //     return this._connection.request(
-    //         {
-    //             method: "DELETE",
-    //             path: this._getPath()
-    //         },
-    //         res => res.body
-    //     );
-    // }
-
     expireMessagesOnAllSubscriptions(expireTimeInSeconds: number) {
         const urlSuffix = `/all_subscription/expireMessages/${expireTimeInSeconds}`;
         return this._connection.request(
@@ -157,7 +147,7 @@ export class Stream {
         );
     }
 
-    resetSubscription(subscription: string, timestamp: number) {
+    resetSubscriptionToTimestamp(subscription: string, timestamp: number) {
         const urlSuffix = `/subscription/${subscription}/resetcursor/${timestamp}`;
         return this._connection.request(
             {

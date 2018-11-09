@@ -25,11 +25,17 @@ npm run dist
 
 ```js
 // Modern JavaScript
-import { Fabric, c8ql } from "jsc8";
+import { Fabric, c8ql, STREAM_TYPE } from "jsc8";
 const fabric = new Fabric();
 (async function() {
   const now = Date.now();
   try {
+    const stream = fabric.stream("my-stream", STREAM_TYPE.P_STREAM, true);
+    await stream.createStream();
+    stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "test-eu-west-1..dev.aws.macrometa.io");
+    stream.producer("hello world", "test-eu-west-1..dev.aws.macrometa.io");
+    stream.closeWSConnections();
+
     const cursor = await fabric.query(c8ql`RETURN ${now}`);
     const result = await cursor.next();
     // ...
@@ -41,6 +47,12 @@ const fabric = new Fabric();
 // or plain old Node-style
 var jsC8 = require("jsc8");
 var fabric = new jsC8.Fabric();
+var stream = fabric.stream("my-stream", jsC8.STREAM_TYPE.P_STREAM, true);
+stream.createStream().then(()=>{
+  stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "test-eu-west-1..dev.aws.macrometa.io");
+  stream.producer("hello world", "test-eu-west-1..dev.aws.macrometa.io");
+  stream.closeWSConnections();
+});
 var now = Date.now();
 fabric.query({
   query: "RETURN @value",

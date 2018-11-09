@@ -9,6 +9,8 @@
   - [Transactions](Database/Transactions.md)
   - [Graph Access](Database/GraphAccess.md)
   - [HTTP Routes](Database/HttpRoutes.md)
+- [Tenant](Tenant.md)
+- [Stream](Stream.md)
 - [Collection](Collection/README.md)
   - [Collection Manipulation](Collection/CollectionManipulation.md)
   - [Document Manipulation](Collection/DocumentManipulation.md)
