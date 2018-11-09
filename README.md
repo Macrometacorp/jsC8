@@ -70,7 +70,7 @@ fabric.query({
 
 ## Documentation
 
-[Latest Documentation](https://docs.macrometacorp.com/jsC8)
+[Latest Documentation](https://github.com/Macrometacorp/jsC8/tree/master/docs/Drivers/JS)
 
 ## Testing
 
@@ -83,31 +83,15 @@ npm test
 ```
 
 By default the tests will be run against a server listening on
-`http://localhost:8529` (using username `root` with no password). To
+`https://localhost` (using username `root` with no password). To
 override this, you can set the environment variable `TEST_C8_URL` to
 something different:
 
 ```sh
-TEST_C8_URL=http://myserver.local:8530 yarn test
+TEST_C8_URL=https://myfabric.macrometa.io yarn test
 # - or -
-TEST_C8_URL=http://myserver.local:8530 npm test
+TEST_C8_URL=https://myfabric.macrometa.io npm test
 ```
-
-To run the resilience/failover tests you need to set the environment variables
-`RESILIENCE_C8_BASEPATH` (to use a local build of C8) or
-`RESILIENCE_DOCKER_IMAGE` (to use a docker image by name):
-
-```sh
-RESILIENCE_C8_BASEPATH=../c8 yarn test
-# - or -
-RESILIENCE_C8_BASEPATH=../c8 npm test
-```
-
-This runs only the resilience/failover tests, without running any other tests.
-
-Note that these tests are generally a lot slower than the regular test suite
-because they involve shutting down and restarting individual C8 server
-instances.
 
 ## License
 
