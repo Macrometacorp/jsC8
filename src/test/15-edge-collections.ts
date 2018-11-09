@@ -9,7 +9,7 @@ describe("EdgeCollection API", function () {
 
   let name = `testdb_${Date.now()}`;
   let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "http://localhost:8529";
+  const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
   let dcList: string;
   let collection: EdgeCollection;

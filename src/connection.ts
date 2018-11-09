@@ -133,7 +133,7 @@ export class Connection {
       ? Array.isArray(config.url)
         ? config.url
         : [config.url]
-      : ["http://localhost:8529"];
+      : ["https://default.dev.macrometa.io"];
     this.addToHostList(urls);
 
     if (this._loadBalancingStrategy === "ONE_RANDOM") {

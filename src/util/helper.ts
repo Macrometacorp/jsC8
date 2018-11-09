@@ -5,9 +5,9 @@ export const STREAM_CONSTANTS = { NP: "non-persistent", P: "persistent" };
 
 export function getStreamTypeString(streamType: STREAM_TYPE): string | false {
     switch (streamType) {
-        case STREAM_TYPE.P_STREAM:
+        case STREAM_TYPE.PERSISTENT_STREAM:
             return STREAM_CONSTANTS.P;
-        case STREAM_TYPE.NP_STREAM:
+        case STREAM_TYPE.NON_PERSISTENT_STREAM:
             return STREAM_CONSTANTS.NP;
         default:
             return false;

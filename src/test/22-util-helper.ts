@@ -9,11 +9,11 @@ import { STREAM_TYPE } from "../stream";
 
 describe("Helper.getStreamTypeString", () => {
     it("returns valid value for non-persistent", () => {
-        expect(getStreamTypeString(STREAM_TYPE.NP_STREAM)).to.equal(STREAM_CONSTANTS.NP);
+        expect(getStreamTypeString(STREAM_TYPE.NON_PERSISTENT_STREAM)).to.equal(STREAM_CONSTANTS.NP);
     });
 
     it("returns valid value for persistent", () => {
-        expect(getStreamTypeString(STREAM_TYPE.P_STREAM)).to.equal(STREAM_CONSTANTS.P);
+        expect(getStreamTypeString(STREAM_TYPE.PERSISTENT_STREAM)).to.equal(STREAM_CONSTANTS.P);
     });
 
     it("returns false for invalid input", () => {
@@ -24,12 +24,12 @@ describe("Helper.getStreamTypeString", () => {
 
 describe("Helper.getFullStreamPath", () => {
     it("returns correct output when there is no extra url", () => {
-        const path = getFullStreamPath("_polog", STREAM_TYPE.NP_STREAM, true);
+        const path = getFullStreamPath("_polog", STREAM_TYPE.NON_PERSISTENT_STREAM, true);
         expect(path).to.equal("/streams/non-persistent/stream/_polog?local=true");
     });
 
     it("returns correct output when there is extra url", () => {
-        const path = getFullStreamPath("_polog", STREAM_TYPE.P_STREAM, false, "/compaction");
+        const path = getFullStreamPath("_polog", STREAM_TYPE.PERSISTENT_STREAM, false, "/compaction");
         expect(path).to.equal("/streams/persistent/stream/_polog/compaction?local=false");
     });
 });

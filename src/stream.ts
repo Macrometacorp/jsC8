@@ -9,7 +9,7 @@ import { btoa } from './util/btoa';
 
 const WebSocket = require('ws');
 
-export enum STREAM_TYPE { P_STREAM = 4, NP_STREAM };
+export enum STREAM_TYPE { PERSISTENT_STREAM = 4, NON_PERSISTENT_STREAM };
 
 export type wsCallbackObj = {
     onopen?: () => void,
@@ -192,7 +192,7 @@ export class Stream {
     }
 
     terminateStream() {
-        if (this.streamType === STREAM_TYPE.NP_STREAM) throw "Non-persistent stream cannot be terminated"
+        if (this.streamType === STREAM_TYPE.NON_PERSISTENT_STREAM) throw "Non-persistent stream cannot be terminated"
         const urlSuffix = "/terminate";
         return this._connection.request(
             {
@@ -207,7 +207,7 @@ export class Stream {
         const lowerCaseUrl = dcName.toLocaleLowerCase();
         if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https")) throw "Invalid DC name";
         const { onopen, onclose, onerror, onmessage } = callbackObj;
-        const persist = this.streamType === STREAM_TYPE.P_STREAM ? STREAM_CONSTANTS.P : STREAM_CONSTANTS.NP;
+        const persist = this.streamType === STREAM_TYPE.PERSISTENT_STREAM ? STREAM_CONSTANTS.P : STREAM_CONSTANTS.NP;
         const region = this.local ? 'c8local' : 'c8global';
         const tenant = this._connection.getTenantName();
         let dbName = this._connection.getFabricName();
@@ -241,19 +241,21 @@ export class Stream {
         });
     }
 
-    producer(message: string, dcName: string) {
-        const lowerCaseUrl = dcName.toLocaleLowerCase();
-        if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https")) throw "Invalid DC name";
-        const persist = this.streamType === STREAM_TYPE.P_STREAM ? STREAM_CONSTANTS.P : STREAM_CONSTANTS.NP;
-        const region = this.local ? 'c8local' : 'c8global';
-        const tenant = this._connection.getTenantName();
-        let dbName = this._connection.getFabricName();
-        if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using."
+    producer(message: string, dcName?: string) {
 
-        dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
-
-        const producerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.name}`;
         if (this._producer === undefined) {
+            if (!dcName) throw "DC name not provided to establish producer connection";
+
+            const lowerCaseUrl = dcName.toLocaleLowerCase();
+            if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https")) throw "Invalid DC name";
+            const persist = this.streamType === STREAM_TYPE.PERSISTENT_STREAM ? STREAM_CONSTANTS.P : STREAM_CONSTANTS.NP;
+            const region = this.local ? 'c8local' : 'c8global';
+            const tenant = this._connection.getTenantName();
+            let dbName = this._connection.getFabricName();
+            if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using."
+
+            dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
+            const producerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.name}`;
             this._producer = new WebSocket(producerUrl);
 
             this._producer.on("open", () => {

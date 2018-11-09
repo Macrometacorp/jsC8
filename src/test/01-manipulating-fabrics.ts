@@ -12,7 +12,7 @@ describe("Manipulating fabrics", function () {
   this.timeout(60000);
 
   let fabric: Fabric;
-  const testUrl: string = process.env.TEST_C8_URL || "http://localhost:8529";
+  const testUrl: string = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
   let dcList: string;
   beforeEach(async () => {

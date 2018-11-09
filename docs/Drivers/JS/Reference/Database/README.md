@@ -14,7 +14,7 @@ If _config_ is a string, it will be interpreted as _config.url_.
 
   An object with the following properties:
 
-  - **url**: `string | Array<string>` (Default: `http://localhost:8529`)
+  - **url**: `string | Array<string>` (Default: `https://default.dev.macrometa.io`)
 
     Base URL of the C8 server or list of server URLs.
 

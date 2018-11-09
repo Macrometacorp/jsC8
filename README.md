@@ -24,33 +24,83 @@ npm run dist
 ## Basic usage example
 
 ```js
-// Modern JavaScript
-import { Fabric, c8ql, STREAM_TYPE } from "jsc8";
-const fabric = new Fabric();
-(async function() {
-  const now = Date.now();
-  try {
-    const stream = fabric.stream("my-stream", STREAM_TYPE.P_STREAM, true);
-    await stream.createStream();
-    stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "test-eu-west-1..dev.aws.macrometa.io");
-    stream.producer("hello world", "test-eu-west-1..dev.aws.macrometa.io");
-    stream.closeWSConnections();
+import { Fabric, STREAM_TYPE } from "jsc8";
 
-    const cursor = await fabric.query(c8ql`RETURN ${now}`);
-    const result = await cursor.next();
-    // ...
-  } catch (err) {
-    // ...
-  }
-})();
+const region = "qa1-us-east-1.ops.aws.macrometa.io";
+const tenantName = "demotenant";
+const fabricName = "demofabric";
+const collectionName = "employees";
+const streamName = "demostream";
 
+//-----------------------------------------------------------------
+// Create a fabric object
+const fabric = new Fabric(region);
+
+//-----------------------------------------------------------------
+// Create a demotenant, demofabric
+const demotenant = fabric.tenant(tenantName);
+await demotenant.createTenant("my-password");
+fabric.useTenant(tenantName);
+fabric.useBasicAuth();
+await fabric.createFabric(fabricName, [{ username: 'root' }], { dcList: region, realTime: true });
+
+//-----------------------------------------------------------------
+// Create and populate employees collection in demofabric
+fabric.useFabric(fabricName);
+const collection = fabric.collection(collectionName);
+await collection.create();
+await collection.createHashIndex(['firstname'], true);//Add a hash index to the collection.
+await collection.save({firstname: 'Jean', lastname: 'Picard'});
+await collection.save({firstname: 'Bruce', lastname: 'Wayne'});
+
+//-----------------------------------------------------------------
+// Query employees collection
+  const cursor = await fabric.query(c8ql`FOR employee IN employees RETURN employee`);
+  const result = await cursor.next();
+
+//-----------------------------------------------------------------
+// Real-time updates from a collection in fabric
+  const callback = evt => console.log(evt);
+  fabric.onChange(collectionName, callback);
+
+//-----------------------------------------------------------------
+// Create persistent, global and local streams in demofabric
+  const persistent_globalStream = fabric.stream(streamName, STREAM_TYPE.PERSISTENT_STREAM, false);
+  await persistent_globalStream.createStream();
+
+  const persistent_localStream = fabric.stream(streamName, STREAM_TYPE.PERSISTENT_STREAM, true);
+  await persistent_localStream.createStream();
+
+// Create non-persistent, global and local streams in demofabric
+  const non_persistent_globalStream = fabric.stream(streamName, STREAM_TYPE.NON_PERSISTENT_STREAM, false);
+  await non_persistent_globalStream.createStream();
+
+  const non_persistent_localStream = fabric.stream(streamName, STREAM_TYPE.NON_PERSISTENT_STREAM, true);
+  await non_persistent_localStream.createStream();
+
+  const streams = await fabric.getStreams();
+
+// Subscribe to a stream
+  const stream = fabric.stream(streamName, STREAM_TYPE.PERSISTENT_STREAM, false);
+  await stream.createStream();
+  stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, region);
+
+// Publish to a stream
+  stream.producer("hello world", region);
+  stream.producer("hey hey hey world");
+
+// Close all connections to a stream
+  stream.closeWSConnections();
+```
+
+```js
 // or plain old Node-style
 var jsC8 = require("jsc8");
 var fabric = new jsC8.Fabric();
-var stream = fabric.stream("my-stream", jsC8.STREAM_TYPE.P_STREAM, true);
+var stream = fabric.stream("my-stream", jsC8.STREAM_TYPE.PERSISTENT_STREAM, true);
 stream.createStream().then(()=>{
-  stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "test-eu-west-1..dev.aws.macrometa.io");
-  stream.producer("hello world", "test-eu-west-1..dev.aws.macrometa.io");
+  stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "test-eu-west-1.dev.aws.macrometa.io");
+  stream.producer("hello world", "test-eu-west-1.dev.aws.macrometa.io");
   stream.closeWSConnections();
 });
 var now = Date.now();
@@ -82,9 +132,7 @@ yarn test
 npm test
 ```
 
-By default the tests will be run against a server listening on
-`https://localhost` (using username `root` with no password). To
-override this, you can set the environment variable `TEST_C8_URL` to
+To set the environment variable `TEST_C8_URL` to
 something different:
 
 ```sh

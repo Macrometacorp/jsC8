@@ -94,10 +94,8 @@ describe("Configuring the driver", () => {
       // default: http
       new Connection(); // eslint-disable-line no-new
       expect(protocol).to.equal("http");
-      new Connection("https://localhost:8529"); // eslint-disable-line no-new
+      new Connection("https://default.dev.macrometa.io"); // eslint-disable-line no-new
       expect(protocol).to.equal("https");
-      new Connection("http://localhost:8529"); // eslint-disable-line no-new
-      expect(protocol).to.equal("http");
     });
   });
   describe("with agent", () => {
@@ -132,15 +130,11 @@ describe("Configuring the driver", () => {
     it("passes the agent to the request function", () => {
       let agent = Symbol("agent");
       let conn;
-      conn = new Connection({ agent }); // default: http
+      conn = new Connection({ agent }); // default: https
       conn.request({ headers: {} }, () => { });
       expect(options).to.have.property("agent", agent);
       agent = Symbol("agent");
-      conn = new Connection({ agent, url: "https://localhost:8529" });
-      conn.request({ headers: {} }, () => { });
-      expect(options).to.have.property("agent", agent);
-      agent = Symbol("agent");
-      conn = new Connection({ agent, url: "http://localhost:8529" });
+      conn = new Connection({ agent, url: "https://default.dev.macrometa.io" });
       conn.request({ headers: {} }, () => { });
       expect(options).to.have.property("agent", agent);
     });
@@ -149,13 +143,10 @@ describe("Configuring the driver", () => {
       let conn;
       conn = new Connection({ agent }); // default: http
       conn.request({ headers: {} }, () => { });
-      expect(protocol).to.equal("http");
-      conn = new Connection({ agent, url: "https://localhost:8529" });
+      expect(protocol).to.equal("https");
+      conn = new Connection({ agent, url: "https://default.dev.macrometa.io" });
       conn.request({ headers: {} }, () => { });
       expect(protocol).to.equal("https");
-      conn = new Connection({ agent, url: "http://localhost:8529" });
-      conn.request({ headers: {} }, () => { });
-      expect(protocol).to.equal("http");
     });
     it("calls Agent#destroy when the connection is closed", () => {
       const agent = {
