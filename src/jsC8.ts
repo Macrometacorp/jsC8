@@ -10,7 +10,7 @@ export default function jsC8(config: Config) {
   return new Fabric(config);
 }
 
-Object.assign(jsC8, { CollectionType, C8Error, Fabric, c8ql });
+Object.assign(jsC8, { CollectionType, C8Error, Fabric, c8ql, Tenant, Stream, STREAM_TYPE });
 export { DocumentCollection, EdgeCollection } from "./collection";
 export { Graph } from "./graph";
 export { Fabric, c8ql, Tenant, Stream, STREAM_TYPE };
