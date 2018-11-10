@@ -1,6 +1,6 @@
 # C8 JavaScript Driver
 
-The official C8 low-level JavaScript client.
+The official C8 JavaScript client.
 
 ## Install
 
@@ -26,20 +26,20 @@ npm run dist
 ```js
 import { Fabric, STREAM_TYPE, c8ql } from "jsc8";
 
-const region = "qa1-us-east-1.ops.aws.macrometa.io";
-const tenantName = "demotenant";
-const fabricName = "demofabric";
+const region = "fabric1.ops.aws.macrometa.io";
+const tenantName = "guest";
+const fabricName = "fabric1";
 const collectionName = "employees";
-const streamName = "demostream";
+const streamName = "guest_stream";
 
 //-----------------------------------------------------------------
 // Create a fabric object
 const fabric = new Fabric(region);
 
 //-----------------------------------------------------------------
-// Create a demotenant, demofabric
-const demotenant = fabric.tenant(tenantName);
-await demotenant.createTenant("my-password");
+// Create a guest tenant, guest fabric
+const guesttenant = fabric.tenant(tenantName);
+await guesttenant.createTenant("my-password");
 fabric.useTenant(tenantName);
 fabric.useBasicAuth();
 await fabric.createFabric(fabricName, [{ username: 'root' }], { dcList: region, realTime: true });
@@ -99,7 +99,7 @@ var jsC8 = require("jsc8");
 var fabric = new jsC8.Fabric();
 var stream = fabric.stream("my-stream", jsC8.STREAM_TYPE.PERSISTENT_STREAM, true);
 stream.createStream().then(()=>{
-  stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "test-eu-west-1.dev.aws.macrometa.io");
+  stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "fabric1.aws.macrometa.io");
   stream.producer("hello world", "test-eu-west-1.dev.aws.macrometa.io");
   stream.closeWSConnections();
 });
