@@ -11,7 +11,7 @@ import { ArrayCursor } from "./cursor";
 import { isC8Error } from "./error";
 import { Graph } from "./graph";
 import { Tenant } from "./tenant";
-import { Stream, STREAM_TYPE } from "./stream";
+import { Stream, StreamType } from "./stream";
 import { Route } from "./route";
 import { btoa } from "./util/btoa";
 
@@ -442,7 +442,7 @@ export class Fabric {
 
   //Stream
 
-  stream(streamName: string, type: STREAM_TYPE, local: boolean): Stream {
+  stream(streamName: string, type: StreamType, local: boolean): Stream {
     return new Stream(this._connection, streamName, type, local);
   }
 

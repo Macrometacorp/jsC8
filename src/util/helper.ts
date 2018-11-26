@@ -1,20 +1,18 @@
-import { STREAM_TYPE } from '../stream';
+import { StreamType, StreamConstants } from '../stream';
 import { EdgeLocation } from "../fabric";
 
-export const STREAM_CONSTANTS = { NP: "non-persistent", P: "persistent" };
-
-export function getStreamTypeString(streamType: STREAM_TYPE): string | false {
+export function getStreamTypeString(streamType: StreamType): string | false {
     switch (streamType) {
-        case STREAM_TYPE.PERSISTENT_STREAM:
-            return STREAM_CONSTANTS.P;
-        case STREAM_TYPE.NON_PERSISTENT_STREAM:
-            return STREAM_CONSTANTS.NP;
+        case StreamType.PERSISTENT_STREAM:
+            return StreamConstants.PERSISTENT;
+        case StreamType.NON_PERSISTENT_STREAM:
+            return StreamConstants.NON_PERSISTENT;
         default:
             return false;
     }
 }
 
-export function getFullStreamPath(name: string, streamType: STREAM_TYPE, local: boolean, extraUrl?: string): string {
+export function getFullStreamPath(name: string, streamType: StreamType, local: boolean, extraUrl?: string): string {
     const typeString: string | false = getStreamTypeString(streamType);
 
     if (!typeString) throw "Invalid stream type";

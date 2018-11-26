@@ -24,7 +24,7 @@ npm run dist
 ## Basic usage example
 
 ```js
-import { Fabric, STREAM_TYPE, c8ql } from "jsc8";
+import { Fabric, StreamType, c8ql } from "jsc8";
 
 const region = "fabric1.ops.aws.macrometa.io";
 const tenantName = "guest";
@@ -65,23 +65,23 @@ await collection.save({firstname: 'Bruce', lastname: 'Wayne'});
 
 //-----------------------------------------------------------------
 // Create persistent, global and local streams in demofabric
-  const persistent_globalStream = fabric.stream(streamName, STREAM_TYPE.PERSISTENT_STREAM, false);
+  const persistent_globalStream = fabric.stream(streamName, StreamType.PERSISTENT_STREAM, false);
   await persistent_globalStream.createStream();
 
-  const persistent_localStream = fabric.stream(streamName, STREAM_TYPE.PERSISTENT_STREAM, true);
+  const persistent_localStream = fabric.stream(streamName, StreamType.PERSISTENT_STREAM, true);
   await persistent_localStream.createStream();
 
 // Create non-persistent, global and local streams in demofabric
-  const non_persistent_globalStream = fabric.stream(streamName, STREAM_TYPE.NON_PERSISTENT_STREAM, false);
+  const non_persistent_globalStream = fabric.stream(streamName, StreamType.NON_PERSISTENT_STREAM, false);
   await non_persistent_globalStream.createStream();
 
-  const non_persistent_localStream = fabric.stream(streamName, STREAM_TYPE.NON_PERSISTENT_STREAM, true);
+  const non_persistent_localStream = fabric.stream(streamName, StreamType.NON_PERSISTENT_STREAM, true);
   await non_persistent_localStream.createStream();
 
   const streams = await fabric.getStreams();
 
 // Subscribe to a stream
-  const stream = fabric.stream(streamName, STREAM_TYPE.PERSISTENT_STREAM, false);
+  const stream = fabric.stream(streamName, StreamType.PERSISTENT_STREAM, false);
   await stream.createStream();
   stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, region);
 
@@ -97,7 +97,7 @@ await collection.save({firstname: 'Bruce', lastname: 'Wayne'});
 // or plain old Node-style
 var jsC8 = require("jsc8");
 var fabric = new jsC8.Fabric();
-var stream = fabric.stream("my-stream", jsC8.STREAM_TYPE.PERSISTENT_STREAM, true);
+var stream = fabric.stream("my-stream", jsC8.StreamType.PERSISTENT_STREAM, true);
 stream.createStream().then(()=>{
   stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "fabric1.aws.macrometa.io");
   stream.producer("hello world", "test-eu-west-1.dev.aws.macrometa.io");

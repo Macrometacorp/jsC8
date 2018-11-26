@@ -1,5 +1,5 @@
 import { Connection } from './connection';
-import { getFullStreamPath, STREAM_CONSTANTS } from './util/helper';
+import { getFullStreamPath } from './util/helper';
 import { btoa } from './util/btoa';
 
 // 2 document
@@ -9,7 +9,8 @@ import { btoa } from './util/btoa';
 
 const WebSocket = require('ws');
 
-export enum STREAM_TYPE { PERSISTENT_STREAM = 4, NON_PERSISTENT_STREAM };
+export enum StreamType { PERSISTENT_STREAM = 4, NON_PERSISTENT_STREAM };
+export enum StreamConstants { NON_PERSISTENT = "non-persistent", PERSISTENT = "persistent" };
 
 export type wsCallbackObj = {
     onopen?: () => void,
@@ -20,13 +21,13 @@ export type wsCallbackObj = {
 
 export class Stream {
     private _connection: Connection;
-    streamType: STREAM_TYPE;
+    streamType: StreamType;
     name: string;
     local: boolean;
     private _producer: any;
     private _consumers: any[];
 
-    constructor(connection: Connection, name: string, streamType: STREAM_TYPE, local: boolean = false) {
+    constructor(connection: Connection, name: string, streamType: StreamType, local: boolean = false) {
         this._connection = connection;
         this.streamType = streamType;
         this.name = name;
@@ -192,7 +193,7 @@ export class Stream {
     }
 
     terminateStream() {
-        if (this.streamType === STREAM_TYPE.NON_PERSISTENT_STREAM) throw "Non-persistent stream cannot be terminated"
+        if (this.streamType === StreamType.NON_PERSISTENT_STREAM) throw "Non-persistent stream cannot be terminated"
         const urlSuffix = "/terminate";
         return this._connection.request(
             {
@@ -207,7 +208,7 @@ export class Stream {
         const lowerCaseUrl = dcName.toLocaleLowerCase();
         if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https")) throw "Invalid DC name";
         const { onopen, onclose, onerror, onmessage } = callbackObj;
-        const persist = this.streamType === STREAM_TYPE.PERSISTENT_STREAM ? STREAM_CONSTANTS.P : STREAM_CONSTANTS.NP;
+        const persist = this.streamType === StreamType.PERSISTENT_STREAM ? StreamConstants.PERSISTENT : StreamConstants.NON_PERSISTENT;
         const region = this.local ? 'c8local' : 'c8global';
         const tenant = this._connection.getTenantName();
         let dbName = this._connection.getFabricName();
@@ -248,7 +249,7 @@ export class Stream {
 
             const lowerCaseUrl = dcName.toLocaleLowerCase();
             if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https")) throw "Invalid DC name";
-            const persist = this.streamType === STREAM_TYPE.PERSISTENT_STREAM ? STREAM_CONSTANTS.P : STREAM_CONSTANTS.NP;
+            const persist = this.streamType === StreamType.PERSISTENT_STREAM ? StreamConstants.PERSISTENT : StreamConstants.NON_PERSISTENT;
             const region = this.local ? 'c8local' : 'c8global';
             const tenant = this._connection.getTenantName();
             let dbName = this._connection.getFabricName();
