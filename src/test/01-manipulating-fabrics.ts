@@ -96,7 +96,11 @@ describe("Manipulating fabrics", function () {
     });
   });
   describe("fabric.listUserFabrics", () => {
-    it("returns a list of fabrics accessible to the active user");
+    it("returns a list of fabrics accessible to the active user", async () => {
+      const fabrics = await fabric.listUserFabrics();
+      expect(fabrics).to.be.an.instanceof(Array);
+      expect(fabrics[0].name).to.equal("_system");
+    });
   });
   describe("fabric.dropFabric", () => {
     let name = `testfabric_${Date.now()}`;
