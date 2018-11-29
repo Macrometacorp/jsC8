@@ -7,7 +7,7 @@ const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 describe("Manipulating collections", function () {
   // create fabric takes 11s in a standard cluster
-  this.timeout(20000);
+  this.timeout(50000);
 
   let name = `testfabric_${Date.now()}`;
   let fabric: Fabric;
@@ -184,4 +184,23 @@ describe("Manipulating collections", function () {
       });
     });
   });
+  describe("collection.onChange", () => {
+    it("should get the message on collection change", (done) => {
+      const callbackObj = {
+        onopen: () => {
+          collection.save({ name: "Anthony", lastname: "Gonsalvis" });
+        },
+        onmessage: (msg: string) => {
+          console.log("msg=>", msg);
+          done();
+        },
+        onerror: (err: any) => {
+          console.log("Connection Error->", err);
+          expect.fail("Websocket connection error");
+        },
+        onclose: () => console.log("Websoket connection closed")
+      }
+      collection.onChange(callbackObj, testUrl.substring(8));
+    });
+  })
 });
