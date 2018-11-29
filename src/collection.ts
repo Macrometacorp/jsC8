@@ -1,6 +1,7 @@
 import { Connection } from "./connection";
 import { ArrayCursor } from "./cursor";
 import { isC8Error } from "./error";
+import { Stream, StreamType, wsCallbackObj } from "./stream";
 
 export enum CollectionType {
   DOCUMENT_COLLECTION = 2,
@@ -10,15 +11,15 @@ export enum CollectionType {
 export type DocumentHandle =
   | string
   | {
-      _key?: string;
-      _id?: string;
-    };
+    _key?: string;
+    _id?: string;
+  };
 
 export type IndexHandle =
   | string
   | {
-      id?: string;
-    };
+    id?: string;
+  };
 
 export interface ImportOptions {
   type?: null | "auto" | "documents" | "array";
@@ -57,6 +58,7 @@ export const COLLECTION_NOT_FOUND = 1203;
 export abstract class BaseCollection implements C8Collection {
   isC8Collection: true = true;
   name: string;
+  protected stream: Stream;
   abstract type: CollectionType;
   protected _idPrefix: string;
   protected _connection: Connection;
@@ -65,6 +67,7 @@ export abstract class BaseCollection implements C8Collection {
     this.name = name;
     this._idPrefix = `${this.name}/`;
     this._connection = connection;
+    this.stream = new Stream(connection, name, StreamType.NON_PERSISTENT_STREAM, true);
     if (this._connection.c8Major >= 3) {
       this.first = undefined!;
       this.last = undefined!;
@@ -155,6 +158,10 @@ export abstract class BaseCollection implements C8Collection {
       },
       res => res.body
     );
+  }
+
+  onChange(callback: wsCallbackObj, dcName: string, subscription: string = "subs") {
+    this.stream.consumer(subscription, callback, dcName);
   }
 
   properties() {
