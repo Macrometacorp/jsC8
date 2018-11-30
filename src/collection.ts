@@ -164,6 +164,10 @@ export abstract class BaseCollection implements C8Collection {
     this.stream.consumer(subscription, callback, dcName);
   }
 
+  closeOnChangeConnection() {
+    this.stream.closeWSConnections();
+  }
+
   properties() {
     return this._get("properties");
   }

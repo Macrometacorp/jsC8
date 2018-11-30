@@ -1,13 +1,13 @@
 import { Connection } from './connection';
 import { getFullStreamPath } from './util/helper';
 import { btoa } from './util/btoa';
-
+import { isBrowser } from "./util/helper";
 // 2 document
 // 3 edge
 // 4 persistent
 // 5 non-persistent
 
-const WebSocket = require('ws');
+const NodeWebSocket = require('ws');
 
 export enum StreamType { PERSISTENT_STREAM = 4, NON_PERSISTENT_STREAM };
 export enum StreamConstants { NON_PERSISTENT = "non-persistent", PERSISTENT = "persistent" };
@@ -25,6 +25,7 @@ export class Stream {
     name: string;
     local: boolean;
     private _producer: any;
+    private _noopProducer: any;
     private _consumers: any[];
 
     constructor(connection: Connection, name: string, streamType: StreamType, local: boolean = false) {
@@ -217,29 +218,75 @@ export class Stream {
         dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
         const consumerUrl = `wss://${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${this.name}/${subscriptionName}`;
 
-        this._consumers.push(new WebSocket(consumerUrl));
-        const lastIndex = this._consumers.length - 1;
+        if (isBrowser) {
+            this._consumers.push(new WebSocket(consumerUrl));
+            const lastIndex = this._consumers.length - 1;
 
-        this._consumers[lastIndex].on('open', () => {
-            console.log("Consumer connection opened");
-            typeof onopen === 'function' && onopen();
-        });
+            this._consumers[lastIndex].onopen = () => {
+                console.log("Consumer connection opened");
+                typeof onopen === 'function' && onopen();
+            };
 
-        this._consumers[lastIndex].on('close', () => {
-            console.log("Consumer connection closed");
-            typeof onclose === 'function' && onclose();
-        });
+            this._consumers[lastIndex].onclose = () => {
+                console.log("Consumer connection closed");
+                typeof onclose === 'function' && onclose();
+            };
 
-        this._consumers[lastIndex].on('error', (e: Error) => {
-            console.log("Consumer connection errored ", e);
-            typeof onerror === 'function' && onerror(e);
-        });
+            this._consumers[lastIndex].onerror = (e: Error) => {
+                console.log("Consumer connection errored ", e);
+                typeof onerror === 'function' && onerror(e);
+            };
 
-        this._consumers[lastIndex].on("message", (msg: string) => {
-            const receiveMsg = JSON.parse(msg);
-            console.log("consumer message received ", msg);
-            typeof onmessage === 'function' && onmessage(receiveMsg);
-        });
+            this._consumers[lastIndex].onmessage = (msg: string) => {
+                typeof onmessage === 'function' && onmessage(msg);
+            };
+
+        } else {
+            this._consumers.push(new NodeWebSocket(consumerUrl));
+            const lastIndex = this._consumers.length - 1;
+
+            this._consumers[lastIndex].on('open', () => {
+                console.log("Consumer connection opened");
+                typeof onopen === 'function' && onopen();
+            });
+
+            this._consumers[lastIndex].on('close', () => {
+                console.log("Consumer connection closed");
+                typeof onclose === 'function' && onclose();
+            });
+
+            this._consumers[lastIndex].on('error', (e: Error) => {
+                console.log("Consumer connection errored ", e);
+                typeof onerror === 'function' && onerror(e);
+            });
+
+            this._consumers[lastIndex].on("message", (msg: string) => {
+                typeof onmessage === 'function' && onmessage(msg);
+            });
+        }
+
+        !this._noopProducer && this.noopProducer(dcName);
+
+    }
+
+    private noopProducer(dcName: string) {
+        const lowerCaseUrl = dcName.toLocaleLowerCase();
+        if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https")) throw "Invalid DC name";
+        const persist = this.streamType === StreamType.PERSISTENT_STREAM ? StreamConstants.PERSISTENT : StreamConstants.NON_PERSISTENT;
+        const region = this.local ? 'c8local' : 'c8global';
+        const tenant = this._connection.getTenantName();
+        let dbName = this._connection.getFabricName();
+        if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using."
+
+        dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
+        const noopProducerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.name}`;
+
+        this._noopProducer = isBrowser ? new WebSocket(noopProducerUrl) : new NodeWebSocket(noopProducerUrl);
+        this._noopProducer.onopen = () => {
+            setInterval(() => {
+                this._noopProducer.send(JSON.stringify({ payload: 'noop' }));
+            }, 30000);
+        }
     }
 
     producer(message: string, dcName?: string) {
@@ -257,19 +304,35 @@ export class Stream {
 
             dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
             const producerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.name}`;
-            this._producer = new WebSocket(producerUrl);
 
-            this._producer.on("open", () => {
-                console.log("Producer connection opened");
-                this._producer.send(JSON.stringify({ data: { payload: btoa(message) } }));
-            });
-            this._producer.on('close', () => {
-                console.log("Producer connection closed");
-            });
+            if (isBrowser) {
+                this._producer = new WebSocket(producerUrl);
 
-            this._producer.on('error', (e: Error) => {
-                console.log("Producer connection errored ", e);
-            });
+                this._producer.onopen = () => {
+                    console.log("Producer connection opened");
+                    this._producer.send(JSON.stringify({ data: { payload: btoa(message) } }));
+                };
+                this._producer.onclose = () => {
+                    console.log("Producer connection closed");
+                };
+
+                this._producer.onerror = (e: Error) => {
+                    console.log("Producer connection errored ", e);
+                };
+            } else {
+                this._producer = new NodeWebSocket(producerUrl);
+                this._producer.on("open", () => {
+                    console.log("Producer connection opened");
+                    this._producer.send(JSON.stringify({ data: { payload: btoa(message) } }));
+                });
+                this._producer.on('close', () => {
+                    console.log("Producer connection closed");
+                });
+
+                this._producer.on('error', (e: Error) => {
+                    console.log("Producer connection errored ", e);
+                });
+            }
         } else {
             this._producer.send(JSON.stringify({ data: { payload: btoa(message) } }));
         }
@@ -277,7 +340,15 @@ export class Stream {
     }
 
     closeWSConnections() {
-        this._producer.close();
-        this._consumers.forEach(consumer => consumer.close());
+        if (isBrowser) {
+            this._producer && this._producer.close();
+            this._noopProducer && this._noopProducer.close();
+            this._consumers && this._consumers.forEach(consumer => consumer.close());
+        } else {
+            this._producer && this._producer.terminate();
+            this._noopProducer && this._noopProducer.terminate();
+            this._consumers && this._consumers.forEach(consumer => consumer.terminate());
+        }
+
     }
 }
