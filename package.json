@@ -31,7 +31,8 @@
     "./lib/cjs/util/bytelength.js": "./lib/cjs/util/bytelength.web.js",
     "./lib/cjs/util/joinPath.js": "./lib/cjs/util/joinPath.web.js",
     "./lib/cjs/util/multipart.js": "./lib/cjs/util/multipart.web.js",
-    "./lib/cjs/util/request.js": "./lib/cjs/util/request.web.js"
+    "./lib/cjs/util/request.js": "./lib/cjs/util/request.web.js",
+    "./lib/cjs/util/webSocket.js": "./lib/cjs/util/webSocket.web.js"
   },
   "files": [
     "lib/*.*",

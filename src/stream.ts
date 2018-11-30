@@ -7,7 +7,7 @@ import { btoa } from './util/btoa';
 // 4 persistent
 // 5 non-persistent
 
-const WebSocket = require('ws');
+import { ws } from './util/webSocket';
 
 export enum StreamType { PERSISTENT_STREAM = 4, NON_PERSISTENT_STREAM };
 export enum StreamConstants { NON_PERSISTENT = "non-persistent", PERSISTENT = "persistent" };
@@ -25,7 +25,9 @@ export class Stream {
     name: string;
     local: boolean;
     private _producer: any;
+    private _noopProducer: any;
     private _consumers: any[];
+    private setIntervalId?: NodeJS.Timeout;
 
     constructor(connection: Connection, name: string, streamType: StreamType, local: boolean = false) {
         this._connection = connection;
@@ -33,6 +35,7 @@ export class Stream {
         this.name = name;
         this.local = local;
         this._consumers = [];
+        this.setIntervalId = undefined;
     }
 
     _getPath(urlSuffix?: string): string {
@@ -217,7 +220,7 @@ export class Stream {
         dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
         const consumerUrl = `wss://${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${this.name}/${subscriptionName}`;
 
-        this._consumers.push(new WebSocket(consumerUrl));
+        this._consumers.push(ws(consumerUrl));
         const lastIndex = this._consumers.length - 1;
 
         this._consumers[lastIndex].on('open', () => {
@@ -227,7 +230,9 @@ export class Stream {
 
         this._consumers[lastIndex].on('close', () => {
             console.log("Consumer connection closed");
+            this.setIntervalId && clearInterval(this.setIntervalId);
             typeof onclose === 'function' && onclose();
+
         });
 
         this._consumers[lastIndex].on('error', (e: Error) => {
@@ -236,9 +241,31 @@ export class Stream {
         });
 
         this._consumers[lastIndex].on("message", (msg: string) => {
-            const receiveMsg = JSON.parse(msg);
-            console.log("consumer message received ", msg);
-            typeof onmessage === 'function' && onmessage(receiveMsg);
+            typeof onmessage === 'function' && onmessage(msg);
+        });
+
+        !this._noopProducer && this.noopProducer(dcName);
+
+    }
+
+    private noopProducer(dcName: string) {
+        const lowerCaseUrl = dcName.toLocaleLowerCase();
+        if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https")) throw "Invalid DC name";
+        const persist = this.streamType === StreamType.PERSISTENT_STREAM ? StreamConstants.PERSISTENT : StreamConstants.NON_PERSISTENT;
+        const region = this.local ? 'c8local' : 'c8global';
+        const tenant = this._connection.getTenantName();
+        let dbName = this._connection.getFabricName();
+        if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using."
+
+        dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
+        const noopProducerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.name}`;
+
+        this._noopProducer = ws(noopProducerUrl);
+
+        this._noopProducer.on('open', () => {
+            this.setIntervalId = setInterval(() => {
+                this._noopProducer.send(JSON.stringify({ payload: 'noop' }));
+            }, 30000);
         });
     }
 
@@ -257,8 +284,8 @@ export class Stream {
 
             dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
             const producerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.name}`;
-            this._producer = new WebSocket(producerUrl);
 
+            this._producer = ws(producerUrl);
             this._producer.on("open", () => {
                 console.log("Producer connection opened");
                 this._producer.send(JSON.stringify({ data: { payload: btoa(message) } }));
@@ -277,7 +304,9 @@ export class Stream {
     }
 
     closeWSConnections() {
-        this._producer.close();
-        this._consumers.forEach(consumer => consumer.close());
+        this.setIntervalId && clearInterval(this.setIntervalId);
+        this._producer && this._producer.terminate();
+        this._noopProducer && this._noopProducer.terminate();
+        this._consumers && this._consumers.forEach(consumer => consumer.terminate());
     }
 }
