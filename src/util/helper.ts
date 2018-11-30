@@ -31,5 +31,3 @@ export function getDCListString(response: any): string {
     }, "");
     return dcList;
 }
-
-export const isBrowser = typeof window !== 'undefined' && typeof window.document !== 'undefined';
