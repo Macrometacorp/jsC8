@@ -73,7 +73,7 @@ var jsC8 = require("jsc8/lib/web");
 You can also use [unpkg](https://unpkg.com) during development:
 
 ```html
-< !-- note the path includes the version number (e.g. 0.10.1) -- >
+< !-- note the path includes the version number (e.g. 0.10.2) -- >
 <script src="https://unpkg.com/jsc8/lib/web.js"></script>
 <script>
 var fabric = new jsC8.Fabric();
@@ -94,7 +94,7 @@ When loading the browser build with a script tag make sure to load the polyfill 
 
 ```html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.js"></script>
-<script src="https://unpkg.com/jsc8@0.10.1/lib/web.js"></script>
+<script src="https://unpkg.com/jsc8@0.10.2/lib/web.js"></script>
 ```
 
 ## Basic usage example

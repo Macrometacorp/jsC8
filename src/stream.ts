@@ -223,24 +223,29 @@ export class Stream {
         this._consumers.push(ws(consumerUrl));
         const lastIndex = this._consumers.length - 1;
 
-        this._consumers[lastIndex].on('open', () => {
+        const consumer = this._consumers[lastIndex];
+
+        consumer.on('open', () => {
             console.log("Consumer connection opened");
             typeof onopen === 'function' && onopen();
         });
 
-        this._consumers[lastIndex].on('close', () => {
+        consumer.on('close', () => {
             console.log("Consumer connection closed");
             this.setIntervalId && clearInterval(this.setIntervalId);
             typeof onclose === 'function' && onclose();
 
         });
 
-        this._consumers[lastIndex].on('error', (e: Error) => {
+        consumer.on('error', (e: Error) => {
             console.log("Consumer connection errored ", e);
             typeof onerror === 'function' && onerror(e);
         });
 
-        this._consumers[lastIndex].on("message", (msg: string) => {
+        consumer.on("message", (msg: string) => {
+            const message = JSON.parse(msg);
+            const ackMsg = { "messageId": message.messageId };
+            consumer.send(JSON.stringify(ackMsg));
             typeof onmessage === 'function' && onmessage(msg);
         });
 
