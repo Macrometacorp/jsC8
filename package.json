@@ -51,7 +51,8 @@
     "dist:async": "tsc -p . --outDir ./lib/async/ --target es2018 --declarationMap true && cpy src/index.js lib/async/",
     "dist:web": "webpack",
     "dist": "rimraf lib && npm-run-all --parallel dist:* && cpy src/index.all.js --rename index.js lib/",
-    "prepare": "yarn dist && node -e 'require(\".\");'"
+    "prepare": "yarn dist && node -e 'require(\".\");'",
+    "devScript": "env TEST_C8_URL=https://qa1.ops.aws.macrometa.io mocha --timeout 50000 lib/async/test/${28}*.js --grep stream.websocket"
   },
   "dependencies": {
     "es6-error": "^4.0.1",
@@ -77,7 +78,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.3.1",
     "mocha": "^5.2.0",
-    "npm-run-all": "^4.1.2",
+    "npm-run-all": "^4.1.5",
     "prettier": "^1.9.1",
     "regenerator-runtime": "^0.11.1",
     "rimraf": "^2.6.2",
