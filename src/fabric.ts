@@ -85,7 +85,7 @@ export interface CreateFabricUser {
 }
 
 export interface CreateFabricOptions {
-  dcList: string,
+  dcList: string,//comma separated string, can also be ""
   realTime: boolean
 }
 
@@ -159,12 +159,12 @@ export class Fabric {
       }
     );
   }
-  createFabric(fabricName: string, users: CreateFabricUser[], options: CreateFabricOptions): Promise<any> {
+  createFabric(fabricName: string, users: CreateFabricUser[] | undefined, options: CreateFabricOptions): Promise<any> {
     return this._connection.request(
       {
         method: "POST",
         path: "/database",
-        body: { users, name: fabricName, options }
+        body: { users: users || [], name: fabricName, options }
       },
       res => res.body
     );

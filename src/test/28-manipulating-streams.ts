@@ -209,11 +209,14 @@ describe("Manipulating streams", function () {
 
             it("gets data in consumer when sent by producer", function (done) {
                 function callback(msg: string) {
-                    expect(msg).to.haveOwnProperty("messageId");
-                    done();
+                    const parsedMsg = JSON.parse(msg);
+                    const { payload } = parsedMsg;
+                    if (payload !== 'noop' && payload !== '') {
+                        expect(payload).to.equal("dGVzdA==");
+                        done();
+                    }
                 }
-                stream.consumer(`streamSubscription_${Date.now()}`, { onmessage: callback }, dcName);
-                stream.producer("{ data: { payload: 'NOOP' } }", dcName);
+                stream.consumer(`streamSubscription_${Date.now()}`, { onmessage: callback, onopen: () => stream.producer("test", dcName) }, dcName);
             });
         });
     });

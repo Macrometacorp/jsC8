@@ -4,13 +4,13 @@ import { Config } from "./connection";
 import { Fabric } from "./fabric";
 import { C8Error } from "./error";
 import { Stream, StreamType } from "./stream";
-import { Tenant } from "./tenant";
 
 export default function jsC8(config: Config) {
   return new Fabric(config);
 }
 
-Object.assign(jsC8, { CollectionType, C8Error, Fabric, c8ql, Tenant, Stream, StreamType });
+Object.assign(jsC8, { CollectionType, C8Error, Fabric, c8ql, StreamType });
 export { DocumentCollection, EdgeCollection } from "./collection";
 export { Graph } from "./graph";
-export { Fabric, c8ql, Tenant, Stream, StreamType };
+export { Tenant } from "./tenant";
+export { Fabric, c8ql, Stream };
