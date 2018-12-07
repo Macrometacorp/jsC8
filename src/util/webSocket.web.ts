@@ -1,19 +1,20 @@
 export function ws(url: string) {
     const conn = new WebSocket(url);
     return {
-        on: function (operation: string, callback: (msg: any) => void) {
+        on: function (operation: string, callback: (msg: Event | string) => void) {
+            const operationCallback = (event: Event) => callback(event);
             switch (operation) {
                 case 'open':
-                    conn.onopen = (event) => { callback(event) };
+                    conn.onopen = operationCallback;
                     break;
                 case 'close':
-                    conn.onclose = (event) => { callback(event) };
+                    conn.onclose = operationCallback;
                     break;
                 case 'error':
-                    conn.onerror = (event) => { callback(event); };
+                    conn.onerror = operationCallback;
                     break;
                 case 'message':
-                    conn.onmessage = (event) => { callback(event) };
+                    conn.onmessage = (event: MessageEvent) => callback(event.data);
                     break;
             }
         },
