@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import { Fabric } from "../jsC8";
-import { Stream, StreamType } from '../stream';
+import { Stream } from '../stream';
 
 describe("Manipulating streams", function () {
     // create fabric takes 11s in a standard cluster
@@ -22,7 +22,7 @@ describe("Manipulating streams", function () {
 
     describe("fabric.stream", () => {
         it("returns a new Stream instance", () => {
-            expect(fabric.stream("testStream", StreamType.PERSISTENT_STREAM, true)).to.be.instanceof(Stream);
+            expect(fabric.stream("testStream", true)).to.be.instanceof(Stream);
         });
         it("gets all streams", async () => {
             const response = await fabric.getStreams();
@@ -43,29 +43,13 @@ describe("Manipulating streams", function () {
 
             it('creates a persistent local stream', async () => {
                 const name = `stream_${Date.now()}`;
-                stream = fabric.stream(name, StreamType.PERSISTENT_STREAM, true);
+                stream = fabric.stream(name, true);
                 const response = await stream.createStream();
                 expect(response.error).to.be.false;
             });
             it('creates a persistent global stream', async () => {
                 const name = `stream_${Date.now()}`;
-                stream = fabric.stream(name, StreamType.PERSISTENT_STREAM, false);
-                const response = await stream.createStream();
-                expect(response.error).to.be.false;
-            });
-        });
-
-        describe("non-persistent", () => {
-            let stream: Stream | undefined;
-            it('creates a non-persistent local stream', async () => {
-                const name = `stream_${Date.now()}`;
-                stream = fabric.stream(name, StreamType.NON_PERSISTENT_STREAM, true);
-                const response = await stream.createStream();
-                expect(response.error).to.be.false;
-            });
-            it('creates a non-persistent global stream', async () => {
-                const name = `stream_${Date.now()}`;
-                stream = fabric.stream(name, StreamType.NON_PERSISTENT_STREAM, false);
+                stream = fabric.stream(name, false);
                 const response = await stream.createStream();
                 expect(response.error).to.be.false;
             });
@@ -79,7 +63,7 @@ describe("Manipulating streams", function () {
     describe("stream.manipulate", function () {
         let stream: Stream;
         this.beforeAll(async () => {
-            stream = fabric.stream(`testStream_${Date.now()}`, StreamType.PERSISTENT_STREAM, false);
+            stream = fabric.stream(`testStream_${Date.now()}`, false);
             await stream.createStream();
         });
 
@@ -140,7 +124,7 @@ describe("Manipulating streams", function () {
                     let stream: Stream;
                     beforeEach(async () => {
                         const streamName = `stream_${Date.now()}`
-                        stream = fabric.stream(streamName, StreamType.PERSISTENT_STREAM, true);
+                        stream = fabric.stream(streamName, true);
                         await stream.createStream();
                     });
                     it("terminates persistent local stream", async () => {
@@ -152,46 +136,12 @@ describe("Manipulating streams", function () {
                     let stream: Stream;
                     beforeEach(async () => {
                         const streamName = `stream_${Date.now()}`
-                        stream = fabric.stream(streamName, StreamType.PERSISTENT_STREAM, false);
+                        stream = fabric.stream(streamName, false);
                         await stream.createStream();
                     });
                     it("terminates persistent global stream", async () => {
                         const response = await stream.terminateStream();
                         expect(response.error).to.be.false;
-                    });
-                });
-            });
-            describe("non-persistent", () => {
-                describe("local", () => {
-                    let stream: Stream;
-                    beforeEach(async () => {
-                        const streamName = `stream_${Date.now()}`
-                        stream = fabric.stream(streamName, StreamType.NON_PERSISTENT_STREAM, true);
-                        await stream.createStream();
-                    });
-                    it("throws an error if terminating a non-persistent local stream", () => {
-                        try {
-                            stream.terminateStream();
-                        } catch (e) {
-                            return;
-                        }
-                        expect.fail("should fail");
-                    });
-                });
-                describe("global", () => {
-                    let stream: Stream;
-                    beforeEach(async () => {
-                        const streamName = `stream_${Date.now()}`
-                        stream = fabric.stream(streamName, StreamType.NON_PERSISTENT_STREAM, false);
-                        await stream.createStream();
-                    });
-                    it("throws an error if terminating a non-persistent global stream", async () => {
-                        try {
-                            stream.terminateStream();
-                        } catch (e) {
-                            return;
-                        }
-                        expect.fail("should fail");
                     });
                 });
             });

@@ -11,7 +11,7 @@ import { ArrayCursor } from "./cursor";
 import { isC8Error } from "./error";
 import { Graph } from "./graph";
 import { Tenant } from "./tenant";
-import { Stream, StreamType } from "./stream";
+import { Stream } from "./stream";
 import { Route } from "./route";
 import { btoa } from "./util/btoa";
 
@@ -442,8 +442,8 @@ export class Fabric {
 
   //Stream
 
-  stream(streamName: string, type: StreamType, local: boolean): Stream {
-    return new Stream(this._connection, streamName, type, local);
+  stream(streamName: string, local: boolean): Stream {
+    return new Stream(this._connection, streamName, local);
   }
 
   getStreams() {
@@ -461,16 +461,6 @@ export class Fabric {
       {
         method: "GET",
         path: `/streams/persistent?local=${local}`,
-      },
-      res => res.body
-    );
-  }
-
-  listNonPersistentStream(local: boolean = false) {
-    return this._connection.request(
-      {
-        method: "GET",
-        path: `/streams/non-persistent?local=${local}`,
       },
       res => res.body
     );

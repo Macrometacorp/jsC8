@@ -16,7 +16,7 @@ Returns a _Stream_ instance representing the stream with the given stream name.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("testStream", StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("testStream", true);
 ```
 
 ## fabric.getStreams
@@ -50,26 +50,6 @@ Get list of persistent streams under the given stream db. Returns either a list 
 ```js
 const fabric = new Fabric();
 const streams = await fabric.listPersistentStreams(true);
-// To change the fabric and tenant, fabric.useFabric and fabric.useTenant respectively
-```
-
-## fabric.listNonPersistentStreams
-
-`async fabric.listNonPersistentStreams(local)`
-
-Get list of non-persistent streams under the given stream db. Returns either a list of global or of local streams.
-
-**Arguments**
-
-- **local**: `boolean`
-
-  Should the streams be local or global.
-
-**Examples**
-
-```js
-const fabric = new Fabric();
-const streams = await fabric.listNonPersistentStreams(true);
 // To change the fabric and tenant, fabric.useFabric and fabric.useTenant respectively
 ```
 
@@ -128,13 +108,13 @@ await fabric.unsubscribe("my-subscription");
 
 `async stream.createStream()`
 
-Create asynchronously a persistent/non-persistent stream for a given database.
+Create asynchronously a persistent stream for a given database.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 ```
 
@@ -148,7 +128,7 @@ Expire messages on all subscriptions of a stream.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.expireMessagesOnAllSubscriptions(5);
 ```
@@ -161,7 +141,7 @@ Get estimated backlog for offline stream.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.backlog();
 ```
@@ -176,7 +156,7 @@ Get the status of a compaction operation for a stream.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.compaction();
 ```
@@ -191,7 +171,7 @@ Trigger a compaction operation on a stream.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.triggerCompaction();
 ```
@@ -206,7 +186,7 @@ Get the statistics for the given stream.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.getStreamStatistics();
 ```
@@ -227,7 +207,7 @@ Delete a subscription.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.deleteSubscription("my-subscription");
 ```
@@ -248,7 +228,7 @@ Reset subscription to message position closest to given position.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.resetSubscriptionToPosition("my-subscription");
 ```
@@ -273,7 +253,7 @@ Expire messages on a stream subscription.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.expireMessages("my-subscription", 5);
 ```
@@ -294,7 +274,7 @@ Disconnect all active consumers for a cursor and reset the cursor.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.resetCursor("my-subscription");
 ```
@@ -319,7 +299,7 @@ Reset subscription to message position closest to absolute timestamp (in milisec
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.resetSubscriptionToTimestamp("my-subscription", 2000);
 ```
@@ -344,7 +324,7 @@ Skip num messages on a topic subscription.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.skipNumberOfMessages("my-subscription", 2);
 ```
@@ -365,7 +345,7 @@ Skip all messages on a stream subscription.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.skipAllMessages("my-subscription");
 ```
@@ -380,7 +360,7 @@ Get the list of persistent subscriptions for a given stream.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.getSubscriptionList();
 ```
@@ -395,7 +375,7 @@ Terminate a stream. A stream that is terminated will not accept any more message
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 await stream.terminateStream();
 ```
@@ -424,7 +404,7 @@ Creates a consumer for a stream.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 stream.consumer("my-subscription", {onmessage: (msg)=>{console.log(msg)}}, "test-eu-west-1.dev.aws.macrometa.io");
 ```
@@ -449,7 +429,7 @@ Creates a producer for a stream.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 stream.producer("hello world", "test-eu-west-1.dev.aws.macrometa.io");
 ```
@@ -464,7 +444,7 @@ Closes all the websocket connections made by producer and consumers.
 
 ```js
 const fabric = new Fabric();
-const stream = fabric.stream("my-stream",  StreamType.PERSISTENT_STREAM, true);
+const stream = fabric.stream("my-stream", true);
 await stream.createStream();
 stream.closeWSConnections();
 ```
