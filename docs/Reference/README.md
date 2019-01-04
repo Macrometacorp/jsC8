@@ -17,7 +17,6 @@
   - [DocumentCollection](Collection/DocumentCollection.md)
   - [EdgeCollection](Collection/EdgeCollection.md)
   - [Indexes](Collection/Indexes.md)
-  - [Simple Queries](Collection/SimpleQueries.md)
   - [Bulk Import](Collection/BulkImport.md)
 - [View Manipulation](ViewManipulation.md)
 - [Cursor](Cursor.md)
