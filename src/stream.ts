@@ -239,7 +239,8 @@ export class Stream {
             const message = JSON.parse(msg);
             const ackMsg = { "messageId": message.messageId };
             consumer.send(JSON.stringify(ackMsg));
-            message.payload !== btoa('noop') && typeof onmessage === 'function' && onmessage(msg);
+            const { payload } = message;
+            if (payload !== btoa('noop') && payload !== 'noop' && typeof onmessage === 'function') onmessage(msg);
         });
 
         !this._noopProducer && this.noopProducer(dcUrl);
