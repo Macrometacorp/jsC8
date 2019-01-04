@@ -1,5 +1,4 @@
 import { Connection } from "./connection";
-import { ArrayCursor } from "./cursor";
 import { isC8Error } from "./error";
 import { Stream, wsCallbackObj } from "./stream";
 
@@ -69,8 +68,6 @@ export abstract class BaseCollection implements C8Collection {
     this._connection = connection;
     this.stream = new Stream(connection, name, true);
     if (this._connection.c8Major >= 3) {
-      this.first = undefined!;
-      this.last = undefined!;
       this.createCapConstraint = undefined!;
     }
   }
@@ -347,191 +344,6 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
-  list(type: string = "id") {
-    if (this._connection.c8Major <= 2) {
-      return this._connection.request(
-        {
-          path: "/document",
-          qs: { type, collection: this.name }
-        },
-        res => res.body.documents
-      );
-    }
-
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/all-keys",
-        body: { type, collection: this.name }
-      },
-      res => res.body.result
-    );
-  }
-
-  all(opts?: any) {
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/all",
-        body: {
-          ...opts,
-          collection: this.name
-        }
-      },
-      res => new ArrayCursor(this._connection, res.body, res.host)
-    );
-  }
-
-  any() {
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/any",
-        body: { collection: this.name }
-      },
-      res => res.body.document
-    );
-  }
-
-  first(opts?: any) {
-    if (typeof opts === "number") {
-      opts = { count: opts };
-    }
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/first",
-        body: {
-          ...opts,
-          collection: this.name
-        }
-      },
-      res => res.body.result
-    );
-  }
-
-  last(opts?: any) {
-    if (typeof opts === "number") {
-      opts = { count: opts };
-    }
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/last",
-        body: {
-          ...opts,
-          collection: this.name
-        }
-      },
-      res => res.body.result
-    );
-  }
-
-  byExample(example: any, opts?: any) {
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/by-example",
-        body: {
-          ...opts,
-          example,
-          collection: this.name
-        }
-      },
-      res => new ArrayCursor(this._connection, res.body, res.host)
-    );
-  }
-
-  firstExample(example: any) {
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/first-example",
-        body: {
-          example,
-          collection: this.name
-        }
-      },
-      res => res.body.document
-    );
-  }
-
-  removeByExample(example: any, opts?: any) {
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/remove-by-example",
-        body: {
-          ...opts,
-          example,
-          collection: this.name
-        }
-      },
-      res => res.body
-    );
-  }
-
-  replaceByExample(example: any, newValue: any, opts?: any) {
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/replace-by-example",
-        body: {
-          ...opts,
-          example,
-          newValue,
-          collection: this.name
-        }
-      },
-      res => res.body
-    );
-  }
-
-  updateByExample(example: any, newValue: any, opts?: any) {
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/update-by-example",
-        body: {
-          ...opts,
-          example,
-          newValue,
-          collection: this.name
-        }
-      },
-      res => res.body
-    );
-  }
-
-  lookupByKeys(keys: string[]) {
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/lookup-by-keys",
-        body: {
-          keys,
-          collection: this.name
-        }
-      },
-      res => res.body.documents
-    );
-  }
-
-  removeByKeys(keys: string[], options: any) {
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/remove-by-keys",
-        body: {
-          options,
-          keys,
-          collection: this.name
-        }
-      },
-      res => res.body
-    );
-  }
-
   import(
     data: Buffer | Blob | string | any[],
     { type = "auto", ...opts }: ImportOptions = {}
@@ -690,23 +502,6 @@ export abstract class BaseCollection implements C8Collection {
         qs: { collection: this.name }
       },
       res => res.body
-    );
-  }
-
-  fulltext(attribute: any, query: any, opts: any = {}) {
-    if (opts.index) opts.index = this._indexHandle(opts.index);
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: "/simple/fulltext",
-        body: {
-          ...opts,
-          attribute,
-          query,
-          collection: this.name
-        }
-      },
-      res => new ArrayCursor(this._connection, res.body, res.host)
     );
   }
 }

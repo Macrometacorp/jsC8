@@ -3,8 +3,6 @@
 This function implements the
 [HTTP API for single roundtrip C8QL queries](https://docs.macrometa.io/jsC8/latest/HTTP/C8QLQueryCursor/QueryResults.html).
 
-For collection-specific queries see [simple queries](../Collection/SimpleQueries.md).
-
 ## fabric.query
 
 `async fabric.query(query, [bindVars,] [opts]): Cursor`

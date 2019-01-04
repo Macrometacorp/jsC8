@@ -161,10 +161,8 @@ describe("Manipulating streams", function () {
                 function callback(msg: string) {
                     const parsedMsg = JSON.parse(msg);
                     const { payload } = parsedMsg;
-                    if (payload !== 'noop' && payload !== '') {
-                        expect(payload).to.equal("dGVzdA==");
-                        done();
-                    }
+                    expect(payload).to.equal("dGVzdA==");
+                    done();
                 }
                 stream.consumer(`streamSubscription_${Date.now()}`, { onmessage: callback, onopen: () => stream.producer("test", dcName) }, dcName);
             });

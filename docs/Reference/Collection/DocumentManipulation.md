@@ -291,22 +291,3 @@ await collection.remove('some-doc');
 await collection.remove('some-collection/some-doc');
 // document 'some-collection/some-doc' no longer exists
 ```
-
-## collection.list
-
-`async collection.list([type]): Array<string>`
-
-Retrieves a list of references for all documents in the collection.
-
-**Arguments**
-
-* **type**: `string` (Default: `"id"`)
-
-  The format of the document references:
-
-  * if _type_ is set to `"id"`, each reference will be the `_id` of the
-    document.
-  * if _type_ is set to `"key"`, each reference will be the `_key` of the
-    document.
-  * if _type_ is set to `"path"`, each reference will be the URI path of the
-    document.
