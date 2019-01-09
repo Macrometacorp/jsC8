@@ -212,7 +212,6 @@ export class Stream {
         let dbName = this._connection.getFabricName();
         if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using."
 
-        dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
         const consumerUrl = `wss://${dcUrl}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${this.name}/${subscriptionName}`;
 
         this._consumers.push(ws(consumerUrl));
@@ -238,9 +237,13 @@ export class Stream {
         consumer.on("message", (msg: string) => {
             const message = JSON.parse(msg);
             const ackMsg = { "messageId": message.messageId };
-            consumer.send(JSON.stringify(ackMsg));
             const { payload } = message;
-            if (payload !== btoa('noop') && payload !== 'noop' && typeof onmessage === 'function') onmessage(msg);
+
+            if (payload !== btoa('noop') && payload !== 'noop') {
+                typeof onmessage === 'function' && consumer.send(JSON.stringify(ackMsg)) && onmessage(msg);
+            } else {
+                consumer.send(JSON.stringify(ackMsg));
+            }
         });
 
         !this._noopProducer && this.noopProducer(dcUrl);
@@ -256,7 +259,6 @@ export class Stream {
         let dbName = this._connection.getFabricName();
         if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using."
 
-        dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
         const noopProducerUrl = `wss://${dcUrl}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.name}`;
 
         this._noopProducer = ws(noopProducerUrl);
@@ -283,7 +285,6 @@ export class Stream {
             let dbName = this._connection.getFabricName();
             if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using."
 
-            dbName = (tenant === '_mm') ? dbName : `${tenant}.${dbName}`;
             const producerUrl = `wss://${dcUrl}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.name}`;
 
             this._producer = ws(producerUrl);
