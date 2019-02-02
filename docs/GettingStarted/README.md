@@ -174,14 +174,14 @@ If the request failed at a network level or the connection was closed without re
 ```js
 // Using async/await
 try {
-  const info = await fabric.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1', realTime: false });
+  const info = await fabric.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1' });
   // fabric created
 } catch (err) {
   console.error(err.stack);
 }
 
 // Using promises with arrow functions
-fabric.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1', realTime: false }).then(
+fabric.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1' }).then(
   info => {
     // fabric created
   },

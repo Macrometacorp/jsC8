@@ -128,7 +128,7 @@ const version = await fabric.version();
 
 ## fabric.createFabric
 
-`async fabric.createFabric(fabricName, [users]): Object`
+`async fabric.createFabric(fabricName, options, [users]): Object`
 
 Creates a new Fabric with the given _fabricName_.
 
@@ -137,6 +137,21 @@ Creates a new Fabric with the given _fabricName_.
 - **fabricName**: `string`
 
   Name of the fabric to create.
+
+- **options**: `Object`
+
+  - **dcList**: `String`
+    A comma separated list of data centers. It is a mandatory field, but if not specified (due to user error), it defaults
+to the local Edge Location.
+
+  - **spotDc**: `String` (optional)
+    The data center to be made as spot data center for this fabric. It has three different behaviour depending upon the value.
+
+      `AUTOMATIC` -  The spot DC is chosen automatically if this key is not present in the `options` object.
+
+      `NONE` - No spot Dc is made for this fabric if empty string is passed. E.g. `spotDc:''`
+
+      `DC name` - If passed a valid DC name as the value, then that DC will be made the spot DC for this fabric.
 
 - **users**: `Array<Object>` (optional)
 
@@ -165,6 +180,20 @@ const fabric = new Fabric();
 const info = await fabric.createFabric('mydb', [{username: 'root'}]);
 // the fabric has been created
 ```
+
+## fabric.updateFabricSpotRegion
+
+`async fabric.updateFabricSpotRegion(tenantName, fabricName, datacenter = ""): Object`
+
+Updates the spot primary region of a fabric.
+
+**Examples**
+
+```js
+await fabric.updateFabricSpotRegion("guestTenant", "guestDB", "myfederation-ap-south-1");
+```
+
+The above code changes the spot DC for `guestDB` in `guestTenant` to `myfederation-ap-south-1`.
 
 ## fabric.exists
 
@@ -268,7 +297,7 @@ Return a list of all Edge Locations (AKA Datacenters) deployed in the Macrometa 
 
 ```js
 const fabric = new Fabric();
-
+await fabric.createFabric('mydb', [{username: 'root'}]);
 await fabric.getAllEdgeLocations();
 ```
 
@@ -282,6 +311,18 @@ Fetches data about the local Edge Location specific to this Datacenter/Location.
 
 ```js
 const fabric = new Fabric();
-
 await fabric.getLocalEdgeLocation();
+```
+
+## fabric.changeEdgeLocationSpotStatus
+
+`async fabric.changeEdgeLocationSpotStatus(): Object`
+
+Change the spot status of a datacenter.
+
+**Examles**
+
+```js
+const fabric = new Fabric();
+await fabric.changeEdgeLocationSpotStatus('myfederation-us-east-1', true);
 ```

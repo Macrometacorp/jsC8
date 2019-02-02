@@ -64,7 +64,7 @@ describe("Manipulating fabrics", function () {
       await fabric.dropFabric(name);
     });
     it("creates a fabric with the given name", async () => {
-      await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+      await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
       fabric.useFabric(name);
       const info = await fabric.get();
       expect(info.name).to.equal(name);
@@ -105,7 +105,7 @@ describe("Manipulating fabrics", function () {
   describe("fabric.dropFabric", () => {
     let name = `testfabric_${Date.now()}`;
     beforeEach(async () => {
-      await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+      await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
     });
     it("deletes the given fabric from the server", async () => {
       await fabric.dropFabric(name);
@@ -125,7 +125,7 @@ describe("Manipulating fabrics", function () {
     let nonSystemCollections = range(4).map(i => `c_${Date.now()}_${i}`);
     let systemCollections = range(4).map(i => `_c_${Date.now()}_${i}`);
     beforeEach(async () => {
-      await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+      await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
       fabric.useFabric(name);
       await Promise.all([
         ...nonSystemCollections.map(async name => {

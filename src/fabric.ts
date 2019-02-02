@@ -41,6 +41,7 @@ export type EdgeLocation = {
   "local": boolean,
   "name": string,
   "port": number,
+  "spot_region": boolean,
   "status": 0 | 1,
   "tags": {
     "city": string,
@@ -86,7 +87,7 @@ export interface CreateFabricUser {
 
 export interface CreateFabricOptions {
   dcList: string,//comma separated string, can also be ""
-  realTime: boolean
+  spotDc?: string
 }
 
 const FABRIC_NOT_FOUND = 1228;
@@ -193,6 +194,33 @@ export class Fabric {
       res => res.body
     );
   }
+
+
+  login(tenant: string, username: string = "root", password: string = "Macrometa123!@#"): Promise<string> {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/_open/auth",
+        body: { username, password, tenant }
+      },
+      res => {
+        this.useBearerAuth(res.body.jwt);
+        return res.body.jwt;
+      }
+    );
+  }
+
+  updateFabricSpotRegion(tenantName: string, fabricName: string, datacenter: string = '') {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `_tenant/${tenantName}/_fabric/${fabricName}/database/${datacenter}`,
+        absolutePath: true
+      },
+      res => res.body
+    )
+  }
+
 
   // Collection manipulation
 
@@ -404,20 +432,6 @@ export class Fabric {
     );
   }
 
-  login(tenant: string, username: string = "root", password: string = "Macrometa123!@#"): Promise<string> {
-    return this._connection.request(
-      {
-        method: "POST",
-        path: "/_open/auth",
-        body: { username, password, tenant }
-      },
-      res => {
-        this.useBearerAuth(res.body.jwt);
-        return res.body.jwt;
-      }
-    );
-  }
-
   // Tenant
 
   useTenant(tenantName: string): this {
@@ -518,6 +532,17 @@ export class Fabric {
       },
       res => res.body
     );
+  }
+
+  changeEdgeLocationSpotStatus(dcName: string, status: boolean) {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `/datacenter/${dcName}/${status}`,
+        absolutePath: true
+      },
+      res => res.body
+    )
   }
 
 }

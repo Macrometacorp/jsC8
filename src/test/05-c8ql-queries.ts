@@ -22,7 +22,7 @@ describe("C8QL queries", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
     fabric.useFabric(name);
   });
   after(async () => {
