@@ -34,6 +34,12 @@ await collection.create({
 // the edge collection "friends" now exists
 ```
 
+To make the collection as `spot`, pass the `isSpot: true` in the `properties` object.
+
+```js
+await collection.create({ isSpot: true });
+```
+
 ## collection.load
 
 `async collection.load([count]): Object`

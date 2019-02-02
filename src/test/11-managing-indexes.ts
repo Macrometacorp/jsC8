@@ -27,7 +27,7 @@ describe("Managing indexes", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(dbName, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    await fabric.createFabric(dbName, [{ username: 'root' }], { dcList: dcList });
     fabric.useFabric(dbName);
     collection = fabric.collection(collectionName);
     await collection.create();

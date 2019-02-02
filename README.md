@@ -42,7 +42,7 @@ const guesttenant = fabric.tenant(tenantName);
 await guesttenant.createTenant("my-password");
 fabric.useTenant(tenantName);
 fabric.useBasicAuth();
-await fabric.createFabric(fabricName, [{ username: 'root' }], { dcList: region, realTime: true });
+await fabric.createFabric(fabricName, [{ username: 'root' }], { dcList: region });
 
 //-----------------------------------------------------------------
 // Create and populate employees collection in demofabric

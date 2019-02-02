@@ -23,7 +23,7 @@ describe("Manipulating graph edges", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(dbName, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    await fabric.createFabric(dbName, [{ username: 'root' }], { dcList: dcList });
     fabric.useFabric(dbName);
   });
   after(async () => {

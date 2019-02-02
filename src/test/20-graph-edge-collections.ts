@@ -22,7 +22,7 @@ describe("GraphEdgeCollection API", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(dbName, [{ username: 'root' }], { dcList: dcList, realTime: false });
+    await fabric.createFabric(dbName, [{ username: 'root' }], { dcList: dcList });
     fabric.useFabric(dbName);
     const graph = fabric.graph(`testgraph_${Date.now()}`);
     await graph.create({
