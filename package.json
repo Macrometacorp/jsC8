@@ -51,9 +51,7 @@
     "dist:async": "tsc -p . --outDir ./lib/async/ --target es2018 --declarationMap true && cpy src/index.js lib/async/",
     "dist:web": "webpack",
     "dist": "rimraf lib && npm-run-all --parallel dist:* && cpy src/index.all.js --rename index.js lib/",
-    "prepare": "yarn dist && node -e 'require(\".\");'",
-    "predev": "yarn dist",
-    "dev": "env TEST_C8_URL=https://poorva-ap-south-1.dev.aws.macrometa.io mocha --timeout 500000 lib/async/test/29*.js"
+    "prepare": "yarn dist && node -e 'require(\".\");'"
   },
   "dependencies": {
     "es6-error": "^4.0.1",
