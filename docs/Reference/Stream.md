@@ -108,7 +108,7 @@ await fabric.unsubscribe("my-subscription");
 
 `async stream.createStream()`
 
-Create asynchronously a persistent stream for a given database.
+Create asynchronously a stream for a given database.
 
 **Examples**
 

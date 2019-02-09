@@ -214,12 +214,12 @@ If you see the error message `"document not found"`, we were successful.
 
 ### Streams
 The time has come now to give you a super power. In C8 you don't need to continuously make API calls to see what has changed and when. We have realtime capabilities built in C8.
-Streams can be `local/global` and `persistent/non-persistent`. Non-persistent streams forget the data once it is closed, whereas for persistent streams it gets saved.
+Streams can be `local/global`.
 
 ### Stream handle
 
 ```js
-stream = fabric.stream(streamName, StreamType.PERSISTENT_STREAM, false);
+stream = fabric.stream(streamName, false);
 ```
 Here the last boolean value tells if the stream is local or global. `false` means that it is global
 

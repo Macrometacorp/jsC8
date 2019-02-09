@@ -24,7 +24,7 @@ export class Stream {
     private _producer: any;
     private _noopProducer: any;
     private _consumers: any[];
-    private setIntervalId?: NodeJS.Timeout;
+    private setIntervalId?: number;
 
     constructor(connection: Connection, name: string, local: boolean = false) {
         this._connection = connection;
