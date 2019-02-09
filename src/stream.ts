@@ -24,7 +24,7 @@ export class Stream {
     private _producer: any;
     private _noopProducer: any;
     private _consumers: any[];
-    private setIntervalId?: number;
+    private setIntervalId?: any;
 
     constructor(connection: Connection, name: string, local: boolean = false) {
         this._connection = connection;
