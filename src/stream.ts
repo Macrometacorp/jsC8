@@ -42,7 +42,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath()
+                path: `/streams/persistent/stream/${this.name}`,
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -240,7 +241,10 @@ export class Stream {
             const { payload } = message;
 
             if (payload !== btoa('noop') && payload !== 'noop') {
-                typeof onmessage === 'function' && consumer.send(JSON.stringify(ackMsg)) && onmessage(msg);
+                if (typeof onmessage === 'function') {
+                    consumer.send(JSON.stringify(ackMsg));
+                    onmessage(msg);
+                }
             } else {
                 consumer.send(JSON.stringify(ackMsg));
             }
