@@ -474,7 +474,8 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: `/streams/persistent?local=${local}`,
+        path: `/streams/persistent`,
+        qs: `local=${local}`
       },
       res => res.body
     );
