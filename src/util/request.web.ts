@@ -54,7 +54,6 @@ export function createRequest(baseUrl: string, agentOptions: any) {
         responseType: expectBinary ? "blob" : "text",
         ...options,
         url: formatUrl(urlParts),
-        withCredentials: true,
         useXDR: true,
         body,
         method,
