@@ -167,7 +167,12 @@ const cursor = await fabric.getSlowQueries();
 
 ## fabric.terminateRunningQuery
 
-`async fabric.terminateRunningQuery()`
+`async fabric.terminateRunningQuery(queryId)`
+
+**Arguments**
+* **queryId**: `string`
+
+  The id of the query.
 
 Kills a running query. The query will be terminated at the next cancelation point.
 
