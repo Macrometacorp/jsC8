@@ -25,15 +25,9 @@ assert.equal(collection.name, "vertices");
 
 ## graph.listVertexCollections
 
-`async graph.listVertexCollections([excludeOrphans]): Array<Object>`
+`async graph.listVertexCollections(): Array<Object>`
 
 Fetches all vertex collections from the graph and returns an array of collection descriptions.
-
-**Arguments**
-
-* **excludeOrphans**: `boolean` (Default: `false`)
-
-  Whether orphan collections should be excluded.
 
 **Examples**
 
@@ -53,15 +47,9 @@ const collections = await graph.listVertexCollections(true);
 
 ## graph.vertexCollections
 
-`async graph.vertexCollections([excludeOrphans]): Array<Collection>`
+`async graph.vertexCollections(): Array<Collection>`
 
 Fetches all vertex collections from the fabric and returns an array of _GraphVertexCollection_ instances for the collections.
-
-**Arguments**
-
-* **excludeOrphans**: `boolean` (Default: `false`)
-
-  Whether orphan collections should be excluded.
 
 **Examples**
 

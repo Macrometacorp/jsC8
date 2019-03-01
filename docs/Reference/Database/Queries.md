@@ -61,6 +61,124 @@ fabric.query(
 });
 ```
 
+## fabric.validateQuery
+
+`async fabric.validateQuery(query)`
+
+Checks if the query is a valid C8QL query without executing it.
+
+**Arguments**
+
+* **query**: `string`
+
+  An C8QL query string.
+
+  **Examples**
+
+```js
+const fabric = new Fabric();
+const query = "FOR doc in docs return doc";
+const cursor = await fabric.validateQuery(query);
+});
+```
+
+## fabric.explainQuery
+
+`async fabric.explainQuery(Object)`
+
+Explain a C8QL query
+
+**Arguments**
+ An object withh the following key.
+ 
+* **query**: `string`
+
+  An C8QL query string or a [query builder](https://npmjs.org/package/aqb)
+  instance.
+
+* **bindVars**: `Object` (optional)
+
+  An object defining the variables to bind the query to.
+
+* **opts**: `Object` (optional)
+
+  Additional parameter object that will be passed to the query API.
+  Possible keys are _maxNumberOfPlans_ and _allPlans_ (explained below)
+
+_maxNumberOfPlans_: an optional maximum number of plans that the optimizer is allowed to generate. Setting this attribute to a low value allows to put a cap on the amount of work the optimizer does.
+
+_allPlans_: if set to true, all possible execution plans will be returned. The default is false, meaning only the optimal plan will be returned.
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+const collection = fabric.collection("myColl");
+await collection.create();
+const query = "FOR doc in myColl return doc";
+const cursor = await fabric.explainQuery({query});
+});
+```
+
+
+## fabric.getCurrentQueries
+
+`async fabric.getCurrentQueries()`
+
+Returns an array containing the C8QL queries currently running in the selected database.
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+const cursor = await fabric.getCurrentQueries();
+});
+```
+
+## fabric.clearSlowQueries
+
+`async fabric.clearSlowQueries()`
+
+Clears the list of slow C8QL queries
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+const cursor = await fabric.clearSlowQueries();
+});
+```
+
+## fabric.getSlowQueries
+
+`async fabric.getSlowQueries()`
+
+Returns the list of slow C8QL queries
+
+Returns an array containing the last C8QL queries that are finished and have exceeded the slow query threshold in the selected database. The maximum amount of queries in the list can be controlled by setting the query tracking property maxSlowQueries. The threshold for treating a query as slow can be adjusted by setting the query tracking property slowQueryThreshold.
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+const cursor = await fabric.getSlowQueries();
+});
+```
+
+## fabric.terminateRunningQuery
+
+`async fabric.terminateRunningQuery()`
+
+Kills a running query. The query will be terminated at the next cancelation point.
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+const cursor = await fabric.terminateRunningQuery();
+});
+```
+
 ## c8ql
 
 `c8ql(strings, ...args): Object`

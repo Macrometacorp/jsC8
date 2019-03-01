@@ -297,3 +297,20 @@ const result = await cursor.reduce(add);
 assert.equal(result, 1 + 2 + 3 + 4 + 5);
 assert.equal(cursor.hasNext(), false);
 ```
+
+## cursor.delete
+
+`cursor.delete(): any`
+
+Deletes the cursor and frees the resources associated with it.
+
+The cursor will automatically be destroyed on the server when the client has retrieved all documents from it. The client can also explicitly destroy the cursor at any earlier time using an HTTP DELETE request. The cursor id must be included as part of the URL.
+
+>Note: C8 will also destroy abandoned cursors automatically after a certain server-controlled timeout to avoid resource leakage.
+
+**Examples**
+
+```js
+const cursor = await fabric.query('FOR x IN 1..5 RETURN x');
+await cursor.delete();
+```
