@@ -298,7 +298,7 @@ export class Graph {
     );
   }
 
-  create(properties: any = {}, opts?: { waitForSync?: boolean }) {
+  create(properties: any = {}) {
     return this._connection.request(
       {
         method: "POST",
@@ -306,8 +306,7 @@ export class Graph {
         body: {
           ...properties,
           name: this.name
-        },
-        qs: opts
+        }
       },
       res => res.body.graph
     );
@@ -328,15 +327,15 @@ export class Graph {
     return new GraphVertexCollection(this._connection, collectionName, this);
   }
 
-  listVertexCollections(opts?: { excludeOrphans?: boolean }) {
+  listVertexCollections() {
     return this._connection.request(
-      { path: `/_api/graph/${this.name}/vertex`, qs: opts },
+      { path: `/_api/graph/${this.name}/vertex` },
       res => res.body.collections
     );
   }
 
-  async vertexCollections(opts?: { excludeOrphans?: boolean }) {
-    const names = await this.listVertexCollections(opts);
+  async vertexCollections() {
+    const names = await this.listVertexCollections();
     return names.map(
       (name: any) => new GraphVertexCollection(this._connection, name, this)
     );
@@ -349,8 +348,7 @@ export class Graph {
     return this._connection.request(
       {
         method: "POST",
-        path: `/_api/graph/${this.name}/vertex`,
-        body: { collection }
+        path: `/_api/graph/${this.name}/vertex`
       },
       res => res.body.graph
     );

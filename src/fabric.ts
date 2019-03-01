@@ -391,6 +391,66 @@ export class Fabric {
     );
   }
 
+  validateQuery(query: string) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/query",
+        body: { query }
+      },
+      res => res.body
+    );
+  }
+
+  explainQuery(explainQueryObj: C8QLQuery) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/query/explain",
+        body: { ...explainQueryObj }
+      },
+      res => res.body
+    );
+  }
+
+  getCurrentQueries() {
+    return this._connection.request(
+      {
+        path: "/query/current"
+      },
+      res => res.body
+    );
+  }
+
+  clearSlowQueries() {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: "/query/slow"
+      },
+      res => res.body
+    );
+  }
+
+  getSlowQueries() {
+    return this._connection.request(
+      {
+        path: "/query/slow"
+      },
+      res => res.body
+    );
+  }
+
+  terminateRunningQuery(queryId: string) {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `/query/${queryId}`
+      },
+      res => res.body
+    );
+  }
+
   // Function management
 
   listFunctions() {
@@ -422,11 +482,13 @@ export class Fabric {
     );
   }
 
-  version(): Promise<any> {
+  version(details: boolean = false): Promise<any> {
     return this._connection.request(
       {
         method: "GET",
-        path: "/version"
+        path: `/_tenant/${this._connection.getTenantName()}/_admin/version`,
+        absolutePath: true,
+        qs: { details }
       },
       res => res.body
     );

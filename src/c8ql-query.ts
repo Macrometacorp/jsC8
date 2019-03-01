@@ -3,6 +3,7 @@ import { C8Collection, isC8Collection } from "./collection";
 export interface C8QLQuery {
   query: string;
   bindVars: { [key: string]: any };
+  options?: any
 }
 
 export interface C8QLLiteral {

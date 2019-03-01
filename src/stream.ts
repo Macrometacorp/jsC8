@@ -35,14 +35,14 @@ export class Stream {
     }
 
     _getPath(urlSuffix?: string): string {
-        return getFullStreamPath(this.name, this.local, urlSuffix);
+        return getFullStreamPath(this.name, urlSuffix);
     }
 
     createStream() {
         return this._connection.request(
             {
                 method: "POST",
-                path: `/streams/persistent/stream/${this.name}`,
+                path: this._getPath(),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -54,7 +54,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -65,7 +66,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "GET",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -76,7 +78,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "GET",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -87,7 +90,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "PUT",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -98,7 +102,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "GET",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -109,7 +114,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "DELETE",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -120,7 +126,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "PUT",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -131,7 +138,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -142,7 +150,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -153,7 +162,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -164,7 +174,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -175,7 +186,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -186,7 +198,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "GET",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );
@@ -197,7 +210,8 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix)
+                path: this._getPath(urlSuffix),
+                qs: `local=${this.local}`
             },
             res => res.body
         );

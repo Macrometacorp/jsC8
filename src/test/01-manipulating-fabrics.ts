@@ -2,6 +2,7 @@ import { expect } from "chai";
 import { Fabric } from "../jsC8";
 import { C8Error } from "../error";
 import { getDCListString } from "../util/helper";
+import { DocumentCollection } from "../collection";
 
 const range = (n: number): number[] => Array.from(Array(n).keys());
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
@@ -25,6 +26,17 @@ describe("Manipulating fabrics", function () {
   });
   afterEach(() => {
     fabric.close();
+  });
+  describe("fabric.version", () => {
+    it("should return the version object when no details are required", async () => {
+      const response = await fabric.version();
+      expect(response.server).to.equal("C8");
+    });
+    it("should return the version object when details are required", async () => {
+      const response = await fabric.version(true);
+      expect(response.server).to.equal("C8");
+      expect(response.details).to.haveOwnProperty("C8DB");
+    });
   });
   describe("fabric.useFabric", () => {
     it("updates the fabric name", () => {
@@ -180,5 +192,46 @@ describe("Manipulating fabrics", function () {
         );
       }
     );
+  });
+  describe("fabric.validateQuery", () => {
+    it("should validate correct query", async () => {
+      const response = await fabric.validateQuery("for doc in docs return doc");
+      expect(response.error).to.be.false;
+    });
+    it("should validate incorrect query", async () => {
+      const response = await fabric.validateQuery("forrrrr doc in docs return doc");
+      expect(response.error).to.be.true;
+    });
+  });
+  describe("fabric.explainQuery", () => {
+    const collectionName = `testColl_${Date.now().toString()}`;
+    let collection: DocumentCollection;
+    this.beforeAll(async () => {
+      const fabric2 = new Fabric({
+        url: testUrl
+      });
+      collection = fabric2.collection(collectionName);
+      await collection.create();
+    });
+    this.afterAll(async () => {
+      await collection.drop();
+    });
+    it("should explain query", async () => {
+      const queryObject = {
+        query: `for doc in ${collectionName} return doc`,
+        bindVars: {}
+      }
+      const response = await fabric.explainQuery(queryObject);
+      expect(response.error).to.be.false;
+    });
+  });
+  describe("fabric.getCurrentQueries", () => {
+    it("should get currently running queries");
+  })
+  describe("fabric.clearSlowQueries", () => {
+    it("should clear slow queries");
+  });
+  describe("fabric.terminateRunningQuery", () => {
+    it("should terminate running query");
   });
 });
