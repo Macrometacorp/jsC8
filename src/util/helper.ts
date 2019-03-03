@@ -1,13 +1,12 @@
 import { StreamConstants } from '../stream';
 import { EdgeLocation } from "../fabric";
 
-export function getFullStreamPath(name: string, local: boolean, extraUrl?: string): string {
-    const typeString: string = StreamConstants.PERSISTENT;
+export function getFullStreamPath(name: string, extraUrl?: string): string {
 
-    const baseUrl = `/streams/${typeString}`;
-    let suffix = typeof local === 'boolean' ? `?local=${local}` : '';
-    suffix = extraUrl ? `${extraUrl}${suffix}` : suffix;
-    const path = name ? `${baseUrl}/stream/${name}${suffix}` : `${baseUrl}${suffix}`;
+    const baseUrl = `/streams/${StreamConstants.PERSISTENT}/stream/${name}`;
+
+    const path = extraUrl ? `${baseUrl}${extraUrl}` : baseUrl;
+
     return path;
 }
 

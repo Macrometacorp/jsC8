@@ -18,7 +18,7 @@ describe("Cursor API", () => {
   let cursor: ArrayCursor;
   before(() => {
     fabric = new Fabric({
-      url: process.env.TEST_C8_URL  || "https://default.dev.macrometa.io",
+      url: process.env.TEST_C8_URL || "https://default.dev.macrometa.io",
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
   });
@@ -152,7 +152,7 @@ describe("Cursor API", () => {
     });
     it("returns false after last result is consumed (with large amount of results)", done => {
       const EXPECTED_LENGTH = 100000;
-      const loadMore = function(cursor: any, totalLength: any) {
+      const loadMore = function (cursor: any, totalLength: any) {
         cursor
           .next()
           .then(() => {
@@ -282,5 +282,8 @@ describe("Cursor API", () => {
         })
         .catch(done);
     });
+  });
+  describe("cursor.delete", () => {
+    it("should delete the cursor");
   });
 });

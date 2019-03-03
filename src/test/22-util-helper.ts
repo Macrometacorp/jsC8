@@ -6,13 +6,13 @@ import {
 
 describe("Helper.getFullStreamPath", () => {
     it("returns correct output when there is no extra url", () => {
-        const path = getFullStreamPath("_polog", true);
-        expect(path).to.equal("/streams/persistent/stream/_polog?local=true");
+        const path = getFullStreamPath("_polog");
+        expect(path).to.equal("/streams/persistent/stream/_polog");
     });
 
     it("returns correct output when there is extra url", () => {
-        const path = getFullStreamPath("_polog", false, "/compaction");
-        expect(path).to.equal("/streams/persistent/stream/_polog/compaction?local=false");
+        const path = getFullStreamPath("_polog", "/compaction");
+        expect(path).to.equal("/streams/persistent/stream/_polog/compaction");
     });
 });
 

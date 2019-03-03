@@ -39,6 +39,16 @@ export class ArrayCursor {
     }
   }
 
+  delete() {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `/cursor/${this._id}`
+      },
+      res => res.body
+    );
+  }
+
   async all() {
     await this._drain();
     let result = this._result;

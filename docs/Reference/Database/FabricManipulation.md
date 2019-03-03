@@ -36,6 +36,25 @@ fabric.useFabric("test");
 // The fabric instance now uses the fabric "test".
 ```
 
+## fabric.version
+
+`async fabric.version(detail)`
+
+Returns the server name and version number.
+
+**Arguments**
+
+- **detail**: `boolean` (Default: `false`)
+
+  If set to true, the response will contain a details attribute with additional information about included components and their versions.
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+const response = await fabric.version(true);
+```
+
 ## fabric.useBasicAuth
 
 `fabric.useBasicAuth([username, [password]]): this`
