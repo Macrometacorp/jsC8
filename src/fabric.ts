@@ -1,4 +1,9 @@
-import { C8QLLiteral, C8QLQuery, isC8QLLiteral, isC8QLQuery } from "./c8ql-query";
+import {
+  C8QLLiteral,
+  C8QLQuery,
+  isC8QLLiteral,
+  isC8QLQuery
+} from "./c8ql-query";
 import {
   C8Collection,
   constructCollection,
@@ -14,6 +19,7 @@ import { Tenant } from "./tenant";
 import { Stream } from "./stream";
 import { Route } from "./route";
 import { btoa } from "./util/btoa";
+import User from "./user";
 
 function colToString(collection: string | C8Collection): string {
   if (isC8Collection(collection)) {
@@ -22,47 +28,46 @@ function colToString(collection: string | C8Collection): string {
 }
 
 export type TenantListObj = {
-  "tenant": string,
-  "active": boolean,
-  "extra": any
-}
+  tenant: string;
+  active: boolean;
+  extra: any;
+};
 
 export type TenantList = {
-  "error": boolean,
-  "code": number,
-  "result": TenantListObj[]
-}
+  error: boolean;
+  code: number;
+  result: TenantListObj[];
+};
 
 export type EdgeLocation = {
-  "_id": string,
-  "_key": string,
-  "_rev": string,
-  "host": string,
-  "local": boolean,
-  "name": string,
-  "port": number,
-  "spot_region": boolean,
-  "status": 0 | 1,
-  "tags": {
-    "city": string,
-    "countrycode": string,
-    "countryname": string,
-    "latitude": string,
-    "longitude": string,
-    "role": string,
-    "url": string
-  }
-
-}
+  _id: string;
+  _key: string;
+  _rev: string;
+  host: string;
+  local: boolean;
+  name: string;
+  port: number;
+  spot_region: boolean;
+  status: 0 | 1;
+  tags: {
+    city: string;
+    countrycode: string;
+    countryname: string;
+    latitude: string;
+    longitude: string;
+    role: string;
+    url: string;
+  };
+};
 
 export type TransactionCollections =
   | string
   | C8Collection
   | (string | C8Collection)[]
   | {
-    write?: string | C8Collection | (string | C8Collection)[];
-    read?: string | C8Collection | (string | C8Collection)[];
-  };
+      write?: string | C8Collection | (string | C8Collection)[];
+      read?: string | C8Collection | (string | C8Collection)[];
+    };
 
 export type TransactionOptions = {
   lockTimeout?: number;
@@ -79,15 +84,15 @@ export type ServiceOptions = {
 };
 
 export interface CreateFabricUser {
-  username: string
-  passwd?: string
-  active?: boolean
-  extra?: { [key: string]: any }
+  username: string;
+  passwd?: string;
+  active?: boolean;
+  extra?: { [key: string]: any };
 }
 
 export interface CreateFabricOptions {
-  dcList: string,//comma separated string, can also be ""
-  spotDc?: string
+  dcList: string; //comma separated string, can also be ""
+  spotDc?: string;
 }
 
 const FABRIC_NOT_FOUND = 1228;
@@ -134,7 +139,10 @@ export class Fabric {
     return this;
   }
 
-  useBasicAuth(username: string = "root", password: string = "Macrometa123!@#"): this {
+  useBasicAuth(
+    username: string = "root",
+    password: string = "Macrometa123!@#"
+  ): this {
     this._connection.setHeader(
       "authorization",
       `Basic ${btoa(`${username}:${password}`)}`
@@ -160,7 +168,11 @@ export class Fabric {
       }
     );
   }
-  createFabric(fabricName: string, users: CreateFabricUser[] | undefined, options: CreateFabricOptions): Promise<any> {
+  createFabric(
+    fabricName: string,
+    users: CreateFabricUser[] | undefined,
+    options: CreateFabricOptions
+  ): Promise<any> {
     return this._connection.request(
       {
         method: "POST",
@@ -195,8 +207,11 @@ export class Fabric {
     );
   }
 
-
-  login(tenant: string, username: string = "root", password: string = "Macrometa123!@#"): Promise<string> {
+  login(
+    tenant: string,
+    username: string = "root",
+    password: string = "Macrometa123!@#"
+  ): Promise<string> {
     return this._connection.request(
       {
         method: "POST",
@@ -210,7 +225,11 @@ export class Fabric {
     );
   }
 
-  updateFabricSpotRegion(tenantName: string, fabricName: string, datacenter: string = '') {
+  updateFabricSpotRegion(
+    tenantName: string,
+    fabricName: string,
+    datacenter: string = ""
+  ) {
     return this._connection.request(
       {
         method: "PUT",
@@ -218,9 +237,8 @@ export class Fabric {
         absolutePath: true
       },
       res => res.body
-    )
+    );
   }
-
 
   // Collection manipulation
 
@@ -239,15 +257,11 @@ export class Fabric {
         qs: { excludeSystem }
       },
       res =>
-        this._connection.c8Major <= 2
-          ? res.body.collections
-          : res.body.result
+        this._connection.c8Major <= 2 ? res.body.collections : res.body.result
     );
   }
 
-  async collections(
-    excludeSystem: boolean = true
-  ): Promise<C8Collection[]> {
+  async collections(excludeSystem: boolean = true): Promise<C8Collection[]> {
     const collections = await this.listCollections(excludeSystem);
     return collections.map((data: any) =>
       constructCollection(this._connection, data)
@@ -454,10 +468,7 @@ export class Fabric {
   // Function management
 
   listFunctions() {
-    return this._connection.request(
-      { path: "/c8qlfunction" },
-      res => res.body
-    );
+    return this._connection.request({ path: "/c8qlfunction" }, res => res.body);
   }
 
   createFunction(name: string, code: string, isDeterministic?: boolean) {
@@ -472,7 +483,10 @@ export class Fabric {
   }
 
   dropFunction(name: string, group?: boolean) {
-    const path = typeof group === 'boolean' ? `/c8qlfunction/${name}?group=${group}` : `/c8qlfunction/${name}`;
+    const path =
+      typeof group === "boolean"
+        ? `/c8qlfunction/${name}?group=${group}`
+        : `/c8qlfunction/${name}`;
     return this._connection.request(
       {
         method: "DELETE",
@@ -526,7 +540,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: "/streams",
+        path: "/streams"
       },
       res => res.body
     );
@@ -605,9 +619,32 @@ export class Fabric {
         absolutePath: true
       },
       res => res.body
-    )
+    );
   }
 
+  //user
+
+  user(user: string): User {
+    return new User(this._connection, user);
+  }
+
+  getAllUsers() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/_admin/user`
+      },
+      res => res.body
+    );
+  }
+
+  getUser(userName: string) {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/_admin/user/${userName}`
+      },
+      res => res.body
+    );
+  }
 }
-
-
