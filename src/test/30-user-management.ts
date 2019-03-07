@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { Fabric } from "../jsC8";
 import User from "../user";
+import { getDCListString } from "../util/helper";
 // import { EdgeLocation, TenantListObj, TenantList } from '../fabric';
 
 describe("User Management", function() {
@@ -8,6 +9,7 @@ describe("User Management", function() {
   this.timeout(20000);
 
   let fabric: Fabric;
+  let dcList: string;
   const testUrl: string =
     process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
@@ -16,6 +18,8 @@ describe("User Management", function() {
       url: testUrl,
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
+    const response = await fabric.getAllEdgeLocations();
+    dcList = getDCListString(response);
   });
 
   after(() => {
@@ -46,7 +50,6 @@ describe("User Management", function() {
   describe("fabric.getAllUsers", () => {
     it("Lists all users", async () => {
       const response = await fabric.getAllUsers();
-      console.log(response);
       expect(response.error).to.be.false;
     });
   });
@@ -55,14 +58,23 @@ describe("User Management", function() {
     let user: User;
     beforeEach(async () => {
       user = fabric.user(`user_${Date.now()}`);
-      const resp = await user.createUser("test_pass");
-      console.log("user Created ==>>", resp);
+      await user.createUser("test_pass");
+    });
+
+    afterEach(async () => {
+      try {
+        // const response = await fabric.getUser(user.user);
+        // if (response.code === 200) {
+        await user.deleteUser();
+        // }
+      } catch (error) {
+        // error);
+      }
     });
 
     describe("user.deleteUser", () => {
       it("Deletes a user", async () => {
         const response = await user.deleteUser();
-        console.log("user deleted ==>>", response);
         expect(response.error).to.be.false;
       });
     });
@@ -70,7 +82,6 @@ describe("User Management", function() {
     describe("fabric.getUser", () => {
       it("Fetches a user", async () => {
         const response = await fabric.getUser(user.user);
-        console.log("Got User ==>>", response);
         expect(response.error).to.be.false;
       });
     });
@@ -80,7 +91,6 @@ describe("User Management", function() {
         const response = await user.modifyUser({
           active: false
         });
-        console.log("user modified ==>>", response);
         expect(response.error).to.be.false;
         expect(response.active).to.be.false;
       });
@@ -91,8 +101,92 @@ describe("User Management", function() {
         const response = await user.replaceUser({
           passwd: "test_passwordddd"
         });
-        console.log("user modified ==>>", response);
         expect(response.error).to.be.false;
+      });
+    });
+    describe("User.FabricAccessOperations", () => {
+      const testFabricName = `test-fabric-${Date.now()}`;
+
+      beforeEach(async () => {
+        await fabric.createFabric(testFabricName, [{ username: user.user }], {
+          dcList: dcList
+        });
+        fabric.useFabric(testFabricName);
+      });
+
+      afterEach(async () => {
+        fabric.useFabric("_system");
+        await fabric.dropFabric(testFabricName);
+      });
+
+      it("Lists the accessible databases and their permissions ", async () => {
+        const response = await user.getAllDatabases();
+        expect(response.error).to.be.false;
+        expect(response.result[testFabricName]).to.exist;
+        expect(response.result[testFabricName].collections).not.exist;
+      });
+
+      it("Lists the accessible databases and their permissions with all the collections", async () => {
+        const response = await user.getAllDatabases(true);
+        expect(response.error).to.be.false;
+        expect(response.result[testFabricName]).to.exist;
+        expect(response.result[testFabricName].collections).to.exist;
+      });
+
+      it("Gets the access level of a database ", async () => {
+        const response = await user.getDatabaseAccessLevel(testFabricName);
+        expect(response.error).to.be.false;
+        expect(response.result).to.be.oneOf(["rw", "ro", "none"]);
+      });
+
+      it("Gets the access level of a collection in a database ", async () => {
+        const collectionName = "Test_Collection";
+        await fabric.collection(collectionName).create();
+        const response = await user.getCollectionAccessLevel(
+          testFabricName,
+          collectionName
+        );
+        expect(response.error).to.be.false;
+      });
+
+      it("Clears the access level of a database ", async () => {
+        const response = await user.clearDatabaseAccessLevel(testFabricName);
+        expect(response.error).to.be.false;
+        expect(response.code).eq(202);
+      });
+
+      it("Clears the access level of a collection in a database ", async () => {
+        const collectionName = "Test_Collection";
+        await fabric.collection(collectionName).create();
+        const response = await user.clearCollectionAccessLevel(
+          testFabricName,
+          collectionName
+        );
+        expect(response.error).to.be.false;
+        expect(response.code).eq(202);
+      });
+
+      it("Sets the access level of a collection in a database ", async () => {
+        const collectionName = "Test_Collection";
+        await fabric.collection(collectionName).create();
+        const response = await user.setCollectionAccessLevel(
+          testFabricName,
+          collectionName,
+          "ro"
+        );
+        expect(response.error).to.be.false;
+        expect(response.code).eq(200);
+        expect(response[`${testFabricName}/${collectionName}`]).eq("ro");
+      });
+
+      it("Sets the access level of a database", async () => {
+        const response = await user.setDatabaseAccessLevel(
+          testFabricName,
+          "ro"
+        );
+        expect(response.error).to.be.false;
+        expect(response.code).eq(200);
+        expect(response[`${testFabricName}`]).eq("ro");
       });
     });
   });

@@ -1,17 +1,7 @@
 import { Connection } from "./connection";
 
-export interface IUser {
-  active?: boolean;
-  extra?: object;
-  passwd: string;
-  user: string;
-}
-
-class User implements IUser {
+class User {
   _connection: Connection;
-  active = true;
-  extra = {};
-  passwd = "";
   user = "";
 
   urlPrefix: string = "/_admin/user";
@@ -22,9 +12,7 @@ class User implements IUser {
     this._connection = connection;
   }
 
-  createUser(passwd: string, active: boolean = true, extra: object = {}) {
-    this.extra = extra;
-    this.active = active;
+  createUser(passwd: string = "", active: boolean = true, extra: object = {}) {
     return this._connection.request(
       {
         method: "POST",
@@ -32,8 +20,8 @@ class User implements IUser {
         body: {
           user: this.user,
           passwd: passwd,
-          active: this.active,
-          extra: this.extra
+          active,
+          extra
         }
       },
       res => res.body
@@ -62,11 +50,7 @@ class User implements IUser {
           ...config
         }
       },
-      res => {
-        this.active = config.active || true;
-        this.extra = config.extra || {};
-        return res.body;
-      }
+      res => res.body
     );
   }
 
@@ -78,7 +62,7 @@ class User implements IUser {
     return this._makeModification(config, "PUT");
   }
 
-  getAllDatabases(isFullRequested: boolean) {
+  getAllDatabases(isFullRequested: boolean = false) {
     return this._connection.request(
       {
         method: "GET",
