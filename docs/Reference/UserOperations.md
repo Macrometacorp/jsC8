@@ -32,21 +32,18 @@ const fabric = new Fabric();
 await fabric.getAllUsers();
 ```
 
-## fabric.getUser
+## user.getUserDetails
 
-`async fabric.getUser()`
+`async fabric.getUserDetails()`
 
 Returns the details of a user
-
-**Arguments**
-
-- **userName**: `string`
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
-await fabric.getUser("sample_username");
+const user = fabric.user("sample_user");
+await user.getUserDetails();
 ```
 
 ## user.createUser

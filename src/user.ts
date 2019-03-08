@@ -7,7 +7,6 @@ class User {
   urlPrefix: string = "/_admin/user";
 
   constructor(connection: Connection, user: string) {
-    // if (!user) throw new Error("Looks like you forgot to supply a username");
     this.user = user;
     this._connection = connection;
   }
@@ -23,6 +22,16 @@ class User {
           active,
           extra
         }
+      },
+      res => res.body
+    );
+  }
+
+  getUserDeatils() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/_admin/user/${this.user}`
       },
       res => res.body
     );

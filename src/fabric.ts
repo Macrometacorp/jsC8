@@ -637,14 +637,4 @@ export class Fabric {
       res => res.body
     );
   }
-
-  getUser(userName: string) {
-    return this._connection.request(
-      {
-        method: "GET",
-        path: `/_admin/user/${userName}`
-      },
-      res => res.body
-    );
-  }
 }

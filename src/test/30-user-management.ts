@@ -2,7 +2,6 @@ import { expect } from "chai";
 import { Fabric } from "../jsC8";
 import User from "../user";
 import { getDCListString } from "../util/helper";
-// import { EdgeLocation, TenantListObj, TenantList } from '../fabric';
 
 describe("User Management", function() {
   // create fabric takes 11s in a standard cluster
@@ -63,13 +62,8 @@ describe("User Management", function() {
 
     afterEach(async () => {
       try {
-        // const response = await fabric.getUser(user.user);
-        // if (response.code === 200) {
         await user.deleteUser();
-        // }
-      } catch (error) {
-        // error);
-      }
+      } catch (error) {}
     });
 
     describe("user.deleteUser", () => {
@@ -79,9 +73,9 @@ describe("User Management", function() {
       });
     });
 
-    describe("fabric.getUser", () => {
+    describe("user.getUserDetails", () => {
       it("Fetches a user", async () => {
-        const response = await fabric.getUser(user.user);
+        const response = await user.getUserDeatils();
         expect(response.error).to.be.false;
       });
     });
