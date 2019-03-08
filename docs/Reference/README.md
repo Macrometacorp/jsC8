@@ -26,3 +26,4 @@
   - [VertexCollection](Graph/VertexCollection.md)
   - [EdgeCollection](Graph/EdgeCollection.md)
 - [Route](Route.md)
+- [User Management](UserOperations.md)
