@@ -5,13 +5,14 @@ import { getDCListString } from "../util/helper";
 
 const range = (n: number): number[] => Array.from(Array(n).keys());
 
-describe("Accessing graphs", function () {
+describe("Accessing graphs", function() {
   // create fabric takes 11s in a standard cluster
-  this.timeout(60000);
+  this.timeout(600000);
 
-  let name = `testdb_${Date.now()}`;
+  let name = `testdb${Date.now()}`;
   let fabric: Fabric;
-  const testUrl: string = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
+  const testUrl: string =
+    process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
   let dcList: string;
   before(async () => {
@@ -23,7 +24,7 @@ describe("Accessing graphs", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
     fabric.useFabric(name);
   });
   after(async () => {
@@ -45,9 +46,9 @@ describe("Accessing graphs", function () {
     });
   });
   describe("fabric.listGraphs", () => {
-    let vertexCollectionNames = range(2).map(i => `vc_${Date.now()}_${i}`);
-    let edgeCollectionNames = range(2).map(i => `ec_${Date.now()}_${i}`);
-    let graphNames = range(4).map(i => `g_${Date.now()}_${i}`);
+    let vertexCollectionNames = range(2).map(i => `vc${Date.now()}${i}`);
+    let edgeCollectionNames = range(2).map(i => `ec${Date.now()}${i}`);
+    let graphNames = range(4).map(i => `g${Date.now()}${i}`);
     before(done => {
       Promise.all([
         ...vertexCollectionNames.map(name => fabric.collection(name).create()),
@@ -88,7 +89,8 @@ describe("Accessing graphs", function () {
         .catch(done);
     });
     it("fetches information about all graphs", done => {
-      fabric.listGraphs()
+      fabric
+        .listGraphs()
         .then(graphs => {
           expect(graphs.length).to.equal(graphNames.length);
           expect(graphs.map((g: any) => g._key).sort()).to.eql(graphNames);
@@ -98,9 +100,9 @@ describe("Accessing graphs", function () {
     });
   });
   describe("fabric.graphs", () => {
-    let vertexCollectionNames = range(2).map(i => `vc_${Date.now()}_${i}`);
-    let edgeCollectionNames = range(2).map(i => `ec_${Date.now()}_${i}`);
-    let graphNames = range(4).map(i => `g_${Date.now()}_${i}`);
+    let vertexCollectionNames = range(2).map(i => `vc${Date.now()}${i}`);
+    let edgeCollectionNames = range(2).map(i => `ec${Date.now()}${i}`);
+    let graphNames = range(4).map(i => `g${Date.now()}${i}`);
     before(done => {
       Promise.all([
         ...vertexCollectionNames.map(name => fabric.collection(name).create()),
@@ -135,7 +137,8 @@ describe("Accessing graphs", function () {
         .catch(done);
     });
     it("creates Graph instances", done => {
-      fabric.graphs()
+      fabric
+        .graphs()
         .then(graphs => {
           expect(graphs.length).to.equal(graphNames.length);
           expect(graphs.map((g: any) => g.name).sort()).to.eql(graphNames);

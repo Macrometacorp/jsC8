@@ -7,7 +7,7 @@ const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const itPre34 = C8_VERSION < 30400 ? it : it.skip;
 const it34 = C8_VERSION >= 30400 ? it : it.skip;
 
-describe("Managing indexes", function () {
+describe("Managing indexes", function() {
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
 
@@ -15,9 +15,9 @@ describe("Managing indexes", function () {
   const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
   let dcList: string;
-  let dbName = `testdb_${Date.now()}`;
+  let dbName = `testdb${Date.now()}`;
   let collection: DocumentCollection;
-  let collectionName = `collection-${Date.now()}`;
+  let collectionName = `collection${Date.now()}`;
   before(async () => {
     fabric = new Fabric({
       url: testUrl,
@@ -27,7 +27,9 @@ describe("Managing indexes", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(dbName, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(dbName, [{ username: "root" }], {
+      dcList: dcList
+    });
     fabric.useFabric(dbName);
     collection = fabric.collection(collectionName);
     await collection.create();

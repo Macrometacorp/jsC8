@@ -4,11 +4,11 @@ import { ArrayCursor } from "../cursor";
 import { C8Error } from "../error";
 import { getDCListString } from "../util/helper";
 
-describe("C8QL queries", function () {
+describe("C8QL queries", function() {
   // create fabric takes 11s in a standard cluster
-  this.timeout(20000);
+  this.timeout(60000);
 
-  let name = `testdb_${Date.now()}`;
+  let name = `testdb${Date.now()}`;
   let fabric: Fabric;
   const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
@@ -22,7 +22,7 @@ describe("C8QL queries", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
     fabric.useFabric(name);
   });
   after(async () => {
@@ -35,7 +35,8 @@ describe("C8QL queries", function () {
   });
   describe("fabric.query", () => {
     it("returns a cursor for the query result", done => {
-      fabric.query("RETURN 23")
+      fabric
+        .query("RETURN 23")
         .then(cursor => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           done();
@@ -43,7 +44,8 @@ describe("C8QL queries", function () {
         .catch(done);
     });
     it("throws an exception on error", done => {
-      fabric.query("FOR i IN no RETURN i")
+      fabric
+        .query("FOR i IN no RETURN i")
         .then(() => {
           expect.fail();
           done();
@@ -66,7 +68,8 @@ describe("C8QL queries", function () {
       }
     });
     it("supports bindVars", done => {
-      fabric.query("RETURN @x", { x: 5 })
+      fabric
+        .query("RETURN @x", { x: 5 })
         .then(cursor => cursor.next())
         .then(value => {
           expect(value).to.equal(5);
@@ -75,10 +78,11 @@ describe("C8QL queries", function () {
         .catch(done);
     });
     it("supports options", done => {
-      fabric.query("FOR x IN 1..10 RETURN x", undefined, {
-        batchSize: 2,
-        count: true
-      })
+      fabric
+        .query("FOR x IN 1..10 RETURN x", undefined, {
+          batchSize: 2,
+          count: true
+        })
         .then(cursor => {
           expect(cursor.count).to.equal(10);
           expect((cursor as any)._hasMore).to.equal(true);
@@ -87,7 +91,8 @@ describe("C8QL queries", function () {
         .catch(done);
     });
     it("supports AQB queries", done => {
-      fabric.query({ toC8QL: () => "RETURN 42" })
+      fabric
+        .query({ toC8QL: () => "RETURN 42" })
         .then(cursor => cursor.next())
         .then(value => {
           expect(value).to.equal(42);
@@ -96,7 +101,8 @@ describe("C8QL queries", function () {
         .catch(done);
     });
     it("supports query objects", done => {
-      fabric.query({ query: "RETURN 1337", bindVars: {} })
+      fabric
+        .query({ query: "RETURN 1337", bindVars: {} })
         .then(cursor => cursor.next())
         .then(value => {
           expect(value).to.equal(1337);
@@ -105,7 +111,8 @@ describe("C8QL queries", function () {
         .catch(done);
     });
     it("supports compact queries", done => {
-      fabric.query({ query: "RETURN @potato", bindVars: { potato: "tomato" } })
+      fabric
+        .query({ query: "RETURN @potato", bindVars: { potato: "tomato" } })
         .then(cursor => cursor.next())
         .then(value => {
           expect(value).to.equal("tomato");
@@ -118,7 +125,8 @@ describe("C8QL queries", function () {
         query: "FOR x IN RANGE(1, @max) RETURN x",
         bindVars: { max: 10 }
       };
-      fabric.query(query, { batchSize: 2, count: true })
+      fabric
+        .query(query, { batchSize: 2, count: true })
         .then(cursor => {
           expect(cursor.count).to.equal(10);
           expect((cursor as any)._hasMore).to.equal(true);
@@ -145,10 +153,10 @@ describe("C8QL queries", function () {
       let query = c8ql`
         A ${values[0]} B ${values[1]} C ${values[2]} D ${values[3]} E ${
         values[4]
-        } F ${values[5]}
+      } F ${values[5]}
         G ${values[6]} H ${values[7]} I ${values[8]} J ${values[9]} K ${
         values[10]
-        } EOF
+      } EOF
       `;
       expect(query.query).to.equal(`
         A @value0 B @value1 C @value2 D @value3 E @value4 F @value5

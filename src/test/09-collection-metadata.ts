@@ -3,17 +3,17 @@ import { Fabric } from "../jsC8";
 import { COLLECTION_NOT_FOUND, DocumentCollection } from "../collection";
 import { getDCListString } from "../util/helper";
 
-describe("Collection metadata", function () {
+describe("Collection metadata", function() {
   // create fabric takes 11s in a standard cluster
-  this.timeout(20000);
+  this.timeout(60000);
 
   let fabric: Fabric;
   const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
   let dcList: string;
-  let dbName = `testdb_${Date.now()}`;
+  let dbName = `testdb${Date.now()}`;
   let collection: DocumentCollection;
-  let collectionName = `collection-${Date.now()}`;
+  let collectionName = `collection${Date.now()}`;
   before(async () => {
     fabric = new Fabric({
       url: testUrl,
@@ -23,7 +23,9 @@ describe("Collection metadata", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(dbName, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(dbName, [{ username: "root" }], {
+      dcList: dcList
+    });
     fabric.useFabric(dbName);
     collection = fabric.collection(collectionName);
     await collection.create();

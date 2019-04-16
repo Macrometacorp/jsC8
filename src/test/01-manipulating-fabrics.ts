@@ -8,12 +8,13 @@ const range = (n: number): number[] => Array.from(Array(n).keys());
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const it2x = C8_VERSION < 30000 ? it : it.skip;
 
-describe("Manipulating fabrics", function () {
+describe("Manipulating fabrics", function() {
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
 
   let fabric: Fabric;
-  const testUrl: string = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
+  const testUrl: string =
+    process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
   let dcList: string;
   beforeEach(async () => {
@@ -53,7 +54,7 @@ describe("Manipulating fabrics", function () {
   });
   describe("fabric.edgeLocations", () => {
     this.beforeEach(() => fabric.useFabric("_system"));
-    it('gets all the edge locations', async () => {
+    it("gets all the edge locations", async () => {
       const response = await fabric.getAllEdgeLocations();
       expect(Array.isArray(response)).to.be.true;
       expect(response[0]).to.haveOwnProperty("_id");
@@ -61,7 +62,7 @@ describe("Manipulating fabrics", function () {
       expect(response[0]).to.haveOwnProperty("tags");
       expect(response.length).to.be.greaterThan(0);
     });
-    it('gets local edge location', async () => {
+    it("gets local edge location", async () => {
       const response = await fabric.getLocalEdgeLocation();
       expect(Array.isArray(response)).to.be.false;
       expect(response).to.haveOwnProperty("_id");
@@ -70,13 +71,15 @@ describe("Manipulating fabrics", function () {
     });
   });
   describe("fabric.createFabric", () => {
-    let name = `testfabric_${Date.now()}`;
+    let name = `testfabric${Date.now()}`;
     afterEach(async () => {
       fabric.useFabric("_system");
       await fabric.dropFabric(name);
     });
     it("creates a fabric with the given name", async () => {
-      await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+      await fabric.createFabric(name, [{ username: "root" }], {
+        dcList: dcList
+      });
       fabric.useFabric(name);
       const info = await fabric.get();
       expect(info.name).to.equal(name);
@@ -115,9 +118,11 @@ describe("Manipulating fabrics", function () {
     });
   });
   describe("fabric.dropFabric", () => {
-    let name = `testfabric_${Date.now()}`;
+    let name = `testfabric${Date.now()}`;
     beforeEach(async () => {
-      await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+      await fabric.createFabric(name, [{ username: "root" }], {
+        dcList: dcList
+      });
     });
     it("deletes the given fabric from the server", async () => {
       await fabric.dropFabric(name);
@@ -133,22 +138,24 @@ describe("Manipulating fabrics", function () {
     });
   });
   describe("fabric.truncate", () => {
-    let name = `testfabric_${Date.now()}`;
-    let nonSystemCollections = range(4).map(i => `c_${Date.now()}_${i}`);
-    let systemCollections = range(4).map(i => `_c_${Date.now()}_${i}`);
+    let name = `testfabric${Date.now()}`;
+    let nonSystemCollections = range(4).map(i => `c${i}${Date.now()}`);
+    let systemCollections = range(4).map(i => `c${i}${Date.now()}${i}`);
     beforeEach(async () => {
-      await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+      await fabric.createFabric(name, [{ username: "root" }], {
+        dcList: dcList
+      });
       fabric.useFabric(name);
       await Promise.all([
         ...nonSystemCollections.map(async name => {
           let collection = fabric.collection(name);
           await collection.create();
-          return await collection.save({ _key: "example" });
+          await collection.save({ _key: "example" });
         }),
         ...systemCollections.map(async name => {
           let collection = fabric.collection(name);
           await collection.create({ isSystem: true });
-          return await collection.save({ _key: "example" });
+          await collection.save({ _key: "example" });
         })
       ]);
     });
@@ -160,18 +167,25 @@ describe("Manipulating fabrics", function () {
       await fabric.truncate();
       await Promise.all([
         ...nonSystemCollections.map(async name => {
-          let doc;
           try {
-            doc = await fabric.collection(name).document("example");
+            await fabric.collection(name).document("example");
+            expect.fail("Expected document to be destroyed");
           } catch (e) {
             expect(e).to.be.an.instanceof(C8Error);
+            expect(e.code).eq(404);
             return;
           }
-          expect.fail(`Expected document to be destroyed: ${doc._id}`);
         }),
-        ...systemCollections.map(name =>
-          fabric.collection(name).document("example")
-        )
+        ...systemCollections.map(async name => {
+          try {
+            await fabric.collection(name).document("example");
+            expect.fail("Expected document to be destroyed");
+          } catch (e) {
+            expect(e).to.be.an.instanceof(C8Error);
+            expect(e.code).eq(404);
+            return;
+          }
+        })
       ]);
     });
     it2x(
@@ -199,12 +213,18 @@ describe("Manipulating fabrics", function () {
       expect(response.error).to.be.false;
     });
     it("should validate incorrect query", async () => {
-      const response = await fabric.validateQuery("forrrrr doc in docs return doc");
-      expect(response.error).to.be.true;
+      try {
+        const response = await fabric.validateQuery(
+          "forrrr doc in docs return doc"
+        );
+        expect(response.error).to.be.true;
+      } catch (e) {
+        expect(e).to.be.an.instanceof(C8Error);
+      }
     });
   });
   describe("fabric.explainQuery", () => {
-    const collectionName = `testColl_${Date.now().toString()}`;
+    const collectionName = `testColl${Date.now().toString()}`;
     let collection: DocumentCollection;
     this.beforeAll(async () => {
       const fabric2 = new Fabric({
@@ -220,14 +240,14 @@ describe("Manipulating fabrics", function () {
       const queryObject = {
         query: `for doc in ${collectionName} return doc`,
         bindVars: {}
-      }
+      };
       const response = await fabric.explainQuery(queryObject);
       expect(response.error).to.be.false;
     });
   });
   describe("fabric.getCurrentQueries", () => {
     it("should get currently running queries");
-  })
+  });
   describe("fabric.clearSlowQueries", () => {
     it("should clear slow queries");
   });

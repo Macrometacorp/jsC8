@@ -3,11 +3,11 @@ import { Fabric } from "../jsC8";
 import { EdgeCollection } from "../collection";
 import { getDCListString } from "../util/helper";
 
-describe("EdgeCollection API", function () {
+describe("EdgeCollection API", function() {
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
 
-  let name = `testdb_${Date.now()}`;
+  let name = `testdb${Date.now()}`;
   let fabric: Fabric;
   const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
@@ -22,7 +22,7 @@ describe("EdgeCollection API", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
     fabric.useFabric(name);
   });
   after(async () => {
@@ -34,7 +34,7 @@ describe("EdgeCollection API", function () {
     }
   });
   beforeEach(done => {
-    collection = fabric.edgeCollection(`c_${Date.now()}`);
+    collection = fabric.edgeCollection(`c${Date.now()}`);
     collection
       .create()
       .then(() => void done())
@@ -63,7 +63,7 @@ describe("EdgeCollection API", function () {
       expect(doc._to).to.equal(data._to);
     });
     it("does not throw on not found when graceful", async () => {
-      const doc = await collection.edge("does-not-exist", true);
+      const doc = await collection.edge("doesnotexist", true);
       expect(doc).to.equal(null);
     });
   });
@@ -83,7 +83,7 @@ describe("EdgeCollection API", function () {
       expect(doc._to).to.equal(data._to);
     });
     it("does not throw on not found when graceful", async () => {
-      const doc = await collection.document("does-not-exist", true);
+      const doc = await collection.document("doesnotexist", true);
       expect(doc).to.equal(null);
     });
   });
@@ -98,7 +98,7 @@ describe("EdgeCollection API", function () {
       expect(exists).to.equal(true);
     });
     it("returns false if the edge does not exist", async () => {
-      const exists = await collection.documentExists("does-not-exist");
+      const exists = await collection.documentExists("doesnotexist");
       expect(exists).to.equal(false);
     });
   });

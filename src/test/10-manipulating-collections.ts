@@ -5,11 +5,11 @@ import { getDCListString } from "../util/helper";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("Manipulating collections", function () {
+describe("Manipulating collections", function() {
   // create fabric takes 11s in a standard cluster
-  this.timeout(50000);
+  this.timeout(60000);
 
-  let name = `testfabric_${Date.now()}`;
+  let name = `testfabric${Date.now()}`;
   let fabric: Fabric;
   const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
@@ -24,7 +24,7 @@ describe("Manipulating collections", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
     fabric.useFabric(name);
   });
   after(async () => {
@@ -36,7 +36,7 @@ describe("Manipulating collections", function () {
     }
   });
   beforeEach(done => {
-    collection = fabric.collection(`collection-${Date.now()}`);
+    collection = fabric.collection(`collection${Date.now()}`);
     collection
       .create()
       .then(() => void done())
@@ -55,7 +55,7 @@ describe("Manipulating collections", function () {
   });
   describe("collection.create", () => {
     it("creates a new document collection", done => {
-      const collection = fabric.collection(`document-collection-${Date.now()}`);
+      const collection = fabric.collection(`documentcollection${Date.now()}`);
       collection
         .create()
         .then(() => {
@@ -73,7 +73,7 @@ describe("Manipulating collections", function () {
         .catch(done);
     });
     it("creates a new edge collection", done => {
-      const collection = fabric.edgeCollection(`edge-collection-${Date.now()}`);
+      const collection = fabric.edgeCollection(`edgecollection${Date.now()}`);
       collection
         .create()
         .then(() => {
@@ -130,11 +130,12 @@ describe("Manipulating collections", function () {
   });
   describe("collection.rename", () => {
     it("should rename a collection", done => {
-      fabric.route("/_admin/server/role")
+      fabric
+        .route("/_admin/server/role")
         .get()
         .then(res => {
           if (res.body.role !== "SINGLE") return;
-          const name = `rename-collection-${Date.now()}`;
+          const name = `renamecollection${Date.now()}`;
           return collection.rename(name).then(info => {
             expect(info).to.have.property("name", name);
           });
@@ -185,7 +186,7 @@ describe("Manipulating collections", function () {
     });
   });
   describe("collection.onChange", () => {
-    it("should get the message on collection change", (done) => {
+    it("should get the message on collection change", done => {
       const callbackObj = {
         onopen: () => {
           collection.save({ name: "Anthony", lastname: "Gonsalvis" });
@@ -199,8 +200,8 @@ describe("Manipulating collections", function () {
           expect.fail("Websocket connection error");
         },
         onclose: () => console.log("Websoket connection closed")
-      }
+      };
       collection.onChange(callbackObj, testUrl.substring(8));
     });
-  })
+  });
 });

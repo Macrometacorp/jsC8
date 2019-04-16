@@ -10,15 +10,15 @@ export enum CollectionType {
 export type DocumentHandle =
   | string
   | {
-    _key?: string;
-    _id?: string;
-  };
+      _key?: string;
+      _id?: string;
+    };
 
 export type IndexHandle =
   | string
   | {
-    id?: string;
-  };
+      id?: string;
+    };
 
 export interface ImportOptions {
   type?: null | "auto" | "documents" | "array";
@@ -41,9 +41,7 @@ export interface ImportResult {
   details?: string[];
 }
 
-export function isC8Collection(
-  collection: any
-): collection is C8Collection {
+export function isC8Collection(collection: any): collection is C8Collection {
   return Boolean(collection && collection.isC8Collection);
 }
 
@@ -157,7 +155,11 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
-  onChange(callback: wsCallbackObj, dcName: string, subscriptionName: string = "subs") {
+  onChange(
+    callback: wsCallbackObj,
+    dcName: string,
+    subscriptionName: string = "subs"
+  ) {
     this.stream.consumer(subscriptionName, callback, dcName);
   }
 

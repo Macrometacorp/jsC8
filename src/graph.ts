@@ -428,19 +428,4 @@ export class Graph {
       res => res.body.graph
     );
   }
-
-  traversal(startVertex: DocumentHandle, opts: any) {
-    return this._connection.request(
-      {
-        method: "POST",
-        path: `/_api/traversal`,
-        body: {
-          ...opts,
-          startVertex,
-          graphName: this.name
-        }
-      },
-      res => res.body.result
-    );
-  }
 }

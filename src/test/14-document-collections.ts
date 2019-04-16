@@ -6,11 +6,11 @@ import { getDCListString } from "../util/helper";
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const it3x = C8_VERSION >= 30000 ? it : it.skip;
 
-describe("DocumentCollection API", function () {
+describe("DocumentCollection API", function() {
   // create fabric takes 11s in a standard cluster
-  this.timeout(20000);
+  this.timeout(60000);
 
-  let name = `testdb_${Date.now()}`;
+  let name = `testdb${Date.now()}`;
   let fabric: Fabric;
   const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
@@ -25,7 +25,7 @@ describe("DocumentCollection API", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
     fabric.useFabric(name);
   });
   after(async () => {
@@ -37,7 +37,7 @@ describe("DocumentCollection API", function () {
     }
   });
   beforeEach(done => {
-    collection = fabric.collection(`c_${Date.now()}`);
+    collection = fabric.collection(`c${Date.now()}`);
     collection
       .create()
       .then(() => void done())
@@ -64,7 +64,7 @@ describe("DocumentCollection API", function () {
       expect(doc.foo).to.equal(data.foo);
     });
     it("does not throw on not found when graceful", async () => {
-      const doc = await collection.document("does-not-exist", true);
+      const doc = await collection.document("doesnotexist", true);
       expect(doc).to.equal(null);
     });
   });
@@ -84,7 +84,7 @@ describe("DocumentCollection API", function () {
     });
     it("returns false if the collection does not exist", async () => {
       const exists = await fabric
-        .collection("does-not-exist")
+        .collection("doesnotexist")
         .documentExists("lol");
       expect(exists).to.equal(false);
     });

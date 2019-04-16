@@ -35,9 +35,9 @@ describe("User Management", function() {
     let user: User;
 
     it("creates a user", async () => {
-      const userName = `user_${Date.now()}`;
+      const userName = `user${Date.now()}`;
       user = fabric.user(userName);
-      const response = await user.createUser("test_pass");
+      const response = await user.createUser("testPass");
       expect(response.error).to.be.false;
     });
 
@@ -56,8 +56,8 @@ describe("User Management", function() {
   describe("user.crud_operations", () => {
     let user: User;
     beforeEach(async () => {
-      user = fabric.user(`user_${Date.now()}`);
-      await user.createUser("test_pass");
+      user = fabric.user(`user${Date.now()}`);
+      await user.createUser("testPass");
     });
 
     afterEach(async () => {
@@ -99,7 +99,7 @@ describe("User Management", function() {
       });
     });
     describe("User.FabricAccessOperations", () => {
-      const testFabricName = `test-fabric-${Date.now()}`;
+      const testFabricName = `testFabric${Date.now()}`;
 
       beforeEach(async () => {
         await fabric.createFabric(testFabricName, [{ username: user.user }], {
@@ -134,7 +134,7 @@ describe("User Management", function() {
       });
 
       it("Gets the access level of a collection in a database ", async () => {
-        const collectionName = "Test_Collection";
+        const collectionName = "TestCollection";
         await fabric.collection(collectionName).create();
         const response = await user.getCollectionAccessLevel(
           testFabricName,
@@ -150,7 +150,7 @@ describe("User Management", function() {
       });
 
       it("Clears the access level of a collection in a database ", async () => {
-        const collectionName = "Test_Collection";
+        const collectionName = "TestCollection";
         await fabric.collection(collectionName).create();
         const response = await user.clearCollectionAccessLevel(
           testFabricName,
@@ -161,7 +161,7 @@ describe("User Management", function() {
       });
 
       it("Sets the access level of a collection in a database ", async () => {
-        const collectionName = "Test_Collection";
+        const collectionName = "TestCollection";
         await fabric.collection(collectionName).create();
         const response = await user.setCollectionAccessLevel(
           testFabricName,

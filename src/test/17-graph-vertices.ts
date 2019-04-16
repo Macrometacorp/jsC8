@@ -8,8 +8,8 @@ import { getDCListString } from "../util/helper";
 const range = (n: number): number[] => Array.from(Array(n).keys());
 
 function createCollections(fabric: Fabric) {
-  let vertexCollectionNames = range(2).map(i => `vc_${Date.now()}_${i}`);
-  let edgeCollectionNames = range(2).map(i => `ec_${Date.now()}_${i}`);
+  let vertexCollectionNames = range(2).map(i => `vc${Date.now()}${i}`);
+  let edgeCollectionNames = range(2).map(i => `ec${Date.now()}${i}`);
   return Promise.all([
     ...vertexCollectionNames.map(name => fabric.collection(name).create()),
     ...edgeCollectionNames.map(name => fabric.edgeCollection(name).create())
@@ -30,7 +30,7 @@ function createGraph(
   });
 }
 
-describe("Manipulating graph vertices", function () {
+describe("Manipulating graph vertices", function() {
   // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
@@ -38,7 +38,7 @@ describe("Manipulating graph vertices", function () {
   const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
   let dcList: string;
-  let name = `testfabric_${Date.now()}`;
+  let name = `testfabric${Date.now()}`;
   let graph: Graph;
   let collectionNames: string[];
   before(async () => {
@@ -50,7 +50,7 @@ describe("Manipulating graph vertices", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
     fabric.useFabric(name);
   });
   after(async () => {
@@ -62,7 +62,7 @@ describe("Manipulating graph vertices", function () {
     }
   });
   beforeEach(done => {
-    graph = fabric.graph(`g_${Date.now()}`);
+    graph = fabric.graph(`g${Date.now()}`);
     createCollections(fabric)
       .then(names => {
         collectionNames = names.reduce((a, b) => a.concat(b));
@@ -93,7 +93,7 @@ describe("Manipulating graph vertices", function () {
   describe("graph.addVertexCollection", () => {
     let vertexCollection: BaseCollection;
     beforeEach(done => {
-      vertexCollection = fabric.collection(`xc_${Date.now()}`);
+      vertexCollection = fabric.collection(`xc${Date.now()}`);
       vertexCollection
         .create()
         .then(() => void done())
@@ -118,7 +118,7 @@ describe("Manipulating graph vertices", function () {
   describe("graph.removeVertexCollection", () => {
     let vertexCollection: BaseCollection;
     beforeEach(done => {
-      vertexCollection = fabric.collection(`xc_${Date.now()}`);
+      vertexCollection = fabric.collection(`xc${Date.now()}`);
       vertexCollection
         .create()
         .then(() => graph.addVertexCollection(vertexCollection.name))

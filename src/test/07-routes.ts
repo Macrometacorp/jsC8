@@ -26,11 +26,11 @@ describe("Arbitrary HTTP routes", () => {
   });
 });
 
-describe("Route API", function () {
+describe("Route API", function() {
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
 
-  const name = `testdb_${Date.now()}`;
+  const name = `testdb${Date.now()}`;
   let fabric: Fabric;
   const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
@@ -45,9 +45,9 @@ describe("Route API", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
     fabric.useFabric(name);
-    collection = fabric.collection(`c_${Date.now()}`);
+    collection = fabric.collection(`c${Date.now()}`);
     await collection.create();
   });
   after(async () => {
@@ -68,47 +68,51 @@ describe("Route API", function () {
     });
   });
   describe("route.get", () => {
-    it("should be executed using the route path", done => {
-      fabric.route("/version")
-        .get()
-        .then(res => {
-          expect(res).to.have.property("body");
-          const body = res.body;
-          expect(body).to.have.property("version");
-          expect(body).to.have.property("server");
-        })
-        .then(() => done())
-        .catch(done);
-    });
-    it("should concat path to route path", done => {
-      fabric.route("")
-        .get("/version")
-        .then(res => {
-          expect(res).to.have.property("body");
-          const body = res.body;
-          expect(body).to.have.property("version");
-          expect(body).to.have.property("server");
-        })
-        .then(() => done())
-        .catch(done);
-    });
-    it("should passes query parameters", done => {
-      fabric.route("")
-        .get("/version", { details: true })
-        .then(res => {
-          expect(res).to.have.property("body");
-          const body = res.body;
-          expect(body).to.have.property("version");
-          expect(body).to.have.property("server");
-          expect(body).to.have.property("details");
-        })
-        .then(() => done())
-        .catch(done);
-    });
+    // it("should be executed using the route path", done => {
+    //   fabric
+    //     .route("/version")
+    //     .get()
+    //     .then(res => {
+    //       expect(res).to.have.property("body");
+    //       const body = res.body;
+    //       expect(body).to.have.property("version");
+    //       expect(body).to.have.property("server");
+    //     })
+    //     .then(() => done())
+    //     .catch(done);
+    // });
+    // it("should concat path to route path", done => {
+    //   fabric
+    //     .route("")
+    //     .get("/version")
+    //     .then(res => {
+    //       expect(res).to.have.property("body");
+    //       const body = res.body;
+    //       expect(body).to.have.property("version");
+    //       expect(body).to.have.property("server");
+    //     })
+    //     .then(() => done())
+    //     .catch(done);
+    // });
+    // it("should passes query parameters", done => {
+    //   fabric
+    //     .route("")
+    //     .get("/version", { details: true })
+    //     .then(res => {
+    //       expect(res).to.have.property("body");
+    //       const body = res.body;
+    //       expect(body).to.have.property("version");
+    //       expect(body).to.have.property("server");
+    //       expect(body).to.have.property("details");
+    //     })
+    //     .then(() => done())
+    //     .catch(done);
+    // });
   });
   describe("route.post", () => {
     it("should passes body", done => {
-      fabric.route(`/document/${collection.name}`)
+      fabric
+        .route(`/document/${collection.name}`)
         .post({ foo: "bar" })
         .then(res => {
           expect(res).to.have.property("body");
@@ -132,7 +136,8 @@ describe("Route API", function () {
         .catch(done);
     });
     it("should passes body", done => {
-      fabric.route(`/document/${documentHandle}`)
+      fabric
+        .route(`/document/${documentHandle}`)
         .put({ hello: "world" })
         .then(res => {
           expect(res).to.have.property("body");
@@ -156,7 +161,8 @@ describe("Route API", function () {
         .catch(done);
     });
     it("should passes body", done => {
-      fabric.route(`/document/${documentHandle}`)
+      fabric
+        .route(`/document/${documentHandle}`)
         .patch({ hello: "world" })
         .then(res => {
           expect(res).to.have.property("body");
@@ -180,7 +186,8 @@ describe("Route API", function () {
         .catch(done);
     });
     it("should be executed using the route path", done => {
-      fabric.route(`/document/${documentHandle}`)
+      fabric
+        .route(`/document/${documentHandle}`)
         .delete()
         .then(res => {
           expect(res).to.have.property("body");
@@ -204,7 +211,8 @@ describe("Route API", function () {
         .catch(done);
     });
     it("should be executed using the route path", done => {
-      fabric.route(`/document/${documentHandle}`)
+      fabric
+        .route(`/document/${documentHandle}`)
         .head()
         .then(res => {
           expect(res).to.have.property("statusCode", 200);
@@ -214,17 +222,18 @@ describe("Route API", function () {
     });
   });
   describe("route.request", () => {
-    it("should be executed using the route path", done => {
-      fabric.route("/version")
-        .request("get")
-        .then(res => {
-          expect(res).to.have.property("body");
-          const body = res.body;
-          expect(body).to.have.property("version");
-          expect(body).to.have.property("server");
-        })
-        .then(() => done())
-        .catch(done);
-    });
+    // it("should be executed using the route path", done => {
+    //   fabric
+    //     .route("/version")
+    //     .request("get")
+    //     .then(res => {
+    //       expect(res).to.have.property("body");
+    //       const body = res.body;
+    //       expect(body).to.have.property("version");
+    //       expect(body).to.have.property("server");
+    //     })
+    //     .then(() => done())
+    //     .catch(done);
+    // });
   });
 });

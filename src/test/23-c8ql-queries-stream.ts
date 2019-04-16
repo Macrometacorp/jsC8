@@ -6,11 +6,11 @@ import { getDCListString } from "../util/helper";
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const describe34 = C8_VERSION >= 30400 ? describe : describe.skip;
 
-describe34("C8QL Stream queries", function () {
+describe34("C8QL Stream queries", function() {
   // create fabric takes 11s in a standard cluster and sometimes even more
-  this.timeout(60000);
+  this.timeout(1000000);
 
-  let name = `testdb_${Date.now()}`;
+  let name = `testdb${Date.now()}`;
   let fabric: Fabric;
   const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
@@ -24,7 +24,7 @@ describe34("C8QL Stream queries", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
     fabric.useFabric(name);
   });
   after(async () => {
@@ -37,7 +37,8 @@ describe34("C8QL Stream queries", function () {
   });
   describe("fabric.query", () => {
     it("returns a cursor for the query result", done => {
-      fabric.query("RETURN 23", {}, { options: { stream: true } })
+      fabric
+        .query("RETURN 23", {}, { options: { stream: true } })
         .then(cursor => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           done();
@@ -45,7 +46,8 @@ describe34("C8QL Stream queries", function () {
         .catch(done);
     });
     it("supports bindVars", done => {
-      fabric.query("RETURN @x", { x: 5 }, { options: { stream: true } })
+      fabric
+        .query("RETURN @x", { x: 5 }, { options: { stream: true } })
         .then(cursor => cursor.next())
         .then(value => {
           expect(value).to.equal(5);
@@ -54,11 +56,12 @@ describe34("C8QL Stream queries", function () {
         .catch(done);
     });
     it("supports options", done => {
-      fabric.query("FOR x IN 1..10 RETURN x", undefined, {
-        batchSize: 2,
-        count: true,
-        options: { stream: true }
-      })
+      fabric
+        .query("FOR x IN 1..10 RETURN x", undefined, {
+          batchSize: 2,
+          count: true,
+          options: { stream: true }
+        })
         .then(cursor => {
           expect(cursor.count).to.equal(10);
           expect((cursor as any)._hasMore).to.equal(true);
@@ -71,7 +74,8 @@ describe34("C8QL Stream queries", function () {
         query: "FOR x IN RANGE(1, @max) RETURN x",
         bindVars: { max: 10 }
       };
-      fabric.query(query, { batchSize: 2, count: true, options: { stream: true } })
+      fabric
+        .query(query, { batchSize: 2, count: true, options: { stream: true } })
         .then(cursor => {
           expect(cursor.count).to.equal(10);
           expect((cursor as any)._hasMore).to.equal(true);

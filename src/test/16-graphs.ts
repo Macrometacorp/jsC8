@@ -6,8 +6,8 @@ import { getDCListString } from "../util/helper";
 const range = (n: number): number[] => Array.from(Array(n).keys());
 
 function createCollections(fabric: Fabric) {
-  let vertexCollectionNames = range(2).map(i => `vc_${Date.now()}_${i}`);
-  let edgeCollectionNames = range(2).map(i => `ec_${Date.now()}_${i}`);
+  let vertexCollectionNames = range(2).map(i => `vc${Date.now()}${i}`);
+  let edgeCollectionNames = range(2).map(i => `ec${Date.now()}${i}`);
   return Promise.all([
     ...vertexCollectionNames.map(name => fabric.collection(name).create()),
     ...edgeCollectionNames.map(name => fabric.edgeCollection(name).create())
@@ -28,15 +28,15 @@ function createGraph(
   });
 }
 
-describe("Graph API", function () {
+describe("Graph API", function() {
   // create fabric takes 11s in a standard cluster
-  this.timeout(20000);
+  this.timeout(60000);
 
   let fabric: Fabric;
   const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
 
   let dcList: string;
-  let name = `testfabric_${Date.now()}`;
+  let name = `testfabric${Date.now()}`;
   before(async () => {
     fabric = new Fabric({
       url: testUrl,
@@ -46,7 +46,7 @@ describe("Graph API", function () {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: 'root' }], { dcList: dcList });
+    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
     fabric.useFabric(name);
   });
   after(async () => {
@@ -61,7 +61,7 @@ describe("Graph API", function () {
     let graph: Graph;
     let collectionNames: string[];
     before(done => {
-      graph = fabric.graph(`g_${Date.now()}`);
+      graph = fabric.graph(`g${Date.now()}`);
       createCollections(fabric)
         .then(names => {
           collectionNames = names.reduce((a, b) => a.concat(b));
@@ -74,7 +74,9 @@ describe("Graph API", function () {
       graph
         .drop()
         .then(() =>
-          Promise.all(collectionNames.map(name => fabric.collection(name).drop()))
+          Promise.all(
+            collectionNames.map(name => fabric.collection(name).drop())
+          )
         )
         .then(() => void done())
         .catch(done);
@@ -110,7 +112,7 @@ describe("Graph API", function () {
         .catch(done);
     });
     it("creates the graph", done => {
-      let graph = fabric.graph(`g_${Date.now()}`);
+      let graph = fabric.graph(`g${Date.now()}`);
       graph
         .create({
           edgeDefinitions: edgeCollectionNames.map(name => ({
@@ -132,7 +134,7 @@ describe("Graph API", function () {
     let edgeCollectionNames: string[];
     let vertexCollectionNames: string[];
     beforeEach(done => {
-      graph = fabric.graph(`g_${Date.now()}`);
+      graph = fabric.graph(`g${Date.now()}`);
       createCollections(fabric)
         .then(names => {
           [vertexCollectionNames, edgeCollectionNames] = names;
