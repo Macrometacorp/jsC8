@@ -44,7 +44,13 @@ In order to do anything useful we need a handle to an existing C8 fabric.
 Let’s do this by creating a new instance of Fabric using a connection string:
 
 ```js
-fabric = new Fabric("https://default.dev.macrometa.io");
+fabric = new Fabric("https://default.dev.macrometa.io"); 
+```
+
+or to have failover support
+
+```js
+fabric = new Fabric(["https://default1.dev.macrometa.io", "https://default1.dev.macrometa.io"]); 
 ```
 
 This connection string actually represents the default values, so you can just omit it:
