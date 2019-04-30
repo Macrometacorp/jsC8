@@ -64,11 +64,11 @@ authentication with the given _username_ and _password_, then returns itself.
 
 **Arguments**
 
-- **username**: `string` (Default: `"root"`)
+- **username**: `string`
 
   The username to authenticate with.
 
-- **password**: `string` (Default: `"Macrometa123!@#"`)
+- **password**: `string`
 
   The password to authenticate with.
 

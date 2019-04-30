@@ -65,9 +65,9 @@ export type TransactionCollections =
   | C8Collection
   | (string | C8Collection)[]
   | {
-      write?: string | C8Collection | (string | C8Collection)[];
-      read?: string | C8Collection | (string | C8Collection)[];
-    };
+    write?: string | C8Collection | (string | C8Collection)[];
+    read?: string | C8Collection | (string | C8Collection)[];
+  };
 
 export type TransactionOptions = {
   lockTimeout?: number;
@@ -101,7 +101,6 @@ export class Fabric {
 
   constructor(config?: Config) {
     this._connection = new Connection(config);
-    this.useBasicAuth();
   }
 
   get name(): string | null {
@@ -140,8 +139,8 @@ export class Fabric {
   }
 
   useBasicAuth(
-    username: string = "root",
-    password: string = "Macrometa123!@#"
+    username: string,
+    password: string
   ): this {
     this._connection.setHeader(
       "authorization",
@@ -209,8 +208,8 @@ export class Fabric {
 
   login(
     tenant: string,
-    username: string = "root",
-    password: string = "Macrometa123!@#"
+    username: string,
+    password: string
   ): Promise<string> {
     return this._connection.request(
       {
