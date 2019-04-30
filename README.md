@@ -144,7 +144,7 @@ Collections provide with a `onChange` method, with which you can see all the cha
 
     async collectionManipulation(collection) {
         const doc = {
-        _key: "employees",
+        _key: "1",
         firstname: "Bruce",
         lastname: "Wayne"
         };
@@ -155,13 +155,13 @@ Collections provide with a `onChange` method, with which you can see all the cha
         }
 
         try {
-        await collection.update("employees", { email: 'wayne@gmail.com' });
+        await collection.update("1", { email: 'wayne@gmail.com' });
         } catch (e) {
         console.log("Could not update document", e);
         }
 
         try {
-        await collection.remove('employees');
+        await collection.remove('1');
         collection.closeOnChangeConnection();
         } catch (e) {
         console.log(e);
@@ -177,7 +177,7 @@ What good is a collection without any collectibles? Let’s start out by definin
 
 ```js
 doc = {
-  _key: 'employees',
+  _key: '1',
   firstname: 'Bruce',
   lastname: 'Wayne'
 };
@@ -199,7 +199,7 @@ await collection.save(doc);
 … and then updating it in place:
 
 ```js
-await collection.update('employees', { email: 'wayne@gmail.com' });
+await collection.update('1', { email: 'wayne@gmail.com' });
 ```
 
 ### Removing the document
@@ -208,7 +208,7 @@ We’ve played around enough with this document, so let’s get rid of it:
 
 ```js
 try {
-    await collection.remove('employees');
+    await collection.remove('1');
 } catch (e) {
     console.log(e);
 }
