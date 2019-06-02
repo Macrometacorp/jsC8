@@ -103,6 +103,7 @@ When loading the browser build with a script tag make sure to load the polyfill 
 // Modern JavaScript
 import { Fabric, c8ql } from "jsc8";
 const fabric = new Fabric();
+fabric.login("_mm", "root", "hunter2");
 (async function() {
   const now = Date.now();
   try {
@@ -119,6 +120,7 @@ const fabric = new Fabric();
 // or plain old Node-style
 var jsC8 = require("jsc8");
 var fabric = new jsC8.Fabric();
+fabric.login("_mm", "root", "hunter2");
 var now = Date.now();
 fabric.query({
   query: "RETURN @value",
@@ -138,7 +140,7 @@ const fabric = new Fabric({
   url: "https://default.dev.macrometa.io"
 });
 fabric.useFabric("pancakes");
-fabric.useBasicAuth("root", "");
+fabric.useBasicAuth("root", "hunter2");
 // The fabric can be swapped at any time
 fabric.useFabric("waffles");
 fabric.useBasicAuth("admin", "maplesyrup");

@@ -215,7 +215,8 @@ export class Fabric {
       {
         method: "POST",
         path: "/_open/auth",
-        body: { username, password, tenant }
+        body: { username, password, tenant },
+        absolutePath: true
       },
       res => {
         this.useBearerAuth(res.body.jwt);

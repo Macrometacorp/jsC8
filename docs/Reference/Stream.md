@@ -434,9 +434,9 @@ await stream.createStream();
 stream.producer("hello world", "test-eu-west-1.dev.aws.macrometa.io");
 ```
 
-## stream.closeWSConnections
+## stream.closeConnections
 
-`stream.closeWSConnections`
+`stream.closeConnections`
 
 Closes all the websocket connections made by producer and consumers.
 
@@ -446,5 +446,5 @@ Closes all the websocket connections made by producer and consumers.
 const fabric = new Fabric();
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
-stream.closeWSConnections();
+stream.closeConnections();
 ```

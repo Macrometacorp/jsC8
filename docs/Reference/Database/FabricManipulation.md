@@ -76,9 +76,7 @@ authentication with the given _username_ and _password_, then returns itself.
 
 ```js
 const fabric = new Fabric();
-fabric.useFabric("test");
 fabric.useBasicAuth("admin", "hunter2");
-// The fabric instance now uses the fabric "test"
 // with the username "admin" and password "hunter2".
 ```
 
@@ -125,8 +123,8 @@ requests and returns it.
 
 ```js
 const fabric = new Fabric();
-fabric.useFabric("test");
 await fabric.login("_mm", "admin", "hunter2");
+fabric.useFabric("test");
 // The fabric instance now uses the fabric "test"
 // with an authentication token for the "admin" user.
 ```

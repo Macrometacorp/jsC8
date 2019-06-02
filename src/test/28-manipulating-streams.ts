@@ -155,7 +155,7 @@ describe("Manipulating streams", function() {
         dcName = response.tags.url;
       });
       this.afterAll(() => {
-        stream.closeWSConnections();
+        stream.closeConnections();
       });
 
       it("gets data in consumer when sent by producer", function(done) {

@@ -53,7 +53,7 @@ or to have failover support
 fabric = new Fabric(["https://default1.dev.macrometa.io", "https://default1.dev.macrometa.io"]); 
 ```
 
-This connection string actually represents the default values, so you can just omit it:
+This connection string actually represents the default value( `"https://default.dev.macrometa.io"` ), so you can just omit it:
 
 ```js
 fabric = new Fabric();
@@ -65,6 +65,16 @@ If that’s still too verbose for you, you can invoke the driver directly:
 fabric = require('jsc8')();
 ```
 The outcome of any of the three calls should be identical.
+
+### Login
+
+To start working, you first have to login. This gets the auth token and automatically puts in each API call.
+
+```js
+const fabric = new Fabric();
+await fabric.login("_mm", "admin", "hunter2");
+```
+Now we have acquired the auth token for `_mm` tenant's `admin` user.
 
 ### Creating a Geofabric
 
@@ -257,7 +267,7 @@ stream.producer("hey hey hey world");
 >Note: Remember to close the connections to the stream if you make a consumer or a producer.
 
 ```js
-stream.closeWSConnections();
+stream.closeConnections();
 ```
 Above method will close all the active connection to the stream.
 
@@ -339,13 +349,15 @@ const streamName = "guest_stream";
 //-----------------------------------------------------------------
 // Create a fabric object
 const fabric = new Fabric(region);
-
+// Log in with valid credentials
+fabric.login("_mm", "root", "hunter2");
 //-----------------------------------------------------------------
 // Create a guest tenant, guest fabric
 const guesttenant = fabric.tenant(tenantName);
 await guesttenant.createTenant("my-password");
+//Login with the newly created tenant
+fabric.login(tenantName, "root", "hunter3");
 fabric.useTenant(tenantName);
-fabric.useBasicAuth();
 await fabric.createFabric(fabricName, [{ username: 'root' }], { dcList: region });
 
 //-----------------------------------------------------------------
@@ -387,18 +399,19 @@ await collection.save({firstname: 'Bruce', lastname: 'Wayne'});
   stream.producer("hey hey hey world");
 
 // Close all connections to a stream
-  stream.closeWSConnections();
+  stream.closeConnections();
 ```
 
 ```js
 // or plain old Node-style
 var jsC8 = require("jsc8");
 var fabric = new jsC8.Fabric();
+fabric.login("_mm", "root", "hunter2");
 var stream = fabric.stream("my-stream", true);
 stream.createStream().then(()=>{
   stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "fabric1.aws.macrometa.io");
   stream.producer("hello world", "test-eu-west-1.dev.aws.macrometa.io");
-  stream.closeWSConnections();
+  stream.closeConnections();
 });
 var now = Date.now();
 fabric.query({
