@@ -376,8 +376,15 @@ await collection.save({firstname: 'Bruce', lastname: 'Wayne'});
 
 //-----------------------------------------------------------------
 // Real-time updates from a collection in fabric
-  const callback = evt => console.log(evt);
-  fabric.onChange(collectionName, callback);
+  collection.onChange({
+    onmessage: (msg) => console.log("message=>", msg),
+    onopen: () => {
+      console.log("connection open");
+      //manipulate the collection here
+      this.collectionManipulation(collection);
+    },
+    onclose: () => console.log("connection closed")
+  }, "default.dev.macrometa.io");
 
 //-----------------------------------------------------------------
 // Create persistent, global and local streams in demofabric
