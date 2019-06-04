@@ -637,4 +637,101 @@ export class Fabric {
       res => res.body
     );
   }
+
+  //User Queries / RESTQL
+
+  listSavedQueries() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/restql/user`
+      },
+      res => res.body
+    );
+
+  }
+
+  saveQuery(name: string, parameter: any, value: string) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/restql",
+        body: {
+          "query": {
+            "name": name,
+            "parameter": parameter,
+            "value": value
+          }
+        }
+      },
+      res => res.body
+    );
+
+  }
+
+  executeSavedQuery(queryName: string, bindVars: any) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: `/restql/execute/${queryName}`,
+        body: {
+          "bindVars": bindVars
+        }
+      },
+      res => res.body
+    );
+
+  }
+
+  updateSavedQuery(queryName: string, parameter: Object, value: string) {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `/restql/${queryName}`,
+        body: {
+          "query": {
+            "name": name,
+            "parameter": parameter,
+            "value": value
+          }
+        }
+      },
+      res => res.body
+    );
+  }
+
+  deleteSavedQuery(queryName: string) {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `/restql/${queryName}`
+      },
+      res => res.body
+    );
+
+  }
+
+  createRestqlCursor(queryName: string, bindVars: any){
+    return this._connection.request(
+      {
+        method: "POST",
+        path: `/restql/dynamic`,
+        body: {
+          "bindVars": [
+            bindVars
+          ],
+          "cache": true,
+          "count": true,
+          "options": {
+            "profile": true
+          },
+          "query": queryName
+        }
+        
+      },
+      res => res.body
+    );
+
+  }
+
 }
