@@ -323,116 +323,113 @@ Don’t worry about your collections though, truncating only deletes the documen
 Although it’s still probably not something you want to take lightly.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 ## Basic usage example
+
+This section aims to provide a basic understanding of all the features. The code below will use the following workflow:
+
+Initialise jsc8
+Create a tenant in a spot enabled region
+Create a geo fabric in this tenant
 
 ```js
 import { Fabric, c8ql } from "jsc8";
 
-const region = "fabric1.ops.aws.macrometa.io";
-const tenantName = "guest";
-const fabricName = "fabric1";
-const collectionName = "employees";
-const streamName = "guest_stream";
+const regionURL = "try.macrometa.io";
+  const region = "try-eu-west-1";
+  const rootPassword = "root-password";
+  const tenantName = "myTenant";
+  const tenantPassword = "myTenant-password";
+  const fabricName = "myFabric";
+  const collectionName = "employees";
+  const streamName = "myStream";
 
-//-----------------------------------------------------------------
-// Create a fabric object
-const fabric = new Fabric(region);
-// Log in with valid credentials
-fabric.login("_mm", "root", "hunter2");
-//-----------------------------------------------------------------
-// Create a guest tenant, guest fabric
-const guesttenant = fabric.tenant(tenantName);
-await guesttenant.createTenant("my-password");
-//Login with the newly created tenant
-fabric.login(tenantName, "root", "hunter3");
-fabric.useTenant(tenantName);
-await fabric.createFabric(fabricName, [{ username: 'root' }], { dcList: region });
+  //--------------------------------------------------------------------------------------
+  // create a fabric handler
+  const fabric = new Fabric(`https://${regionURL}`);
 
-//-----------------------------------------------------------------
-// Create and populate employees collection in demofabric
-fabric.useFabric(fabricName);
-const collection = fabric.collection(collectionName);
-await collection.create();
-await collection.createHashIndex(['firstname'], true);//Add a hash index to the collection.
-await collection.save({firstname: 'Jean', lastname: 'Picard'});
-await collection.save({firstname: 'Bruce', lastname: 'Wayne'});
+  // login with root user
+  await fabric.login("_mm", "root", rootPassword);
 
-//-----------------------------------------------------------------
-// Query employees collection
+  //--------------------------------------------------------------------------------------
+  // create a tenant
+  const guestTenant = fabric.tenant(tenantName);
+  await guestTenant.createTenant(tenantPassword);
+  // log in with the newly created tenant
+  await fabric.login(tenantName, "root", tenantPassword);
+  fabric.useTenant(tenantName);
+
+  //--------------------------------------------------------------------------------------
+  // create a new geo fabric in the newly created tenant
+  await fabric.createFabric(fabricName, [{ username: "root" }], { dcList: region });
+  fabric.useFabric(fabricName);
+
+  //--------------------------------------------------------------------------------------
+  // create and populate employees collection in the above tenant and geo fabric
+  const collection = fabric.collection(collectionName);
+  await collection.create();
+
+  //--------------------------------------------------------------------------------------
+  // See what is happening to your collections in realtime
+  collection.onChange({
+    onmessage: (msg) => console.log("message=>", msg),
+    onopen: async () => {
+      console.log("connection open");
+      //manipulate the collection here
+
+      // add new documents to the collection
+      await collection.save({ firstname: 'Jean', lastname: 'Picard' });
+      await collection.save({ firstname: 'Bruce', lastname: 'Wayne' });
+
+    },
+    onclose: () => console.log("connection closed")
+  }, regionURL);
+
+  //--------------------------------------------------------------------------------------
+  // Querying is done by C8QL
+  // you can directly pass the query
+  // or use restql to save the query once and call it multiple times
   const cursor = await fabric.query(c8ql`FOR employee IN employees RETURN employee`);
   const result = await cursor.next();
 
-//-----------------------------------------------------------------
-// Real-time updates from a collection in fabric
-  collection.onChange({
-    onmessage: (msg) => console.log("message=>", msg),
-    onopen: () => {
-      console.log("connection open");
-      //manipulate the collection here
-      this.collectionManipulation(collection);
-    },
-    onclose: () => console.log("connection closed")
-  }, "default.dev.macrometa.io");
+  // RESTQL
+  // now we save the same query and will call it later directly by its name
+  const query = "FOR employee IN employees RETURN employee";
+  const queryName = "listEmployees";
+  await fabric.saveQuery(queryName, {}, query);
+  const res = await fabric.executeSavedQuery(queryName);
 
-//-----------------------------------------------------------------
-// Create persistent, global and local streams in demofabric
+  //--------------------------------------------------------------------------------------
+  // Create persistent, global and local streams in demofabric
   const persistent_globalStream = fabric.stream(streamName, false);
   await persistent_globalStream.createStream();
 
   const persistent_localStream = fabric.stream(streamName, true);
   await persistent_localStream.createStream();
 
-  const streams = await fabric.getStreams();
-
-// Subscribe to a stream
+  //--------------------------------------------------------------------------------------
+  // Subscribe to a stream
   const stream = fabric.stream(streamName, false);
   await stream.createStream();
-  stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, region);
+  stream.consumer("my-sub", { onmessage: (msg) => { console.log(msg) } }, regionURL);
 
-// Publish to a stream
-  stream.producer("hello world", region);
-  stream.producer("hey hey hey world");
+  // Publish to a stream
+  stream.producer("hello world", regionURL);
 
-// Close all connections to a stream
+  // Close all connections to a stream
   stream.closeConnections();
-```
 
-```js
-// or plain old Node-style
-var jsC8 = require("jsc8");
-var fabric = new jsC8.Fabric();
-fabric.login("_mm", "root", "hunter2");
-var stream = fabric.stream("my-stream", true);
-stream.createStream().then(()=>{
-  stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "fabric1.aws.macrometa.io");
-  stream.producer("hello world", "test-eu-west-1.dev.aws.macrometa.io");
-  stream.closeConnections();
-});
-var now = Date.now();
-fabric.query({
-  query: "RETURN @value",
-  bindVars: { value: now }
-})
-  .then(function(cursor) {
-    return cursor.next().then(function(result) {
-      // ...
-    });
-  })
-  .catch(function(err) {
-    // ...
-  });
+  //--------------------------------------------------------------------------------------
+  // Spot Collections
+  await fabric.login("_mm", "root", rootPassword);
+  fabric.useTenant("_mm");
+  fabric.useFabric("_system");
+  // Make a geo location as spot enabled
+  await fabric.changeEdgeLocationSpotStatus(region, true);
+  // Create a geo-fabric with spot region capabilities.
+  fabric.createFabric("spotFabric", [{ username: "root" }], { dcList: region, spotDc: true });
+  // Then create a collection that is designated as a spot collection. 
+  const collection = fabric.collection(collectionName);
+  await collection.create({ isSpot: true });
 ```
 
 ## Testing

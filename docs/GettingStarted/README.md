@@ -99,62 +99,111 @@ When loading the browser build with a script tag make sure to load the polyfill 
 
 ## Basic usage example
 
+This section aims to provide a basic understanding of all the features. The code below will use the following workflow:
+
+Initialise jsc8
+Create a tenant in a spot enabled region
+Create a geo fabric in this tenant
+
 ```js
-// Modern JavaScript
 import { Fabric, c8ql } from "jsc8";
-const fabric = new Fabric();
-fabric.login("_mm", "root", "hunter2");
-(async function() {
-  const now = Date.now();
-  try {
-    const cursor = await fabric.query(c8ql`
-      RETURN ${now}
-    `);
-    const result = await cursor.next();
-    // ...
-  } catch (err) {
-    // ...
-  }
-})();
 
-// or plain old Node-style
-var jsC8 = require("jsc8");
-var fabric = new jsC8.Fabric();
-fabric.login("_mm", "root", "hunter2");
-var now = Date.now();
-fabric.query({
-  query: "RETURN @value",
-  bindVars: { value: now }
-})
-  .then(function(cursor) {
-    return cursor.next().then(function(result) {
-      // ...
-    });
-  })
-  .catch(function(err) {
-    // ...
-  });
+const regionURL = "try.macrometa.io";
+  const region = "try-eu-west-1";
+  const rootPassword = "root-password";
+  const tenantName = "myTenant";
+  const tenantPassword = "myTenant-password";
+  const fabricName = "myFabric";
+  const collectionName = "employees";
+  const streamName = "myStream";
 
-// Using different fabrics
-const fabric = new Fabric({
-  url: "https://default.dev.macrometa.io"
-});
-fabric.useFabric("pancakes");
-fabric.useBasicAuth("root", "hunter2");
-// The fabric can be swapped at any time
-fabric.useFabric("waffles");
-fabric.useBasicAuth("admin", "maplesyrup");
+  //--------------------------------------------------------------------------------------
+  // create a fabric handler
+  const fabric = new Fabric(`https://${regionURL}`);
 
-// Using C8 behind a reverse proxy
-const fabric = new Fabric({
-  url: "http://myproxy.local:8000",
-  isAbsolute: true // don't automatically append fabric path to URL
-});
+  // login with root user
+  await fabric.login("_mm", "root", rootPassword);
 
-// Trigger C8 2.8 compatibility mode
-const fabric = new Fabric({
-  c8Version: 20800
-});
+  //--------------------------------------------------------------------------------------
+  // create a tenant
+  const guestTenant = fabric.tenant(tenantName);
+  await guestTenant.createTenant(tenantPassword);
+  // log in with the newly created tenant
+  await fabric.login(tenantName, "root", tenantPassword);
+  fabric.useTenant(tenantName);
+
+  //--------------------------------------------------------------------------------------
+  // create a new geo fabric in the newly created tenant
+  await fabric.createFabric(fabricName, [{ username: "root" }], { dcList: region });
+  fabric.useFabric(fabricName);
+
+  //--------------------------------------------------------------------------------------
+  // create and populate employees collection in the above tenant and geo fabric
+  const collection = fabric.collection(collectionName);
+  await collection.create();
+
+  //--------------------------------------------------------------------------------------
+  // See what is happening to your collections in realtime
+  collection.onChange({
+    onmessage: (msg) => console.log("message=>", msg),
+    onopen: async () => {
+      console.log("connection open");
+      //manipulate the collection here
+
+      // add new documents to the collection
+      await collection.save({ firstname: 'Jean', lastname: 'Picard' });
+      await collection.save({ firstname: 'Bruce', lastname: 'Wayne' });
+
+    },
+    onclose: () => console.log("connection closed")
+  }, regionURL);
+
+  //--------------------------------------------------------------------------------------
+  // Querying is done by C8QL
+  // you can directly pass the query
+  // or use restql to save the query once and call it multiple times
+  const cursor = await fabric.query(c8ql`FOR employee IN employees RETURN employee`);
+  const result = await cursor.next();
+
+  // RESTQL
+  // now we save the same query and will call it later directly by its name
+  const query = "FOR employee IN employees RETURN employee";
+  const queryName = "listEmployees";
+  await fabric.saveQuery(queryName, {}, query);
+  const res = await fabric.executeSavedQuery(queryName);
+
+  //--------------------------------------------------------------------------------------
+  // Create persistent, global and local streams in demofabric
+  const persistent_globalStream = fabric.stream(streamName, false);
+  await persistent_globalStream.createStream();
+
+  const persistent_localStream = fabric.stream(streamName, true);
+  await persistent_localStream.createStream();
+
+  //--------------------------------------------------------------------------------------
+  // Subscribe to a stream
+  const stream = fabric.stream(streamName, false);
+  await stream.createStream();
+  stream.consumer("my-sub", { onmessage: (msg) => { console.log(msg) } }, regionURL);
+
+  // Publish to a stream
+  stream.producer("hello world", regionURL);
+
+  // Close all connections to a stream
+  stream.closeConnections();
+
+  //--------------------------------------------------------------------------------------
+  // Spot Collections
+  await fabric.login("_mm", "root", rootPassword);
+  fabric.useTenant("_mm");
+  fabric.useFabric("_system");
+  // Make a geo location as spot enabled
+  await fabric.changeEdgeLocationSpotStatus(region, true);
+  // Create a geo-fabric with spot region capabilities.
+  fabric.createFabric("spotFabric", [{ username: "root" }], { dcList: region, spotDc: true });
+  // Then create a collection that is designated as a spot collection. 
+  const collection = fabric.collection(collectionName);
+  await collection.create({ isSpot: true });
 ```
 
 For C8QL please check out the [c8ql template tag](https://macrometa.gitbook.io/c8/c8ql/fundamentals/bindparameters) for writing parametrized C8QL queries without making your code vulnerable to injection attacks.
