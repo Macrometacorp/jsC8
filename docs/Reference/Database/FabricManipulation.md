@@ -3,15 +3,6 @@
 These functions implement the
 [HTTP API for manipulating fabrics](https://docs.macrometa.io/jsC8/latest/HTTP/Fabric/index.html).
 
-## fabric.acquireHostList
-
-`async fabric.acquireHostList(): this`
-
-Updates the URL list by requesting a list of all coordinators in the cluster and adding any endpoints not initially specified in the _url_ configuration.
-
-For long-running processes communicating with an C8 cluster it is recommended to run this method repeatedly (e.g. once per hour) to make sure new coordinators are picked up correctly and can be used for fail-over or load balancing.
-
-**Note**: This method can not be used when the jsC8 instance was created with `isAbsolute: true`.
 
 ## fabric.useFabric
 

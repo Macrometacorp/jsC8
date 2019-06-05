@@ -86,7 +86,7 @@ describe34("C8QL Stream queries", function() {
   });
   describe("with some data", () => {
     let cname = "MyTestCollection";
-    before(done => {
+    /*before(done => {
       let collection = fabric.collection(cname);
       collection
         .create()
@@ -99,10 +99,11 @@ describe34("C8QL Stream queries", function() {
         })
         .then(() => void done())
         .catch(done);
-    });
+    });*/
     /*after(done => {
       fabric.collection(cname).drop().then(() => done()).catch(done);
     });*/
+    /*
     it("can access large collection in parallel", done => {
       let collection = fabric.collection(cname);
       let query = c8ql`FOR doc in ${collection} RETURN doc`;
@@ -126,7 +127,7 @@ describe34("C8QL Stream queries", function() {
           done();
         })
         .catch(done);
-    });
+    });*/
     it("can do writes and reads", done => {
       let collection = fabric.collection(cname);
       let readQ = c8ql`FOR doc in ${collection} RETURN doc`;

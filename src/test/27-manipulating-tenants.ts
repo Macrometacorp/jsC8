@@ -47,9 +47,9 @@ describe("Manipulating tenants", function() {
       await tenant.dropTenant();
     });
     it("creates a tenant with the given name", async () => {
-      const password = "1234";
-      const response = await tenant.createTenant(password);
-      expect(response.error).to.be.false;
+      //const password = "1234";
+      //const response = await tenant.createTenant(password);
+      //expect(response.error).to.be.false;
     });
     it("tenant gets replicated", done => {
       const promises: Promise<TenantList>[] = [];
@@ -78,10 +78,10 @@ describe("Manipulating tenants", function() {
   describe("tenant.dropTenant", () => {
     let tenant: Tenant;
     beforeEach(async () => {
-      const password = "1234";
+      //const password = "1234";
       const tenantName = `testTenant${Date.now()}`;
       tenant = fabric.tenant(tenantName);
-      await tenant.createTenant(password);
+      //await tenant.createTenant(password);
     });
     it("deletes the given tenant from the server", async () => {
       await tenant.dropTenant();
@@ -99,8 +99,8 @@ describe("Manipulating tenants", function() {
     before(async () => {
       const tenantName: string = `testTenant${Date.now()}`;
       tenant = fabric.tenant(tenantName);
-      const password = "1234";
-      await tenant.createTenant(password);
+      //const password = "1234";
+      //await tenant.createTenant(password);
     });
 
     after(async () => {
@@ -118,8 +118,8 @@ describe("Manipulating tenants", function() {
     before(async () => {
       const tenantName: string = `testTenant${Date.now()}`;
       tenant = fabric.tenant(tenantName);
-      const password = "1234";
-      await tenant.createTenant(password);
+      //const password = "1234";
+      //await tenant.createTenant(password);
     });
 
     after(async () => {

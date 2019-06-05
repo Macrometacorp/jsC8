@@ -111,16 +111,7 @@ export class Fabric {
     return new Route(this._connection, path, headers);
   }
 
-  async acquireHostList(): Promise<void> {
-    if (!this._connection.getFabricName()) {
-      throw new Error("Cannot acquire host list with absolute URL");
-    }
-    const urls: string[] = await this._connection.request(
-      { path: "/cluster/endpoints" },
-      res => res.body.endpoints.map((endpoint: any) => endpoint.endpoint)
-    );
-    this._connection.addToHostList(urls);
-  }
+  
 
   close(): void {
     this._connection.close();

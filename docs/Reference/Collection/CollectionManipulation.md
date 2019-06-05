@@ -36,70 +36,6 @@ await collection.create({
 
 To make the collection as `spot`, pass the `isSpot: true` in the `properties` object.
 
-```js
-await collection.create({ isSpot: true });
-```
-
-## collection.load
-
-`async collection.load([count]): Object`
-
-Tells the server to load the collection into memory.
-
-**Arguments**
-
-- **count**: `boolean` (Default: `true`)
-
-  If set to `false`, the return value will not include the number of documents
-  in the collection (which may speed up the process).
-
-**Examples**
-
-```js
-const fabric = new Fabric();
-const collection = fabric.collection('some-collection');
-await collection.load(false)
-// the collection has now been loaded into memory
-```
-
-## collection.unload
-
-`async collection.unload(): Object`
-
-Tells the server to remove the collection from memory.
-
-**Examples**
-
-```js
-const fabric = new Fabric();
-const collection = fabric.collection('some-collection');
-await collection.unload()
-// the collection has now been unloaded from memory
-```
-
-## collection.setProperties
-
-`async collection.setProperties(properties): Object`
-
-Replaces the properties of the collection.
-
-**Arguments**
-
-- **properties**: `Object`
-
-  For information on the _properties_ argument see
-  [the HTTP API for modifying collections](https://docs.macrometa.io/jsC8/latest/HTTP/Collection/Modifying.html).
-
-**Examples**
-
-```js
-const fabric = new Fabric();
-const collection = fabric.collection('some-collection');
-const result = await collection.setProperties({waitForSync: true})
-assert.equal(result.waitForSync, true);
-// the collection will now wait for data being written to disk
-// whenever a document is changed
-```
 
 ## collection.rename
 
@@ -119,20 +55,6 @@ assert.equal(collection.name, result.name);
 // result contains additional information about the collection
 ```
 
-## collection.rotate
-
-`async collection.rotate(): Object`
-
-Rotates the journal of the collection.
-
-**Examples**
-
-```js
-const fabric = new Fabric();
-const collection = fabric.collection('some-collection');
-const data = await collection.rotate();
-// data.result will be true if rotation succeeded
-```
 
 ## collection.truncate
 
