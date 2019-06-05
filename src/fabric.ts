@@ -711,7 +711,7 @@ export class Fabric {
 
   }
 
-  createRestqlCursor(queryName: string, bindVars: any){
+  createRestqlCursor(query: string, bindVars: any){
     return this._connection.request(
       {
         method: "POST",
@@ -725,7 +725,7 @@ export class Fabric {
           "options": {
             "profile": true
           },
-          "query": queryName
+          "query": query
         }
         
       },

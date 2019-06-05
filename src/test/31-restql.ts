@@ -23,24 +23,58 @@ describe("manipulating restql", function () {
         fabric.close();
     });
 
+   
+    describe("fabric.saveQuery", () => {
+        
+        it("should save a query", async () => {
+            const queryName = "testQuery";
+            const response = await fabric.saveQuery(queryName, {}, "for coll in _collections return coll");
+            expect(response.error).to.be.false;
+            expect(response.result.name).to.equal(queryName);
+            
+        })
+    });
+
     describe("fabric.listSavedQueries", () => {
         it("should make a successful API call", async () => {
             const response = await fabric.listSavedQueries();
             expect(response.error).to.be.false;
+            expect(response.result.length).to.be.at.least(1)
         })
     });
 
-    describe("fabric.saveQuery", () => {
+    describe("fabric.executeSavedQuery",()=>{
         let response: { error: any; };
         const queryName = "testQuery";
         before(async () => {
-            response = await fabric.saveQuery(queryName, {}, "for coll in _collections return coll");
+            response = await fabric.executeSavedQuery(queryName, {});
         });
-        after(async () => {
-            await fabric.deleteSavedQuery(queryName);
-        })
-        it("should save a query", async () => {
+       
+        it("should execute a saved query", async () => {
             expect(response.error).to.be.false;
         })
+
     });
+
+    describe("fabric.deleteSavedQuery",()=>{
+        let response: { error: any; };
+        const queryName = "testQuery";
+
+        it("should delete a saved query", async () => {
+            response = await fabric.deleteSavedQuery(queryName)
+            expect(response.error).to.be.false;
+        })
+
+
+    });
+
+    describe("fabric.createRestqlCursor",()=>{
+        //const query = "FOR x IN _routing RETURN x";
+
+        it("should delete a saved query");
+
+
+    });
+
+
 })

@@ -110,18 +110,18 @@ const fabric = new Fabric();
 fabric.deleteSavedQuery("testQuery")
 ```
 
-## fabric.createRestqlCursor(queryName: string, bindVars: any)
+## fabric.createRestqlCursor(query: string, bindVars: any)
 
 
-`  createRestqlCursor(queryName: string, bindVars: any)`
+`  createRestqlCursor(query: string, bindVars: any)`
 
-Creates a restql cursor for running a saved query.
+Creates a restql cursor for running a query.
 
 **Arguments**
 
-- **queryName**: `string`
+- **query**: `string`
 
-  The name of the query to be executed.
+  The query to be executed.
 
 - **bindVars**: `any`
 
@@ -131,6 +131,6 @@ Creates a restql cursor for running a saved query.
 
 ```js
 const fabric = new Fabric();
-fabric.createRestqlCursor(queryName: "testQuery", bindVars: {})
+fabric.createRestqlCursor(query: "FOR x IN TestCollection RETURN x", bindVars: {})
 
 ```
