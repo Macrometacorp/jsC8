@@ -13,7 +13,7 @@ describe("Accessing collections", function() {
   let fabric: Fabric;
   let builtinSystemCollections: string[];
   const testUrl: string =
-    process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
+    process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   let dcList: string;
   before(async () => {

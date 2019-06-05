@@ -44,7 +44,7 @@ In order to do anything useful we need a handle to an existing C8 fabric.
 Let’s do this by creating a new instance of Fabric using a connection string:
 
 ```js
-fabric = new Fabric("https://default.dev.macrometa.io"); 
+fabric = new Fabric("https://test.macrometa.io"); 
 ```
 
 or to have failover support
@@ -53,7 +53,7 @@ or to have failover support
 fabric = new Fabric(["https://default1.dev.macrometa.io", "https://default1.dev.macrometa.io"]); 
 ```
 
-This connection string actually represents the default value( `"https://default.dev.macrometa.io"` ), so you can just omit it:
+This connection string actually represents the default value( `"https://test.macrometa.io"` ), so you can just omit it:
 
 ```js
 fabric = new Fabric();
@@ -150,7 +150,7 @@ Collections provide with a `onChange` method, with which you can see all the cha
         this.collectionManipulation(collection);
       },
       onclose: () => console.log("connection closed")
-    }, "default.dev.macrometa.io");
+    }, "test.macrometa.io");
 
     async collectionManipulation(collection) {
         const doc = {
@@ -249,14 +249,14 @@ await stream.createStream();
 Streams have the capability to both consume and produce messages.
 To create a consumer:
 ```js
-stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "default.dev.macrometa.io");
+stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "test.macrometa.io");
 ```
 This will create a consumer with a callback of your choice to listen to a stream in realtime.
 
 ### Publishing to a stream
 To publish a message to a stream simply use:
 ```js
-stream.producer("hello world", "default.dev.macrometa.io");
+stream.producer("hello world", "test.macrometa.io");
 ```
 The first time a producer is created it requires the datacenter name, but not later on.
 
@@ -384,7 +384,7 @@ await collection.save({firstname: 'Bruce', lastname: 'Wayne'});
       this.collectionManipulation(collection);
     },
     onclose: () => console.log("connection closed")
-  }, "default.dev.macrometa.io");
+  }, "test.macrometa.io");
 
 //-----------------------------------------------------------------
 // Create persistent, global and local streams in demofabric
@@ -417,7 +417,7 @@ fabric.login("_mm", "root", "hunter2");
 var stream = fabric.stream("my-stream", true);
 stream.createStream().then(()=>{
   stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "fabric1.aws.macrometa.io");
-  stream.producer("hello world", "test-eu-west-1.dev.aws.macrometa.io");
+  stream.producer("hello world", "test.macrometa.io");
   stream.closeConnections();
 });
 var now = Date.now();

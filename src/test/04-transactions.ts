@@ -5,7 +5,7 @@ describe("Transactions", () => {
   let fabric: Fabric;
   before(() => {
     fabric = new Fabric({
-      url: process.env.TEST_C8_URL  || "https://default.dev.macrometa.io",
+      url: process.env.TEST_C8_URL  || "https://test.macrometa.io",
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
   });

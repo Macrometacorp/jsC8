@@ -9,14 +9,16 @@ describe("Manipulating tenants", function() {
 
   let fabric: Fabric;
   const testUrl: string =
-    process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
+    process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   before(async () => {
     fabric = new Fabric({
       url: testUrl,
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
+    
   });
+  
 
   after(() => {
     fabric.close();

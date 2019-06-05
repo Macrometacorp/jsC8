@@ -174,11 +174,12 @@ export abstract class BaseCollection implements C8Collection {
   count() {
     return this._get("count");
   }
-
+// figures?
   figures() {
     return this._get("figures");
   }
 
+  //revision?
   revision() {
     return this._get("revision");
   }
@@ -186,7 +187,7 @@ export abstract class BaseCollection implements C8Collection {
   checksum(opts?: any) {
     return this._get("checksum", opts);
   }
-
+//No api as collection/collname/load same for unload
   load(count?: boolean) {
     return this._put(
       "load",
@@ -215,7 +216,7 @@ export abstract class BaseCollection implements C8Collection {
     this._idPrefix = `${name}/`;
     return result;
   }
-
+//Rotate?
   rotate() {
     return this._put("rotate", undefined);
   }

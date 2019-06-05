@@ -137,7 +137,7 @@ fabric.query({
 
 // Using different fabrics
 const fabric = new Fabric({
-  url: "https://default.dev.macrometa.io"
+  url: "https://test.macrometa.io"
 });
 fabric.useFabric("pancakes");
 fabric.useBasicAuth("root", "hunter2");
