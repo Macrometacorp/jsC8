@@ -651,7 +651,7 @@ export class Fabric {
 
   }
 
-  saveQuery(name: string, parameter: any, value: string) {
+  saveQuery(name: string, parameter: any = {}, value: string) {
     return this._connection.request(
       {
         method: "POST",
@@ -669,7 +669,7 @@ export class Fabric {
 
   }
 
-  executeSavedQuery(queryName: string, bindVars: any) {
+  executeSavedQuery(queryName: string, bindVars: any = {}) {
     return this._connection.request(
       {
         method: "POST",
@@ -683,7 +683,7 @@ export class Fabric {
 
   }
 
-  updateSavedQuery(queryName: string, parameter: Object, value: string) {
+  updateSavedQuery(queryName: string, parameter: any = {}, value: string) {
     return this._connection.request(
       {
         method: "PUT",
@@ -711,7 +711,7 @@ export class Fabric {
 
   }
 
-  createRestqlCursor(query: string, bindVars: any){
+  createRestqlCursor(query: string, bindVars: any = {} ){
     return this._connection.request(
       {
         method: "POST",

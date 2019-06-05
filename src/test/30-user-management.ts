@@ -10,7 +10,7 @@ describe("User Management", function() {
   let fabric: Fabric;
   let dcList: string;
   const testUrl: string =
-    process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
+    process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   before(async () => {
     fabric = new Fabric({

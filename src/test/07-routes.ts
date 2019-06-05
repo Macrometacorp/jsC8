@@ -6,7 +6,7 @@ import { getDCListString } from "../util/helper";
 
 describe("Arbitrary HTTP routes", () => {
   const fabric = new Fabric({
-    url: process.env.TEST_C8_URL || "https://default.dev.macrometa.io",
+    url: process.env.TEST_C8_URL || "https://test.macrometa.io",
     c8Version: Number(process.env.C8_VERSION || 30400)
   });
   describe("fabric.route", () => {
@@ -32,7 +32,7 @@ describe("Route API", function() {
 
   const name = `testdb${Date.now()}`;
   let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
+  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   let dcList: string;
   let collection: DocumentCollection;

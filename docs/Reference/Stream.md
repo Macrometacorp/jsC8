@@ -406,7 +406,7 @@ Creates a consumer for a stream.
 const fabric = new Fabric();
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
-stream.consumer("my-subscription", {onmessage: (msg)=>{console.log(msg)}}, "test-eu-west-1.dev.aws.macrometa.io");
+stream.consumer("my-subscription", {onmessage: (msg)=>{console.log(msg)}}, "test.macrometa.io");
 ```
 
 ## stream.producer
@@ -431,7 +431,7 @@ Creates a producer for a stream.
 const fabric = new Fabric();
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
-stream.producer("hello world", "test-eu-west-1.dev.aws.macrometa.io");
+stream.producer("hello world", "test.macrometa.io");
 ```
 
 ## stream.closeConnections

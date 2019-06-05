@@ -8,7 +8,7 @@ describe("Collection metadata", function() {
   this.timeout(60000);
 
   let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
+  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   let dcList: string;
   let dbName = `testdb${Date.now()}`;

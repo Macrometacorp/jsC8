@@ -10,13 +10,14 @@ export class Tenant {
         this.name = tenantName;
     }
 
-    createTenant(passwd: string, extra: object = {}) {
+    createTenant(dcList: string, passwd: string, extra: object = {}) {
         return this._connection.request(
             {
                 method: "POST",
                 path: "/tenant",
                 absolutePath: true,
                 body: {
+                    dcList: dcList,
                     name: this.name,
                     passwd,
                     extra
