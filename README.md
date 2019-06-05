@@ -44,16 +44,16 @@ In order to do anything useful we need a handle to an existing C8 fabric.
 Let’s do this by creating a new instance of Fabric using a connection string:
 
 ```js
-fabric = new Fabric("https://test.macrometa.io"); 
+fabric = new Fabric("https://try.macrometa.io"); 
 ```
 
 or to have failover support
 
 ```js
-fabric = new Fabric(["https://default1.dev.macrometa.io", "https://default1.dev.macrometa.io"]); 
+fabric = new Fabric(["https://try.macrometa.io", "https://try.macrometa.io"]); 
 ```
 
-This connection string actually represents the default value( `"https://test.macrometa.io"` ), so you can just omit it:
+This connection string actually represents the default value( `"https://try.macrometa.io"` ), so you can just omit it:
 
 ```js
 fabric = new Fabric();
@@ -83,7 +83,7 @@ Now we have acquired the auth token for `_mm` tenant's `admin` user.
 We don’t want to mess with any existing data, so let’s start by creating a new geofabric called “myfabric”:
 
 ```js
-await fabric.createFabric("myfabric", [{ username: 'root' }], { dcList: "fabric1.ops.aws.macrometa.io" });
+await fabric.createFabric("myfabric", [{ username: 'root' }], { dcList: "try.macrometa.io" });
 ```
 Because we’re trying to actually do something on the server, this action is asynchronous. All asynchronous methods in the C8 driver return promises but you can also pass a node-style callback instead.
 
@@ -150,7 +150,7 @@ Collections provide with a `onChange` method, with which you can see all the cha
         this.collectionManipulation(collection);
       },
       onclose: () => console.log("connection closed")
-    }, "test.macrometa.io");
+    }, "try.macrometa.io");
 
     async collectionManipulation(collection) {
         const doc = {
@@ -249,14 +249,14 @@ await stream.createStream();
 Streams have the capability to both consume and produce messages.
 To create a consumer:
 ```js
-stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "test.macrometa.io");
+stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "try.macrometa.io");
 ```
 This will create a consumer with a callback of your choice to listen to a stream in realtime.
 
 ### Publishing to a stream
 To publish a message to a stream simply use:
 ```js
-stream.producer("hello world", "test.macrometa.io");
+stream.producer("hello world", "try.macrometa.io");
 ```
 The first time a producer is created it requires the datacenter name, but not later on.
 
@@ -382,11 +382,7 @@ const regionURL = "try.macrometa.io";
 
     },
     onclose: () => console.log("connection closed")
-<<<<<<< HEAD
   }, regionURL);
-=======
-  }, "test.macrometa.io");
->>>>>>> dddd65ecb09110f9f572fe3735d444988a6a4108
 
   //--------------------------------------------------------------------------------------
   // Querying is done by C8QL
@@ -450,9 +446,9 @@ To set the environment variable `TEST_C8_URL` to
 something different:
 
 ```sh
-TEST_C8_URL=https://myfabric.macrometa.io yarn test
+TEST_C8_URL=https://try.macrometa.io yarn test
 # - or -
-TEST_C8_URL=https://myfabric.macrometa.io npm test
+TEST_C8_URL=https://try.macrometa.io npm test
 ```
 
 ## License
