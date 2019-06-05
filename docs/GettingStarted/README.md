@@ -99,11 +99,7 @@ When loading the browser build with a script tag make sure to load the polyfill 
 
 ## Basic usage example
 
-This section aims to provide a basic understanding of all the features. The code below will use the following workflow:
-
-Initialise jsc8
-Create a tenant in a spot enabled region
-Create a geo fabric in this tenant
+This section aims to provide a basic understanding of all the features.
 
 ```js
 import { Fabric, c8ql } from "jsc8";
