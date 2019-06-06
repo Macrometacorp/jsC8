@@ -86,7 +86,7 @@ describe("Collection metadata", function() {
         .catch(done);
     });
   });
-  describe("collection.revision", () => {
+  /*describe("collection.revision", () => {
     it("should return information about a collection", done => {
       collection
         .revision()
@@ -97,5 +97,5 @@ describe("Collection metadata", function() {
         .then(() => done())
         .catch(done);
     });
-  });
+  });*/
 });
