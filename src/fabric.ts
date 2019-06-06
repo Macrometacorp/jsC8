@@ -643,6 +643,10 @@ export class Fabric {
   }
 
   saveQuery(name: string, parameter: any = {}, value: string) {
+    try{
+    
+    if (name.includes(" ")) throw("Spaces are not allowed in query name")
+      
     return this._connection.request(
       {
         method: "POST",
@@ -657,6 +661,10 @@ export class Fabric {
       },
       res => res.body
     );
+    }
+    catch(err){
+      return err
+    }
 
   }
 
