@@ -164,7 +164,7 @@ export abstract class BaseCollection implements C8Collection {
   }
 
   closeOnChangeConnection() {
-    this.stream.closeWSConnections();
+    this.stream.closeConnections();
   }
 
   properties() {
@@ -173,33 +173,6 @@ export abstract class BaseCollection implements C8Collection {
 
   count() {
     return this._get("count");
-  }
-
-  figures() {
-    return this._get("figures");
-  }
-
-  revision() {
-    return this._get("revision");
-  }
-
-  checksum(opts?: any) {
-    return this._get("checksum", opts);
-  }
-
-  load(count?: boolean) {
-    return this._put(
-      "load",
-      typeof count === "boolean" ? { count: count } : undefined
-    );
-  }
-
-  unload() {
-    return this._put("unload", undefined);
-  }
-
-  setProperties(properties: any) {
-    return this._put("properties", properties);
   }
 
   async rename(name: string) {
@@ -216,9 +189,6 @@ export abstract class BaseCollection implements C8Collection {
     return result;
   }
 
-  rotate() {
-    return this._put("rotate", undefined);
-  }
 
   truncate() {
     return this._put("truncate", undefined);
@@ -313,17 +283,6 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
-  bulkUpdate(newValues: any, opts?: any) {
-    return this._connection.request(
-      {
-        method: "PATCH",
-        path: `/document/${this.name}`,
-        body: newValues,
-        qs: opts
-      },
-      res => res.body
-    );
-  }
 
   remove(documentHandle: DocumentHandle, opts: any = {}) {
     const headers: { [key: string]: string } = {};

@@ -111,16 +111,7 @@ export class Fabric {
     return new Route(this._connection, path, headers);
   }
 
-  async acquireHostList(): Promise<void> {
-    if (!this._connection.getFabricName()) {
-      throw new Error("Cannot acquire host list with absolute URL");
-    }
-    const urls: string[] = await this._connection.request(
-      { path: "/cluster/endpoints" },
-      res => res.body.endpoints.map((endpoint: any) => endpoint.endpoint)
-    );
-    this._connection.addToHostList(urls);
-  }
+  
 
   close(): void {
     this._connection.close();
@@ -215,7 +206,8 @@ export class Fabric {
       {
         method: "POST",
         path: "/_open/auth",
-        body: { username, password, tenant }
+        body: { username, password, tenant },
+        absolutePath: true
       },
       res => {
         this.useBearerAuth(res.body.jwt);
@@ -636,4 +628,109 @@ export class Fabric {
       res => res.body
     );
   }
+
+  //User Queries / RESTQL
+
+  listSavedQueries() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/restql/user`
+      },
+      res => res.body
+    );
+
+  }
+
+  saveQuery(name: string, parameter: any = {}, value: string) {
+    try{
+    
+    if (name.includes(" ")) throw("Spaces are not allowed in query name")
+      
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/restql",
+        body: {
+          "query": {
+            "name": name,
+            "parameter": parameter,
+            "value": value
+          }
+        }
+      },
+      res => res.body
+    );
+    }
+    catch(err){
+      return err
+    }
+
+  }
+
+  executeSavedQuery(queryName: string, bindVars: any = {}) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: `/restql/execute/${queryName}`,
+        body: {
+          "bindVars": bindVars
+        }
+      },
+      res => res.body
+    );
+
+  }
+
+  updateSavedQuery(queryName: string, parameter: any = {}, value: string) {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `/restql/${queryName}`,
+        body: {
+          "query": {
+            "name": name,
+            "parameter": parameter,
+            "value": value
+          }
+        }
+      },
+      res => res.body
+    );
+  }
+
+  deleteSavedQuery(queryName: string) {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `/restql/${queryName}`
+      },
+      res => res.body
+    );
+
+  }
+
+  createRestqlCursor(query: string, bindVars: any = {} ){
+    return this._connection.request(
+      {
+        method: "POST",
+        path: `/restql/dynamic`,
+        body: {
+          "bindVars": [
+            bindVars
+          ],
+          "cache": true,
+          "count": true,
+          "options": {
+            "profile": true
+          },
+          "query": query
+        }
+        
+      },
+      res => res.body
+    );
+
+  }
+
 }

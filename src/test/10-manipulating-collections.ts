@@ -11,7 +11,7 @@ describe("Manipulating collections", function() {
 
   let name = `testfabric${Date.now()}`;
   let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
+  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   let dcList: string;
   let collection: DocumentCollection;
@@ -91,7 +91,7 @@ describe("Manipulating collections", function() {
         .catch(done);
     });
   });
-  describe("collection.load", () => {
+ /* describe("collection.load", () => {
     it("should load a collection", done => {
       collection
         .load()
@@ -102,8 +102,8 @@ describe("Manipulating collections", function() {
         .then(() => void done())
         .catch(done);
     });
-  });
-  describe("collection.unload", () => {
+  });*/
+  /*describe("collection.unload", () => {
     it("should unload a collection", done => {
       collection
         .unload()
@@ -115,7 +115,8 @@ describe("Manipulating collections", function() {
         .then(() => void done())
         .catch(done);
     });
-  });
+  });*/
+  /*
   describe("collection.setProperties", () => {
     it("should change properties", done => {
       collection
@@ -127,7 +128,7 @@ describe("Manipulating collections", function() {
         .then(() => void done())
         .catch(done);
     });
-  });
+  });*/
   describe("collection.rename", () => {
     it("should rename a collection", done => {
       fabric

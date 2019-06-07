@@ -94,7 +94,7 @@ describe("Configuring the driver", () => {
       // default: http
       new Connection(); // eslint-disable-line no-new
       expect(protocol).to.equal("http");
-      new Connection("https://default.dev.macrometa.io"); // eslint-disable-line no-new
+      new Connection("https://test.macrometa.io"); // eslint-disable-line no-new
       expect(protocol).to.equal("https");
     });
   });
@@ -134,7 +134,7 @@ describe("Configuring the driver", () => {
       conn.request({ headers: {} }, () => { });
       expect(options).to.have.property("agent", agent);
       agent = Symbol("agent");
-      conn = new Connection({ agent, url: "https://default.dev.macrometa.io" });
+      conn = new Connection({ agent, url: "https://test.macrometa.io" });
       conn.request({ headers: {} }, () => { });
       expect(options).to.have.property("agent", agent);
     });
@@ -144,7 +144,7 @@ describe("Configuring the driver", () => {
       conn = new Connection({ agent }); // default: http
       conn.request({ headers: {} }, () => { });
       expect(protocol).to.equal("https");
-      conn = new Connection({ agent, url: "https://default.dev.macrometa.io" });
+      conn = new Connection({ agent, url: "https://test.macrometa.io" });
       conn.request({ headers: {} }, () => { });
       expect(protocol).to.equal("https");
     });

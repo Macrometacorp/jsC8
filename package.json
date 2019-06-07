@@ -51,7 +51,9 @@
     "dist:async": "tsc -p . --outDir ./lib/async/ --target es2018 --declarationMap true && cpy src/index.js lib/async/",
     "dist:web": "webpack",
     "dist": "rimraf lib && npm-run-all --parallel dist:* && cpy src/index.all.js --rename index.js lib/",
-    "prepare": "yarn dist && node -e 'require(\".\");'"
+    "prepare": "yarn dist && node -e 'require(\".\");'",
+    "predevTest": "npm run dist",
+    "devTest": "env TEST_C8_URL=https://abhishek.eng1.macrometa.io mocha --timeout 50000 lib/async/test/27-manipulating-tenants"
   },
   "dependencies": {
     "es6-error": "^4.0.1",

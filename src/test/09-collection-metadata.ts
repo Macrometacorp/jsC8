@@ -8,7 +8,7 @@ describe("Collection metadata", function() {
   this.timeout(60000);
 
   let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
+  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   let dcList: string;
   let dbName = `testdb${Date.now()}`;
@@ -86,7 +86,7 @@ describe("Collection metadata", function() {
         .catch(done);
     });
   });
-  describe("collection.revision", () => {
+  /*describe("collection.revision", () => {
     it("should return information about a collection", done => {
       collection
         .revision()
@@ -97,5 +97,5 @@ describe("Collection metadata", function() {
         .then(() => done())
         .catch(done);
     });
-  });
+  });*/
 });

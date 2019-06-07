@@ -330,7 +330,7 @@ export class Stream {
 
     }
 
-    closeWSConnections() {
+    closeConnections() {
         this.setIntervalId && clearInterval(this.setIntervalId);
         this._producer && this._producer.terminate();
         this._noopProducer && this._noopProducer.terminate();

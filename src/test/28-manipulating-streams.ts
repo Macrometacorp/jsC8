@@ -8,7 +8,7 @@ describe("Manipulating streams", function() {
 
   let fabric: Fabric;
   const testUrl: string =
-    process.env.TEST_C8_URL || "https://default.dev.macrometa.io";
+    process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   before(async () => {
     fabric = new Fabric({
@@ -155,7 +155,7 @@ describe("Manipulating streams", function() {
         dcName = response.tags.url;
       });
       this.afterAll(() => {
-        stream.closeWSConnections();
+        stream.closeConnections();
       });
 
       it("gets data in consumer when sent by producer", function(done) {
