@@ -57,7 +57,7 @@ const allTenants = fabric.listTenants();
 
 ## tenant.createTenant
 
-`async tenant.createTenant(password, extra): Object`
+`async tenant.createTenant(password, extra, dcList): Object`
 
 Creates a tenant.
 
@@ -70,6 +70,13 @@ Creates a tenant.
 - **extra**: `object`
 
   An optional JSON object with arbitrary extra data about the user.
+
+- **dcList**: `string`
+
+   A comma-separated string containing the datacenter names on which this tenant
+   is to be created. If an empty string is passed in, the tenant is assumed to
+   be global to the federation and will be created on all current datacenters in
+   the federation.
 
 **Examples**
 
