@@ -1,13 +1,60 @@
+## Overview
 
-# C8 JavaScript Driver
+Today’s applications are required to be highly responsive and always online. To achieve low latency and high availability, instances of these applications need to be deployed in datacenters that are close to their users. These applications are typically deployed in multiple datacenters and are called globally distributed. 
 
-The official C8 JavaScript client.
+Globally distributed applications need a geo distributed fast data platform that can transparently replicate the data anywhere in the world to enable the applications to operate on a copy of the data that's close to its users. Similarly the applications need geo-replicated and local streams to handle pub-sub, ETL and real-time updates from the fast data platform. 
 
-## Install
+C8 is a fully managed geo-distributed fast data service with turnkey global distribution and transparent multi-master replication. You can run globally distributed, low-latency  workloads within C8. This article is an introduction to using C8 with jsC8 (JavaScript Driver).
+
+![jsc8_tutorial](https://cdn.document360.io/d1a6730a-fd70-4f0a-a08d-dfa28ca8b958/Images/Documentation/pyc8_tutorial.png){height="" width=""}
+
+In jsC8, a **document** is an object that is a JSON serializable object with the following properties:
+
+* Contains the `_key` field, which identifies the document uniquely within a specific collection.
+* Contains the `_id` field (also called the *handle*), which identifies the document uniquely across all collections within a fabric. This ID is a combination of the collection name and the document key using the format `{collection}/{key}` (see example below).
+* Contains the `_rev` field. C8  supports MVCC (Multiple Version Concurrency Control) and is capable of storing each document in multiple revisions. Latest revision of a document is indicated by this field. The field is populated by C8 and is not required as input unless you want to validate a document against its current revision.
+
+Here is an example of a valid document:
+
+```json
+    {
+        '_id': 'students/bruce',
+        '_key': 'bruce',
+        '_rev': '_Wm3dzEi--_',
+        'first_name': 'Bruce',
+        'last_name': 'Wayne',
+        'address': {
+            'street' : '1007 Mountain Dr.',
+            'city': 'Gotham',
+            'state': 'NJ'
+        },
+        'is_rich': True,
+        'friends': ['robin', 'gordon']
+    }
+```
+
+**Edge documents (edges)** are similar to standard documents but with two additional required fields ``_from`` and ``_to``. Values of these fields must be the handles of "from" and "to" vertex documents linked by the edge document in question (see :doc:`graph` for details). Here is an example of a valid edge document:
+
+```json
+    {
+        '_id': 'friends/001',
+        '_key': '001',
+        '_rev': '_Wm3dyle--_',
+        '_from': 'students/john',
+        '_to': 'students/jane',
+        'closeness': 9.5
+    }
+```
+
+## Pre-requisite
+
+Let's assume your tenant name is `demotenant` and `root` user password is `demopwd`.
+
+## Download and Install JavaScript Client
 
 ### With Yarn or NPM
 
-```sh
+```bash
 yarn add jsc8
 ## - or -
 npm install jsc8
@@ -21,433 +68,448 @@ npm install --global jsc8
 
 ### From source
 
-```sh
+```bash
 git clone https://github.com/macrometacorp/jsc8.git
 cd jsC8
 npm install
 npm run dist
 ```
 
+## Connect to C8
 
-## Documentation
-
-[Latest Documentation](https://github.com/Macrometacorp/jsC8/tree/master/docs)
-
-jsc8 tutorial
-=============
-
-This is a short tutorial to get started with jsc8.
-
-
-### Getting a handle
-In order to do anything useful we need a handle to an existing C8 fabric.
-Let’s do this by creating a new instance of Fabric using a connection string:
+The first step in using C8 is to establish a connection to a local region. When this code executes, it initializes the server connection to the region URL you sepcified and returns a fabric. Then this fabric can be used to perform operations. 
 
 ```js
-fabric = new Fabric("https://try.macrometa.io"); 
+Fabric = require('jsc8')
+fabric = new Fabric("MY-C8-URL"); 
 ```
 
 or to have failover support
 
 ```js
-fabric = new Fabric(["https://try.macrometa.io", "https://try.macrometa.io"]); 
+Fabric = require('jsc8')
+fabric = new Fabric(["MY-C8-URL1", "MY-C8-URL2"]); 
 ```
 
-This connection string actually represents the default value( `"https://try.macrometa.io"` ), so you can just omit it:
+This connection string actually represents the default value( `"https://try.macrometa.io"` ), so if this is the value you want, you can omit url while invocation:
 
 ```js
+Fabric = require('jsc8')
 fabric = new Fabric();
 ```
 
-If that’s still too verbose for you, you can invoke the driver directly:
+If that’s still too verbose for you, you can invoke the driver directly using the require statement itself.
 
 ```js
 fabric = require('jsc8')();
 ```
 The outcome of any of the three calls should be identical.
 
-### Login
+## Login
 
-To start working, you first have to login. This gets the auth token and automatically puts in each API call.
-
-```js
-const fabric = new Fabric();
-await fabric.login("_mm", "admin", "hunter2");
-```
-Now we have acquired the auth token for `_mm` tenant's `admin` user.
-
-### Creating a Geofabric
-
-> A Fabric consists of one or many individual "geofabrics" with which you can do anything. Each geofabric is a cluster of one or more physical locations.
-
-We don’t want to mess with any existing data, so let’s start by creating a new geofabric called “myfabric”:
+To start working, you first have to login. This gets the auth token and is added in each API call. Continuing from the previous snippet, the following statement will log you into the c8 using the provided credentials.
 
 ```js
-await fabric.createFabric("myfabric", [{ username: 'root' }], { dcList: "try.macrometa.io" });
-```
-Because we’re trying to actually do something on the server, this action is asynchronous. All asynchronous methods in the C8 driver return promises but you can also pass a node-style callback instead.
+async function login() {
+  return await fabric.login("demotenant", "root", "demopwd");
 
-Keep in mind that the new fabric you’ve created is only available once the callback is called or the promise is resolved.
-
-### Switching to the new fabric
-
-We’ve created a new fabric, but we haven’t yet told the driver it should start using it. Let’s change that:
-
-```js
-fabric.useFabric("myfabric");
+}
 ```
 
-You’ll notice this method is executed immediately.
-The handle “fabric” now references the “myfabric” geofabric instead of the (default) “_system” geofabric it referenced before.
-
-### Creating a tenant
+Below line should print the jwt token. However, this is just for demonstative purposes as this token will be added to further requests. Simple fabric.login should suffice for most cases.
 
 ```js
-const guestTenant = fabric.tenant("mytenant");
-await guestTenant.createTenant("my-password");
+login().then(console.log)
 ```
 
-Here a tenant named "mytenant" will be created with password as "my-password". As in the case for creating a fabric, this call is also asynchronous.
-
-### Switching to the new tenant
-
-We’ve created a new tenant, but we haven’t yet told the driver it should start using it. Let’s change that:
+To use the demotenant, we need to use fabric.useTenant as below
 
 ```js
-fabric.useTenant("mytenant");
-```
-Again like in fabric, this will be executed immediately.
-The handle "fabric" now references the "mytenant" tenant instead of the (default) "_mm" tenant it referenced before.
-
-### Another handle
-
-Collections are where you keep your actual data.
-There are actually two types of collections but for now we only need one.
-
-Like fabrics, you need a handle before you can do anything to it:
-```js
-collection = fabric.collection('firstCollection');
-```
-Again notice that it executes immediately.
-Unlike fabrics, the collection doesn’t have to already exist before we can create the handle.
-
-### Creating a collection
-We have a handle but in order to put actual data in the collection we need to create it:
-
-```js
-await collection.create();
+fabric.useTenant("demotenant");
 ```
 
-### Listening to collection changes in realtime
-Collections provide with a `onChange` method, with which you can see all the changes happening to an existing collection in realtime.
+
+## Create Geo-Fabric
+
+Let's create geo-fabric called `demofabric` by passing a parameter called `dclist`. The fabric `demofabric` is created in all the regions specified in the dclist. 
 
 ```js
-    collection.onChange({
+
+const Fabric = require("jsc8");
+
+const fabric = new Fabric("https://try.macrometa.io");
+
+async function createFabric() {
+    await console.log("Logging in...");
+    await fabric.login("demotenant", "root", "demopwd");
+
+    await console.log("Using the demotenant...");  
+    fabric.useTenant("demotenant");
+
+    try{
+      await console.log("Creating the fabric...");
+      let result = await fabric.createFabric("demoFabric", [{ username: 'root' }], { dcList:"try-asia-south1,try-us-east4,try-us-west2" });
+
+      await console.log("result is: ", result)
+    
+      await console.log("Listing the fabrics to verify that demoFabric has been created");
+      const res = await fabric.listFabrics();
+
+      await console.log(res);
+    } catch(e){
+      await console.log("Fabric could not be created due to "+ e)
+    }
+    
+}
+
+createFabric();
+```
+
+## Get GeoFabric Details
+
+To get details of `fabric` geo-fabric
+
+```js
+const Fabric = require("jsc8");
+
+const fabric = new Fabric("https://try.macrometa.io");
+
+async function getFabric() {
+    await console.log("Logging in...");
+    await fabric.login("demotenant", "root", "demopwd");
+    await console.log("Using the demotenant...");  
+    fabric.useTenant("demotenant");
+
+    try{
+      await console.log("Using the demoFabric...");  
+      fabric.useFabric("demoFabric")
+
+      await console.log("Getting the fabric details...");
+      let result = await fabric.get();
+
+      await console.log("result is: ", result)
+    } catch(e){
+      await console.log("Fabric details could not be fetched because "+ e)
+    }
+    
+}
+
+getFabric();
+```
+
+## Create Collection
+
+We can now create collection in the fabric.  To do this,  first you connect to `demofabric` under `demotenant` with user as `root` and password `demouserpwd`. Then create a collection called `employees`.  
+
+The below example shows the steps.
+
+```js
+Fabric = require('jsc8')
+fabric = new Fabric("https://try.macrometa.io")
+
+async function createCollection() {
+  await console.log("Logging in...");
+  await fabric.login("demotenant", "root", "demopwd");
+
+  await console.log("Using the demotenant");
+  fabric.useTenant("demotenant");
+
+  await console.log("Using the demoFabric...");
+  fabric.useFabric("demoFabric");
+
+  await console.log("Creating the collection object to be used...");
+  let collection = fabric.collection('employees');
+
+  await console.log("Creating the collection employees under demoFabric...");
+  let collectionDetails;
+  try{
+    collectionDetails = await collection.create(); 
+    await console.log("The collection details are: ", collectionDetails);
+  } catch(e){
+    return "Collection creation did not succeed due to " + e
+  }
+
+  return "Collection " + collectionDetails.name + " created successfully"  
+}
+
+createCollection().then(console.log)
+
+```
+
+## Create Index
+
+Let's add a hash_index called `emails` to our collection `employees`. Please refer to user guide for details on other available index types.
+
+```js
+
+Fabric = require('jsc8')
+fabric = new Fabric("https://try.macrometa.io")
+
+async function createIndex() {
+  await console.log("Logging in...");
+  await fabric.login("demotenant", "root", "demopwd");
+
+  await console.log("Using the demotenant");
+  fabric.useTenant("demotenant");
+
+  await console.log("Using the demoFabric...");
+  fabric.useFabric("demoFabric");
+
+  await console.log("Creating the collection object to be used...");
+  let collection = fabric.collection('employees');
+
+  await console.log("Creating the index on collection employees under demoFabric...");
+  let index;
+  try{
+    index = await collection.createIndex({type: 'hash', fields: ['email', '_key']}); 
+    await console.log("The index details are: ", index);
+  } catch(e){
+    return "Index creation did not succeed due to " + e
+  }
+
+  return "Index created successfully"  
+}
+
+createIndex().then(console.log)
+```
+
+## Populate Collection
+
+Let's  insert  documents to the `employees` collection as shown below.
+
+```js
+Fabric = require('jsc8')
+fabric = new Fabric("https://try.macrometa.io")
+
+
+const docJean = {'_key':'Jean', 
+           'firstname': 'Jean', 
+           'lastname':'Picard', 'email':'jean.picard@macrometa.io'}
+
+const docJames = {'_key':'James', 
+                  'firstname': 'James', 'lastname':'Kirk', 'email':'james.kirk@macrometa.io'}
+
+const docHan = {'_key': 'Han', 
+                'firstname': 'Han',
+                'lastname':'Solo', 'email':'han.solo@macrometa.io'}
+
+const docBruce = {'_key': 'Bruce',
+                  'firstname': 'Bruce', 'lastname':'Wayne', 'email':'bruce.wayne@macrometa.io'}
+
+const docs = [docJean, docJames, docHan, docBruce]
+
+
+async function populate() {
+  await console.log("Logging in...");
+  await fabric.login("demotenant", "root", "demopwd");
+
+  await console.log("Using the demotenant");
+  fabric.useTenant("demotenant");
+
+  await console.log("Using the demoFabric...");
+  fabric.useFabric("demoFabric");
+
+  await console.log("Creating the collection object to be used...");
+  let collection = fabric.collection('employees');
+  
+  for (let doc of docs) {
+    await collection.save(doc)
+  }
+  await console.log("collection populated with documents")
+}
+
+populate()
+```
+
+## Retrieve documents using C8QL
+
+C8QL is C8's query language. You can execute C8QL query on our newly created collection `employees` to get its contents. 
+
+> The  query `FOR employee IN employees RETURN employee` is equivalent to SQL's SELECT query.
+
+```js
+
+Fabric = require('jsc8')
+c8ql = Fabric.c8ql
+fabric = new Fabric("https://try.macrometa.io")
+
+async function c8Queries() {
+  await console.log("Logging in...");
+  await fabric.login("demotenant", "root", "demopwd");
+
+  await console.log("Using the demotenant");
+  fabric.useTenant("demotenant");
+
+  await console.log("Using the demoFabric...");
+  fabric.useFabric("demoFabric");
+
+  await console.log("Creating the collection object to be used...");
+  let collection = fabric.collection('employees');
+
+
+
+  const cursor = await fabric.query(c8ql`FOR employee IN employees RETURN employee`);
+  const result = await cursor.all();
+  await console.log(result)
+}
+
+c8Queries()
+```
+
+## Real-time Database
+
+Example for real-time updates from a collection in fabric:
+
+```js
+
+Fabric = require('jsc8')
+fabric = new Fabric("https://try.macrometa.io")
+
+async function callback_fn(collection){
+  await console.log("Connection open on ", collection.name)
+}
+
+async function realTimeListener() {
+  await console.log("Logging in...");
+  await fabric.login("demotenant", "root", "demopwd");
+
+  await console.log("Using the demotenant");
+  fabric.useTenant("demotenant");
+
+  await console.log("Using the demoFabric...");
+  fabric.useFabric("demoFabric");
+
+  await console.log("Creating the collection object to be used...");
+  let collection = fabric.collection('employees');
+
+  collection.onChange({
       onmessage: (msg) => console.log("message=>", msg),
-      onopen: () => {
-        console.log("connection open");
-        //manipulate the collection here
-        this.collectionManipulation(collection);
+      onopen: () => {;
+        this.callback_fn(collection)
       },
       onclose: () => console.log("connection closed")
     }, "try.macrometa.io");
-
-    async collectionManipulation(collection) {
-        const doc = {
-        _key: "1",
-        firstname: "Bruce",
-        lastname: "Wayne"
-        };
-        try {
-        await collection.save(doc);
-        } catch (e) {
-        console.log("Could not save document", e);
-        }
-
-        try {
-        await collection.update("1", { email: 'wayne@gmail.com' });
-        } catch (e) {
-        console.log("Could not update document", e);
-        }
-
-        try {
-        await collection.remove('1');
-        collection.closeOnChangeConnection();
-        } catch (e) {
-        console.log(e);
-        }
-  }
-```
-Now whenever you manipulate the collection realtime messages can be seen.
-
-> Note: Remember to close the `onChange`'s listeners else you will have have a memory leak. Use  `closeOnChangeConnection` for this purpose.
-
-### Creating a document
-What good is a collection without any collectibles? Let’s start out by defining a piece of data we want to store:
-
-```js
-doc = {
-  _key: '1',
-  firstname: 'Bruce',
-  lastname: 'Wayne'
-};
-```
-Collection entries (called documents in C8) are plain JavaScript objects and can contain anything you could store in a JSON string.
-You may be wondering about the `_key` property: some property names that start with underscores are special in C8 and the key is used to identify the document later.
-If you don’t specify a key yourself, C8 will generate one for you.
-
-### Saving and updating the document
-
-C8 also adds a `_rev` property which changes every time the document is written to, and an `_id` which consists of the collection name and document key.
-These “meta” properties are returned every time you create, update, replace or fetch a document directly.
-
-Let’s see this in action by fist saving the document:
-
-```js
-await collection.save(doc);
-```
-… and then updating it in place:
-
-```js
-await collection.update('1', { email: 'wayne@gmail.com' });
-```
-
-### Removing the document
-
-We’ve played around enough with this document, so let’s get rid of it:
-
-```js
-try {
-    await collection.remove('1');
-} catch (e) {
-    console.log(e);
 }
-```
-Once the promise has resolved, the document has ceased to exist.
-We can verify this by trying to fetch it again (which should result in an error).
 
-If you see the error message `"document not found"`, we were successful.
-
-### Streams
-The time has come now to give you a super power. In C8 you don't need to continuously make API calls to see what has changed and when. We have realtime capabilities built in C8.
-Streams can be `local/global`.
-
-### Stream handle
-
-```js
-stream = fabric.stream(streamName, false);
-```
-Here the last boolean value tells if the stream is local or global. `false` means that it is global
-
-### Create a stream
-
-```js
-await stream.createStream();
+realTimeListener()
 ```
 
-### Subscribing to a stream
-Streams have the capability to both consume and produce messages.
-To create a consumer:
-```js
-stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "try.macrometa.io");
-```
-This will create a consumer with a callback of your choice to listen to a stream in realtime.
+## Create Streams, Publish and Subscribe
 
-### Publishing to a stream
-To publish a message to a stream simply use:
-```js
-stream.producer("hello world", "try.macrometa.io");
-```
-The first time a producer is created it requires the datacenter name, but not later on.
-
-So now you can simply do:
-```js
-stream.producer("hey hey hey world");
-```
->Note: Remember to close the connections to the stream if you make a consumer or a producer.
+Creating streams in C8 is a 1 step operation.  The stream can be either a `local` stream or could be a `geo-replicated` stream.
 
 ```js
-stream.closeConnections();
-```
-Above method will close all the active connection to the stream.
+Fabric = require('jsc8')
+fabric = new Fabric("https://try.macrometa.io")
 
-### C8QL Queries
-```js
-const cursor = await fabric.query(c8ql`FOR employee IN employees RETURN employee`);
-const result = await cursor.next();
-```
-
-> Note that most queries return a cursor object representing the result set instead of returning an array of all of the results directly.
-
-This helps avoiding unnecessarily cluttering up memory when working with very large result sets.
-
-All interactions with the cursor object are asynchronous as the driver will automatically fetch additional data from the server as necessary.
-Keep in mind that unlike arrays, cursors are depleted when you use them.
-They’re single-use items, not permanent data structures.
-
-### Template strings
-
-When writing complex queries you don’t want to have to hardcode everything in a giant string.
-The driver provides the same c8qlQuery template handler you can also use within C8 itself:
-
-```js
-c8ql = require('jsc8').c8ql;
-```
-
-You can use it to write c8ql templates.
-Any variables referenced in c8ql templates will be added to the query’s bind values automatically.
-It even knows how to treat collection handles.
-
-```js
-const cursor = await fabric.query(c8ql`FOR employee IN employees RETURN employee`);
-const result = await cursor.next();
-```
-
-### Removing all the documents
-
-Enough fooling around. Let’s end with a clean slate.
-The method for completely emptying a collection is called “truncate”:
-
-```js
-try {
-    await collection.truncate();
-} catch (e) {
-    console.log(e);
+async function subscribe(stream){
+  await stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "try.macrometa.io");
 }
-```
-When you truncate a collection, you discard all of its contents.
-There’s no way back.
 
-Keep in mind that you can also truncate fabrics.
-Don’t worry about your collections though, truncating only deletes the documents.
-Although it’s still probably not something you want to take lightly.
+async function publish(stream){
+  await stream.producer("hello world", "try.macrometa.io");
+}
 
+async function streamDemo() {
+  await console.log("Logging in...");
+  await fabric.login("demotenant", "root", "demopwd");
 
-## Basic usage example
+  await console.log("Using the demotenant");
+  fabric.useTenant("demotenant");
 
-This section aims to provide a basic understanding of all the features.
+  stream = fabric.stream("newStreamFromJSC8", false);
+  //Here the last boolean value tells if the stream is local or global. false means that it is global.
 
-```js
-import { Fabric, c8ql } from "jsc8";
-
-const regionURL = "try.macrometa.io";
-  const region = "try-eu-west-1";
-  const rootPassword = "root-password";
-  const tenantName = "myTenant";
-  const tenantPassword = "myTenant-password";
-  const fabricName = "myFabric";
-  const collectionName = "employees";
-  const streamName = "myStream";
-
-  //--------------------------------------------------------------------------------------
-  // create a fabric handler
-  const fabric = new Fabric(`https://${regionURL}`);
-
-  // login with root user
-  await fabric.login("_mm", "root", rootPassword);
-
-  //--------------------------------------------------------------------------------------
-  // create a tenant
-  const guestTenant = fabric.tenant(tenantName);
-  await guestTenant.createTenant(tenantPassword);
-  // log in with the newly created tenant
-  await fabric.login(tenantName, "root", tenantPassword);
-  fabric.useTenant(tenantName);
-
-  //--------------------------------------------------------------------------------------
-  // create a new geo fabric in the newly created tenant
-  await fabric.createFabric(fabricName, [{ username: "root" }], { dcList: region });
-  fabric.useFabric(fabricName);
-
-  //--------------------------------------------------------------------------------------
-  // create and populate employees collection in the above tenant and geo fabric
-  const collection = fabric.collection(collectionName);
-  await collection.create();
-
-  //--------------------------------------------------------------------------------------
-  // See what is happening to your collections in realtime
-  collection.onChange({
-    onmessage: (msg) => console.log("message=>", msg),
-    onopen: async () => {
-      console.log("connection open");
-      //manipulate the collection here
-
-      // add new documents to the collection
-      await collection.save({ firstname: 'Jean', lastname: 'Picard' });
-      await collection.save({ firstname: 'Bruce', lastname: 'Wayne' });
-
-    },
-    onclose: () => console.log("connection closed")
-  }, regionURL);
-
-  //--------------------------------------------------------------------------------------
-  // Querying is done by C8QL
-  // you can directly pass the query
-  // or use restql to save the query once and call it multiple times
-  const cursor = await fabric.query(c8ql`FOR employee IN employees RETURN employee`);
-  const result = await cursor.next();
-
-  // RESTQL
-  // now we save the same query and will call it later directly by its name
-  const query = "FOR employee IN employees RETURN employee";
-  const queryName = "listEmployees";
-  await fabric.saveQuery(queryName, {}, query);
-  const res = await fabric.executeSavedQuery(queryName);
-
-  //--------------------------------------------------------------------------------------
-  // Create persistent, global and local streams in demofabric
-  const persistent_globalStream = fabric.stream(streamName, false);
-  await persistent_globalStream.createStream();
-
-  const persistent_localStream = fabric.stream(streamName, true);
-  await persistent_localStream.createStream();
-
-  //--------------------------------------------------------------------------------------
-  // Subscribe to a stream
-  const stream = fabric.stream(streamName, false);
   await stream.createStream();
-  stream.consumer("my-sub", { onmessage: (msg) => { console.log(msg) } }, regionURL);
 
-  // Publish to a stream
-  stream.producer("hello world", regionURL);
+  await subscribe(stream)
 
-  // Close all connections to a stream
-  stream.closeConnections();
+  await publish(stream)
+}
 
-  //--------------------------------------------------------------------------------------
-  // Spot Collections
-  await fabric.login("_mm", "root", rootPassword);
-  fabric.useTenant("_mm");
-  fabric.useFabric("_system");
-  // Make a geo location as spot enabled
-  await fabric.changeEdgeLocationSpotStatus(region, true);
-  // Create a geo-fabric with spot region capabilities.
-  fabric.createFabric("spotFabric", [{ username: "root" }], { dcList: region, spotDc: true });
-  // Then create a collection that is designated as a spot collection. 
-  const collection = fabric.collection(collectionName);
-  await collection.create({ isSpot: true });
+streamDemo()
+
 ```
 
-## Testing
+## RESTQL Example
+On using a geo-distributed database as backend as service eliminating the need for separate backend servers & containers.
 
-Run the tests using the `yarn test` or `npm test` commands:
+```js
+Fabric = require('jsc8')
 
-```sh
-yarn test
-# - or -
-npm test
+//Variables
+fed_url = "https://try.macrometa.io"
+guest_tenant = "guest"
+guest_password = "guest5"
+guest_user = "guest5"
+geo_fabric = "guest5"
+collection_name = "addresses" + Math.floor(1000 + Math.random() * 9000).toString()
+
+//Queries
+insert_data = "INSERT {'firstname':@firstname, 'lastname':@lastname, 'email':@email, 'zipcode':@zipcode, '_key': 'abc'} IN " + collection_name
+
+get_data = "FOR doc IN " + collection_name + " RETURN doc"
+
+update_data = "UPDATE 'abc' WITH {'lastname': @lastname } IN " + collection_name
+
+delete_data = "REMOVE 'abc' IN " + collection_name
+
+get_count = "RETURN COUNT(FOR doc IN " + collection_name + " RETURN 1)"
+
+fabric = new Fabric(fed_url)
+
+
+async function restqldemo() {
+  await fabric.login(guest_tenant, guest_user, guest_password);
+  fabric.useTenant(guest_tenant);
+  fabric.useFabric(geo_fabric);
+  console.log("------- CREATE GEO-REPLICATED COLLECTION  ------")
+  const collection = fabric.collection(collection_name);
+  await collection.create()
+  console.log("Collection " + collection_name + " created.\n")
+
+  console.log("------- SAVING THE QUERIES  ------")
+
+  await fabric.saveQuery("insertData", {}, insert_data)
+
+  await fabric.saveQuery("getData", {}, get_data)
+  await fabric.saveQuery("updateData", {}, update_data)
+
+  await fabric.saveQuery("deleteData", {}, delete_data)
+
+  await fabric.saveQuery("getCount", {}, get_count)
+
+  console.log("Saved Queries Successfully\n")
+
+  console.log("------- EXECUTING THE QUERIES  ------")
+
+  bindVars = {
+    "firstname": "john", "lastname": "doe",
+    "email": "john.doe@macrometa.io", "zipcode": "511037"
+  }
+
+  await fabric.executeSavedQuery("insertData", bindVars)
+  console.log("Data Inserted \n")
+
+  const res = await fabric.executeSavedQuery("getData")
+  console.log("Output of get data query:")
+  console.log(res.result)
+  console.log("\n")
+
+  await fabric.executeSavedQuery("updateData", { "lastname": "mathews" })
+  console.log("Data updated \n")
+
+  const data = await fabric.executeSavedQuery("getData")
+  console.log("Output of get data query after update:")
+  console.log(data.result)
+  console.log("\n")
+
+  const count = await fabric.executeSavedQuery("getCount")
+  console.log("Count:")
+  console.log(count.result)
+  await fabric.executeSavedQuery("deleteData")
+
+}
+
+restqldemo().then(console.log("Starting Execution"))
 ```
-
-To set the environment variable `TEST_C8_URL` to
-something different:
-
-```sh
-TEST_C8_URL=https://try.macrometa.io yarn test
-# - or -
-TEST_C8_URL=https://try.macrometa.io npm test
-```
-
-## License
-
-The Apache License, Version 2.0. For more information, see the accompanying
-LICENSE file.
