@@ -6,7 +6,7 @@ Globally distributed applications need a geo distributed fast data platform that
 
 C8 is a fully managed geo-distributed fast data service with turnkey global distribution and transparent multi-master replication. You can run globally distributed, low-latency  workloads within C8. This article is an introduction to using C8 with jsC8 (JavaScript Driver).
 
-![jsc8_tutorial](https://cdn.document360.io/d1a6730a-fd70-4f0a-a08d-dfa28ca8b958/Images/Documentation/pyc8_tutorial.png){height="" width=""}
+[jsc8_tutorial](https://cdn.document360.io/d1a6730a-fd70-4f0a-a08d-dfa28ca8b958/Images/Documentation/pyc8_tutorial.png)
 
 In jsC8, a **document** is an object that is a JSON serializable object with the following properties:
 
@@ -16,7 +16,7 @@ In jsC8, a **document** is an object that is a JSON serializable object with the
 
 Here is an example of a valid document:
 
-```json
+```
     {
         '_id': 'students/bruce',
         '_key': 'bruce',
@@ -35,7 +35,7 @@ Here is an example of a valid document:
 
 **Edge documents (edges)** are similar to standard documents but with two additional required fields ``_from`` and ``_to``. Values of these fields must be the handles of "from" and "to" vertex documents linked by the edge document in question (see :doc:`graph` for details). Here is an example of a valid edge document:
 
-```json
+```
     {
         '_id': 'friends/001',
         '_key': '001',
