@@ -1,5 +1,4 @@
 //REPL link: https://repl.it/repls/WirelessNauticalCase
-
 _ = require('lodash')
 Fabric = require('jsc8')
 fabric = new Fabric("https://try.macrometa.io")
@@ -29,12 +28,7 @@ async function getDCList(){
   return dcListObject.options.dcList.split(",")
 }
 
-async function receive(stream){
-  for (let i=0; i<10; i++){
-    await sleep(2000)
-    await stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "try.macrometa.io");
-  }
-}
+
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -54,18 +48,25 @@ async function publishAll(stream){
   }
 }
 
+async function receive(stream){
+    await stream.consumer("my-sub", { 
+      onmessage:(msg)=>{ 
+        console.log(msg) 
+      },
+      onopen: () => publishAll(stream)
+    }, "try.macrometa.io");
+  
+}
+
 (async function() {
   await setup();
   const dcList = await getDCList()
   await console.log("dcList: ", dcList)
   const stream = fabric.stream("testStream", false);
-  //Here the last boolean value tells if the stream is local or global. fa, msglse means that it is global.
+  //Here the last boolean value tells if the stream is local or global. false means that it is global.
 
   await stream.createStream();
 
-  await publishAll(stream)
-  
   await receive(stream)
 
-  await stream.closeConnections();
 })();
