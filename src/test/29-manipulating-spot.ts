@@ -15,6 +15,9 @@ describe("manipulating spot", () => {
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
 
+    await fabric.login("demo", "root", "demo");
+    fabric.useTenant("demo");
+
     localLocation = await fabric.getLocalEdgeLocation();
     name = localLocation.name;
   });

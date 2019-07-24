@@ -22,6 +22,9 @@ describe("Manipulating fabrics", function() {
       url: testUrl,
       c8Version: C8_VERSION
     });
+
+    await fabric.login("demo", "root", "demo");
+    fabric.useTenant("demo");
     
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
@@ -31,6 +34,22 @@ describe("Manipulating fabrics", function() {
     fabric.close();
   });
   describe("fabric.version", () => {
+    this.beforeAll(async () => {
+      fabric = new Fabric({
+        url: testUrl,
+        c8Version: C8_VERSION
+      });
+  
+      await fabric.login("demo", "root", "demo");
+      fabric.useTenant("demo");
+      
+      const response = await fabric.getAllEdgeLocations();
+      dcList = getDCListString(response);
+     
+    });
+    this.afterAll(() => {
+      fabric.close();
+    });
     it("should return the version object when no details are required", async () => {
       const response = await fabric.version();
       expect(response.server).to.equal("C8");
@@ -232,6 +251,8 @@ describe("Manipulating fabrics", function() {
       const fabric2 = new Fabric({
         url: testUrl
       });
+      await fabric2.login("demo", "root", "demo");
+      fabric2.useTenant("demo");
       collection = fabric2.collection(collectionName);
       await collection.create();
     });

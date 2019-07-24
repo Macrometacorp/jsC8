@@ -4,11 +4,15 @@ import { DocumentCollection } from "../collection";
 import { Route } from "../route";
 import { getDCListString } from "../util/helper";
 
-describe("Arbitrary HTTP routes", () => {
+describe("Arbitrary HTTP routes", async () => {
   const fabric = new Fabric({
     url: process.env.TEST_C8_URL || "https://test.macrometa.io",
     c8Version: Number(process.env.C8_VERSION || 30400)
   });
+
+  await fabric.login("demo", "root", "demo");
+  fabric.useTenant("demo");
+
   describe("fabric.route", () => {
     it("returns a Route instance", () => {
       const route = fabric.route();
@@ -41,6 +45,9 @@ describe("Route API", function() {
       url: testUrl,
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
+
+    await fabric.login("demo", "root", "demo");
+    fabric.useTenant("demo");
 
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
