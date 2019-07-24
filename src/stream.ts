@@ -73,30 +73,6 @@ export class Stream {
         );
     }
 
-    compaction() {
-        const urlSuffix = "/compaction";
-        return this._connection.request(
-            {
-                method: "GET",
-                path: this._getPath(urlSuffix),
-                qs: `local=${this.local}`
-            },
-            res => res.body
-        );
-    }
-
-    triggerCompaction() {
-        const urlSuffix = "/compaction";
-        return this._connection.request(
-            {
-                method: "PUT",
-                path: this._getPath(urlSuffix),
-                qs: `local=${this.local}`
-            },
-            res => res.body
-        );
-    }
-
     getStreamStatistics() {
         const urlSuffix = "/stats";
         return this._connection.request(

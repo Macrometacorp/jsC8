@@ -15,6 +15,8 @@ describe("Manipulating streams", function() {
       url: testUrl,
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
+    await fabric.login("demo", "root", "demo");
+    fabric.useTenant("demo");
   });
 
   after(() => {
@@ -73,20 +75,6 @@ describe("Manipulating streams", function() {
       it("gets estimated backlog for offline stream", async () => {
         const response = await stream.backlog();
         console.log(response.error);
-        expect(response.error).to.be.false;
-      });
-    });
-
-    describe("stream.compaction", () => {
-      it("gets the status of a compaction operation for a stream", async () => {
-        const response = await stream.compaction();
-        expect(response.error).to.be.false;
-      });
-    });
-
-    describe("stream.triggerCompaction", () => {
-      it("triggers a compaction on a stream", async () => {
-        const response = await stream.triggerCompaction();
         expect(response.error).to.be.false;
       });
     });
