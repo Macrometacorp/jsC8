@@ -146,36 +146,6 @@ await stream.createStream();
 await stream.backlog();
 ```
 
-## stream.compaction
-
-`async stream.compaction()`
-
-Get the status of a compaction operation for a stream.
-
-**Examples**
-
-```js
-const fabric = new Fabric();
-const stream = fabric.stream("my-stream", true);
-await stream.createStream();
-await stream.compaction();
-```
-
-## stream.triggerCompaction
-
-`async stream.triggerCompaction()`
-
-Trigger a compaction operation on a stream.
-
-**Examples**
-
-```js
-const fabric = new Fabric();
-const stream = fabric.stream("my-stream", true);
-await stream.createStream();
-await stream.triggerCompaction();
-```
-
 ## stream.getStreamStatistics
 
 `async stream.getStreamStatistics()`
