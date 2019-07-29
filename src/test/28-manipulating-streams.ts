@@ -58,16 +58,14 @@ describe("Manipulating streams", function() {
     });
   });
 
-  describe("stream.delete", () => {
-    it("deletes the stream");
-  });
-
   describe("stream.manipulate", function() {
     let stream: Stream;
     this.beforeAll(async () => {
       stream = fabric.stream(`testStream${Date.now()}`, false);
       await stream.createStream();
     });
+
+    
 
     it("stream.expireMessagesOnAllSubscriptions");
 
@@ -85,25 +83,83 @@ describe("Manipulating streams", function() {
         expect(response.error).to.be.false;
       });
     });
+    // TODO: Add the below one later
+    // it("stream.deleteSubscription", async (done) => {
 
-    it("stream.deleteSubscription");
+    //   let dcName: string;
+    //   function callback(msg: string) {
+    //     const parsedMsg = JSON.parse(msg);
+    //     const { payload } = parsedMsg;
+    //     expect(payload).to.equal("dGVzdA==");
+    //     done();
+    //   }
+    //   stream.consumer(
+    //     `streamSubscription${Date.now()}`,
+    //     {
+    //       onmessage: callback,
+    //       onopen: () => stream.producer("test", dcName)
+    //     },
+    //     ''
+    //   );
+      
+      
+      // expect(response.error).to.be.false;
+      //present in swagger
+    //});
+    describe("stream.subscriptions", () => {
+      let dcName: string;
+      this.beforeAll(async () => {
+        const response = await fabric.getLocalEdgeLocation();
+        dcName = response.tags.url;
+      });
+      this.afterAll(() => {
+        stream.closeConnections();
+      });
+      it("stream.resetSubscriptionToPosition", (done) => {
+        let numberOfMessages:number = 0;
+        function callback(msg: string) {
+          const parsedMsg = JSON.parse(msg);
+          const { payload } = parsedMsg;
+          const array = ["bmFuZGhh","YWJoaXNoZWs=","dmlwdWw=","c3Vsb20=","cHJhdGlr"];
+            if(array.includes(payload)){
+              numberOfMessages++;
+            };
+          if(numberOfMessages === 5){
+            done();
+          }
+        }
+        stream.consumer(
+          `streamSubscriptionTest`,
+          {
+            onmessage: callback,
+            onopen: () => {
+              stream.producer(["nandha","abhishek","vipul","sulom","pratik"], dcName);
+            }
+          },
+          dcName
+        );
+      });
 
-    it("stream.resetSubscriptionToPosition");
+      it("stream.expireMessages", () => {
+        //present in swagger
+      });
 
-    it("stream.expireMessages");
+      it("stream.resetCursor", () => {
+      });
 
-    it("stream.resetCursor");
+      it("stream.skipNumberOfMessages", () => {
+        //present in swagger
+      });
 
-    it("stream.resetSubscription");
+      it("stream.skipAllMessages", () => {
+        //present in swagger
+      });
 
-    it("stream.skipNumberOfMessages");
-
-    it("stream.skipAllMessages");
-
-    it("stream.getSubscriptionList", () => {
-      it("gets subscription list", async () => {
-        const response = await stream.getSubscriptionList();
-        expect(response.error).to.be.false;
+      it("stream.getSubscriptionList", () => {
+        it("gets subscription list", async () => {
+          const response = await stream.getSubscriptionList();
+          expect(response.error).to.be.false;
+        });
       });
     });
 
