@@ -24,6 +24,9 @@ describe("Managing indexes", function() {
       c8Version: C8_VERSION
     });
 
+    await fabric.login("demo", "root", "demo");
+    fabric.useTenant("demo");
+
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 

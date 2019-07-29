@@ -5,7 +5,7 @@ import { getDCListString } from "../util/helper";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("Manipulating collections", function() {
+describe("Manipulating collections", async function() {
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
 
@@ -20,6 +20,9 @@ describe("Manipulating collections", function() {
       url: testUrl,
       c8Version: C8_VERSION
     });
+
+    await fabric.login("demo", "root", "demo");
+    fabric.useTenant("demo");
 
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);

@@ -3,11 +3,15 @@ import { Fabric } from "../jsC8";
 
 describe("Transactions", () => {
   let fabric: Fabric;
-  before(() => {
+  before(async () => {
     fabric = new Fabric({
       url: process.env.TEST_C8_URL  || "https://test.macrometa.io",
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
+
+    await fabric.login("demo", "root", "demo");
+    fabric.useTenant("demo");
+
   });
   after(() => {
     fabric.close();

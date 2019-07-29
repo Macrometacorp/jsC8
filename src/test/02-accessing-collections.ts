@@ -21,7 +21,8 @@ describe("Accessing collections", function() {
       url: testUrl,
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
-
+    await fabric.login("demo", "root", "demo");
+    fabric.useTenant("demo");
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
     await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
