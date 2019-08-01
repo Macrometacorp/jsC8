@@ -267,7 +267,17 @@ export class Stream {
     }
 
     producer(message: string | Array<string>, dcName?: string, callbackObj?: wsCallbackObj) {
-        console.log(callbackObj);
+        type CallbackFunction = () => void;
+        let onopen: CallbackFunction | undefined;
+        let onclose: CallbackFunction  | undefined;
+        let onmessage: (msg: string) => void | undefined;
+        let onerror: ((e: Error) => void) | undefined;
+        if(callbackObj !== undefined){
+            onopen = callbackObj.onopen;
+            onclose = callbackObj.onclose;
+            onmessage = callbackObj.onmessage;
+            onerror = callbackObj.onerror;
+        }
         if (this._producer === undefined) {
             if (!dcName) throw "DC name not provided to establish producer connection";
 
@@ -285,7 +295,7 @@ export class Stream {
 
             this._producer.on("message", (msg: string) => {
                 console.log('received ack: %s', msg);
-                this._producer.send(JSON.stringify({ payload: btoa(msg) }));
+                typeof onmessage === 'function' && onmessage(msg);
             });
 
             this._producer.on("open", () => {
@@ -296,13 +306,16 @@ export class Stream {
                         this._producer.send(JSON.stringify({ payload: btoa(message[i]) }));
                     }
                 }
+                typeof onopen === 'function' && onopen();
             });
             this._producer.on('close', (e: any) => {
                 console.log("Producer connection closed ", e);
+                typeof onclose === 'function' && onclose();
             });
 
             this._producer.on('error', (e: Error) => {
                 console.log("Producer connection errored ", e);
+                typeof onerror === 'function' && onerror(e);
             });
 
         } else {
