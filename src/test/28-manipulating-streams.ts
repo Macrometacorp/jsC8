@@ -101,10 +101,8 @@ describe("Manipulating streams", function() {
     //     },
     //     ''
     //   );
-      
-      
-      // expect(response.error).to.be.false;
-      //present in swagger
+    // expect(response.error).to.be.false;
+    //present in swagger
     //});
     describe("stream.subscriptions", () => {
       let dcName: string;
@@ -141,18 +139,15 @@ describe("Manipulating streams", function() {
       });
 
       it("stream.expireMessages", () => {
-        //present in swagger
       });
 
       it("stream.resetCursor", () => {
       });
 
       it("stream.skipNumberOfMessages", () => {
-        //present in swagger
       });
 
       it("stream.skipAllMessages", () => {
-        //present in swagger
       });
 
       it("stream.getSubscriptionList", () => {

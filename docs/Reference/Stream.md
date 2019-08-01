@@ -381,7 +381,7 @@ stream.consumer("my-subscription", {onmessage: (msg)=>{console.log(msg)}}, "test
 
 ## stream.producer
 
-`stream.producer(message, dcName)`
+`stream.producer(message, dcName, callbackObj)`
 
 Creates a producer for a stream.
 
@@ -394,6 +394,10 @@ Creates a producer for a stream.
 - **dcName**: `string``
 
   The dcName for the producer.
+
+- **callbackObj**: `object``
+
+  The object containing onopen, onclose, onmessage, onerror callbacks.
 
 **Examples**
 
