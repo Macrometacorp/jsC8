@@ -391,13 +391,13 @@ Creates a producer for a stream.
 
   The message to be published to the stream.
 
-- **dcName**: `string``
+- **dcName**: `string | string[]`
 
-  The dcName for the producer.
+  The dcName for the producer. It can be a string or an array of strings.
 
-- **callbackObj**: `object``
+- **callbackObj**: `{ onopen, onclose, onerror, onmessage }`
 
-  The object containing onopen, onclose, onmessage, onerror callbacks.
+  An object having required callbacks. `onmessage` is necessary.
 
 **Examples**
 
