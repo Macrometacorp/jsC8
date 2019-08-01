@@ -1,6 +1,6 @@
 {
   "name": "jsc8",
-  "version": "0.12.2",
+  "version": "0.12.3",
   "license": "Apache-2.0",
   "description": "The official C8 JavaScript driver.",
   "homepage": "https://github.com/macrometacorp/jsC8",
@@ -53,7 +53,7 @@
     "dist": "rimraf lib && npm-run-all --parallel dist:* && cpy src/index.all.js --rename index.js lib/",
     "prepare": "yarn dist && node -e 'require(\".\");'",
     "predevTest": "npm run dist",
-    "devTest": "env TEST_C8_URL=https://abhishek.eng1.macrometa.io mocha --timeout 50000 lib/async/test/27-manipulating-tenants"
+    "devTest": "env TEST_C8_URL=https://fed.macrometa.io mocha --timeout 50000 lib/async/test/27-manipulating-tenants"
   },
   "dependencies": {
     "es6-error": "^4.0.1",
