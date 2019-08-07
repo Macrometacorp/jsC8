@@ -1,13 +1,12 @@
-# Accessing graphs
+## Accessing graphs
 
-These functions implement the
-[HTTP API for accessing general graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Graph/index.html).
+These functions implement the [HTTP API for accessing general graphs](https://developer.document360.io/docs/graphs).
 
 ## fabric.graph
 
 `fabric.graph(graphName): Graph`
 
-Returns a _Graph_ instance representing the graph with the given graph name.
+Returns a `Graph` instance representing the graph with the given graph name.
 
 ## fabric.listGraphs
 
@@ -19,6 +18,8 @@ Fetches all graphs from the fabric and returns an array of graph descriptions.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graphs = await fabric.listGraphs();
 // graphs is an array of graph descriptions
 ```
@@ -27,13 +28,14 @@ const graphs = await fabric.listGraphs();
 
 `async fabric.graphs(): Array<Graph>`
 
-Fetches all graphs from the fabric and returns an array of _Graph_ instances
-for the graphs.
+Fetches all graphs from the fabric and returns an array of `Graph` instances for the graphs.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graphs = await fabric.graphs();
 // graphs is an array of Graph instances
 ```
