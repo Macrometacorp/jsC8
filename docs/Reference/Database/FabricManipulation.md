@@ -1,17 +1,15 @@
 # Manipulating fabrics
 
-These functions implement the
-[HTTP API for manipulating fabrics](https://docs.macrometa.io/jsC8/latest/HTTP/Fabric/index.html).
+These functions implement the [HTTP API for manipulating fabrics](https://developer.document360.io/docs/geo-fabrics)
 
 
 ## fabric.useFabric
 
 `fabric.useFabric(fabricName): this`
 
-Updates the _Fabric_ instance and its connection string to use the given
-_fabricName_, then returns itself.
+Updates the `Fabric` instance and its connection string to use the given `fabricName`, then returns itself.
 
-**Note**: This method can not be used when the jsC8 instance was created with `isAbsolute: true`.
+Note:-This method can not be used when the jsC8 instance was created with `isAbsolute: true`.
 
 **Arguments**
 
@@ -23,6 +21,8 @@ _fabricName_, then returns itself.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 fabric.useFabric("test");
 // The fabric instance now uses the fabric "test".
 ```
@@ -43,6 +43,8 @@ Returns the server name and version number.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const response = await fabric.version(true);
 ```
 
@@ -50,8 +52,7 @@ const response = await fabric.version(true);
 
 `fabric.useBasicAuth([username, [password]]): this`
 
-Updates the _Fabric_ instance's `authorization` header to use Basic
-authentication with the given _username_ and _password_, then returns itself.
+Updates the `Fabric` instance's `authorization` header to use Basic authentication with the given `username` and `password`, then returns itself.
 
 **Arguments**
 
@@ -67,6 +68,8 @@ authentication with the given _username_ and _password_, then returns itself.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 fabric.useBasicAuth("admin", "hunter2");
 // with the username "admin" and password "hunter2".
 ```
@@ -75,8 +78,7 @@ fabric.useBasicAuth("admin", "hunter2");
 
 `fabric.useBearerAuth(token): this`
 
-Updates the _Fabric_ instance's `authorization` header to use Bearer
-authentication with the given authentication token, then returns itself.
+Updates the `Fabric` instance's `authorization` header to use Bearer authentication with the given authentication token, then returns itself.
 
 **Arguments**
 
@@ -88,6 +90,8 @@ authentication with the given authentication token, then returns itself.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 fabric.useBearerAuth("keyboardcat");
 // The fabric instance now uses Bearer authentication.
 ```
@@ -96,9 +100,7 @@ fabric.useBearerAuth("keyboardcat");
 
 `async fabric.login(tenant, [username, [password]]): string`
 
-Validates the given fabric credentials and exchanges them for an
-authentication token, then uses the authentication token for future
-requests and returns it.
+Validates the given fabric credentials and exchanges them for an authentication token, then uses the authentication token for future requests and returns it.
 
 **Arguments**
 
@@ -114,6 +116,8 @@ requests and returns it.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 await fabric.login("_mm", "admin", "hunter2");
 fabric.useFabric("test");
 // The fabric instance now uses the fabric "test"
@@ -130,6 +134,8 @@ Fetches the C8 version information for the active fabric from the server.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const version = await fabric.version();
 // the version object contains the C8 version information.
 ```
@@ -138,7 +144,7 @@ const version = await fabric.version();
 
 `async fabric.createFabric(fabricName, options, [users]): Object`
 
-Creates a new Fabric with the given _fabricName_.
+Creates a new Fabric with the given `fabricName`.
 
 **Arguments**
 
@@ -185,6 +191,8 @@ to the local Edge Location.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const info = await fabric.createFabric('mydb', [{username: 'root'}]);
 // the fabric has been created
 ```
@@ -213,6 +221,8 @@ Checks whether the fabric exists.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const result = await fabric.exists();
 // result indicates whether the fabric exists
 ```
@@ -227,6 +237,8 @@ Fetches the fabric description for the active fabric from the server.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const info = await fabric.get();
 // the fabric exists
 ```
@@ -241,6 +253,8 @@ Fetches all fabrics from the server and returns an array of their names.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const names = await fabric.listFabrics();
 // fabrics is an array of fabric names
 ```
@@ -249,13 +263,14 @@ const names = await fabric.listFabrics();
 
 `async fabric.listUserFabrics(): Array<string>`
 
-Fetches all fabrics accessible to the active user from the server and returns
-an array of their names.
+Fetches all fabrics accessible to the active user from the server and returns an array of their names.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const names = await fabric.listUserFabrics();
 // fabrics is an array of fabric names
 ```
@@ -264,10 +279,12 @@ const names = await fabric.listUserFabrics();
 
 `async fabric.dropFabric(fabricName): Object`
 
-Deletes the fabric with the given _fabricName_ from the server.
+Deletes the fabric with the given `fabricName` from the server.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 await fabric.dropFabric('mydb');
 // fabric "mydb" no longer exists
 ```
@@ -282,15 +299,14 @@ Deletes **all documents in all collections** in the active fabric.
 
 - **excludeSystem**: `boolean` (Default: `true`)
 
-  Whether system collections should be excluded. Note that this option will be
-  ignored because truncating system collections is not supported anymore for
-  some system collections.
+  Whether system collections should be excluded. Note that this option will be ignored because truncating system collections is not supported anymore for some system collections.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
-
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 await fabric.truncate();
 // all non-system collections in this fabric are now empty
 ```
@@ -305,6 +321,8 @@ Return a list of all Edge Locations (AKA Datacenters) deployed in the Macrometa 
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 await fabric.createFabric('mydb', [{username: 'root'}]);
 await fabric.getAllEdgeLocations();
 ```
@@ -319,6 +337,8 @@ Fetches data about the local Edge Location specific to this Datacenter/Location.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 await fabric.getLocalEdgeLocation();
 ```
 
@@ -332,5 +352,7 @@ Change the spot status of a datacenter.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 await fabric.changeEdgeLocationSpotStatus('myfederation-us-east-1', true);
 ```
