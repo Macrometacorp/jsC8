@@ -1,7 +1,6 @@
-# Managing C8QL user functions
+## Managing C8QL user functions
 
-These functions implement the
-[HTTP API for managing C8QL user functions](https://docs.macrometa.io/jsC8/latest/HTTP/C8QLUserFunctions/index.html).
+These functions implement the HTTP API for managing C8QL user functions
 
 ## fabric.listFunctions
 
@@ -13,6 +12,8 @@ Fetches a list of all C8QL user functions registered with the fabric.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const functions = fabric.listFunctions();
 // functions is a list of function descriptions
 ```
@@ -21,8 +22,7 @@ const functions = fabric.listFunctions();
 
 `async fabric.createFunction(name, code): Object`
 
-Creates an C8QL user function with the given _name_ and _code_ if it does not
-already exist or replaces it if a function with the same name already existed.
+Creates an C8QL user function with the given `name` and `code` if it does not already exist or replaces it if a function with the same name already existed.
 
 **Arguments**
 
@@ -32,13 +32,14 @@ already exist or replaces it if a function with the same name already existed.
 
 * **code**: `string`
 
-  A string evaluating to a JavaScript function (not a JavaScript function
-  object).
+  A string evaluating to a JavaScript function (not a JavaScript function object).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 await fabric.createFunction(
   'ACME::ACCOUNTING::CALCULATE_VAT',
   String(function (price) {
@@ -70,13 +71,14 @@ Deletes the C8QL user function with the given name from the fabric.
 
 * **group**: `boolean` (Default: `false`)
 
-  If set to `true`, all functions with a name starting with _name_ will be
-  deleted; otherwise only the function with the exact name will be deleted.
+  If set to `true`, all functions with a name starting with `name` will be  deleted; otherwise only the function with the exact name will be deleted.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 await fabric.dropFunction('ACME::ACCOUNTING::CALCULATE_VAT');
 // the function no longer exists
 ```
