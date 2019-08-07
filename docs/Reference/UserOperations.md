@@ -1,4 +1,4 @@
-# Setting User Permissions and related Operations
+## Setting User Permissions and related Operations
 
 ## fabric.user
 
@@ -16,6 +16,8 @@ Returns a User instance representing the user with the given username.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 ```
 
@@ -29,6 +31,8 @@ Returns the list of all the users for this fabric
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 await fabric.getAllUsers();
 ```
 
@@ -42,6 +46,8 @@ Returns the details of a user
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 await user.getUserDetails();
 ```
@@ -60,8 +66,7 @@ Asynchronously creates a user
 
 - **active**: `boolean` [optional]
 
-  An optional flag that specifies whether the user is active. If not
-  specified, this will default to `true`
+  An optional flag that specifies whether the user is active. If not specified, this will default to `true`
 
 - **extra**: `object` [optional]
 
@@ -71,6 +76,8 @@ Asynchronously creates a user
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 await user.createUser("sample_password", active, extra);
 ```
@@ -85,6 +92,8 @@ deletes a user
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 await user.deleteUser();
 ```
@@ -111,6 +120,8 @@ Partially updates the data of an existing user.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 const config = {
   active: false // only updating active status
@@ -140,6 +151,8 @@ Partially updates the data of an existing user.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 const config = {
   passwd: "sample_password",
@@ -164,6 +177,8 @@ Lists all the databases' access levels associated with the user
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 await user.getAllDatabases();
 ```
@@ -184,6 +199,8 @@ gets access level of the given database associated with the user
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 await user.getDatabaseAccessLevel("sample_database");
 ```
@@ -208,6 +225,8 @@ Get the access level of a specific collection in a given database
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 await user.getCollectionAccessLevel(
   "sample_databaseName",
@@ -231,6 +250,8 @@ clear access level for the database
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 await user.clearDatabaseAccessLevel("sample_database");
 ```
@@ -255,6 +276,8 @@ clears the access level of a specific collection in a given database
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 await user.clearCollectionAccessLevel(
   "sample_databaseName",
@@ -282,6 +305,8 @@ Sets the database access level
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 await user.setDatabaseAccessLevel(databaseName, permission);
 ```
@@ -310,6 +335,8 @@ Sets Access level of a collection in a database
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const user = fabric.user("sample_user");
 await user.setCollectionAccessLevel(databaseName, collectionName, permission);
 ```
