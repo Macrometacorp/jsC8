@@ -1,11 +1,10 @@
-# Arbitrary HTTP routes
+## Arbitrary HTTP routes
 
 ## fabric.route
 
 `fabric.route([path,] [headers]): Route`
 
-Returns a new _Route_ instance for the given path (relative to the fabric)
-that can be used to perform arbitrary HTTP requests.
+Returns a new `Route` instance for the given path (relative to the fabric) that can be used to perform arbitrary HTTP requests.
 
 **Arguments**
 
@@ -17,15 +16,16 @@ that can be used to perform arbitrary HTTP requests.
 
   Default headers that should be sent with each request to the route.
 
-If _path_ is missing, the route will refer to the base URL of the fabric.
+If `path` is missing, the route will refer to the base URL of the fabric.
 
-For more information on _Route_ instances see the
-[_Route API_ below](../Route.md).
+For more information on `Route` instances see the [Route API_ below](https://developer.document360.io/docs/route).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const myFoxxService = fabric.route('my-foxx-service');
 const response = await myFoxxService.post('users', {
   username: 'admin',
