@@ -1,26 +1,25 @@
-# Manipulating the collection
+## Manipulating the collection
 
-These functions implement
-[the HTTP API for modifying collections](https://docs.macrometa.io/jsC8/latest/HTTP/Collection/Modifying.html).
+These functions implement [the HTTP API for modifying collections](https://developer.document360.io/docs/using-c8-rest-api)
 
 ## collection.create
 
 `async collection.create([properties]): Object`
 
-Creates a collection with the given _properties_ for this collection's name,
-then returns the server response.
+Creates a collection with the given `properties` for this collection's name, then returns the server response.
 
 **Arguments**
 
 - **properties**: `Object` (optional)
-
-  For more information on the _properties_ object, see
-  [the HTTP API documentation for creating collections](https://docs.macrometa.io/jsC8/latest/HTTP/Collection/Creating.html).
+  For more information on the 'properties` object, see  [the HTTP API documentation for creating collections](https://developer.document360.io/docs/using-c8-rest-api).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
+
 const collection = fabric.collection('potatoes');
 await collection.create()
 // the document collection "potatoes" now exists
@@ -33,21 +32,21 @@ await collection.create({
 });
 // the edge collection "friends" now exists
 ```
-
-To make the collection as `spot`, pass the `isSpot: true` in the `properties` object.
+Note:-(To make the collection as `spot`, pass the `isSpot: true` in the `properties` object.)
 
 
 ## collection.rename
 
 `async collection.rename(name): Object`
 
-Renames the collection. The _Collection_ instance will automatically update its
-name when the rename succeeds.
+Renames the collection. The  `Collection` instance will automatically update its name when the rename succeeds.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const result = await collection.rename('new-collection-name')
 assert.equal(result.name, 'new-collection-name');
@@ -66,6 +65,8 @@ Deletes **all documents** in the collection in the fabric.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 await collection.truncate();
 // the collection "some-collection" is now empty
@@ -89,12 +90,12 @@ Deletes the collection from the fabric.
 
     This parameter must be set to `true` when dropping a system collection.
 
-  For more information on the _properties_ object, see
-  [the HTTP API documentation for dropping collections](https://docs.macrometa.io/jsC8/latest/HTTP/Collection/Creating.html#drops-a-collection).
-  **Examples**
+**Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 await collection.drop();
 // the collection "some-collection" no longer exists
