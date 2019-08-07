@@ -1,14 +1,12 @@
-# Route API
+## Route 
 
-_Route_ instances provide access for arbitrary HTTP requests. This allows easy
-access to Foxx services and other HTTP APIs not covered by the driver itself.
+`Route` instances provide access for arbitrary HTTP requests. This allows easy access to Foxx services and other HTTP APIs not covered by the driver itself.
 
 ## route.route
 
 `route.route([path], [headers]): Route`
 
-Returns a new _Route_ instance for the given path (relative to the current
-route) that can be used to perform arbitrary HTTP requests.
+Returns a new `Route` instance for the given path (relative to the current route) that can be used to perform arbitrary HTTP requests.
 
 **Arguments**
 
@@ -20,12 +18,14 @@ route) that can be used to perform arbitrary HTTP requests.
 
   Default headers that should be sent with each request to the route.
 
-If _path_ is missing, the route will refer to the base URL of the fabric.
+If `path` is missing, the route will refer to the base URL of the fabric.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const route = fabric.route("my-foxx-service");
 const users = route.route("users");
 // equivalent to fabric.route('my-foxx-service/users')
@@ -41,18 +41,18 @@ Performs a GET request to the given URL and returns the server response.
 
 * **path**: `string` (optional)
 
-  The route-relative URL for the request. If omitted, the request will be made
-  to the base URL of the route.
+  The route-relative URL for the request. If omitted, the request will be made  to the base URL of the route.
 
 * **qs**: `string` (optional)
 
-  The query string for the request. If _qs_ is an object, it will be translated
-  to a query string.
+  The query string for the request. If `qs`  is an object, it will be translated  to a query string.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const route = fabric.route('my-foxx-service');
 const response = await route.get();
 // response.body is the response body of calling
@@ -81,22 +81,22 @@ Performs a POST request to the given URL and returns the server response.
 
 * **path**: `string` (optional)
 
-  The route-relative URL for the request. If omitted, the request will be made
-  to the base URL of the route.
+ The route-relative URL for the request. If omitted, the request will be made  to the base URL of the route.
 
 * **body**: `string` (optional)
 
-  The response body. If _body_ is an object, it will be encoded as JSON.
+  The response body. If `body` is an object, it will be encoded as JSON.
 
 * **qs**: `string` (optional)
 
-  The query string for the request. If _qs_ is an object, it will be translated
-  to a query string.
+  The query string for the request. If `qs` is an object, it will be translated to a query string.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const route = fabric.route('my-foxx-service');
 const response = await route.post()
 // response.body is the response body of calling
@@ -139,22 +139,22 @@ Performs a PUT request to the given URL and returns the server response.
 
 * **path**: `string` (optional)
 
-  The route-relative URL for the request. If omitted, the request will be made
-  to the base URL of the route.
+  The route-relative URL for the request. If omitted, the request will be made  to the base URL of the route.
 
 * **body**: `string` (optional)
 
-  The response body. If _body_ is an object, it will be encoded as JSON.
+  The response body. If `body` is an object, it will be encoded as JSON.
 
 * **qs**: `string` (optional)
 
-  The query string for the request. If _qs_ is an object, it will be translated
-  to a query string.
+  The query string for the request. If `qs` is an object, it will be translated to a query string.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const route = fabric.route('my-foxx-service');
 const response = await route.put();
 // response.body is the response body of calling
@@ -197,22 +197,22 @@ Performs a PATCH request to the given URL and returns the server response.
 
 * **path**: `string` (optional)
 
-  The route-relative URL for the request. If omitted, the request will be made
-  to the base URL of the route.
+  The route-relative URL for the request. If omitted, the request will be made to the base URL of the route.
 
 * **body**: `string` (optional)
 
-  The response body. If _body_ is an object, it will be encoded as JSON.
+  The response body. If `body`  is an object, it will be encoded as JSON.
 
 * **qs**: `string` (optional)
 
-  The query string for the request. If _qs_ is an object, it will be translated
-  to a query string.
+  The query string for the request. If `qs` is an object, it will be translated to a query string.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const route = fabric.route('my-foxx-service');
 const response = await route.patch();
 // response.body is the response body of calling
@@ -258,13 +258,14 @@ Performs a DELETE request to the given URL and returns the server response.
 
 * **qs**: `string` (optional)
 
-  The query string for the request. If _qs_ is an object, it will be translated
-  to a query string.
+  The query string for the request. If `qs` is an object, it will be translated  to a query string.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const route = fabric.route('my-foxx-service');
 const response = await route.delete()
 // response.body is the response body of calling
@@ -293,13 +294,11 @@ Performs a HEAD request to the given URL and returns the server response.
 
 * **path**: `string` (optional)
 
-  The route-relative URL for the request. If omitted, the request will be made
-  to the base URL of the route.
+  The route-relative URL for the request. If omitted, the request will be made to the base URL of the route.
 
 * **qs**: `string` (optional)
 
-  The query string for the request. If _qs_ is an object, it will be translated
-  to a query string.
+  The query string for the request. If _qs_ is an object, it will be translated to a query string.
 
 **Examples**
 
@@ -354,6 +353,8 @@ Performs an arbitrary request to the given URL and returns the server response.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const route = fabric.route('my-foxx-service');
 const response = await route.request({
   path: 'hello-world',
