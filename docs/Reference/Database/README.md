@@ -1,12 +1,12 @@
-# Fabric API
+## Fabric
 
 ## new Fabric
 
 `new Fabric([config]): Fabric`
 
-Creates a new _Fabric_ instance.
+Creates a new `Fabric` instance.
 
-If _config_ is a string, it will be interpreted as _config.url_.
+If `config` is a string, it will be interpreted as `config.url`.
 
 **Arguments**
 
@@ -18,16 +18,10 @@ If _config_ is a string, it will be interpreted as _config.url_.
 
     Base URL of the C8 server or list of server URLs.
 
-    When working with a cluster or a single server with leader/follower failover,
-    [the method `fabric.acquireHostList`](DatabaseManipulation.md#databaseacquirehostlist)
-    can be used to automatically pick up additional coordinators/followers at
-    any point.
-
     If you want to use C8 with authentication, see
-    _useBasicAuth_ or _useBearerAuth_ methods.
-
-    If you need to support self-signed HTTPS certificates, you may have to add
-    your certificates to the _agentOptions_, e.g.:
+    `useBasicAuth` or`seBearerAuth` methods.
+    
+    If you need to support self-signed HTTPS certificates, you may have to add your certificates to the `agentOptions`, e.g.:
 
     ```js
     agentOptions: {
@@ -40,10 +34,7 @@ If _config_ is a string, it will be interpreted as _config.url_.
 
   - **isAbsolute**: `boolean` (Default: `false`)
 
-    If this option is explicitly set to `true`, the _url_ will be treated as the
-    absolute fabric path. This is an escape hatch to allow using jsC8 with
-    fabric APIs exposed with a reverse proxy and makes it impossible to switch
-    databases with _useDatabase_ or using _acquireHostList_.
+    If this option is explicitly set to `true`, the `url` will be treated as the absolute fabric path. This is an escape hatch to allow using jsC8 with fabric APIs exposed with a reverse proxy and makes it impossible to switch databases.
 
   - **c8Version**: `number` (Default: `30000`)
 
@@ -54,35 +45,25 @@ If _config_ is a string, it will be interpreted as _config.url_.
 
     **Example**: `30102` corresponds to version 3.1.2 of C8.
 
-    **Note**: The driver will behave differently when using different major
-    versions of C8 to compensate for API changes. Some functions are
-    not available on every major version of C8 as indicated in their
-    descriptions below (e.g. _collection.first_, _collection.bulkUpdate_).
+    
+@(Info)(Note:-)( The driver will behave differently when using different major versions of C8 to compensate for API changes. Some functions are not available on every major version of C8 as indicated in their  descriptions below (e.g. `collection.first`, `collection.bulkUpdate`.)
 
   - **headers**: `Object` (optional)
 
     An object with additional headers to send with every request.
 
-    Header names should always be lowercase. If an `"authorization"` header is
-    provided, it will be overridden when using _useBasicAuth_ or _useBearerAuth_.
+    Header names should always be lowercase. If an `"authorization"` header is  provided, it will be overridden when using `useBasicAuth` or `useBearerAuth`.
 
   - **agent**: `Agent` (optional)
 
     An http Agent instance to use for connections.
 
-    By default a new
-    [`http.Agent`](https://nodejs.org/api/http.html#http_new_agent_options) (or
-    https.Agent) instance will be created using the _agentOptions_.
-
-    This option has no effect when using the browser version of jsC8.
-
+   
   - **agentOptions**: `Object` (Default: see below)
 
-    An object with options for the agent. This will be ignored if _agent_ is
-    also provided.
-
-    Default: `{maxSockets: 3, keepAlive: true, keepAliveMsecs: 1000}`.
-    Browser default: `{maxSockets: 3, keepAlive: false}`;
+    An object with options for the agent. This will be ignored if `agent` is  also provided.
+    
+    Default: `{maxSockets: 3, keepAlive: true, keepAliveMsecs: 1000}`. Browser default: `{maxSockets: 3, keepAlive: false}`;
 
     The option `maxSockets` can also be used to limit how many requests
     jsC8 will perform concurrently. The maximum number of requests is
@@ -143,6 +124,8 @@ Can be used to clean up idling connections during longer periods of inactivity.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const sessions = fabric.collection("sessions");
 // Clean up expired sessions once per hour
 setInterval(async () => {
