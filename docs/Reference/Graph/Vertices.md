@@ -1,11 +1,10 @@
-# Manipulating vertices
+## Manipulating vertices
 
 ## graph.vertexCollection
 
 `graph.vertexCollection(collectionName): GraphVertexCollection`
 
-Returns a new [_GraphVertexCollection_ instance](VertexCollection.md)
-with the given name for this graph.
+Returns a new [GraphVertexCollection  instance ](https://developer.document360.io/docs/vertexcollection)with the given name for this graph.
 
 **Arguments**
 
@@ -17,6 +16,8 @@ with the given name for this graph.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph("some-graph");
 const collection = graph.vertexCollection("vertices");
 assert.equal(collection.name, "vertices");
@@ -49,7 +50,7 @@ const collections = await graph.listVertexCollections(true);
 
 `async graph.vertexCollections(): Array<Collection>`
 
-Fetches all vertex collections from the fabric and returns an array of _GraphVertexCollection_ instances for the collections.
+Fetches all vertex collections from the fabric and returns an array of `GraphVertexCollection` instances for the collections.
 
 **Examples**
 
@@ -71,8 +72,7 @@ const collections = await graph.vertexCollections(true)
 
 `async graph.addVertexCollection(collectionName): Object`
 
-Adds the collection with the given _collectionName_ to the graph's vertex
-collections.
+Adds the collection with the given `collectionName` to the graph's vertex collections.
 
 **Arguments**
 
@@ -84,6 +84,8 @@ collections.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 await graph.addVertexCollection('vertices');
 // the collection "vertices" has been added to the graph
@@ -93,7 +95,7 @@ await graph.addVertexCollection('vertices');
 
 `async graph.removeVertexCollection(collectionName, [dropCollection]): Object`
 
-Removes the vertex collection with the given _collectionName_ from the graph.
+Removes the vertex collection with the given `collectionName`  from the graph.
 
 **Arguments**
 
@@ -109,6 +111,8 @@ Removes the vertex collection with the given _collectionName_ from the graph.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 await graph.removeVertexCollection('vertices')
 // collection "vertices" has been removed from the graph
