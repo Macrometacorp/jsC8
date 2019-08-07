@@ -1,7 +1,6 @@
-# EdgeCollection API
+## EdgeCollection 
 
-The _EdgeCollection API_ extends the
-[_Collection API_](README.md) with the following methods.
+The `EdgeCollection API` extends the [_Collection API_](https://developer.document360.io/docs/collections) with the following methods.
 
 ## edgeCollection.document
 
@@ -9,7 +8,7 @@ The _EdgeCollection API_ extends the
 
 Alias: `edgeCollection.edge`.
 
-Retrieves the edge with the given _documentHandle_ from the collection.
+Retrieves the edge with the given `documentHandle` from the collection.
 
 **Arguments**
 
@@ -21,13 +20,14 @@ Retrieves the edge with the given _documentHandle_ from the collection.
 
 * **graceful**: `boolean` (Default: `false`)
 
-  If set to `true`, the method will return `null` instead of throwing an error
-  if the edge does not exist.
+Note:- If set to `true`, the method will return `null` instead of throwing an error if the edge does not exist.)
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 
 const edge = await collection.document('some-key');
@@ -54,7 +54,7 @@ if (edge === null) {
 
 `async edgeCollection.documentExists(documentHandle): boolean`
 
-Checks whether the edge with the given _documentHandle_ exists.
+Checks whether the edge with the given `documentHandle` exists.
 
 **Arguments**
 
@@ -68,6 +68,8 @@ Checks whether the edge with the given _documentHandle_ exists.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('my-docs');
 
 const exists = await collection.documentExists('some-key');
@@ -80,14 +82,13 @@ if (exists === false) {
 
 `async edgeCollection.save(data, [fromId, toId], [opts]): Object`
 
-Creates a new edge between the documents _fromId_ and _toId_ with the given
-_data_ and returns an object containing the edge's metadata.
+Creates a new edge between the documents `fromId` and `toId` with the given`data` and returns an object containing the edge's metadata.
 
 **Arguments**
 
 - **data**: `Object`
 
-  The data of the new edge. If _fromId_ and _toId_ are not specified, the _data_
+  The data of the new edge. If `fromId` and `toId` are not specified, the `data`
   needs to contain the properties `_from` and `_to`.
 
 - **fromId**: `string` (optional)
@@ -104,7 +105,7 @@ _data_ and returns an object containing the edge's metadata.
 
 - **opts**: `Object` (optional)
 
-  If _opts_ is set, it must be an object with any of the following properties:
+  If `opts` is set, it must be an object with any of the following properties:
 
   - **waitForSync**: `boolean` (Default: `false`)
 
@@ -132,13 +133,14 @@ _data_ and returns an object containing the edge's metadata.
     same \_key already exists the new document is not rejected with unique
     constraint violated but will replace the old document.
 
-If a boolean is passed instead of an options object, it will be interpreted as
-the _returnNew_ option.
+Note:-If a boolean is passed instead of an options object, it will be interpreted as the `returnNew` option.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 const data = {some: 'data'};
 
@@ -169,7 +171,7 @@ const info = await collection.save({
 
 `async edgeCollection.edges(documentHandle): Array<Object>`
 
-Retrieves a list of all edges of the document with the given _documentHandle_.
+Retrieves a list of all edges of the document with the given `documentHandle`.
 
 **Arguments**
 
@@ -183,6 +185,8 @@ Retrieves a list of all edges of the document with the given _documentHandle_.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
@@ -199,8 +203,7 @@ assert.deepEqual(edges.map(edge => edge._key), ['x', 'y', 'z']);
 
 `async edgeCollection.inEdges(documentHandle): Array<Object>`
 
-Retrieves a list of all incoming edges of the document with the given
-_documentHandle_.
+Retrieves a list of all incoming edges of the document with the given `documentHandle`.
 
 **Arguments**
 
@@ -214,6 +217,8 @@ _documentHandle_.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
@@ -230,8 +235,7 @@ assert.equal(edges[0]._key, 'z');
 
 `async edgeCollection.outEdges(documentHandle): Array<Object>`
 
-Retrieves a list of all outgoing edges of the document with the given
-_documentHandle_.
+Retrieves a list of all outgoing edges of the document with the given `documentHandle`.
 
 **Arguments**
 
@@ -245,6 +249,8 @@ _documentHandle_.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
@@ -261,8 +267,7 @@ assert.deepEqual(edges.map(edge => edge._key), ['x', 'y']);
 
 `async edgeCollection.traversal(startVertex, opts): Object`
 
-Performs a traversal starting from the given _startVertex_ and following edges
-contained in this edge collection.
+Performs a traversal starting from the given `startVertex` and following edges contained in this edge collection.
 
 **Arguments**
 
@@ -274,20 +279,16 @@ contained in this edge collection.
 
 - **opts**: `Object`
 
-  See
-  [the HTTP API documentation](https://docs.macrometa.io/jsC8/latest/HTTP/Traversal/index.html)
-  for details on the additional arguments.
+  See  [the HTTP API documentation](https://developer.document360.io/docs/indexing) for details on the additional arguments.
 
-  Please note that while _opts.filter_, _opts.visitor_, _opts.init_,
-  _opts.expander_ and _opts.sort_ should be strings evaluating to well-formed
-  JavaScript code, it's not possible to pass in JavaScript functions directly
-  because the code needs to be evaluated on the server and will be transmitted
-  in plain text.
+Note:-Please note that while `opts.filter`, `opts.visitor`, `opts.init`, `opts.expander` and `opts.sort` should be strings evaluating to well-formed JavaScript code, it's not possible to pass in JavaScript functions directly because the code needs to be evaluated on the server and will be transmitted in plain text.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
