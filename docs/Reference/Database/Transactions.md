@@ -1,7 +1,6 @@
-# Transactions
+## Transactions
 
-This function implements the
-[HTTP API for transactions](https://docs.macrometa.io/jsC8/latest/HTTP/Transaction/index.html).
+This function implements the [HTTP API for transactions](https://developer.document360.io/docs/transactions).
 
 ## fabric.transaction
 
@@ -30,13 +29,9 @@ Performs a server-side transaction and returns its return value.
 
   A string evaluating to a JavaScript function to be executed on the server.
 
-  **Note**: For accessing the fabric from within C8, see
-  [the documentation for the `@c8` module in C8](https://docs.macrometa.io/jsC8/latest/Manual/Appendix/JavaScriptModules/C8.html).
-
 * **params**: `Object` (optional)
 
-  Available as variable `params` when the _action_ function is being executed on
-  server. Check the example below.
+  Available as variable `params` when the `action` function is being executed on server. Check the example below.
 
 * **options**: `Object` (optional)
 
@@ -65,21 +60,20 @@ Performs a server-side transaction and returns its return value.
     Determine the maximum total size of operations after which an intermediate commit is
     performed automatically. Honored by the RocksDB storage engine only.
 
-If _collections_ is an array or string, it will be treated as
-_collections.write_.
+If `collections` is an array or string, it will be treated as
+`collections.write`.
 
-Please note that while _action_ should be a string evaluating to a well-formed
-JavaScript function, it's not possible to pass in a JavaScript function directly
-because the function needs to be evaluated on the server and will be transmitted
+Please note that while `action` should be a string evaluating to a well-formed JavaScript function, it's not possible to pass in a JavaScript function directly because the function needs to be evaluated on the server and will be transmitted
 in plain text.
 
-For more information on transactions, see
-[the HTTP API documentation for transactions](https://docs.macrometa.io/jsC8/latest/HTTP/Transaction/index.html).
+For more information on transactions, see [the HTTP API documentation for transactions](https://developer.document360.io/docs/transactions).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const action = String(function (params) {
   // This code will be executed inside C8!
   const fabric = require('@c8').fabric;
