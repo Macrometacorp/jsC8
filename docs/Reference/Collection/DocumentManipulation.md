@@ -1,17 +1,15 @@
-# Manipulating documents
+## Manipulating documents
 
-These functions implement the
-[HTTP API for manipulating documents](https://docs.macrometa.io/jsC8/latest/HTTP/Document/index.html).
+These functions implement the [HTTP API for manipulating documents](https://developer.document360.io/docs/documents).
 
 ## collection.replace
 
 `async collection.replace(documentHandle, newValue, [opts]): Object`
 
-Replaces the content of the document with the given _documentHandle_ with the
-given _newValue_ and returns an object containing the document's metadata.
+Replaces the content of the document with the given `documentHandle` with the
+given `newValue` and returns an object containing the document's metadata.
 
-**Note**: The _policy_ option is not available when using the driver with
-C8 3.0 as it is redundant when specifying the _rev_ option.
+Note:-The `policy` option is not available when using the driver with C8 3.0 as it is redundant when specifying the `rev`option.
 
 **Arguments**
 
@@ -45,17 +43,16 @@ C8 3.0 as it is redundant when specifying the _rev_ option.
       of the revision.
     * if _policy_ is set to `"error"` or not set, the replacement will fail with
       an error.
+      
+Note:-If a string is passed instead of an options object, it will be interpreted as the `rev` option.
 
-If a string is passed instead of an options object, it will be interpreted as
-the _rev_ option.
-
-For more information on the _opts_ object, see
-[the HTTP API documentation for working with documents](https://docs.macrometa.io/jsC8/latest/HTTP/Document/WorkingWithDocuments.html).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = {number: 1, hello: 'world'};
 const info1 = await collection.save(data);
@@ -77,8 +74,7 @@ Updates (merges) the content of the document with the given _documentHandle_
 with the given _newValue_ and returns an object containing the document's
 metadata.
 
-**Note**: The _policy_ option is not available when using the driver with
-C8 3.0 as it is redundant when specifying the _rev_ option.
+Note:-The _policy_ option is not available when using the driver with C8 3.0 as it is redundant when specifying the `rev`option.
 
 **Arguments**
 
@@ -140,16 +136,14 @@ C8 3.0 as it is redundant when specifying the _rev_ option.
     * if _policy_ is set to `"error"` or not set, the replacement will fail with
       an error.
 
-If a string is passed instead of an options object, it will be interpreted as
-the _rev_ option.
-
-For more information on the _opts_ object, see
-[the HTTP API documentation for working with documents](https://docs.macrometa.io/jsC8/latest/HTTP/Document/WorkingWithDocuments.html).
+Note:- If a string is passed instead of an options object, it will be interpreted as the `rev` option.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const doc = {number: 1, hello: 'world'};
 const doc1 = await collection.save(doc);
@@ -168,10 +162,9 @@ assert.equal(doc3.hello, doc.hello);
 
 `async collection.remove(documentHandle, [opts]): Object`
 
-Deletes the document with the given _documentHandle_ from the collection.
+Deletes the document with the given `documentHandle` from the collection.
 
-**Note**: The _policy_ option is not available when using the driver with
-C8 3.0 as it is redundant when specifying the _rev_ option.
+Note:- The `policy` option is not available when using the driver with C8 3.0 as it is redundant when specifying the `rev`option.
 
 **Arguments**
 
@@ -183,7 +176,7 @@ C8 3.0 as it is redundant when specifying the _rev_ option.
 
 * **opts**: `Object` (optional)
 
-  If _opts_ is set, it must be an object with any of the following properties:
+  If `opts` is set, it must be an object with any of the following properties:
 
   * **waitForSync**: `boolean` (Default: `false`)
 
@@ -202,11 +195,9 @@ C8 3.0 as it is redundant when specifying the _rev_ option.
     * if _policy_ is set to `"error"` or not set, the replacement will fail with
       an error.
 
-If a string is passed instead of an options object, it will be interpreted as
-the _rev_ option.
+Note:-If a string is passed instead of an options object, it will be interpreted as the `rev` option.
 
-For more information on the _opts_ object, see
-[the HTTP API documentation for working with documents](https://docs.macrometa.io/jsC8/latest/HTTP/Document/WorkingWithDocuments.html).
+For more information on the `opts` object, see [the HTTP API documentation for working with documents](https://developer.document360.io/docs/documents).
 
 **Examples**
 
