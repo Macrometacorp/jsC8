@@ -1,13 +1,12 @@
-# Manipulating tenants
+## Manipulating tenants
 
 ## fabric.useTenant
 
 `fabric.useTenant(tenantName): this`
 
-Updates the _Fabric_ instance and its connection string to use the given
-_tenantName_, then returns itself.
+Updates the `Fabric` instance and its connection string to use the given `tenantName`, then returns itself.
 
-**Note**: This method can not be used when the jsC8 instance was created with `isAbsolute: true`.
+Note:-This method can not be used when the jsC8 instance was created with `isAbsolute: true`.)
 
 **Arguments**
 
@@ -19,6 +18,8 @@ _tenantName_, then returns itself.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 fabric.useTenant("testTenant");
 // The fabric instance now uses the tenant "testTenant".
 ```
@@ -39,6 +40,8 @@ Returns a _Tenant_ instance representing the tenant with the given tenant name.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const tenant = fabric.tenant("testTenant");
 ```
 
@@ -52,16 +55,21 @@ Fetches all tenants from the fabric and returns an array of tenant descriptions.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const allTenants = fabric.listTenants();
 ```
 
 ## tenant.createTenant
 
-`async tenant.createTenant(password, extra, dcList): Object`
+`async tenant.createTenant(dcList, password, extra): Object`
 
 Creates a tenant.
 
 **Arguments**
+
+- **dcList**: `string`
+    Comma seperated list of the regions that you want the tenant to  access
 
 - **password**: `string`
 
@@ -71,19 +79,14 @@ Creates a tenant.
 
   An optional JSON object with arbitrary extra data about the user.
 
-- **dcList**: `string`
-
-   A comma-separated string containing the datacenter names on which this tenant
-   is to be created. If an empty string is passed in, the tenant is assumed to
-   be global to the federation and will be created on all current datacenters in
-   the federation.
-
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const tenant = fabric.tenant("testTenant");
-await tenant.createTenant("myPassword", {});
+await tenant.createTenant("test-eu-west-1, test-us-west-2","myPassword", {});
 // creates a new tenant "testTenant" with password as "myPassword".
 ```
 
@@ -97,6 +100,8 @@ Deletes the tenant.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const tenant = fabric.tenant("testTenant");
 await tenant.createTenant("myPassword", {});
 await tenant.dropTenant();
@@ -112,6 +117,8 @@ Gets the details of a tenant.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const tenant = fabric.tenant("testTenant");
 await tenant.createTenant("myPassword", {});
 await tenant.tenantDetails();
@@ -137,6 +144,8 @@ Modifies the given tenant.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const tenant = fabric.tenant("testTenant");
 await tenant.createTenant("myPassword", {});
 await tenant.modifyTenant("myPassword", { info: "string"});
