@@ -1,7 +1,6 @@
-# Manipulating indexes
+## Manipulating indexes
 
-These functions implement the
-[HTTP API for manipulating indexes](https://docs.macrometa.io/jsC8/latest/HTTP/Indexes/index.html).
+These functions implement the [HTTP API for manipulating indexes](https://developer.document360.io/docs/indexing).
 
 ## collection.createIndex
 
@@ -13,13 +12,13 @@ Creates an arbitrary index on the collection.
 
 * **details**: `Object`
 
-  For information on the possible properties of the _details_ object, see
-  [the HTTP API for manipulating indexes](https://docs.macrometa.io/jsC8/latest/HTTP/Indexes/WorkingWith.html).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const index = await collection.createIndex({type: 'hash', fields: ['a', 'a.b']});
 // the index has been created with the handle `index.id`
@@ -41,15 +40,16 @@ Creates a hash index on the collection.
 * **opts**: `Object` (optional)
 
   Additional options for this index. If the value is a boolean, it will be
-  interpreted as _opts.unique_.
+  interpreted as `opts.unique`.
 
-For more information on hash indexes, see
-[the HTTP API for hash indexes](https://docs.macrometa.io/jsC8/latest/HTTP/Indexes/Hash.html).
+For more information on hash indexes, see [the HTTP API for hash indexes](https://developer.document360.io/docs/indexing).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
 const index = await collection.createHashIndex('favorite-color');
@@ -73,21 +73,18 @@ Creates a skiplist index on the collection.
 
 * **fields**: `Array<string>`
 
-  An array of names of document fields on which to create the index. If the
-  value is a string, it will be wrapped in an array automatically.
+  An array of names of document fields on which to create the index. If the value is a string, it will be wrapped in an array automatically.
 
 * **opts**: `Object` (optional)
 
-  Additional options for this index. If the value is a boolean, it will be
-  interpreted as _opts.unique_.
-
-For more information on skiplist indexes, see
-[the HTTP API for skiplist indexes](https://docs.macrometa.io/jsC8/latest/HTTP/Indexes/Skiplist.html).
+  Additional options for this index. If the value is a boolean, it will be interpreted as `opts.unique`.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
 const index = await collection.createSkipList('favorite-color')
@@ -111,21 +108,18 @@ Creates a geo-spatial index on the collection.
 
 * **fields**: `Array<string>`
 
-  An array of names of document fields on which to create the index. Currently,
-  geo indexes must cover exactly one field. If the value is a string, it will be
-  wrapped in an array automatically.
+  An array of names of document fields on which to create the index. Currently, geo indexes must cover exactly one field. If the value is a string, it will be wrapped in an array automatically.
 
 * **opts**: `Object` (optional)
 
   An object containing additional properties of the index.
 
-For more information on the properties of the _opts_ object see
-[the HTTP API for manipulating geo indexes](https://docs.macrometa.io/jsC8/latest/HTTP/Indexes/Geo.html).
-
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
 const index = await collection.createGeoIndex(['latitude', 'longitude']);
@@ -149,22 +143,18 @@ Creates a fulltext index on the collection.
 
 * **fields**: `Array<string>`
 
-  An array of names of document fields on which to create the index. Currently,
-  fulltext indexes must cover exactly one field. If the value is a string, it
-  will be wrapped in an array automatically.
+  An array of names of document fields on which to create the index. Currently, fulltext indexes must cover exactly one field. If the value is a string, it will be wrapped in an array automatically.
 
 * **minLength** (optional):
 
-  Minimum character length of words to index. Uses a server-specific default
-  value if not specified.
-
-For more information on fulltext indexes, see
-[the HTTP API for fulltext indexes](https://docs.macrometa.io/jsC8/latest/HTTP/Indexes/Fulltext.html).
+  Minimum character length of words to index. Uses a server-specific default value if not specified.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
 const index = await collection.createFulltextIndex('description');
@@ -182,10 +172,7 @@ assert.deepEqual(index.fields, ['description']);
 
 `async collection.createPersistentIndex(fields, [opts]): Object`
 
-Creates a Persistent index on the collection. Persistent indexes are similarly
-in operation to skiplist indexes, only that these indexes are in disk as opposed
-to in memory. This reduces memory usage and DB startup time, with the trade-off
-being that it will always be orders of magnitude slower than in-memory indexes.
+Creates a Persistent index on the collection. Persistent indexes are similarly in operation to skiplist indexes, only that these indexes are in disk as opposed to in memory. This reduces memory usage and DB startup time, with the trade-off being that it will always be orders of magnitude slower than in-memory indexes.
 
 **Arguments**
 
@@ -197,13 +184,14 @@ being that it will always be orders of magnitude slower than in-memory indexes.
 
   An object containing additional properties of the index.
 
-For more information on the properties of the _opts_ object see
-[the HTTP API for manipulating Persistent indexes](https://docs.macrometa.io/jsC8/latest/HTTP/Indexes/Persistent.html).
+For more information on the properties of the `opts` object see [the HTTP API for manipulating Persistent indexes](https://developer.document360.io/docs/indexing).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
 const index = await collection.createPersistentIndex(['name', 'email']);
@@ -215,20 +203,20 @@ assert.deepEqual(index.fields, ['name', 'email']);
 
 `async collection.index(indexHandle): Object`
 
-Fetches information about the index with the given _indexHandle_ and returns it.
+Fetches information about the index with the given `indexHandle` and returns it.
 
 **Arguments**
 
 * **indexHandle**: `string`
 
-  The handle of the index to look up. This can either be a fully-qualified
-  identifier or the collection-specific key of the index. If the value is an
-  object, its _id_ property will be used instead.
+  The handle of the index to look up. This can either be a fully-qualified identifier or the collection-specific key of the index. If the value is an object, its `id` property will be used instead.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
 const result = await collection.index(index.id);
@@ -252,6 +240,8 @@ Fetches a list of all indexes on this collection.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 await collection.createFulltextIndex('description')
 const indexes = await collection.indexes();
@@ -263,20 +253,20 @@ assert.equal(indexes.length, 1);
 
 `async collection.dropIndex(indexHandle): Object`
 
-Deletes the index with the given _indexHandle_ from the collection.
+Deletes the index with the given `indexHandle` from the collection.
 
 **Arguments**
 
 * **indexHandle**: `string`
 
-  The handle of the index to delete. This can either be a fully-qualified
-  identifier or the collection-specific key of the index. If the value is an
-  object, its _id_ property will be used instead.
+  The handle of the index to delete. This can either be a fully-qualified identifier or the collection-specific key of the index. If the value is an object, its `id` property will be used instead.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
 await collection.dropIndex(index.id);
@@ -294,8 +284,7 @@ await collection.dropIndex(index.id.split('/')[1]);
 
 Creates a cap constraint index on the collection.
 
-**Note**: This method is not available when using the driver with C8 3.0
-and higher as cap constraints are no longer supported.
+Note:-This method is not available when using the driver with C8 3.0 and higher as cap constraints are no longer supported.
 
 **Arguments**
 
@@ -311,15 +300,14 @@ and higher as cap constraints are no longer supported.
 
     The maximum size of active document data in the collection (in bytes).
 
-If _size_ is a number, it will be interpreted as _size.size_.
-
-For more information on the properties of the _size_ object see
-[the HTTP API for creating cap constraints](https://docs.macrometa.io/jsC8/2.8/HttpIndexes/Cap.html).
+If `size` is a number, it will be interpreted as `size.size`.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
 const index = await collection.createCapConstraint(20)
