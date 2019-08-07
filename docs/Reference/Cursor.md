@@ -190,7 +190,7 @@ Returns an array of the return values of `fn`.
 
 Equivalent to `Array.prototype.map` (except async).
 
-@(Info)(Note:-)(This creates an array of all return values. It is probably a bad idea to do this for very large query result sets.)
+Note:-This creates an array of all return values. It is probably a bad idea to do this for very large query result sets.
 
 **Arguments**
 
@@ -284,7 +284,7 @@ Deletes the cursor and frees the resources associated with it.
 
 The cursor will automatically be destroyed on the server when the client has retrieved all documents from it. The client can also explicitly destroy the cursor at any earlier time using an HTTP DELETE request. The cursor id must be included as part of the URL.
 
-@(Info)(Note:-)( C8 will also destroy abandoned cursors automatically after a certain server-controlled timeout to avoid resource leakage.)
+Note:-C8 will also destroy abandoned cursors automatically after a certain server-controlled timeout to avoid resource leakage.
 
 **Examples**
 
