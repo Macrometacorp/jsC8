@@ -1,11 +1,10 @@
-# Manipulating edges
+## Manipulating edges
 
 ## graph.edgeCollection
 
 `graph.edgeCollection(collectionName): GraphEdgeCollection`
 
-Returns a new [_GraphEdgeCollection_ instance](EdgeCollection.md) with
-the given name bound to this graph.
+Returns a new [GraphEdgeCollection  instance](https://developer.document360.io/docs/edgecollection) with the given name bound to this graph.
 
 **Arguments**
 
@@ -17,6 +16,8 @@ the given name bound to this graph.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 // assuming the collections "edges" and "vertices" exist
 const graph = fabric.graph("some-graph");
 const collection = graph.edgeCollection("edges");
@@ -28,19 +29,20 @@ assert.equal(collection.name, "edges");
 
 `async graph.addEdgeDefinition(definition): Object`
 
-Adds the given edge definition _definition_ to the graph.
+Adds the given edge definition `definition` to the graph.
 
 **Arguments**
 
 * **definition**: `Object`
 
-  For more information on edge definitions see
-  [the HTTP API for managing graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Graph/Management.html).
+  For more information on edge definitions see [the HTTP API for managing graphs](https://developer.document360.io/docs/graphs).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 // assuming the collections "edges" and "vertices" exist
 const graph = fabric.graph('some-graph');
 await graph.addEdgeDefinition({
@@ -55,8 +57,8 @@ await graph.addEdgeDefinition({
 
 `async graph.replaceEdgeDefinition(collectionName, definition): Object`
 
-Replaces the edge definition for the edge collection named _collectionName_ with
-the given _definition_.
+Replaces the edge definition for the edge collection named `collectionName` with
+the given `definition`.
 
 **Arguments**
 
@@ -66,13 +68,14 @@ the given _definition_.
 
 * **definition**: `Object`
 
-  For more information on edge definitions see
-  [the HTTP API for managing graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Graph/Management.html).
+  For more information on edge definitions see [the HTTP API for managing graphs](https://developer.document360.io/docs/graphs).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 // assuming the collections "edges", "vertices" and "more-vertices" exist
 const graph = fabric.graph('some-graph');
 await graph.replaceEdgeDefinition('edges', {
@@ -87,7 +90,7 @@ await graph.replaceEdgeDefinition('edges', {
 
 `async graph.removeEdgeDefinition(definitionName, [dropCollection]): Object`
 
-Removes the edge definition with the given _definitionName_ form the graph.
+Removes the edge definition with the given `definitionName` form the graph.
 
 **Arguments**
 
@@ -97,13 +100,14 @@ Removes the edge definition with the given _definitionName_ form the graph.
 
 * **dropCollection**: `boolean` (optional)
 
-  If set to `true`, the edge collection associated with the definition will also
-  be deleted from the fabric.
+  If set to `true`, the edge collection associated with the definition will also be deleted from the fabric.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 
 await graph.removeEdgeDefinition('edges')
@@ -121,32 +125,26 @@ await graph.removeEdgeDefinition('edges', true)
 
 `async graph.traversal(startVertex, opts): Object`
 
-Performs a traversal starting from the given _startVertex_ and following edges
-contained in any of the edge collections of this graph.
+Performs a traversal starting from the given `startVertex` and following edges contained in any of the edge collections of this graph.
 
 **Arguments**
 
 * **startVertex**: `string`
 
-  The handle of the start vertex. This can be either the `_id` of a document in
-  the graph or a document (i.e. an object with an `_id` property).
+  The handle of the start vertex. This can be either the `_id` of a document in the graph or a document (i.e. an object with an `_id` property).
 
 * **opts**: `Object`
 
-  See
-  [the HTTP API documentation](https://docs.macrometa.io/jsC8/latest/HTTP/Traversal/index.html)
-  for details on the additional arguments.
+  See [the HTTP API documentation](https://developer.document360.io/docs/indexing) for details on the additional arguments.
 
-  Please note that while _opts.filter_, _opts.visitor_, _opts.init_,
-  _opts.expander_ and _opts.sort_ should be strings evaluating to well-formed
-  JavaScript functions, it's not possible to pass in JavaScript functions
-  directly because the functions need to be evaluated on the server and will be
-  transmitted in plain text.
+Note:-Please note that while `opts.filte`, `opts.visitor`, `opts.init`, `opts.expander` and `opts.sort` should be strings evaluating to well-formed JavaScript functions, it's not possible to pass in JavaScript functions directly because the functions need to be evaluated on the server and will be transmitted in plain text.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
