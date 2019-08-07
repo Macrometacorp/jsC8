@@ -1,7 +1,6 @@
-# Graph API
+## Graph 
 
-These functions implement the
-[HTTP API for manipulating graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Graph/index.html).
+These functions implement the [HTTP API for manipulating graphs](https://developer.document360.io/docs/graphs).
 
 ## graph.exists
 
@@ -13,6 +12,8 @@ Checks whether the graph exists.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const result = await graph.exists();
 // result indicates whether the graph exists
@@ -28,6 +29,8 @@ Retrieves general information about the graph.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const data = await graph.get();
 // data contains general information about the graph
@@ -37,20 +40,20 @@ const data = await graph.get();
 
 `async graph.create(properties): Object`
 
-Creates a graph with the given _properties_ for this graph's name, then returns
-the server response.
+Creates a graph with the given `properties` for this graph's name, then returns the server response.
 
 **Arguments**
 
 - **properties**: `Object`
 
-  For more information on the _properties_ object, see
-  [the HTTP API documentation for creating graphs](https://docs.macrometa.io/jsC8/latest/HTTP/Graph/Management.html).
+  For more information on the `properties` object, see  [the HTTP API documentation for creating graphs](https://developer.document360.io/docs/graphs).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const info = await graph.create({
   edgeDefinitions: [{
@@ -72,13 +75,14 @@ Deletes the graph from the fabric.
 
 - **dropCollections**: `boolean` (optional)
 
-  If set to `true`, the collections associated with the graph will also be
-  deleted.
+  If set to `true`, the collections associated with the graph will also be deleted.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 await graph.drop();
 // the graph "some-graph" no longer exists
