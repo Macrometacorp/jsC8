@@ -1,13 +1,12 @@
-# Accessing collections
+## Accessing collections
 
-These functions implement the
-[HTTP API for accessing collections](https://docs.macrometa.io/jsC8/latest/HTTP/Collection/Getting.html).
+These functions implement the [HTTP API for accessing collections](https://developer.document360.io/docs/collections).
 
 ## fabric.collection
 
 `fabric.collection(collectionName): DocumentCollection`
 
-Returns a _DocumentCollection_ instance for the given collection name.
+Returns a `DocumentCollection` instance for the given collection name.
 
 **Arguments**
 
@@ -19,6 +18,8 @@ Returns a _DocumentCollection_ instance for the given collection name.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection("potatoes");
 ```
 
@@ -26,7 +27,7 @@ const collection = fabric.collection("potatoes");
 
 `fabric.edgeCollection(collectionName): EdgeCollection`
 
-Returns an _EdgeCollection_ instance for the given collection name.
+Returns an `EdgeCollection` instance for the given collection name.
 
 **Arguments**
 
@@ -38,6 +39,8 @@ Returns an _EdgeCollection_ instance for the given collection name.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const collection = fabric.edgeCollection("potatoes");
 ```
 
@@ -45,8 +48,7 @@ const collection = fabric.edgeCollection("potatoes");
 
 `async fabric.listCollections([excludeSystem]): Array<Object>`
 
-Fetches all collections from the fabric and returns an array of collection
-descriptions.
+Fetches all collections from the fabric and returns an array of collection descriptions.
 
 **Arguments**
 
@@ -58,7 +60,8 @@ descriptions.
 
 ```js
 const fabric = new Fabric();
-
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collections = await fabric.listCollections();
 // collections is an array of collection descriptions
 // not including system collections
@@ -75,7 +78,7 @@ const collections = await fabric.listCollections(false);
 `async fabric.collections([excludeSystem]): Array<Collection>`
 
 Fetches all collections from the fabric and returns an array of
-_DocumentCollection_ and _EdgeCollection_ instances for the collections.
+`DocumentCollection` and `EdgeCollection` instances for the collections.
 
 **Arguments**
 
@@ -87,7 +90,8 @@ _DocumentCollection_ and _EdgeCollection_ instances for the collections.
 
 ```js
 const fabric = new Fabric();
-
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collections = await fabric.collections()
 // collections is an array of DocumentCollection
 // and EdgeCollection instances
