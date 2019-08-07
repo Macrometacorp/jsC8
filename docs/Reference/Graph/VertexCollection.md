@@ -1,129 +1,90 @@
-# GraphVertexCollection API
+## Graph API
 
-The _GraphVertexCollection API_ extends the
-[_Collection API_](../Collection/README.md) with the following methods.
+These functions implement the [HTTP API for manipulating graphs](https://developer.document360.io/docs/indexing).
 
-## graphVertexCollection.remove
+## graph.exists
 
-`async graphVertexCollection.remove(documentHandle): Object`
+`async graph.exists(): boolean`
 
-Deletes the vertex with the given _documentHandle_ from the collection.
-
-**Arguments**
-
-- **documentHandle**: `string`
-
-  The handle of the vertex to retrieve. This can be either the `_id` or the
-  `_key` of a vertex in the collection, or a vertex (i.e. an object with an
-  `_id` or `_key` property).
-
-**Examples**
-
-```js
-const graph = fabric.graph('some-graph');
-const collection = graph.vertexCollection('vertices');
-
-await collection.remove('some-key')
-// document 'vertices/some-key' no longer exists
-
-// -- or --
-
-await collection.remove('vertices/some-key')
-// document 'vertices/some-key' no longer exists
-```
-
-## graphVertexCollection.documentExists
-
-`async graphVertexCollection.documentExists(documentHandle): boolean`
-
-Checks whether the vertex with the given _documentHandle_ exists.
-
-**Arguments**
-
-- **documentHandle**: `string`
-
-  The handle of the vertex to retrieve. This can be either the `_id` or the
-  `_key` of a vertex in the collection, or a vertex (i.e. an object with an
-  `_id` or `_key` property).
-
-**Examples**
-
-```js
-const graph = fabric.graph('some-graph');
-const collection = graph.vertexCollection('vertices');
-
-const exists = await collection.documentExists('some-key');
-if (exists === false) {
-  // the vertex does not exist
-}
-```
-
-## graphVertexCollection.document
-
-`async graphVertexCollection.document(documentHandle, [graceful]): Object`
-
-Alias: `graphVertexCollection.vertex`.
-
-Retrieves the vertex with the given _documentHandle_ from the collection.
-
-**Arguments**
-
-- **documentHandle**: `string`
-
-  The handle of the vertex to retrieve. This can be either the `_id` or the
-  `_key` of a vertex in the collection, or a vertex (i.e. an object with an
-  `_id` or `_key` property).
-
-- **graceful**: `boolean` (Default: `false`)
-
-  If set to `true`, the method will return `null` instead of throwing an error
-  if the vertex does not exist.
-
-**Examples**
-
-```js
-const graph = fabric.graph('some-graph');
-const collection = graph.vertexCollection('vertices');
-
-const doc = await collection.document('some-key');
-// the vertex exists
-assert.equal(doc._key, 'some-key');
-assert.equal(doc._id, 'vertices/some-key');
-
-// -- or --
-
-const doc = await collection.document('vertices/some-key');
-// the vertex exists
-assert.equal(doc._key, 'some-key');
-assert.equal(doc._id, 'vertices/some-key');
-
-// -- or --
-
-const doc = await collection.vertex('some-key', true);
-if (doc === null) {
-  // the vertex does not exist
-}
-```
-
-## graphVertexCollection.save
-
-`async graphVertexCollection.save(data): Object`
-
-Creates a new vertex with the given _data_.
-
-**Arguments**
-
-- **data**: `Object`
-
-  The data of the vertex.
+Checks whether the graph exists.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
-const collection = graph.vertexCollection('vertices');
-const doc = await collection.save({some: 'data'});
-assert.equal(doc._id, 'vertices/' + doc._key);
-assert.equal(doc.some, 'data');
+const result = await graph.exists();
+// result indicates whether the graph exists
+```
+
+## graph.get
+
+`async graph.get(): Object`
+
+Retrieves general information about the graph.
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
+const graph = fabric.graph('some-graph');
+const data = await graph.get();
+// data contains general information about the graph
+```
+
+## graph.create
+
+`async graph.create(properties): Object`
+
+Creates a graph with the given `properties` for this graph's name, then returns the server response.
+
+**Arguments**
+
+- **properties**: `Object`
+
+  For more information on the `properties` object, see
+  [the HTTP API documentation for creating graphs](https://developer.document360.io/docs/overview-6).
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
+const graph = fabric.graph('some-graph');
+const info = await graph.create({
+  edgeDefinitions: [{
+    collection: 'edges',
+    from: ['start-vertices'],
+    to: ['end-vertices']
+  }]
+});
+// graph now exists
+```
+
+## graph.drop
+
+`async graph.drop([dropCollections]): Object`
+
+Deletes the graph from the fabric.
+
+**Arguments**
+
+- **dropCollections**: `boolean` (optional)
+
+  If set to `true`, the collections associated with the graph will also be deleted.
+
+**Examples**
+
+```js
+const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
+const graph = fabric.graph('some-graph');
+await graph.drop();
+// the graph "some-graph" no longer exists
 ```
