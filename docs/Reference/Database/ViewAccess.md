@@ -1,13 +1,12 @@
 # Accessing views
 
-These functions implement the
-[HTTP API for accessing views](https://docs.macrometa.io/jsC8/latest/HTTP/Views/Getting.html).
+These functions implement the HTTP API for accessing views.
 
 ## fabric.c8SearchView
 
 `fabric.c8SearchView(viewName): c8SearchView`
 
-Returns a _c8SearchView_ instance for the given view name.
+Returns a `c8SearchView`  instance for the given view name.
 
 **Arguments**
 
@@ -43,12 +42,14 @@ const views = await fabric.listViews();
 `async fabric.views([excludeSystem]): Array<View>`
 
 Fetches all views from the fabric and returns an array of
-_c8SearchView_ instances for the views.
+`c8SearchView` instances for the views.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 
 const views = await fabric.views()
 // views is an array of c8SearchView instances
