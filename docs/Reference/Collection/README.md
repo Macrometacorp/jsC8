@@ -1,20 +1,12 @@
-# Collection API
+## Collection
 
-These functions implement the
-[HTTP API for manipulating collections](https://docs.macrometa.io/jsC8/latest/HTTP/Collection/index.html).
+These functions implement the [HTTP API for manipulating collections](https://developer.document360.io/docs/collections).
 
-The _Collection API_ is implemented by all _Collection_ instances, regardless of
-their specific type. I.e. it represents a shared subset between instances of
-[_DocumentCollection_](DocumentCollection.md),
-[_EdgeCollection_](EdgeCollection.md),
-[_GraphVertexCollection_](../Graph/VertexCollection.md) and
-[_GraphEdgeCollection_](../Graph/EdgeCollection.md).
+The `Collection API` is implemented by all `Collection` instances, regardless of their specific type. I.e. it represents a shared subset between instances of [_DocumentCollection_](https://developer.document360.io/docs/documentcollection),[_EdgeCollection_](https://developer.document360.io/docs/edgecollection) ,[_GraphVertexCollection_](https://developer.document360.io/docs/vertexcollection) and [_GraphEdgeCollection_](https://developer.document360.io/docs/edgecollection-1).
 
 ## Getting information about the collection
 
-See
-[the HTTP API documentation](https://docs.macrometa.io/jsC8/latest/HTTP/Collection/Getting.html)
-for details.
+See [the HTTP API documentation ](https://developer.document360.io/docs/collections)for details.
 
 ## collection.exists
 
@@ -26,6 +18,8 @@ Checks whether the collection exists.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const result = await collection.exists();
 // result indicates whether the collection exists
@@ -41,6 +35,8 @@ Retrieves general information about the collection.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = await collection.get();
 // data contains general information about the collection
@@ -71,6 +67,8 @@ Retrieves information about the number of documents in a collection.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = await collection.count();
 // data contains the collection's count
@@ -86,6 +84,8 @@ Retrieves statistics for a collection.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = await collection.figures();
 // data contains the collection's figures
@@ -101,6 +101,8 @@ Retrieves the collection revision ID.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = await collection.revision();
 // data contains the collection's revision
@@ -123,6 +125,8 @@ Retrieves the collection checksum.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = await collection.checksum();
 // data contains the collection's checksum
