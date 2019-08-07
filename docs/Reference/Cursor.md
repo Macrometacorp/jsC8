@@ -1,12 +1,11 @@
-# Cursor API
+## Cursor API
 
-_Cursor_ instances provide an abstraction over the HTTP API's limitations.
-Unless a method explicitly exhausts the cursor, the driver will only fetch as
-many batches from the server as necessary. Like the server-side cursors,
-_Cursor_ instances are incrementally depleted as they are read from.
+`Cursor` instances provide an abstraction over the HTTP API's limitations.Unless a method explicitly exhausts the cursor, the driver will only fetch as many batches from the server as necessary. Like the server-side cursors,`Cursor` instances are incrementally depleted as they are read from.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const cursor = await fabric.query('FOR x IN 1..5 RETURN x');
 // query result list: [1, 2, 3, 4, 5]
 const value = await cursor.next();
@@ -25,8 +24,7 @@ The total number of documents in the query result. This is only available if the
 
 `async cursor.all(): Array<Object>`
 
-Exhausts the cursor, then returns an array containing all values in the cursor's
-remaining result list.
+Exhausts the cursor, then returns an array containing all values in the cursor's remaining result list.
 
 **Examples**
 
@@ -42,8 +40,7 @@ assert.equal(cursor.hasNext(), false);
 
 `async cursor.next(): Object`
 
-Advances the cursor and returns the next value in the cursor's remaining result
-list. If the cursor has already been exhausted, returns `undefined` instead.
+Advances the cursor and returns the next value in the cursor's remaining result list. If the cursor has already been exhausted, returns `undefined` instead.
 
 **Examples**
 
@@ -62,8 +59,7 @@ assert.equal(val2, 2);
 
 `cursor.hasNext(): boolean`
 
-Returns `true` if the cursor has more values or `false` if the cursor has been
-exhausted.
+Returns `true` if the cursor has more values or `false` if the cursor has been exhausted.
 
 **Examples**
 
@@ -76,20 +72,17 @@ assert.equal(cursor.hasNext(), false);
 
 `async cursor.each(fn): any`
 
-Advances the cursor by applying the function _fn_ to each value in the cursor's
-remaining result list until the cursor is exhausted or _fn_ explicitly returns
-`false`.
+Advances the cursor by applying the function _fn_ to each value in the cursor's remaining result list until the cursor is exhausted or `fn` explicitly returns `false`.
 
-Returns the last return value of _fn_.
+Returns the last return value of `fn`.
 
-Equivalent to _Array.prototype.forEach_ (except async).
+Equivalent to `Array.prototype.forEach` (except async).
 
 **Arguments**
 
 * **fn**: `Function`
 
-  A function that will be invoked for each value in the cursor's remaining
-  result list until it explicitly returns `false` or the cursor is exhausted.
+  A function that will be invoked for each value in the cursor's remaining result list until it explicitly returns `false` or the cursor is exhausted.
 
   The function receives the following arguments:
 
@@ -126,23 +119,17 @@ assert.equal(last, 'C');
 
 `async cursor.every(fn): boolean`
 
-Advances the cursor by applying the function _fn_ to each value in the cursor's
-remaining result list until the cursor is exhausted or _fn_ returns a value that
-evaluates to `false`.
+Advances the cursor by applying the function `fn` to each value in the cursor's remaining result list until the cursor is exhausted or `fn` returns a value that evaluates to `false`.
 
-Returns `false` if _fn_ returned a value that evaluates to `false`, or `true`
-otherwise.
+Returns `false` if `fn` returned a value that evaluates to `false`, or `true`otherwise.
 
-Equivalent to _Array.prototype.every_ (except async).
+Equivalent to `Array.prototype.every`(except async).
 
 **Arguments**
 
 * **fn**: `Function`
 
-  A function that will be invoked for each value in the cursor's remaining
-  result list until it returns a value that evaluates to `false` or the cursor
-  is exhausted.
-
+  A function that will be invoked for each value in the cursor's remaining result list until it returns a value that evaluates to `false` or the cursor is exhausted.
   The function receives the following arguments:
 
   * **value**: `any`
@@ -173,14 +160,11 @@ assert.equal(value, 4); // next value after 3
 
 `async cursor.some(fn): boolean`
 
-Advances the cursor by applying the function _fn_ to each value in the cursor's
-remaining result list until the cursor is exhausted or _fn_ returns a value that
-evaluates to `true`.
+Advances the cursor by applying the function `fn` to each value in the cursor's remaining result list until the cursor is exhausted or `fn` returns a value that evaluates to `true`.
 
-Returns `true` if _fn_ returned a value that evalutes to `true`, or `false`
-otherwise.
+Returns `true` if `fn` returned a value that evalutes to `true`, or `false` otherwise.
 
-Equivalent to _Array.prototype.some_ (except async).
+Equivalent to `Array.prototype.some` (except async).
 
 **Examples**
 
@@ -200,22 +184,19 @@ assert.equal(value, 3); // next value after 2
 
 `cursor.map(fn): Array<any>`
 
-Advances the cursor by applying the function _fn_ to each value in the cursor's
-remaining result list until the cursor is exhausted.
+Advances the cursor by applying the function `fn` to each value in the cursor's remaining result list until the cursor is exhausted.
 
-Returns an array of the return values of _fn_.
+Returns an array of the return values of `fn`.
 
-Equivalent to _Array.prototype.map_ (except async).
+Equivalent to `Array.prototype.map` (except async).
 
-**Note**: This creates an array of all return values. It is probably a bad idea
-to do this for very large query result sets.
+@(Info)(Note:-)(This creates an array of all return values. It is probably a bad idea to do this for very large query result sets.)
 
 **Arguments**
 
 * **fn**: `Function`
 
-  A function that will be invoked for each value in the cursor's remaining
-  result list until the cursor is exhausted.
+  A function that will be invoked for each value in the cursor's remaining result list until the cursor is exhausted.
 
   The function receives the following arguments:
 
@@ -246,19 +227,16 @@ assert.equal(cursor.hasNext(), false);
 
 `cursor.reduce(fn, [accu]): any`
 
-Exhausts the cursor by reducing the values in the cursor's remaining result list
-with the given function _fn_. If _accu_ is not provided, the first value in the
-cursor's remaining result list will be used instead (the function will not be
+Exhausts the cursor by reducing the values in the cursor's remaining result list with the given function `fn`. If `accu` is not provided, the first value in the cursor's remaining result list will be used instead (the function will not be
 invoked for that value).
 
-Equivalent to _Array.prototype.reduce_ (except async).
+Equivalent to `Array.prototype.reduce` (except async).
 
 **Arguments**
 
 * **fn**: `Function`
 
-  A function that will be invoked for each value in the cursor's remaining
-  result list until the cursor is exhausted.
+  A function that will be invoked for each value in the cursor's remaining  result list until the cursor is exhausted.
 
   The function receives the following arguments:
 
@@ -306,7 +284,7 @@ Deletes the cursor and frees the resources associated with it.
 
 The cursor will automatically be destroyed on the server when the client has retrieved all documents from it. The client can also explicitly destroy the cursor at any earlier time using an HTTP DELETE request. The cursor id must be included as part of the URL.
 
->Note: C8 will also destroy abandoned cursors automatically after a certain server-controlled timeout to avoid resource leakage.
+@(Info)(Note:-)( C8 will also destroy abandoned cursors automatically after a certain server-controlled timeout to avoid resource leakage.)
 
 **Examples**
 
