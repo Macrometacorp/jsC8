@@ -1,26 +1,25 @@
-# GraphEdgeCollection API
+## GraphEdgeCollection 
 
-The _GraphEdgeCollection API_ extends the
-[_Collection API_](../Collection/README.md) with the following methods.
+The GraphEdgeCollection API extends the [Collection API](https://developer.document360.io/docs/collections) with the following methods.
 
 ## graphEdgeCollection.remove
 
 `async graphEdgeCollection.remove(documentHandle): Object`
 
-Deletes the edge with the given _documentHandle_ from the collection.
+Deletes the edge with the given `documentHandle` from the collection.
 
 **Arguments**
 
 - **documentHandle**: `string`
 
-  The handle of the edge to retrieve. This can be either the `_id` or the `_key`
-  of an edge in the collection, or an edge (i.e. an object with an `_id` or
-  `_key` property).
+  The handle of the edge to retrieve. This can be either the `_id` or the `_key`  of an edge in the collection, or an edge (i.e. an object with an `_id` or `_key` property).
 
 **Examples**
 
 ```js
 const graph = fabric.graph('some-graph');
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
 await collection.remove('some-key')
@@ -36,7 +35,7 @@ await collection.remove('edges/some-key')
 
 `async graphEdgeCollection.documentExists(documentHandle): boolean`
 
-Checks whether the edge with the given _documentHandle_ exists.
+Checks whether the edge with the given `documentHandle` exists.
 
 **Arguments**
 
@@ -50,6 +49,8 @@ Checks whether the edge with the given _documentHandle_ exists.
 
 ```js
 const graph = fabric.graph('some-graph');
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
 const exists = await collection.documentExists('some-key');
@@ -64,25 +65,24 @@ if (exists === false) {
 
 Alias: `graphEdgeCollection.edge`.
 
-Retrieves the edge with the given _documentHandle_ from the collection.
+Retrieves the edge with the given `documentHandle` from the collection.
 
 **Arguments**
 
 - **documentHandle**: `string`
 
-  The handle of the edge to retrieve. This can be either the `_id` or the `_key`
-  of an edge in the collection, or an edge (i.e. an object with an `_id` or
-  `_key` property).
+  The handle of the edge to retrieve. This can be either the `_id` or the `_key` of an edge in the collection, or an edge (i.e. an object with an `_id` or `_key` property).
 
 - **graceful**: `boolean` (Default: `false`)
 
-  If set to `true`, the method will return `null` instead of throwing an error
-  if the edge does not exist.
+  If set to `true`, the method will return `null` instead of throwing an error  if the edge does not exist.
 
 **Examples**
 
 ```js
 const graph = fabric.graph('some-graph');
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
 const edge = await collection.document('some-key');
@@ -109,32 +109,28 @@ if (edge === null) {
 
 `async graphEdgeCollection.save(data, [fromId, toId]): Object`
 
-Creates a new edge between the vertices _fromId_ and _toId_ with the given
-_data_.
+Creates a new edge between the vertices `fromId` and `toId` with the given `data`.
 
 **Arguments**
 
 - **data**: `Object`
 
-  The data of the new edge. If _fromId_ and _toId_ are not specified, the _data_
-  needs to contain the properties **from\_ and **to\_.
+  The data of the new edge. If `fromId` and `toId` are not specified, the `data` needs to contain the properties **from\_ and **to\_.
 
 - **fromId**: `string` (optional)
 
-  The handle of the start vertex of this edge. This can be either the `_id` of a
-  document in the fabric, the `_key` of an edge in the collection, or a
-  document (i.e. an object with an `_id` or `_key` property).
+  The handle of the start vertex of this edge. This can be either the `_id` of a document in the fabric, the `_key` of an edge in the collection, or a  document (i.e. an object with an `_id` or `_key` property).
 
 - **toId**: `string` (optional)
 
-  The handle of the end vertex of this edge. This can be either the `_id` of a
-  document in the fabric, the `_key` of an edge in the collection, or a
-  document (i.e. an object with an `_id` or `_key` property).
+  The handle of the end vertex of this edge. This can be either the `_id` of a  document in the fabric, the `_key` of an edge in the collection, or a document (i.e. an object with an `_id` or `_key` property).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 const edge = await collection.save(
@@ -152,20 +148,20 @@ assert.equal(edge._to, 'vertices/end-vertex');
 
 `async graphEdgeCollection.edges(documentHandle): Array<Object>`
 
-Retrieves a list of all edges of the document with the given _documentHandle_.
+Retrieves a list of all edges of the document with the given `documentHandle`.
 
 **Arguments**
 
 - **documentHandle**: `string`
 
-  The handle of the document to retrieve the edges of. This can be either the
-  `_id` of a document in the fabric, the `_key` of an edge in the collection,
-  or a document (i.e. an object with an `_id` or `_key` property).
+  The handle of the document to retrieve the edges of. This can be either the `_id` of a document in the fabric, the `_key` of an edge in the collection,  or a document (i.e. an object with an `_id` or `_key` property).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
@@ -183,16 +179,13 @@ assert.deepEqual(edges.map(edge => edge._key), ['x', 'y', 'z']);
 
 `async graphEdgeCollection.inEdges(documentHandle): Array<Object>`
 
-Retrieves a list of all incoming edges of the document with the given
-_documentHandle_.
+Retrieves a list of all incoming edges of the document with the given `documentHandle`.
 
 **Arguments**
 
 - **documentHandle**: `string`
 
-  The handle of the document to retrieve the edges of. This can be either the
-  `_id` of a document in the fabric, the `_key` of an edge in the collection,
-  or a document (i.e. an object with an `_id` or `_key` property).
+  The handle of the document to retrieve the edges of. This can be either the `_id` of a document in the fabric, the `_key` of an edge in the collection,  or a document (i.e. an object with an `_id` or `_key` property).
 
 **Examples**
 
@@ -215,21 +208,20 @@ assert.equal(edges[0]._key, 'z');
 
 `async graphEdgeCollection.outEdges(documentHandle): Array<Object>`
 
-Retrieves a list of all outgoing edges of the document with the given
-_documentHandle_.
+Retrieves a list of all outgoing edges of the document with the given `documentHandle`.
 
 **Arguments**
 
 - **documentHandle**: `string`
 
-  The handle of the document to retrieve the edges of. This can be either the
-  `_id` of a document in the fabric, the `_key` of an edge in the collection,
-  or a document (i.e. an object with an `_id` or `_key` property).
+  The handle of the document to retrieve the edges of. This can be either the  `_id` of a document in the fabric, the `_key` of an edge in the collection,  or a document (i.e. an object with an `_id` or `_key` property).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
@@ -247,33 +239,24 @@ assert.deepEqual(edges.map(edge => edge._key), ['x', 'y']);
 
 `async graphEdgeCollection.traversal(startVertex, opts): Object`
 
-Performs a traversal starting from the given _startVertex_ and following edges
-contained in this edge collection.
+Performs a traversal starting from the given _startVertex_ and following edges contained in this edge collection.
 
 **Arguments**
 
 - **startVertex**: `string`
 
-  The handle of the start vertex. This can be either the `_id` of a document in
-  the fabric, the `_key` of an edge in the collection, or a document (i.e. an
-  object with an `_id` or `_key` property).
+  The handle of the start vertex. This can be either the `_id` of a document in   the fabric, the `_key` of an edge in the collection, or a document (i.e. an object with an `_id` or `_key` property).
 
 - **opts**: `Object`
 
-  See
-  [the HTTP API documentation](https://docs.macrometa.io/jsC8/latest/HTTP/Traversal/index.html)
-  for details on the additional arguments.
-
-  Please note that while _opts.filter_, _opts.visitor_, _opts.init_,
-  _opts.expander_ and _opts.sort_ should be strings evaluating to well-formed
-  JavaScript code, it's not possible to pass in JavaScript functions directly
-  because the code needs to be evaluated on the server and will be transmitted
-  in plain text.
+Note:-Please note that while `opts.filter`, `opts.visitor`, `opts.init`, `opts.expander` and `opts.sort` should be strings evaluating to well-formed JavaScript code, it's not possible to pass in JavaScript functions directly  because the code needs to be evaluated on the server and will be transmitted  in plain text.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
