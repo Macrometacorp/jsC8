@@ -1,13 +1,12 @@
-# DocumentCollection API
+## DocumentCollection 
 
-The _DocumentCollection API_ extends the
-[_Collection API_](README.md) with the following methods.
+The `DocumentCollection API` extends the [_Collection API_](https://developer.document360.io/docs/overview-4)        with the following methods.
 
 ## documentCollection.document
 
 `async documentCollection.document(documentHandle, [graceful]): Object`
 
-Retrieves the document with the given _documentHandle_ from the collection.
+Retrieves the document with the given `documentHandle` from the collection.
 
 **Arguments**
 
@@ -26,6 +25,8 @@ Retrieves the document with the given _documentHandle_ from the collection.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('my-docs');
 
 try {
@@ -62,7 +63,7 @@ if (doc === null) {
 
 `async documentCollection.documentExists(documentHandle): boolean`
 
-Checks whether the document with the given _documentHandle_ exists.
+Checks whether the document with the given `documentHandle` exists.
 
 **Arguments**
 
@@ -76,6 +77,8 @@ Checks whether the document with the given _documentHandle_ exists.
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('my-docs');
 
 const exists = await collection.documentExists('some-key');
@@ -88,7 +91,7 @@ if (exists === false) {
 
 `async documentCollection.save(data, [opts]): Object`
 
-Creates a new document with the given _data_ and returns an object containing
+Creates a new document with the given `data` and returns an object containing
 the document's metadata.
 
 **Arguments**
@@ -127,16 +130,17 @@ the document's metadata.
     same \_key already exists the new document is not rejected with unique
     constraint violated but will replace the old document.
 
-If a boolean is passed instead of an options object, it will be interpreted as
-the _returnNew_ option.
+@(Info)(Note:-)(If a boolean is passed instead of an options object, it will be interpreted as the `returnNew` option.)
 
 For more information on the _opts_ object, see
-[the HTTP API documentation for working with documents](https://docs.macrometa.io/jsC8/latest/HTTP/Document/WorkingWithDocuments.html).
+[the HTTP API documentation for working with documents](https://developer.document360.io/docs/documents).
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('my-docs');
 const data = {some: 'data'};
 const info = await collection.save(data);
@@ -149,6 +153,8 @@ assert.equal(doc2.some, data.some);
 // -- or --
 
 const fabric = new Fabric();
+await fabric.login(tenant-name, user ,password);
+fabric.useTenant(tenant-name)
 const collection = fabric.collection('my-docs');
 const data = {some: 'data'};
 const opts = {returnNew: true};
