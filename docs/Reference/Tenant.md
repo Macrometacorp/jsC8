@@ -107,6 +107,22 @@ await tenant.createTenant("myPassword", {});
 await tenant.dropTenant();
 ```
 
+## tenant.getTenantEdgeLocations
+
+`async tenant.getTenantEdgeLocations(): Object`
+
+Fetches data about the Edge Locations specific to this tenant.
+
+**Examples**
+```js
+const fabric = new Fabric();
+await fabric.login(tenant-name, user, password);
+fabric.useTenant(tenant-name);
+const tenant = fabric.tenant(tenant-name);
+const locations = await tenant.getTenantEdgeLocations();
+```
+
+
 ## tenant.tenantDetails
 
 `async tenant.tenantDetails(): Object`

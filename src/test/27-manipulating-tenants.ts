@@ -1,4 +1,4 @@
-// Tenant manipulation can only be performed by _mm root _system 
+// Tenant manipulation can only be performed by _mm root _system
 
 // import { expect } from "chai";
 // import { Fabric } from "../jsC8";
@@ -21,9 +21,9 @@
 
 //     await fabric.login("demo", "root", "demo");
 //     fabric.useTenant("demo");
-    
+
 //   });
-  
+
 
 //   after(() => {
 //     fabric.close();
@@ -141,3 +141,5 @@
 //     });
 //   });
 // });
+
+// tenant.getTenantEdgeLocations

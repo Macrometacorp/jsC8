@@ -38,6 +38,17 @@ export class Tenant {
         );
     }
 
+    getTenantEdgeLocations() {
+        return this._connection.request(
+            {
+                method: "GET",
+                path: `/datacenter/_tenant/${this.name}`,
+                absolutePath: true
+            },
+            res => res.body
+        )
+    }
+
     tenantDetails() {
         return this._connection.request(
             {
