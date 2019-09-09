@@ -7,7 +7,7 @@ describe("Manipulating pipelines", function() {
   
     let fabric: Fabric;
     const testUrl: string =
-      process.env.TEST_C8_URL || "https://qa1.macrometa.io";
+      process.env.TEST_C8_URL || "https://test.macrometa.io";
   
     before(async () => {
       fabric = new Fabric({
