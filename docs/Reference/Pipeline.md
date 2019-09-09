@@ -38,7 +38,7 @@ const pipeline = fabric.pipeline("testPipeline");
 
 ## pipeline.create
 
-`async pipeline.create(regions, enabled, config): string`
+`async pipeline.create(regions, enabled, config): Object`
 
 Creates a pipeline.
 
@@ -67,7 +67,7 @@ await pipeline.create(["test-eu-west-1", "test-us-west-2"], true , {});
 
 ## pipeline.drop
 
-`async pipeline.drop: string`
+`async pipeline.drop: Object`
 
 Deletes the pipeline.
 
@@ -101,7 +101,7 @@ await pipeline.details();
 
 ## pipeline.update
 
-`async pipeline.update(regions, enabled, config): string`
+`async pipeline.update(regions, enabled, config): Object`
 
 Modifies the given pipeline.
 
