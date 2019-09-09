@@ -19,6 +19,7 @@ import { Tenant } from "./tenant";
 import { Stream } from "./stream";
 import { Route } from "./route";
 import { btoa } from "./util/btoa";
+import { Pipeline } from './pipeline';
 import User from "./user";
 
 function colToString(collection: string | C8Collection): string {
@@ -229,6 +230,20 @@ export class Fabric {
       },
       res => res.body
     );
+  }
+
+  getPipelines() {
+    return this._connection.request(
+      {
+          method: "GET",
+          path: `/pipelines`,
+      },
+      res => res.body
+    );
+  }
+
+  pipeline(pipelineName: string) {
+    return new Pipeline(this._connection, pipelineName);
   }
 
   // Collection manipulation
