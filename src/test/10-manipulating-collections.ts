@@ -75,6 +75,25 @@ describe("Manipulating collections", async function() {
         .then(() => void done())
         .catch(done);
     });
+    it("creates a new local document collection", done => {
+      const collection = fabric.collection(`documentcollection${Date.now()}`);
+      collection
+        .create({isLocal: true})
+        .then(() => {
+          return fabric
+            .collection(collection.name)
+            .get()
+            .then(info => {
+              expect(info).to.have.property("name", collection.name);
+              expect(info).to.have.property("isSystem", false);
+              expect(info).to.have.property("status", 3); // loaded
+              expect(info).to.have.property("type", 2); // document collection
+              expect(info).to.have.property("isLocal", true); // local geo-distribution
+            });
+        })
+        .then(() => void done())
+        .catch(done);
+    });
     it("creates a new edge collection", done => {
       const collection = fabric.edgeCollection(`edgecollection${Date.now()}`);
       collection
@@ -88,6 +107,25 @@ describe("Manipulating collections", async function() {
               expect(info).to.have.property("isSystem", false);
               expect(info).to.have.property("status", 3); // loaded
               expect(info).to.have.property("type", 3); // edge collection
+            });
+        })
+        .then(() => void done())
+        .catch(done);
+    });
+    it("creates a new local edge collection", done => {
+      const collection = fabric.edgeCollection(`edgecollection${Date.now()}`);
+      collection
+        .create({isLocal: true})
+        .then(() => {
+          return fabric
+            .collection(collection.name)
+            .get()
+            .then(info => {
+              expect(info).to.have.property("name", collection.name);
+              expect(info).to.have.property("isSystem", false);
+              expect(info).to.have.property("status", 3); // loaded
+              expect(info).to.have.property("type", 3); // edge collection
+              expect(info).to.have.property("isLocal", true); // local geo-distribution
             });
         })
         .then(() => void done())
