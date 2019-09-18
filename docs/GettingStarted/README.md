@@ -200,6 +200,19 @@ const regionURL = "try.macrometa.io";
   // Then create a collection that is designated as a spot collection. 
   const collection = fabric.collection(collectionName);
   await collection.create({ isSpot: true });
+
+  //--------------------------------------------------------------------------------------
+  // Local Collections
+  await fabric.login("_mm", "root", rootPassword);
+  fabric.useTenant("_mm");
+  fabric.useFabric("_system");
+  // Make a geo location as spot enabled
+  await fabric.changeEdgeLocationSpotStatus(region, true);
+  // Create a geo-fabric with spot region capabilities.
+  fabric.createFabric("spotFabric", [{ username: "root" }], { dcList: region, spotDc: true });
+  // Then create a collection that is designated as a local collection. 
+  const collection = fabric.collection(collectionName);
+  await collection.create({ isLocal: true });
 ```
 
 For C8QL please check out the [c8ql template tag](https://macrometa.gitbook.io/c8/c8ql/fundamentals/bindparameters) for writing parametrized C8QL queries without making your code vulnerable to injection attacks.
