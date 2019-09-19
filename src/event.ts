@@ -65,11 +65,11 @@ export class Event {
         );
     }
 
-    details(eventId: number) {
+    details() {
         return this._connection.request(
             {
                 method: "GET",
-                path: `/events/${eventId}`,
+                path: `/events/${this.eventId}`,
             },
             res => res.body
         );

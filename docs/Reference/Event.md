@@ -111,7 +111,7 @@ await event.create({
 
 ## event.details
 
-`async event.details: Object`
+`async event.details(): Object`
 
 Fetches the details of a particular event.
 
