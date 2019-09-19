@@ -20,6 +20,7 @@ import { Stream } from "./stream";
 import { Route } from "./route";
 import { btoa } from "./util/btoa";
 import { Pipeline } from './pipeline';
+import { Event } from './event'; 
 import User from "./user";
 
 function colToString(collection: string | C8Collection): string {
@@ -242,8 +243,33 @@ export class Fabric {
     );
   }
 
+  getEvents(){
+    return this._connection.request(
+      {
+          method: "GET",
+          path: `/events`,
+      },
+      res => res.body
+    );
+  }
+
+  deleteEvents(eventIds: string[]){
+    return this._connection.request(
+      {
+          method: "DELETE",
+          path: `/events`,
+          body: JSON.stringify(eventIds),
+      },
+      res => res.body
+    );
+  }
+
   pipeline(pipelineName: string) {
     return new Pipeline(this._connection, pipelineName);
+  }
+
+  event(entityName: string | null, eventId?: number){
+    return new Event(this._connection, entityName, eventId);
   }
 
   // Collection manipulation
