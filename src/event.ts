@@ -35,10 +35,10 @@ export interface IEventCreateRequest {
 export class Event {
 
     _connection: Connection;
-    entityName: string | null;
+    entityName?: string | null;
     eventId?: number;
 
-    constructor(connection: Connection, entityName: string | null, eventId?: number) {
+    constructor(connection: Connection, entityName?: string | null, eventId?: number) {
         this._connection = connection;
         this.entityName = entityName;
         this.eventId =eventId;
@@ -69,6 +69,9 @@ export class Event {
     }
 
     details() {
+        if(!this.eventId){
+            throw new Error("Event id is not set. Either provide while creating the handler or create a new event.");
+        }
         return this._connection.request(
             {
                 method: "GET",

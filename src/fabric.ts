@@ -268,7 +268,7 @@ export class Fabric {
     return new Pipeline(this._connection, pipelineName);
   }
 
-  event(entityName: string | null, eventId?: number){
+  event(entityName?: string | null, eventId?: number){
     return new Event(this._connection, entityName, eventId);
   }
 
