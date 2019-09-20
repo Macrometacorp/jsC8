@@ -7,7 +7,7 @@ describe("Manipulating events", function() {
   
     let fabric: Fabric;
     const testUrl: string =
-      process.env.TEST_C8_URL || "https://qa1.eng1.macrometa.io";
+      process.env.TEST_C8_URL || "https://test.macrometa.io";
   
     before(async () => {
       fabric = new Fabric({
@@ -79,7 +79,7 @@ describe("Manipulating events", function() {
             const event = fabric.event("testEvent");
             const initialEventsList = await fabric.getEvents();
             const initialEventsCount = initialEventsList.length;
-            const response = await event.create({
+            await event.create({
                 status: Status.OK,
                 description: "description about the event",
                 entityType: EntityType.GEOFABRIC,
@@ -87,13 +87,17 @@ describe("Manipulating events", function() {
                 action: ActionType.CREATE,
                 attributes: {},
             });
+            const eventDetails = await event.details();
             const updatedEventList = await fabric.getEvents();
             const updatedEventsCount = updatedEventList.length;
             expect(updatedEventsCount).to.equal(initialEventsCount + 1);
-            expect(response).to.be.an('object');
-            expect(response).to.have.property('_id');
-            expect(response).to.have.property('_key');
-            expect(response).to.have.property('_rev');
+            expect(eventDetails).to.be.an('object');
+            expect(eventDetails).to.have.property('_id');
+            expect(eventDetails).to.have.property('_key');
+            expect(eventDetails).to.have.property('_rev');
+            expect(eventDetails).to.have.property('action').that.equals(ActionType.CREATE);
+            expect(eventDetails).to.have.property('entityType').that.equals(EntityType.GEOFABRIC);
+            expect(eventDetails).to.have.property('status').that.equals(Status.OK);
         });
     });
 

@@ -61,7 +61,10 @@ export class Event {
                     attributes,
                 }
             },
-            res => res.body
+            res => { 
+                this.eventId = res.body._key; 
+                return res.body
+            }
         );
     }
 
