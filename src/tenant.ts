@@ -10,7 +10,7 @@ export class Tenant {
         this.name = tenantName;
     }
 
-    createTenant(passwd: string, extra: object = {}, dcList: string = "") {
+    createTenant(passwd: string, extra: object = {}, dcList: string = "", email: string = "") {
         return this._connection.request(
             {
                 method: "POST",
@@ -18,9 +18,10 @@ export class Tenant {
                 absolutePath: true,
                 body: {
                     dcList,
-                    name: this.name,
+                    name: email ? "" : this.name,
                     passwd,
-                    extra
+                    extra,
+                    email,
                 }
             },
             res => res.body

@@ -69,7 +69,8 @@ Creates a tenant.
 **Arguments**
 
 - **dcList**: `string`
-    Comma seperated list of the regions that you want the tenant to  access
+
+  Comma seperated list of the regions that you want the tenant to  access
 
 - **password**: `string`
 
@@ -79,6 +80,10 @@ Creates a tenant.
 
   An optional JSON object with arbitrary extra data about the user.
 
+- **email**: `string`
+
+  Email address of the tenant.
+
 **Examples**
 
 ```js
@@ -86,7 +91,7 @@ const fabric = new Fabric();
 await fabric.login(tenant-name, user ,password);
 fabric.useTenant(tenant-name);
 const tenant = fabric.tenant("testTenant");
-await tenant.createTenant("test-eu-west-1, test-us-west-2","myPassword", {});
+await tenant.createTenant("test-eu-west-1, test-us-west-2","myPassword", {}, "test@test.com");
 // creates a new tenant "testTenant" with password as "myPassword".
 ```
 

@@ -202,13 +202,19 @@ export class Fabric {
   login(
     tenant: string,
     username: string,
-    password: string
+    password: string,
+    email: string = "",
   ): Promise<string> {
     return this._connection.request(
       {
         method: "POST",
         path: "/_open/auth",
-        body: { username, password, tenant },
+        body: { 
+          username: email ? "" : username, 
+          password, 
+          tenant,
+          email,
+        },
         absolutePath: true
       },
       res => {

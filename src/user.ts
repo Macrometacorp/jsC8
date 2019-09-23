@@ -11,16 +11,17 @@ class User {
     this._connection = connection;
   }
 
-  createUser(passwd: string = "", active: boolean = true, extra: object = {}) {
+  createUser(passwd: string = "", active: boolean = true, extra: object = {}, email: string = "") {
     return this._connection.request(
       {
         method: "POST",
         path: this.urlPrefix,
         body: {
-          user: this.user,
+          user: email ? "" : this.user,
           passwd: passwd,
           active,
-          extra
+          extra,
+          email,
         }
       },
       res => res.body
