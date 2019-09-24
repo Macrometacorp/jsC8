@@ -44,13 +44,13 @@ Returns a _Event_ instance representing the event with the given entity name or 
 
 **Arguments**
 
-- **entityName**: `string | null`
+- **entityName**: `string`
 
-  The name of the entity to use to create the event. It should be null when fetching the details of a particular event
+  The name of the entity to use to create the event. If the entity name is not known pass an empty string.
 
-- **eventId**: `number`
+- **eventId**: `number` (optional)
 
-  Generated unique identifier for the event. Mandatory while fetching the details of the event and optional while creating the event.
+  Generated unique identifier for the event in case when the event already exists. The `eventId` will automatically get assigned while creating an event.
 
 **Examples**
 
