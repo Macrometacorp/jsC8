@@ -18,7 +18,7 @@ Returns a `DocumentCollection` instance for the given collection name.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection("potatoes");
 ```
@@ -39,7 +39,7 @@ Returns an `EdgeCollection` instance for the given collection name.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const collection = fabric.edgeCollection("potatoes");
 ```
@@ -60,7 +60,7 @@ Fetches all collections from the fabric and returns an array of collection descr
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collections = await fabric.listCollections();
 // collections is an array of collection descriptions
@@ -90,7 +90,7 @@ Fetches all collections from the fabric and returns an array of
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collections = await fabric.collections()
 // collections is an array of DocumentCollection

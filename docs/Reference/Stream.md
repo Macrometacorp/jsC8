@@ -16,7 +16,7 @@ Returns a `Stream` instance representing the stream with the given stream name.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("testStream", true);
 ```
@@ -31,7 +31,7 @@ Get list of all streams under given database.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const streams = await fabric.getStreams();
 // To change the fabric and tenant, fabric.useFabric and fabric.useTenant respectively
@@ -53,7 +53,7 @@ Get list of persistent streams under the given stream db. Returns either a list 
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const streams = await fabric.listPersistentStreams(true);
 // To change the fabric and tenant, fabric.useFabric and fabric.useTenant respectively
@@ -69,7 +69,7 @@ Clear backlog for all streams for given subscription.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 await fabric.clearBacklog();
 ```
@@ -90,7 +90,7 @@ Clear backlog for all streams for given subscription.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 await fabric.clearSubscriptionBacklog("my-subscription");
 ```
@@ -111,7 +111,7 @@ Unsubscribes the given subscription on all streams on a stream db.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 await fabric.unsubscribe("my-subscription");
 ```
@@ -126,7 +126,7 @@ Create asynchronously a stream for a given database.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -142,7 +142,7 @@ Expire messages on all subscriptions of a stream.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -157,7 +157,7 @@ Get estimated backlog for offline stream.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -174,7 +174,7 @@ Get the status of a compaction operation for a stream.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -191,7 +191,7 @@ Trigger a compaction operation on a stream.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -208,7 +208,7 @@ Get the statistics for the given stream.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -231,7 +231,7 @@ Delete a subscription.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -254,7 +254,7 @@ Reset subscription to message position closest to given position.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -281,7 +281,7 @@ Expire messages on a stream subscription.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -304,7 +304,7 @@ Disconnect all active consumers for a cursor and reset the cursor.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -331,7 +331,7 @@ Reset subscription to message position closest to absolute timestamp (in milisec
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -358,7 +358,7 @@ Skip num messages on a topic subscription.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -381,7 +381,7 @@ Skip all messages on a stream subscription.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -398,7 +398,7 @@ Get the list of persistent subscriptions for a given stream.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -415,7 +415,7 @@ Terminate a stream. A stream that is terminated will not accept any more message
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -446,7 +446,7 @@ Creates a consumer for a stream.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -473,7 +473,7 @@ Creates a producer for a stream.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();
@@ -490,7 +490,7 @@ Closes all the websocket connections made by producer and consumers.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const stream = fabric.stream("my-stream", true);
 await stream.createStream();

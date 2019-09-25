@@ -10,7 +10,7 @@ Fetches all pipelines from the fabric and returns an array of pipeline descripti
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const allPipelines = fabric.getPipelines();
 ```
@@ -31,7 +31,7 @@ Returns a _Pipeline_ instance representing the pipeline with the given pipeline 
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const pipeline = fabric.pipeline("testPipeline");
 ```
@@ -59,7 +59,7 @@ Creates a pipeline.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const pipeline = fabric.pipeline("testPipeline");
 await pipeline.create(["test-eu-west-1", "test-us-west-2"], true , {});
@@ -75,7 +75,7 @@ Deletes the pipeline.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const pipeline = fabric.pipeline("testPipeline");
 await pipeline.create(["test-eu-west-1", "test-us-west-2"], true , {});
@@ -92,7 +92,7 @@ Gets the details of a particular pipeline.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const pipeline = fabric.pipeline("testPipeline");
 await pipeline.create(["test-eu-west-1", "test-us-west-2"], true , {});
@@ -122,7 +122,7 @@ Modifies the given pipeline.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const pipeline = fabric.pipeline("testPipeline");
 await pipeline.create(["test-eu-west-1", "test-us-west-2"], true , {});

@@ -33,7 +33,7 @@ If `query` is an object with `query` and `bindVars` properties, those will be us
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const active = true;
 
@@ -110,7 +110,7 @@ Explain a C8QL query
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const collection = fabric.collection("myColl");
 await collection.create();
@@ -130,7 +130,7 @@ Returns an array containing the C8QL queries currently running in the selected d
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const cursor = await fabric.getCurrentQueries();
 });
@@ -146,7 +146,7 @@ Clears the list of slow C8QL queries
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const cursor = await fabric.clearSlowQueries();
 });
@@ -164,7 +164,7 @@ Returns an array containing the last C8QL queries that are finished and have exc
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const cursor = await fabric.getSlowQueries();
 });
@@ -185,7 +185,7 @@ Kills a running query. The query will be terminated at the next cancelation poin
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const cursor = await fabric.terminateRunningQuery();
 });

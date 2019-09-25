@@ -24,7 +24,7 @@ For more information on `Route` instances see the [Route API_ below](https://dev
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const myFoxxService = fabric.route('my-foxx-service');
 const response = await myFoxxService.post('users', {

@@ -12,7 +12,7 @@ Checks whether the graph exists.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const result = await graph.exists();
@@ -29,7 +29,7 @@ Retrieves general information about the graph.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const data = await graph.get();
@@ -53,7 +53,7 @@ Creates a graph with the given `properties` for this graph's name, then returns 
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const info = await graph.create({
@@ -82,7 +82,7 @@ Deletes the graph from the fabric.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 await graph.drop();

@@ -12,7 +12,7 @@ Fetches a list of all C8QL user functions registered with the fabric.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const functions = fabric.listFunctions();
 // functions is a list of function descriptions
@@ -38,7 +38,7 @@ Creates an C8QL user function with the given `name` and `code` if it does not al
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 await fabric.createFunction(
   'ACME::ACCOUNTING::CALCULATE_VAT',
@@ -77,7 +77,7 @@ Deletes the C8QL user function with the given name from the fabric.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 await fabric.dropFunction('ACME::ACCOUNTING::CALCULATE_VAT');
 // the function no longer exists

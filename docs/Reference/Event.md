@@ -10,7 +10,7 @@ Fetches all events from the fabric and returns an array of event descriptions.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const allEvents = fabric.getEvents();
 ```
@@ -31,7 +31,7 @@ Deletes the event/events from the fabric.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 await fabric.deleteEvents(["215660321","215660322"]);
 ```
@@ -56,7 +56,7 @@ Returns a _Event_ instance representing the event with the given entity name or 
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const event = fabric.event("testEvent"); // To create a event
 const eventDetails = fabric.event(null, 258849024);
@@ -96,7 +96,7 @@ Creates an event. The request object contains the below properties.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const event = fabric.event("testEvent");
 await event.create({
@@ -119,7 +119,7 @@ Fetches the details of a particular event.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const event = fabric.event(null, 215602123);
 const eventDetails = await pipeline.details();

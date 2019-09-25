@@ -124,7 +124,7 @@ Can be used to clean up idling connections during longer periods of inactivity.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const sessions = fabric.collection("sessions");
 // Clean up expired sessions once per hour

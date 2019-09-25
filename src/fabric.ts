@@ -545,8 +545,7 @@ export class Fabric {
     this._connection.setTenantName(tenantName);
     return this;
   }
-
-  // ABHISHEK
+  
   tenant(email: string, tenantName?: string): Tenant {
     return new Tenant(this._connection, email, tenantName);
   }

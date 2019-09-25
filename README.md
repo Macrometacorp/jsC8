@@ -111,7 +111,7 @@ To start working, you first have to login. This gets the auth token and is added
 
 ```js
 async function login() {
-  return await fabric.login("demotenant", "root", "demopwd");
+  return await fabric.login(email, password);
 
 }
 ```
@@ -125,7 +125,7 @@ login().then(console.log)
 To use the demotenant, we need to use fabric.useTenant as below
 
 ```js
-fabric.useTenant("demotenant");
+fabric.useTenant(tenant-name);
 ```
 
 
@@ -141,10 +141,10 @@ const fabric = new Fabric("https://try.macrometa.io");
 
 async function createFabric() {
     await console.log("Logging in...");
-    await fabric.login("demotenant", "root", "demopwd");
+    await fabric.login(email, password);
 
     await console.log("Using the demotenant...");  
-    fabric.useTenant("demotenant");
+    fabric.useTenant(tenant-name);
 
     try{
       await console.log("Creating the fabric...");
@@ -176,9 +176,9 @@ const fabric = new Fabric("https://try.macrometa.io");
 
 async function getFabric() {
     await console.log("Logging in...");
-    await fabric.login("demotenant", "root", "demopwd");
+    await fabric.login(email, password);
     await console.log("Using the demotenant...");  
-    fabric.useTenant("demotenant");
+    fabric.useTenant(tenant-name);
 
     try{
       await console.log("Using the demoFabric...");  
@@ -209,10 +209,10 @@ fabric = new Fabric("https://try.macrometa.io")
 
 async function createCollection() {
   await console.log("Logging in...");
-  await fabric.login("demotenant", "root", "demopwd");
+  await fabric.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant("demotenant");
+  fabric.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
   fabric.useFabric("demoFabric");
@@ -247,10 +247,10 @@ fabric = new Fabric("https://try.macrometa.io")
 
 async function createIndex() {
   await console.log("Logging in...");
-  await fabric.login("demotenant", "root", "demopwd");
+  await fabric.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant("demotenant");
+  fabric.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
   fabric.useFabric("demoFabric");
@@ -301,10 +301,10 @@ const docs = [docJean, docJames, docHan, docBruce]
 
 async function populate() {
   await console.log("Logging in...");
-  await fabric.login("demotenant", "root", "demopwd");
+  await fabric.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant("demotenant");
+  fabric.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
   fabric.useFabric("demoFabric");
@@ -335,10 +335,10 @@ fabric = new Fabric("https://try.macrometa.io")
 
 async function c8Queries() {
   await console.log("Logging in...");
-  await fabric.login("demotenant", "root", "demopwd");
+  await fabric.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant("demotenant");
+  fabric.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
   fabric.useFabric("demoFabric");
@@ -371,10 +371,10 @@ async function callback_fn(collection){
 
 async function realTimeListener() {
   await console.log("Logging in...");
-  await fabric.login("demotenant", "root", "demopwd");
+  await fabric.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant("demotenant");
+  fabric.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
   fabric.useFabric("demoFabric");
@@ -412,10 +412,10 @@ async function publish(stream){
 
 async function streamDemo() {
   await console.log("Logging in...");
-  await fabric.login("demotenant", "root", "demopwd");
+  await fabric.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant("demotenant");
+  fabric.useTenant(tenant-name);
 
   stream = fabric.stream("newStreamFromJSC8", false);
   //Here the last boolean value tells if the stream is local or global. false means that it is global.
@@ -460,7 +460,7 @@ fabric = new Fabric(fed_url)
 
 
 async function restqldemo() {
-  await fabric.login(guest_tenant, guest_user, guest_password);
+  await fabric.login(guest_tenant_email, guest_password);
   fabric.useTenant(guest_tenant);
   fabric.useFabric(geo_fabric);
   console.log("------- CREATE GEO-REPLICATED COLLECTION  ------")
