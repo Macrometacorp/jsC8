@@ -202,7 +202,7 @@ export class Fabric {
   login(
     email: string,
     password: string
-  ): Promise<string> {
+  ): Promise<object> {
     return this._connection.request(
       {
         method: "POST",
@@ -212,7 +212,8 @@ export class Fabric {
       },
       res => {
         this.useBearerAuth(res.body.jwt);
-        return res.body.jwt;
+        this.useTenant(res.body.tenant);
+        return res.body;
       }
     );
   }
@@ -545,7 +546,7 @@ export class Fabric {
     this._connection.setTenantName(tenantName);
     return this;
   }
-  
+
   tenant(email: string, tenantName?: string): Tenant {
     return new Tenant(this._connection, email, tenantName);
   }

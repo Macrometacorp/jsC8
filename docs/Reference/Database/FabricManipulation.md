@@ -98,9 +98,9 @@ fabric.useBearerAuth("keyboardcat");
 
 ## fabric.login
 
-`async fabric.login(email, password): string`
+`async fabric.login(email, password): object`
 
-Validates the given fabric credentials and exchanges them for an authentication token, then uses the authentication token for future requests and returns it.
+Validates the given fabric credentials and exchanges them for an authentication token, then uses the authentication token for future requests and uses the tenant returned by the auth to be used in the URLs.
 
 **Arguments**
 
