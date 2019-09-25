@@ -20,7 +20,7 @@ import { Stream } from "./stream";
 import { Route } from "./route";
 import { btoa } from "./util/btoa";
 import { Pipeline } from './pipeline';
-import { Event } from './event'; 
+import { Event } from './event';
 import User from "./user";
 
 function colToString(collection: string | C8Collection): string {
@@ -113,7 +113,7 @@ export class Fabric {
     return new Route(this._connection, path, headers);
   }
 
-  
+
 
   close(): void {
     this._connection.close();
@@ -200,15 +200,14 @@ export class Fabric {
   }
 
   login(
-    tenant: string,
-    username: string,
+    email: string,
     password: string
   ): Promise<string> {
     return this._connection.request(
       {
         method: "POST",
         path: "/_open/auth",
-        body: { username, password, tenant },
+        body: { email, password },
         absolutePath: true
       },
       res => {
@@ -236,29 +235,29 @@ export class Fabric {
   getPipelines() {
     return this._connection.request(
       {
-          method: "GET",
-          path: `/pipelines`,
+        method: "GET",
+        path: `/pipelines`,
       },
       res => res.body
     );
   }
 
-  getEvents(){
+  getEvents() {
     return this._connection.request(
       {
-          method: "GET",
-          path: `/events`,
+        method: "GET",
+        path: `/events`,
       },
       res => res.body
     );
   }
 
-  deleteEvents(eventIds: string[]){
+  deleteEvents(eventIds: string[]) {
     return this._connection.request(
       {
-          method: "DELETE",
-          path: `/events`,
-          body: JSON.stringify(eventIds),
+        method: "DELETE",
+        path: `/events`,
+        body: JSON.stringify(eventIds),
       },
       res => res.body
     );
@@ -268,7 +267,7 @@ export class Fabric {
     return new Pipeline(this._connection, pipelineName);
   }
 
-  event(entityName?: string | null, eventId?: number){
+  event(entityName: string, eventId?: number) {
     return new Event(this._connection, entityName, eventId);
   }
 
@@ -547,8 +546,9 @@ export class Fabric {
     return this;
   }
 
-  tenant(tenantName: string): Tenant {
-    return new Tenant(this._connection, tenantName);
+  // ABHISHEK
+  tenant(email: string, tenantName?: string): Tenant {
+    return new Tenant(this._connection, email, tenantName);
   }
 
   listTenants() {
@@ -656,8 +656,8 @@ export class Fabric {
 
   //user
 
-  user(user: string): User {
-    return new User(this._connection, user);
+  user(user: string, email: string): User {
+    return new User(this._connection, user, email);
   }
 
   getAllUsers() {
@@ -684,26 +684,26 @@ export class Fabric {
   }
 
   saveQuery(name: string, parameter: any = {}, value: string) {
-    try{
-    
-    if (name.includes(" ")) throw("Spaces are not allowed in query name")
-      
-    return this._connection.request(
-      {
-        method: "POST",
-        path: "/restql",
-        body: {
-          "query": {
-            "name": name,
-            "parameter": parameter,
-            "value": value
+    try {
+
+      if (name.includes(" ")) throw ("Spaces are not allowed in query name")
+
+      return this._connection.request(
+        {
+          method: "POST",
+          path: "/restql",
+          body: {
+            "query": {
+              "name": name,
+              "parameter": parameter,
+              "value": value
+            }
           }
-        }
-      },
-      res => res.body
-    );
+        },
+        res => res.body
+      );
     }
-    catch(err){
+    catch (err) {
       return err
     }
 
@@ -751,7 +751,7 @@ export class Fabric {
 
   }
 
-  createRestqlCursor(query: string, bindVars: any = {} ){
+  createRestqlCursor(query: string, bindVars: any = {}) {
     return this._connection.request(
       {
         method: "POST",
@@ -767,7 +767,7 @@ export class Fabric {
           },
           "query": query
         }
-        
+
       },
       res => res.body
     );
