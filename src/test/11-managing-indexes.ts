@@ -24,8 +24,8 @@ describe("Managing indexes", function() {
       c8Version: C8_VERSION
     });
 
-    await fabric.login("demo", "root", "demo");
-    fabric.useTenant("demo");
+    await fabric.login("guest@macrometa.io", "guest");
+    fabric.useTenant("guest");
 
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);

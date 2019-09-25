@@ -21,8 +21,8 @@ describe("Cursor API", () => {
       url: process.env.TEST_C8_URL || "https://test.macrometa.io",
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
-    await fabric.login("demo", "root", "demo");
-    fabric.useTenant("demo");
+    await fabric.login("guest@macrometa.io", "guest");
+    fabric.useTenant("guest");
   });
   after(() => {
     fabric.close();

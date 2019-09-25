@@ -18,7 +18,7 @@ Note:-This method can not be used when the jsC8 instance was created with `isAbs
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 fabric.useTenant("testTenant");
 // The fabric instance now uses the tenant "testTenant".
@@ -26,23 +26,26 @@ fabric.useTenant("testTenant");
 
 ## fabric.tenant
 
-`fabric.tenant(tenantName): Tenant`
+`fabric.tenant(tenantEmail, tenantName): Tenant`
 
 Returns a _Tenant_ instance representing the tenant with the given tenant name.
 
 **Arguments**
 
-- **tenantName**: `string`
+- **tenantEmail**: `string`
+  The email of the tenant.
 
-  The name of the tenant to use.
+- **tenantName**: `string` (optional)
+
+  The name of the tenant to use. The name of the tenant will be automatically assigned if the tenant is created by `tenant.createTenant`.
 
 **Examples**
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const tenant = fabric.tenant("testTenant");
+const tenant = fabric.tenant(tenant-email);
 ```
 
 ## fabric.listTenants
@@ -55,7 +58,7 @@ Fetches all tenants from the fabric and returns an array of tenant descriptions.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const allTenants = fabric.listTenants();
 ```
@@ -83,11 +86,11 @@ Creates a tenant.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const tenant = fabric.tenant("testTenant");
-await tenant.createTenant("test-eu-west-1, test-us-west-2","myPassword", {});
-// creates a new tenant "testTenant" with password as "myPassword".
+const tenant = fabric.tenant(tenant-email);
+await tenant.createTenant("test-eu-west-1,test-us-west-2","myPassword", {});
+// creates a new tenant with email as tenant-email with password as "myPassword".
 ```
 
 ## tenant.dropTenant
@@ -100,9 +103,9 @@ Deletes the tenant.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const tenant = fabric.tenant("testTenant");
+const tenant = fabric.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword", {});
 await tenant.dropTenant();
 ```
@@ -116,9 +119,9 @@ Fetches data about the Edge Locations specific to this tenant.
 **Examples**
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user, password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const tenant = fabric.tenant(tenant-name);
+const tenant = fabric.tenant(tenant-email, tenant-name);
 const locations = await tenant.getTenantEdgeLocations();
 ```
 
@@ -133,9 +136,9 @@ Gets the details of a tenant.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const tenant = fabric.tenant("testTenant");
+const tenant = fabric.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword", {});
 await tenant.tenantDetails();
 ```
@@ -160,9 +163,9 @@ Modifies the given tenant.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const tenant = fabric.tenant("testTenant");
+const tenant = fabric.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword", {});
 await tenant.modifyTenant("myPassword", { info: "string"});
 ```

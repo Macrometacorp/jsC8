@@ -16,7 +16,7 @@ Returns a new [GraphEdgeCollection  instance](https://developer.document360.io/d
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 // assuming the collections "edges" and "vertices" exist
 const graph = fabric.graph("some-graph");
@@ -41,7 +41,7 @@ Adds the given edge definition `definition` to the graph.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 // assuming the collections "edges" and "vertices" exist
 const graph = fabric.graph('some-graph');
@@ -74,7 +74,7 @@ the given `definition`.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 // assuming the collections "edges", "vertices" and "more-vertices" exist
 const graph = fabric.graph('some-graph');
@@ -106,7 +106,7 @@ Removes the edge definition with the given `definitionName` form the graph.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 
@@ -143,7 +143,7 @@ Note:-Please note that while `opts.filte`, `opts.visitor`, `opts.init`, `opts.ex
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');

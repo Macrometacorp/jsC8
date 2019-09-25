@@ -8,7 +8,7 @@ const range = (n: number): number[] => Array.from(Array(n).keys());
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const it2x = C8_VERSION < 30000 ? it : it.skip;
 
-describe("Manipulating fabrics", function() {
+describe("Manipulating fabrics", function () {
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
 
@@ -23,12 +23,12 @@ describe("Manipulating fabrics", function() {
       c8Version: C8_VERSION
     });
 
-    await fabric.login("demo", "root", "demo");
-    fabric.useTenant("demo");
-    
+    await fabric.login("guest@macrometa.io", "guest");
+    fabric.useTenant("guest");
+
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
-   
+
   });
   afterEach(() => {
     fabric.close();
@@ -39,13 +39,13 @@ describe("Manipulating fabrics", function() {
         url: testUrl,
         c8Version: C8_VERSION
       });
-  
-      await fabric.login("demo", "root", "demo");
-      fabric.useTenant("demo");
-      
+
+      await fabric.login("guest@macrometa.io", "guest");
+      fabric.useTenant("guest");
+
       const response = await fabric.getAllEdgeLocations();
       dcList = getDCListString(response);
-     
+
     });
     this.afterAll(() => {
       fabric.close();
@@ -251,8 +251,8 @@ describe("Manipulating fabrics", function() {
       const fabric2 = new Fabric({
         url: testUrl
       });
-      await fabric2.login("demo", "root", "demo");
-      fabric2.useTenant("demo");
+      await fabric2.login("guest@macrometa.io", "guest");
+      fabric2.useTenant("guest");
       collection = fabric2.collection(collectionName);
       await collection.create();
     });

@@ -107,7 +107,7 @@ import { Fabric, c8ql } from "jsc8";
 const regionURL = "try.macrometa.io";
   const region = "try-eu-west-1";
   const rootPassword = "root-password";
-  const tenantName = "myTenant";
+  const tenantEmail = "myTenant@macrometa.io";
   const tenantPassword = "myTenant-password";
   const fabricName = "myFabric";
   const collectionName = "employees";
@@ -118,15 +118,15 @@ const regionURL = "try.macrometa.io";
   const fabric = new Fabric(`https://${regionURL}`);
 
   // login with root user
-  await fabric.login("_mm", "root", rootPassword);
+  await fabric.login(email, rootPassword);
 
   //--------------------------------------------------------------------------------------
   // create a tenant
-  const guestTenant = fabric.tenant(tenantName);
+  const guestTenant = fabric.tenant(tenantEmail);
   await guestTenant.createTenant(tenantPassword);
   // log in with the newly created tenant
-  await fabric.login(tenantName, "root", tenantPassword);
-  fabric.useTenant(tenantName);
+  await fabric.login(tenantEmail, tenantPassword);
+  fabric.useTenant(guestTenant.name);
 
   //--------------------------------------------------------------------------------------
   // create a new geo fabric in the newly created tenant
@@ -190,7 +190,7 @@ const regionURL = "try.macrometa.io";
 
   //--------------------------------------------------------------------------------------
   // Spot Collections
-  await fabric.login("_mm", "root", rootPassword);
+  await fabric.login(rootEmail, rootPassword);
   fabric.useTenant("_mm");
   fabric.useFabric("_system");
   // Make a geo location as spot enabled
@@ -203,7 +203,7 @@ const regionURL = "try.macrometa.io";
 
   //--------------------------------------------------------------------------------------
   // Local Collections
-  await fabric.login("_mm", "root", rootPassword);
+  await fabric.login(rootEmail, rootPassword);
   fabric.useTenant("_mm");
   fabric.useFabric("_system");
   // Make a geo location as spot enabled

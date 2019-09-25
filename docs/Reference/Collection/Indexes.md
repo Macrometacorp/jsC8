@@ -17,7 +17,7 @@ Creates an arbitrary index on the collection.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const index = await collection.createIndex({type: 'hash', fields: ['a', 'a.b']});
@@ -48,7 +48,7 @@ For more information on hash indexes, see [the HTTP API for hash indexes](https:
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
@@ -83,7 +83,7 @@ Creates a skiplist index on the collection.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
@@ -118,7 +118,7 @@ Creates a geo-spatial index on the collection.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
@@ -153,7 +153,7 @@ Creates a fulltext index on the collection.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
@@ -190,7 +190,7 @@ For more information on the properties of the `opts` object see [the HTTP API fo
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 
@@ -215,7 +215,7 @@ Fetches information about the index with the given `indexHandle` and returns it.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
@@ -240,7 +240,7 @@ Fetches a list of all indexes on this collection.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 await collection.createFulltextIndex('description')
@@ -265,7 +265,7 @@ Deletes the index with the given `indexHandle` from the collection.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
@@ -306,7 +306,7 @@ If `size` is a number, it will be interpreted as `size.size`.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 

@@ -25,7 +25,7 @@ Retrieves the document with the given `documentHandle` from the collection.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('my-docs');
 
@@ -77,7 +77,7 @@ Checks whether the document with the given `documentHandle` exists.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('my-docs');
 
@@ -139,7 +139,7 @@ For more information on the _opts_ object, see
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('my-docs');
 const data = {some: 'data'};
@@ -153,7 +153,7 @@ assert.equal(doc2.some, data.some);
 // -- or --
 
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('my-docs');
 const data = {some: 'data'};

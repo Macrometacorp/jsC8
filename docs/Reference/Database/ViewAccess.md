@@ -48,7 +48,7 @@ Fetches all views from the fabric and returns an array of
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 
 const views = await fabric.views()

@@ -26,7 +26,7 @@ Note:- If set to `true`, the method will return `null` instead of throwing an er
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 
@@ -68,7 +68,7 @@ Checks whether the edge with the given `documentHandle` exists.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('my-docs');
 
@@ -139,7 +139,7 @@ Note:-If a boolean is passed instead of an options object, it will be interprete
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 const data = {some: 'data'};
@@ -185,7 +185,7 @@ Retrieves a list of all edges of the document with the given `documentHandle`.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 await collection.import([
@@ -217,7 +217,7 @@ Retrieves a list of all incoming edges of the document with the given `documentH
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 await collection.import([
@@ -249,7 +249,7 @@ Retrieves a list of all outgoing edges of the document with the given `documentH
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 await collection.import([
@@ -287,7 +287,7 @@ Note:-Please note that while `opts.filter`, `opts.visitor`, `opts.init`, `opts.e
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.edgeCollection('edges');
 await collection.import([

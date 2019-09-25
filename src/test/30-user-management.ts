@@ -3,7 +3,7 @@ import { Fabric } from "../jsC8";
 import User from "../user";
 import { getDCListString } from "../util/helper";
 
-describe("User Management", function() {
+describe("User Management", function () {
   // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
@@ -18,9 +18,9 @@ describe("User Management", function() {
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
 
-    await fabric.login("demo", "root", "demo");
-    fabric.useTenant("demo");
-    
+    await fabric.login("guest@macrometa.io", "guest");
+    fabric.useTenant("guest");
+
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
   });
@@ -31,7 +31,7 @@ describe("User Management", function() {
 
   describe("fabric.user", () => {
     it("creates a new user instance", () => {
-      expect(fabric.user("testUser")).to.be.instanceof(User);
+      expect(fabric.user("testUser", "testUser@test.com")).to.be.instanceof(User);
     });
   });
 
@@ -40,7 +40,8 @@ describe("User Management", function() {
 
     it("creates a user", async () => {
       const userName = `user${Date.now()}`;
-      user = fabric.user(userName);
+      const userEmail = `${userName}@test.com`
+      user = fabric.user(userName, userEmail);
       const response = await user.createUser("testPass");
       expect(response.error).to.be.false;
     });
@@ -60,14 +61,16 @@ describe("User Management", function() {
   describe("user.crud_operations", () => {
     let user: User;
     beforeEach(async () => {
-      user = fabric.user(`user${Date.now()}`);
+      const userName = `user${Date.now()}`;
+      const userEmail = `${userName}@test.com`;
+      user = fabric.user(userName, userEmail);
       await user.createUser("testPass");
     });
 
     afterEach(async () => {
       try {
         await user.deleteUser();
-      } catch (error) {}
+      } catch (error) { }
     });
 
     describe("user.deleteUser", () => {

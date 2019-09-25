@@ -3,12 +3,14 @@ import { Connection } from "./connection";
 class User {
   _connection: Connection;
   user = "";
+  email: string;
 
   urlPrefix: string = "/_admin/user";
 
-  constructor(connection: Connection, user: string) {
+  constructor(connection: Connection, user: string, email: string) {
     this.user = user;
     this._connection = connection;
+    this.email = email;
   }
 
   createUser(passwd: string = "", active: boolean = true, extra: object = {}) {
@@ -18,6 +20,7 @@ class User {
         path: this.urlPrefix,
         body: {
           user: this.user,
+          email: this.email,
           passwd: passwd,
           active,
           extra
@@ -31,7 +34,7 @@ class User {
     return this._connection.request(
       {
         method: "GET",
-        path: `/_admin/user/${this.user}`
+        path: `${this.urlPrefix}/${this.user}`
       },
       res => res.body
     );
@@ -100,7 +103,7 @@ class User {
         method: "GET",
         path: `${this.urlPrefix}/${
           this.user
-        }/database/${databaseName}/${collectionName}`
+          }/database/${databaseName}/${collectionName}`
       },
       res => res.body
     );
@@ -135,7 +138,7 @@ class User {
         method: "DELETE",
         path: `${this.urlPrefix}/${
           this.user
-        }/database/${fabricName}/${collectionName}`
+          }/database/${fabricName}/${collectionName}`
       },
       res => res.body
     );
@@ -151,7 +154,7 @@ class User {
         method: "PUT",
         path: `${this.urlPrefix}/${
           this.user
-        }/database/${fabricName}/${collectionName}`,
+          }/database/${fabricName}/${collectionName}`,
         body: {
           grant: permission
         }

@@ -17,7 +17,7 @@ Creates a collection with the given `properties` for this collection's name, the
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 
 const collection = fabric.collection('potatoes');
@@ -45,7 +45,7 @@ Renames the collection. The  `Collection` instance will automatically update its
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const result = await collection.rename('new-collection-name')
@@ -65,7 +65,7 @@ Deletes **all documents** in the collection in the fabric.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 await collection.truncate();
@@ -94,7 +94,7 @@ Deletes the collection from the fabric.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 await collection.drop();

@@ -51,7 +51,7 @@ Note:-If a string is passed instead of an options object, it will be interpreted
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = {number: 1, hello: 'world'};
@@ -142,7 +142,7 @@ Note:- If a string is passed instead of an options object, it will be interprete
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const doc = {number: 1, hello: 'world'};

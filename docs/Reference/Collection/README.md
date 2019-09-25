@@ -18,7 +18,7 @@ Checks whether the collection exists.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const result = await collection.exists();
@@ -35,7 +35,7 @@ Retrieves general information about the collection.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = await collection.get();
@@ -67,7 +67,7 @@ Retrieves information about the number of documents in a collection.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = await collection.count();
@@ -84,7 +84,7 @@ Retrieves statistics for a collection.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = await collection.figures();
@@ -101,7 +101,7 @@ Retrieves the collection revision ID.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = await collection.revision();
@@ -125,7 +125,7 @@ Retrieves the collection checksum.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name)
 const collection = fabric.collection('some-collection');
 const data = await collection.checksum();

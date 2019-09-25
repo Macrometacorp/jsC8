@@ -4,7 +4,7 @@
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const cursor = await fabric.query('FOR x IN 1..5 RETURN x');
 // query result list: [1, 2, 3, 4, 5]

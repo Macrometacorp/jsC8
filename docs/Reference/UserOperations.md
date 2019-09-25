@@ -2,7 +2,7 @@
 
 ## fabric.user
 
-`user(user: string): User`
+`user(user: string, email: string): User`
 
 Returns a User instance representing the user with the given username.
 
@@ -12,13 +12,17 @@ Returns a User instance representing the user with the given username.
 
   The name of the User for the instance.
 
+- **email**: `string`
+
+  The email of the User.
+
 **Examples**
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 ```
 
 ## fabric.getAllUsers
@@ -31,7 +35,7 @@ Returns the list of all the users for this fabric
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 await fabric.getAllUsers();
 ```
@@ -46,9 +50,9 @@ Returns the details of a user
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 await user.getUserDetails();
 ```
 
@@ -76,9 +80,9 @@ Asynchronously creates a user
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 await user.createUser("sample_password", active, extra);
 ```
 
@@ -92,9 +96,9 @@ deletes a user
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 await user.deleteUser();
 ```
 
@@ -120,9 +124,9 @@ Partially updates the data of an existing user.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 const config = {
   active: false // only updating active status
 };
@@ -151,9 +155,9 @@ Partially updates the data of an existing user.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 const config = {
   passwd: "sample_password",
   active: false
@@ -177,9 +181,9 @@ Lists all the databases' access levels associated with the user
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 await user.getAllDatabases();
 ```
 
@@ -199,9 +203,9 @@ gets access level of the given database associated with the user
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 await user.getDatabaseAccessLevel("sample_database");
 ```
 
@@ -225,9 +229,9 @@ Get the access level of a specific collection in a given database
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 await user.getCollectionAccessLevel(
   "sample_databaseName",
   "sample_collectionName"
@@ -250,9 +254,9 @@ clear access level for the database
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 await user.clearDatabaseAccessLevel("sample_database");
 ```
 
@@ -276,9 +280,9 @@ clears the access level of a specific collection in a given database
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 await user.clearCollectionAccessLevel(
   "sample_databaseName",
   "sample_collectionName"
@@ -305,9 +309,9 @@ Sets the database access level
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 await user.setDatabaseAccessLevel(databaseName, permission);
 ```
 
@@ -335,8 +339,8 @@ Sets Access level of a collection in a database
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user");
+const user = fabric.user("sample_user", "sample_user@macrometa.io");
 await user.setCollectionAccessLevel(databaseName, collectionName, permission);
 ```

@@ -3,11 +3,13 @@ import { Connection } from "./connection";
 export class Tenant {
 
     _connection: Connection;
-    name: string;
+    name?: string;
+    email: string;
 
-    constructor(connection: Connection, tenantName: string) {
+    constructor(connection: Connection, email: string, tenantName?: string) {
         this._connection = connection;
         this.name = tenantName;
+        this.email = email;
     }
 
     createTenant(passwd: string, extra: object = {}, dcList: string = "") {
@@ -18,12 +20,15 @@ export class Tenant {
                 absolutePath: true,
                 body: {
                     dcList,
-                    name: this.name,
+                    email: this.email,
                     passwd,
                     extra
                 }
             },
-            res => res.body
+            res => {
+                this.name = res.body.tenant;
+                return res.body;
+            }
         );
     }
 

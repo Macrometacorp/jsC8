@@ -16,7 +16,7 @@ Returns a new [GraphVertexCollection  instance ](https://developer.document360.i
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph("some-graph");
 const collection = graph.vertexCollection("vertices");
@@ -84,7 +84,7 @@ Adds the collection with the given `collectionName` to the graph's vertex collec
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 await graph.addVertexCollection('vertices');
@@ -111,7 +111,7 @@ Removes the vertex collection with the given `collectionName`  from the graph.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 await graph.removeVertexCollection('vertices')

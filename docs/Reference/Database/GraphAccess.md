@@ -18,7 +18,7 @@ Fetches all graphs from the fabric and returns an array of graph descriptions.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graphs = await fabric.listGraphs();
 // graphs is an array of graph descriptions
@@ -34,7 +34,7 @@ Fetches all graphs from the fabric and returns an array of `Graph` instances for
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graphs = await fabric.graphs();
 // graphs is an array of Graph instances

@@ -18,7 +18,7 @@ Deletes the edge with the given `documentHandle` from the collection.
 
 ```js
 const graph = fabric.graph('some-graph');
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
@@ -49,7 +49,7 @@ Checks whether the edge with the given `documentHandle` exists.
 
 ```js
 const graph = fabric.graph('some-graph');
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
@@ -81,7 +81,7 @@ Retrieves the edge with the given `documentHandle` from the collection.
 
 ```js
 const graph = fabric.graph('some-graph');
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
@@ -129,7 +129,7 @@ Creates a new edge between the vertices `fromId` and `toId` with the given `data
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');
@@ -160,7 +160,7 @@ Retrieves a list of all edges of the document with the given `documentHandle`.
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');
@@ -220,7 +220,7 @@ Retrieves a list of all outgoing edges of the document with the given `documentH
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');
@@ -255,7 +255,7 @@ Note:-Please note that while `opts.filter`, `opts.visitor`, `opts.init`, `opts.e
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const graph = fabric.graph('some-graph');
 const collection = graph.edgeCollection('edges');

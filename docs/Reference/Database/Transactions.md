@@ -72,7 +72,7 @@ For more information on transactions, see [the HTTP API documentation for transa
 
 ```js
 const fabric = new Fabric();
-await fabric.login(tenant-name, user ,password);
+await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const action = String(function (params) {
   // This code will be executed inside C8!
