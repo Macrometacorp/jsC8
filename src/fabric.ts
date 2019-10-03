@@ -564,8 +564,8 @@ export class Fabric {
 
   //Stream
 
-  stream(streamName: string, local: boolean): Stream {
-    return new Stream(this._connection, streamName, local);
+  stream(streamName: string, local: boolean, isCollectionStream: boolean = false): Stream {
+    return new Stream(this._connection, streamName, local, isCollectionStream);
   }
 
   getStreams() {

@@ -2,7 +2,7 @@ import { expect } from "chai";
 import { Fabric } from "../jsC8";
 import { Stream } from "../stream";
 
-describe("Manipulating streams", function() {
+describe("Manipulating streams", function () {
   // create fabric takes 11s in a standard cluster
   this.timeout(50000);
 
@@ -58,14 +58,12 @@ describe("Manipulating streams", function() {
     });
   });
 
-  describe("stream.manipulate", function() {
+  describe("stream.manipulate", function () {
     let stream: Stream;
     this.beforeAll(async () => {
       stream = fabric.stream(`testStream${Date.now()}`, false);
       await stream.createStream();
     });
-
-    
 
     it("stream.expireMessagesOnAllSubscriptions");
 
@@ -83,27 +81,6 @@ describe("Manipulating streams", function() {
         expect(response.error).to.be.false;
       });
     });
-    // TODO: Add the below one later
-    // it("stream.deleteSubscription", async (done) => {
-
-    //   let dcName: string;
-    //   function callback(msg: string) {
-    //     const parsedMsg = JSON.parse(msg);
-    //     const { payload } = parsedMsg;
-    //     expect(payload).to.equal("dGVzdA==");
-    //     done();
-    //   }
-    //   stream.consumer(
-    //     `streamSubscription${Date.now()}`,
-    //     {
-    //       onmessage: callback,
-    //       onopen: () => stream.producer("test", dcName)
-    //     },
-    //     ''
-    //   );
-    // expect(response.error).to.be.false;
-    //present in swagger
-    //});
     describe("stream.subscriptions", () => {
       let dcName: string;
       this.beforeAll(async () => {
@@ -114,15 +91,15 @@ describe("Manipulating streams", function() {
         stream.closeConnections();
       });
       it("stream.resetSubscriptionToPosition", (done) => {
-        let numberOfMessages:number = 0;
+        let numberOfMessages: number = 0;
         function callback(msg: string) {
           const parsedMsg = JSON.parse(msg);
           const { payload } = parsedMsg;
-          const array = ["bmFuZGhh","YWJoaXNoZWs=","dmlwdWw=","c3Vsb20=","cHJhdGlr"];
-            if(array.includes(payload)){
-              numberOfMessages++;
-            };
-          if(numberOfMessages === 5){
+          const array = ["bmFuZGhh", "YWJoaXNoZWs=", "dmlwdWw=", "c3Vsb20=", "cHJhdGlr"];
+          if (array.includes(payload)) {
+            numberOfMessages++;
+          };
+          if (numberOfMessages === 5) {
             done();
           }
         }
@@ -131,7 +108,7 @@ describe("Manipulating streams", function() {
           {
             onmessage: callback,
             onopen: () => {
-              stream.producer(["nandha","abhishek","vipul","sulom","pratik"], dcName);
+              stream.producer(["nandha", "abhishek", "vipul", "sulom", "pratik"], dcName);
             }
           },
           dcName
@@ -187,7 +164,7 @@ describe("Manipulating streams", function() {
       });
     });
 
-    describe("stream.websocket", function() {
+    describe("stream.websocket", function () {
       let dcName: string;
       this.beforeAll(async () => {
         const response = await fabric.getLocalEdgeLocation();
@@ -197,7 +174,7 @@ describe("Manipulating streams", function() {
         stream.closeConnections();
       });
 
-      it("gets data in consumer when sent by producer", function(done) {
+      it("gets data in consumer when sent by producer", function (done) {
         function callback(msg: string) {
           const parsedMsg = JSON.parse(msg);
           const { payload } = parsedMsg;

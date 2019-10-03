@@ -21,28 +21,39 @@ export class Stream {
     private _connection: Connection;
     name: string;
     local: boolean;
+    isCollectionStream: boolean;
+    topic: string;
     private _producer: any;
     private _noopProducer: any;
     private _consumers: any[];
     private setIntervalId?: any;
 
-    constructor(connection: Connection, name: string, local: boolean = false) {
+    constructor(connection: Connection, name: string, local: boolean = false, isCollectionStream: boolean = false) {
         this._connection = connection;
-        this.name = name;
+        this.isCollectionStream = isCollectionStream;
         this.local = local;
         this._consumers = [];
         this.setIntervalId = undefined;
+        this.name = name;
+
+        let topic = this.name;
+        if (!this.isCollectionStream) {
+            if (this.local) topic = `c8locals.${this.name}`;
+            else topic = `c8globals.${this.name}`;
+        }
+        this.topic = topic;
     }
 
-    _getPath(urlSuffix?: string): string {
-        return getFullStreamPath(this.name, urlSuffix);
+    _getPath(useName: boolean, urlSuffix?: string): string {
+        let topic = useName ? this.name : this.topic;
+        return getFullStreamPath(topic, urlSuffix);
     }
 
     createStream() {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(),
+                path: this._getPath(true),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -54,7 +65,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -66,7 +77,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "GET",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -78,7 +89,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "GET",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -90,7 +101,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "DELETE",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -102,7 +113,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "PUT",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -114,7 +125,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -126,7 +137,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -138,7 +149,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -150,7 +161,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -162,7 +173,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -174,7 +185,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "GET",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -186,7 +197,7 @@ export class Stream {
         return this._connection.request(
             {
                 method: "POST",
-                path: this._getPath(urlSuffix),
+                path: this._getPath(false, urlSuffix),
                 qs: `local=${this.local}`
             },
             res => res.body
@@ -201,9 +212,9 @@ export class Stream {
         const region = this.local ? 'c8local' : 'c8global';
         const tenant = this._connection.getTenantName();
         let dbName = this._connection.getFabricName();
-        if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using."
+        if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using.";
 
-        const consumerUrl = `wss://${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${this.name}/${subscriptionName}`;
+        const consumerUrl = `wss://${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${this.topic}/${subscriptionName}`;
 
         this._consumers.push(ws(consumerUrl));
         const lastIndex = this._consumers.length - 1;
@@ -253,7 +264,7 @@ export class Stream {
         let dbName = this._connection.getFabricName();
         if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using."
 
-        const noopProducerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.name}`;
+        const noopProducerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.topic}`;
 
         this._noopProducer = ws(noopProducerUrl);
 
@@ -269,10 +280,10 @@ export class Stream {
     producer(message: string | Array<string>, dcName?: string, callbackObj?: wsCallbackObj) {
         type CallbackFunction = () => void;
         let onopen: CallbackFunction | undefined;
-        let onclose: CallbackFunction  | undefined;
+        let onclose: CallbackFunction | undefined;
         let onmessage: (msg: string) => void | undefined;
         let onerror: ((e: Error) => void) | undefined;
-        if(callbackObj !== undefined){
+        if (callbackObj !== undefined) {
             onopen = callbackObj.onopen;
             onclose = callbackObj.onclose;
             onmessage = callbackObj.onmessage;
@@ -289,7 +300,7 @@ export class Stream {
             let dbName = this._connection.getFabricName();
             if (!dbName || !tenant) throw "Set correct DB and/or tenant name before using."
 
-            const producerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.name}`;
+            const producerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.topic}`;
 
             this._producer = ws(producerUrl);
 
@@ -299,10 +310,10 @@ export class Stream {
             });
 
             this._producer.on("open", () => {
-                if(!Array.isArray(message)){
+                if (!Array.isArray(message)) {
                     this._producer.send(JSON.stringify({ payload: btoa(message) }));
-                }else{
-                    for(let i=0; i<message.length; i++){
+                } else {
+                    for (let i = 0; i < message.length; i++) {
                         this._producer.send(JSON.stringify({ payload: btoa(message[i]) }));
                     }
                 }
@@ -320,10 +331,10 @@ export class Stream {
 
         } else {
             if (this._producer.readyState === this._producer.OPEN) {
-                if(!Array.isArray(message)){
+                if (!Array.isArray(message)) {
                     this._producer.send(JSON.stringify({ payload: btoa(message) }));
-                }else{
-                    for(let i=0; i<message.length; i++){
+                } else {
+                    for (let i = 0; i < message.length; i++) {
                         this._producer.send(JSON.stringify({ payload: btoa(message[i]) }));
                     }
                 }

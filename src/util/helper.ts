@@ -1,9 +1,9 @@
 import { StreamConstants } from '../stream';
 import { EdgeLocation } from "../fabric";
 
-export function getFullStreamPath(name: string, extraUrl?: string): string {
+export function getFullStreamPath(topic: string, extraUrl?: string): string {
 
-    const baseUrl = `/streams/${StreamConstants.PERSISTENT}/stream/${name}`;
+    const baseUrl = `/streams/${StreamConstants.PERSISTENT}/stream/${topic}`;
 
     const path = extraUrl ? `${baseUrl}${extraUrl}` : baseUrl;
 

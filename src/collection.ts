@@ -10,15 +10,15 @@ export enum CollectionType {
 export type DocumentHandle =
   | string
   | {
-      _key?: string;
-      _id?: string;
-    };
+    _key?: string;
+    _id?: string;
+  };
 
 export type IndexHandle =
   | string
   | {
-      id?: string;
-    };
+    id?: string;
+  };
 
 export interface ImportOptions {
   type?: null | "auto" | "documents" | "array";
@@ -64,7 +64,7 @@ export abstract class BaseCollection implements C8Collection {
     this.name = name;
     this._idPrefix = `${this.name}/`;
     this._connection = connection;
-    this.stream = new Stream(connection, name, true);
+    this.stream = new Stream(connection, name, true, true);
     if (this._connection.c8Major >= 3) {
       this.createCapConstraint = undefined!;
     }

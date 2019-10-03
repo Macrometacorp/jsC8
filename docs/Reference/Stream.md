@@ -2,7 +2,7 @@
 
 ## fabric.stream
 
-`fabric.stream(streamName, type, local): Stream`
+`fabric.stream(streamName, local, isCollectionStream): Stream`
 
 Returns a `Stream` instance representing the stream with the given stream name.
 
@@ -12,13 +12,21 @@ Returns a `Stream` instance representing the stream with the given stream name.
 
   The name of the stream to use.
 
+- **local**: `boolean`
+
+  Is the stream local or global
+
+- **isCollectionStream**: `boolean`
+
+   If the stream is a collection stream or not. The default is `false`.
+
 **Examples**
 
 ```js
 const fabric = new Fabric();
 await fabric.login(email, password);
 fabric.useTenant(tenant-name);
-const stream = fabric.stream("testStream", true);
+const stream = fabric.stream("testStream", true, false);
 ```
 
 ## fabric.getStreams

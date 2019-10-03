@@ -34,6 +34,42 @@ await collection.create({
 ```
 Note:-(To make the collection as `spot`, pass the `isSpot: true` in the `properties` object.)
 
+## collection.onChange
+
+`async collection.onChange(callbackObject, dcName, subscriptionName): void`
+
+**Arguments**
+
+- **callbackObj**: `{ onopen, onclose, onerror, onmessage }`
+
+  An object having required callbacks. `onmessage` is necessary.
+
+- **dcName**: `string``
+
+  The dcName for the consumer.
+
+- **subscriptionName**: `string`
+
+  The name of the subscription.
+
+**Examples**
+
+```js
+  collection.onChange({
+    onmessage: (msg) => console.log("message=>", msg),
+    onopen: async () => {
+      console.log("connection open");
+      //manipulate the collection here
+
+      // add new documents to the collection
+      await collection.save({ firstname: 'Jean', lastname: 'Picard' });
+      await collection.save({ firstname: 'Bruce', lastname: 'Wayne' });
+
+    },
+    onclose: () => console.log("connection closed")
+  }, "fed.macrometa.io", "mySub");
+```
+
 
 ## collection.rename
 
