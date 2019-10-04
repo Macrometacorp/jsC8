@@ -1,13 +1,12 @@
-//REPL Link: https://repl.it/repls/ExperiencedAbleDatabase
+//REPL Link: https://repl.it/repls/TrueJadedCurrencies
 _ = require('lodash')
 Fabric = require('jsc8')
 fabric = new Fabric("https://try.macrometa.io")
 
 const fed_url = "https://try.macrometa.io"
-const guest_tenant = "guest2"
 const guest_password = "guest2"
-const guest_user = "guest2"
 const geo_fabric = "guest2"
+const guest_email = "guest2@macrometa.io"
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
@@ -18,10 +17,7 @@ const collection_name = "person" + getRandomInt(10000).toString()
 
 async function createCollection() {
   await console.log("Logging in...");
-  await fabric.login(guest_tenant, guest_user, guest_password);
-
-  await console.log("Using the demotenant");
-  fabric.useTenant(guest_tenant)
+  await fabric.login(guest_email, guest_password);
 
   await console.log("Using the demoFabric...");
   fabric.useFabric(geo_fabric);
@@ -60,9 +56,7 @@ async function readData(regions){
   let c8ql = Fabric.c8ql
   for (let region of regions){
     const newFabric = new Fabric("https://"+ region +".macrometa.io")
-    await newFabric.login(guest_tenant, guest_user, guest_password);
-
-    newFabric.useTenant(guest_tenant)
+    await newFabric.login(guest_email, guest_password);
     newFabric.useFabric(geo_fabric);
 
     const cursor = await newFabric.query(c8ql(["FOR doc in "+ collection_name + " RETURN doc"]));
@@ -84,9 +78,6 @@ let docs = [
   await createCollection();
   const dcList = await getDCList()
   await console.log("dcList: ", dcList)
-  
   await insertData(docs)
-
   await readData(dcList)
-  
 })();

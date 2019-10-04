@@ -1,21 +1,17 @@
-//REPL link: https://repl.it/repls/WirelessNauticalCase
+//REPL link: https://repl.it/repls/GiganticScalyGlobalarrays
 _ = require('lodash')
 Fabric = require('jsc8')
 fabric = new Fabric("https://try.macrometa.io")
 
 const fed_url = "https://try.macrometa.io"
-const guest_tenant = "guest2"
+const guest_email = "guest2@macrometa.io"
 const guest_password = "guest2"
-const guest_user = "guest2"
 const geo_fabric = "guest2"
 let collection
 
 async function setup(){
   await console.log("Logging in...");
-  await fabric.login(guest_tenant, guest_user, guest_password);
-
-  await console.log("Using the tenant: " + guest_tenant);
-  fabric.useTenant(guest_tenant)
+  await fabric.login(guest_email, guest_password);
 
   await console.log("Using the fabric: " + geo_fabric);
   fabric.useFabric(geo_fabric);
