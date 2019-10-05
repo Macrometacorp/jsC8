@@ -1,4 +1,4 @@
-//REPL link: https://repl.it/repls/FortunateSardonicComputer
+//REPL link: https://repl.it/repls/ConfusedWarlikeSystems
 
 
 _ = require('lodash')
@@ -6,9 +6,8 @@ Fabric = require('jsc8')
 fabric = new Fabric("https://try.macrometa.io")
 
 const fed_url = "https://try.macrometa.io"
-const guest_tenant = "guest2"
+const guest_email = "guest2@macrometa.io"
 const guest_password = "guest2"
-const guest_user = "guest2"
 const geo_fabric = "guest2"
 
 function getRandomInt(max) {
@@ -31,10 +30,7 @@ let docs = [
 
 async function createCollection() {
   await console.log("Logging in...");
-  await fabric.login(guest_tenant, guest_user, guest_password);
-
-  await console.log("Using the demotenant");
-  fabric.useTenant(guest_tenant)
+  await fabric.login(guest_email, guest_password);
 
   await console.log("Using the demoFabric...");
   fabric.useFabric(geo_fabric);
@@ -70,9 +66,8 @@ async function insertData(regions, docs){
   for (let doc of docs) {
     
     let randomIdx = getRandomInt(regions.length - 1);
-    await fabrics[randomIdx].login(guest_tenant, guest_user, guest_password);
+    await fabrics[randomIdx].login(guest_email, guest_password);
 
-    fabrics[randomIdx].useTenant(guest_tenant)
     fabrics[randomIdx].useFabric(geo_fabric);
     const collection = await fabrics[randomIdx].collection(collection_name);
     collection.save(doc)
@@ -83,9 +78,7 @@ async function readData(regions){
   let c8ql = Fabric.c8ql
   for (let region of regions){
     const newFabric = new Fabric("https://"+ region +".macrometa.io")
-    await newFabric.login(guest_tenant, guest_user, guest_password);
-
-    newFabric.useTenant(guest_tenant)
+    await newFabric.login(guest_email, guest_password);
     newFabric.useFabric(geo_fabric);
 
     const cursor = await newFabric.query(c8ql(["FOR doc in "+ collection_name + " RETURN doc"]));
@@ -99,9 +92,6 @@ async function readData(regions){
   await createCollection();
   const dcList = await getDCList()
   await console.log("dcList: ", dcList)
-  
   await insertData(dcList, docs)
-
   await readData(dcList)
-  
 })();

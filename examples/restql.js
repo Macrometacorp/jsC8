@@ -1,12 +1,11 @@
-//REPL link: https://repl.it/repls/EnragedDecentTitles
+//REPL link: https://repl.it/repls/SeparateFocusedGigahertz
 
 Fabric = require('jsc8')
 
 //Variables
 fed_url = "try.macrometa.io"
-guest_tenant = "guest2"
+guest_email = "guest2@macrometa.io"
 guest_password = "guest2"
-guest_user = "guest2"
 geo_fabric = "guest2"
 collection_name = "addresses" + Math.floor(1000 + Math.random() * 9000).toString()
 
@@ -25,8 +24,7 @@ fabric = new Fabric("https://try.macrometa.io")
 
 
 async function restqldemo() {
-  await fabric.login(guest_tenant, guest_user, guest_password);
-  fabric.useTenant(guest_tenant);
+  await fabric.login(guest_email, guest_password);
   fabric.useFabric(geo_fabric);
   console.log("------- CREATE GEO-REPLICATED COLLECTION  ------")
   const collection = fabric.collection(collection_name);
