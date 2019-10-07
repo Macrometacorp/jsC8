@@ -1,3 +1,5 @@
+// REPL link https://repl.it/repls/IckyDefenselessAutomatedinformationsystem
+
 _ = require('lodash')
 Fabric = require('jsc8')
 fabric = new Fabric("https://try.macrometa.io")
