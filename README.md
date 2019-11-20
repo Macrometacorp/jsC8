@@ -91,7 +91,7 @@ Fabric = require('jsc8')
 fabric = new Fabric(["MY-C8-URL1", "MY-C8-URL2"]); 
 ```
 
-This connection string actually represents the default value( `"https://try.macrometa.io"` ), so if this is the value you want, you can omit url while invocation:
+This connection string actually represents the default value( `"https://gdn1.macrometa.io"` ), so if this is the value you want, you can omit url while invocation:
 
 ```js
 Fabric = require('jsc8')
@@ -137,7 +137,7 @@ Let's create geo-fabric called `demofabric` by passing a parameter called `dclis
 
 const Fabric = require("jsc8");
 
-const fabric = new Fabric("https://try.macrometa.io");
+const fabric = new Fabric("https://gdn1.macrometa.io");
 
 async function createFabric() {
     await console.log("Logging in...");
@@ -172,7 +172,7 @@ To get details of `fabric` geo-fabric
 ```js
 const Fabric = require("jsc8");
 
-const fabric = new Fabric("https://try.macrometa.io");
+const fabric = new Fabric("https:gdn1.macrometa.io");
 
 async function getFabric() {
     await console.log("Logging in...");
@@ -205,7 +205,7 @@ The below example shows the steps.
 
 ```js
 Fabric = require('jsc8')
-fabric = new Fabric("https://try.macrometa.io")
+fabric = new Fabric("https://gdn1.macrometa.io")
 
 async function createCollection() {
   await console.log("Logging in...");
@@ -243,7 +243,7 @@ Let's add a hash_index called `emails` to our collection `employees`. Please ref
 ```js
 
 Fabric = require('jsc8')
-fabric = new Fabric("https://try.macrometa.io")
+fabric = new Fabric("https://gdn1.macrometa.io")
 
 async function createIndex() {
   await console.log("Logging in...");
@@ -279,7 +279,7 @@ Let's  insert  documents to the `employees` collection as shown below.
 
 ```js
 Fabric = require('jsc8')
-fabric = new Fabric("https://try.macrometa.io")
+fabric = new Fabric("https://gdn1.macrometa.io")
 
 
 const docJean = {'_key':'Jean', 
@@ -331,7 +331,7 @@ C8QL is C8's query language. You can execute C8QL query on our newly created col
 
 Fabric = require('jsc8')
 c8ql = Fabric.c8ql
-fabric = new Fabric("https://try.macrometa.io")
+fabric = new Fabric("https://gdn1.macrometa.io")
 
 async function c8Queries() {
   await console.log("Logging in...");
@@ -363,7 +363,7 @@ Example for real-time updates from a collection in fabric:
 ```js
 
 Fabric = require('jsc8')
-fabric = new Fabric("https://try.macrometa.io")
+fabric = new Fabric("https://gdn1.macrometa.io")
 
 async function callback_fn(collection){
   await console.log("Connection open on ", collection.name)
@@ -388,7 +388,7 @@ async function realTimeListener() {
         this.callback_fn(collection)
       },
       onclose: () => console.log("connection closed")
-    }, "try.macrometa.io");
+    }, "gdn1.macrometa.io");
 }
 
 realTimeListener()
@@ -400,14 +400,14 @@ Creating streams in C8 is a 1 step operation.  The stream can be either a `local
 
 ```js
 Fabric = require('jsc8')
-fabric = new Fabric("https://try.macrometa.io")
+fabric = new Fabric("https://gdn1.macrometa.io")
 
 async function subscribe(stream){
-  await stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "try.macrometa.io");
+  await stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "gdn1.macrometa.io");
 }
 
 async function publish(stream){
-  await stream.producer("hello world", "try.macrometa.io");
+  await stream.producer("hello world", "gdn1.macrometa.io");
 }
 
 async function streamDemo() {
@@ -438,7 +438,7 @@ On using a geo-distributed database as backend as service eliminating the need f
 Fabric = require('jsc8')
 
 //Variables
-fed_url = "https://try.macrometa.io"
+fed_url = "https://gdn1.macrometa.io"
 guest_tenant = "guest"
 guest_password = "guest5"
 guest_user = "guest5"

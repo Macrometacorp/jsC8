@@ -1,9 +1,9 @@
 //REPL Link: https://repl.it/repls/TrueJadedCurrencies
 _ = require('lodash')
 Fabric = require('jsc8')
-fabric = new Fabric("https://try.macrometa.io")
+fabric = new Fabric("https://gdn1.macrometa.io")
 
-const fed_url = "https://try.macrometa.io"
+const fed_url = "https://gdn1.macrometa.io"
 const guest_password = "guest2"
 const geo_fabric = "guest2"
 const guest_email = "guest2@macrometa.io"

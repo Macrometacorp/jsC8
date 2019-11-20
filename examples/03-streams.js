@@ -1,9 +1,9 @@
 //REPL link: https://repl.it/repls/GiganticScalyGlobalarrays
 _ = require('lodash')
 Fabric = require('jsc8')
-fabric = new Fabric("https://try.macrometa.io")
+fabric = new Fabric("https://gdn1.macrometa.io")
 
-const fed_url = "https://try.macrometa.io"
+const fed_url = "https://gdn1.macrometa.io"
 const guest_email = "guest2@macrometa.io"
 const guest_password = "guest2"
 const geo_fabric = "guest2"
@@ -31,7 +31,7 @@ function sleep(ms) {
 }
 
 async function publish(stream, msg){
-  await stream.producer(msg, "try.macrometa.io");
+  await stream.producer(msg, "gdn1.macrometa.io");
 }
 
 
@@ -50,7 +50,7 @@ async function receive(stream){
         console.log(msg) 
       },
       onopen: () => publishAll(stream)
-    }, "try.macrometa.io");
+    }, "gdn1.macrometa.io");
   
 }
 

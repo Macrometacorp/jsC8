@@ -104,7 +104,7 @@ This section aims to provide a basic understanding of all the features.
 ```js
 import { Fabric, c8ql } from "jsc8";
 
-const regionURL = "try.macrometa.io";
+const regionURL = "gdn1.macrometa.io";
   const region = "try-eu-west-1";
   const rootPassword = "root-password";
   const tenantEmail = "myTenant@macrometa.io";

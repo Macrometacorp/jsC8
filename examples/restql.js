@@ -3,7 +3,7 @@
 Fabric = require('jsc8')
 
 //Variables
-fed_url = "try.macrometa.io"
+fed_url = "gdn1.macrometa.io"
 guest_email = "guest2@macrometa.io"
 guest_password = "guest2"
 geo_fabric = "guest2"
@@ -20,7 +20,7 @@ delete_data = "REMOVE 'abc' IN " + collection_name
 
 get_count = "RETURN COUNT(FOR doc IN " + collection_name + " RETURN 1)"
 
-fabric = new Fabric("https://try.macrometa.io")
+fabric = new Fabric("https://gdn1.macrometa.io")
 
 
 async function restqldemo() {

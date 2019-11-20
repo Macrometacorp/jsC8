@@ -2,9 +2,9 @@
 
 _ = require('lodash')
 Fabric = require('jsc8')
-fabric = new Fabric("https://try.macrometa.io")
+fabric = new Fabric("https://gdn1.macrometa.io")
 
-const fed_url = "https://try.macrometa.io"
+const fed_url = "https://gdn1.macrometa.io"
 const guest_email = "guest2@macrometa.io"
 const guest_password = "guest2"
 const geo_fabric = "guest2"
@@ -58,7 +58,7 @@ async function registerCallbackFn(){
   collection.onChange({
       onmessage: (msg) => console.log("message=>", msg),
       onclose: () => console.log("connection closed")
-    }, "try.macrometa.io");
+    }, "gdn1.macrometa.io");
 }
 
 let docs = [
