@@ -4,7 +4,14 @@ Fabric = require('jsc8')
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 var xmlHttp = new XMLHttpRequest();
 
+// Define URLs
 const fed_url = "https://gdn1.macrometa.io"
+const fed_url_west = "https://gdn1-sfo2.prod.macrometa.io"
+const fed_url_eastcoast = "https://gdn1-nyc1.prod.macrometa.io"
+const fed_url_europe = "https://gdn1-fra1.prod.macrometa.io"
+const fed_url_asia = "https://gdn1-blr1.prod.macrometa.io"
+
+// Variables
 const guest_password = "guest1"
 const geo_fabric = "guest1"
 const guest_email = "guest1@macrometa.io"
@@ -122,11 +129,11 @@ async function main() {
       cache.set(key, doc)
     }
     else {
-      console.log("CACHE_HIT: \ndoc:" + JSON.stringify(doc))
+      console.log("CACHE_HIT: get from closest region cache...")
     }
 
   }
-  console.log("\n------- Execution Time: " + (Date.now()-before) + "ms  -------\n")
+  console.log("\n------- Execution Time: " + (Date.now()-before) + "ms  (from Origin) -------\n")
 
   // 2nd time access served from GDN edge cache.
   console.log("----------------------\n2. Second time access:\n----------------------")
@@ -142,17 +149,16 @@ async function main() {
       console.log("CACHE_HIT: get from closest region cache...")
     }
   }
-   console.log("\n------- Execution Time: " + (Date.now()-before) + "ms  -------\n")
+   console.log("\n------- Execution Time: " + (Date.now()-before) + "ms  (from Closest Cache)-------\n")
 
-
-  // GDN Cache Geo replication in action... US East Coast
-  console.log("------------------------------\n3a. Access from US_EAST_COAST:\n------------------------------")
-  fed_url_asia = "https://gdn1-nyc1.prod.macrometa.io"
-  fabric = new Fabric(fed_url_asia)
+  // GDN Cache Geo replication in action... US West Coast
+  console.log("------------------------------\n3a. Access from US_WEST_COAST:\n------------------------------")
+  fabric = new Fabric(fed_url_west)
   await fabric.login(guest_email, guest_password)
   await fabric.useFabric(geo_fabric)
   cache3a = new Cache(fabric)
 
+  var before = Date.now();
   for (key of keys) {
     doc = await cache3a.get(key)
     if (doc == null) {
@@ -161,18 +167,20 @@ async function main() {
       cache3a.set(key, doc)
     }
     else {
-      console.log("CACHE_HIT: \ndoc:" + JSON.stringify(doc))
+      console.log("CACHE_HIT: doc_id:" + doc._id)
     }
   }
+  console.log("\n------- Execution Time: " + (Date.now()-before) + "ms  (from US_WEST_COAST Cache) -------\n")
 
-  // GDN Cache Geo replication in action... Europe
-  console.log("------------------------------\n3b. Access from EUROPE:\n------------------------------")
-  fed_url_asia = "https://gdn1-fra1.prod.macrometa.io"
-  fabric = new Fabric(fed_url_asia)
+
+  // GDN Cache Geo replication in action... US East Coast
+  console.log("------------------------------\n3b. Access from US_EAST_COAST:\n------------------------------")
+  fabric = new Fabric(fed_url_eastcoast)
   await fabric.login(guest_email, guest_password)
   await fabric.useFabric(geo_fabric)
   cache3b = new Cache(fabric)
 
+  var before = Date.now();
   for (key of keys) {
     doc = await cache3b.get(key)
     if (doc == null) {
@@ -181,18 +189,19 @@ async function main() {
       cache3b.set(key, doc)
     }
     else {
-      console.log("CACHE_HIT: \ndoc:" + JSON.stringify(doc))
+      console.log("CACHE_HIT: doc_id:" + doc._id)
     }
   }
+  console.log("\n------- Execution Time: " + (Date.now()-before) + "ms (from US_EAST_COAST Cache) -------\n")
 
-  // GDN Cache Geo replication in action... Asia
-  console.log("------------------------------\n3c. Access from ASIA:\n------------------------------")
-  fed_url_asia = "https://gdn1-nyc1.prod.macrometa.io"
-  fabric = new Fabric(fed_url_asia)
+  // GDN Cache Geo replication in action... Europe
+  console.log("------------------------------\n3c. Access from EUROPE:\n------------------------------")
+  fabric = new Fabric(fed_url_europe)
   await fabric.login(guest_email, guest_password)
   await fabric.useFabric(geo_fabric)
   cache3c = new Cache(fabric)
 
+  var before = Date.now();
   for (key of keys) {
     doc = await cache3c.get(key)
     if (doc == null) {
@@ -201,9 +210,31 @@ async function main() {
       cache3c.set(key, doc)
     }
     else {
-      console.log("CACHE_HIT: \ndoc:" + JSON.stringify(doc))
+      console.log("CACHE_HIT: doc_id:" + doc._id)
     }
   }
+  console.log("\n------- Execution Time: " + (Date.now()-before) + "ms  (from EUROPE Cache)-------\n")
+
+  // GDN Cache Geo replication in action... Asia
+  console.log("------------------------------\n3c. Access from ASIA:\n------------------------------")
+  fabric = new Fabric(fed_url_asia)
+  await fabric.login(guest_email, guest_password)
+  await fabric.useFabric(geo_fabric)
+  cache3d = new Cache(fabric)
+
+  var before = Date.now();
+  for (key of keys) {
+    doc = await cache3d.get(key)
+    if (doc == null) {
+      console.log("CACHE_MISS: get from remote origin database...")
+      doc = get_from_origin_db(key)
+      cache3d.set(key, doc)
+    }
+    else {
+      console.log("CACHE_HIT: doc_id:" + doc._id)
+    }
+  }
+  console.log("\n------- Execution Time: " + (Date.now()-before) + "ms  (from ASIA Cache)-------\n")
 
   // Invalidate & update cache globally on writes. 
   console.log("------------------------------\n4. Writes from Edge to origin and global cache update: \n------------------------------")
