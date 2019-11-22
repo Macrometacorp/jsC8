@@ -1,4 +1,4 @@
-//REPL link: https://repl.it/repls/SeparateFocusedGigahertz
+//REPL link: https://repl.it/@durgaMacrometa/HowTo-UsingRestQLJS
 
 Fabric = require('jsc8')
 
