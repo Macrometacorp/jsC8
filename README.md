@@ -11,7 +11,7 @@ C8 is a fully managed geo-distributed fast data service with turnkey global dist
 In jsC8, a **document** is an object that is a JSON serializable object with the following properties:
 
 * Contains the `_key` field, which identifies the document uniquely within a specific collection.
-* Contains the `_id` field (also called the *handle*), which identifies the document uniquely across all collections within a fabric. This ID is a combination of the collection name and the document key using the format `{collection}/{key}` (see example below).
+* Contains the `_id` field (also called the *handle*), which identifies the document uniquely across all collections within a client. This ID is a combination of the collection name and the document key using the format `{collection}/{key}` (see example below).
 * Contains the `_rev` field. C8  supports MVCC (Multiple Version Concurrency Control) and is capable of storing each document in multiple revisions. Latest revision of a document is indicated by this field. The field is populated by C8 and is not required as input unless you want to validate a document against its current revision.
 
 Here is an example of a valid document:
@@ -77,31 +77,31 @@ npm run dist
 
 ## Connect to C8
 
-The first step in using C8 is to establish a connection to a local region. When this code executes, it initializes the server connection to the region URL you sepcified and returns a fabric. Then this fabric can be used to perform operations. 
+The first step in using C8 is to establish a connection to a local region. When this code executes, it initializes the server connection to the region URL you sepcified and returns a client. Then this fabric can be used to perform operations. 
 
 ```js
-Fabric = require('jsc8')
-fabric = new Fabric("MY-C8-URL"); 
+const jsc8 = require('jsc8')
+const client = new jsc8("MY-C8-URL"); 
 ```
 
 or to have failover support
 
 ```js
-Fabric = require('jsc8')
-fabric = new Fabric(["MY-C8-URL1", "MY-C8-URL2"]); 
+const jsc8 = require('jsc8')
+const client = new jsc8(["MY-C8-URL1", "MY-C8-URL2"]); 
 ```
 
 This connection string actually represents the default value( `"https://gdn1.macrometa.io"` ), so if this is the value you want, you can omit url while invocation:
 
 ```js
-Fabric = require('jsc8')
-fabric = new Fabric();
+const jsc8 = require('jsc8')
+const client = new jsc8();
 ```
 
 If that’s still too verbose for you, you can invoke the driver directly using the require statement itself.
 
 ```js
-fabric = require('jsc8')();
+const client = require('jsc8')();
 ```
 The outcome of any of the three calls should be identical.
 
@@ -111,21 +111,21 @@ To start working, you first have to login. This gets the auth token and is added
 
 ```js
 async function login() {
-  return await fabric.login(email, password);
+  return await client.login(email, password);
 
 }
 ```
 
-Below line should print the jwt token. However, this is just for demonstative purposes as this token will be added to further requests. Simple fabric.login should suffice for most cases.
+Below line should print the jwt token. However, this is just for demonstative purposes as this token will be added to further requests. Simple client.login should suffice for most cases.
 
 ```js
 login().then(console.log)
 ```
 
-To use the demotenant, we need to use fabric.useTenant as below
+To use the demotenant, we need to use client.useTenant as below
 
 ```js
-fabric.useTenant(tenant-name);
+client.useTenant(tenant-name);
 ```
 
 
@@ -135,25 +135,25 @@ Let's create geo-fabric called `demofabric` by passing a parameter called `dclis
 
 ```js
 
-const Fabric = require("jsc8");
+const jsc8 = require("jsc8");
 
-const fabric = new Fabric("https://gdn1.macrometa.io");
+const client = new jsc8("https://gdn1.macrometa.io");
 
 async function createFabric() {
     await console.log("Logging in...");
-    await fabric.login(email, password);
+    await client.login(email, password);
 
     await console.log("Using the demotenant...");  
-    fabric.useTenant(tenant-name);
+    client.useTenant(tenant-name);
 
     try{
-      await console.log("Creating the fabric...");
-      let result = await fabric.createFabric("demoFabric", [{ username: 'root' }], { dcList:"try-asia-south1,try-us-east4,try-us-west2" });
+      await console.log("Creating the client...");
+      let result = await client.createFabric("demoFabric", [{ username: 'root' }], { dcList:"try-asia-south1,try-us-east4,try-us-west2" });
 
       await console.log("result is: ", result)
     
       await console.log("Listing the fabrics to verify that demoFabric has been created");
-      const res = await fabric.listFabrics();
+      const res = await client.listFabrics();
 
       await console.log(res);
     } catch(e){
@@ -170,22 +170,22 @@ createFabric();
 To get details of `fabric` geo-fabric
 
 ```js
-const Fabric = require("jsc8");
+const jsc8 = require("jsc8");
 
-const fabric = new Fabric("https:gdn1.macrometa.io");
+const client = new jsc8("https:gdn1.macrometa.io");
 
 async function getFabric() {
     await console.log("Logging in...");
-    await fabric.login(email, password);
+    await client.login(email, password);
     await console.log("Using the demotenant...");  
-    fabric.useTenant(tenant-name);
+    client.useTenant(tenant-name);
 
     try{
       await console.log("Using the demoFabric...");  
-      fabric.useFabric("demoFabric")
+      client.useFabric("demoFabric")
 
       await console.log("Getting the fabric details...");
-      let result = await fabric.get();
+      let result = await client.get();
 
       await console.log("result is: ", result)
     } catch(e){
@@ -199,26 +199,26 @@ getFabric();
 
 ## Create Collection
 
-We can now create collection in the fabric.  To do this,  first you connect to `demofabric` under `demotenant` with user as `root` and password `demouserpwd`. Then create a collection called `employees`.  
+We can now create collection in the client.  To do this,  first you connect to `demofabric` under `demotenant` with user as `root` and password `demouserpwd`. Then create a collection called `employees`.  
 
 The below example shows the steps.
 
 ```js
-Fabric = require('jsc8')
-fabric = new Fabric("https://gdn1.macrometa.io")
+const jsc8 = require('jsc8')
+const client = new jsc8("https://gdn1.macrometa.io")
 
 async function createCollection() {
   await console.log("Logging in...");
-  await fabric.login(email, password);
+  await client.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant(tenant-name);
+  client.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
-  fabric.useFabric("demoFabric");
+  client.useFabric("demoFabric");
 
   await console.log("Creating the collection object to be used...");
-  let collection = fabric.collection('employees');
+  let collection = client.collection('employees');
 
   await console.log("Creating the collection employees under demoFabric...");
   let collectionDetails;
@@ -242,21 +242,21 @@ Let's add a hash_index called `emails` to our collection `employees`. Please ref
 
 ```js
 
-Fabric = require('jsc8')
-fabric = new Fabric("https://gdn1.macrometa.io")
+const jsc8 = require('jsc8')
+const client = new jsc8("https://gdn1.macrometa.io")
 
 async function createIndex() {
   await console.log("Logging in...");
-  await fabric.login(email, password);
+  await client.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant(tenant-name);
+  client.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
-  fabric.useFabric("demoFabric");
+  client.useFabric("demoFabric");
 
   await console.log("Creating the collection object to be used...");
-  let collection = fabric.collection('employees');
+  let collection = client.collection('employees');
 
   await console.log("Creating the index on collection employees under demoFabric...");
   let index;
@@ -278,8 +278,8 @@ createIndex().then(console.log)
 Let's  insert  documents to the `employees` collection as shown below.
 
 ```js
-Fabric = require('jsc8')
-fabric = new Fabric("https://gdn1.macrometa.io")
+const jsc8 = require('jsc8')
+const client = new jsc8("https://gdn1.macrometa.io")
 
 
 const docJean = {'_key':'Jean', 
@@ -301,16 +301,16 @@ const docs = [docJean, docJames, docHan, docBruce]
 
 async function populate() {
   await console.log("Logging in...");
-  await fabric.login(email, password);
+  await client.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant(tenant-name);
+  client.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
-  fabric.useFabric("demoFabric");
+  client.useFabric("demoFabric");
 
   await console.log("Creating the collection object to be used...");
-  let collection = fabric.collection('employees');
+  let collection = client.collection('employees');
   
   for (let doc of docs) {
     await collection.save(doc)
@@ -329,26 +329,26 @@ C8QL is C8's query language. You can execute C8QL query on our newly created col
 
 ```js
 
-Fabric = require('jsc8')
-c8ql = Fabric.c8ql
-fabric = new Fabric("https://gdn1.macrometa.io")
+const jsc8 = require('jsc8')
+const c8ql = jsc8.c8ql
+const client = new jsc8("https://gdn1.macrometa.io")
 
 async function c8Queries() {
   await console.log("Logging in...");
-  await fabric.login(email, password);
+  await client.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant(tenant-name);
+  client.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
-  fabric.useFabric("demoFabric");
+  client.useFabric("demoFabric");
 
   await console.log("Creating the collection object to be used...");
-  let collection = fabric.collection('employees');
+  let collection = client.collection('employees');
 
 
 
-  const cursor = await fabric.query(c8ql`FOR employee IN employees RETURN employee`);
+  const cursor = await client.query(c8ql`FOR employee IN employees RETURN employee`);
   const result = await cursor.all();
   await console.log(result)
 }
@@ -362,8 +362,8 @@ Example for real-time updates from a collection in fabric:
 
 ```js
 
-Fabric = require('jsc8')
-fabric = new Fabric("https://gdn1.macrometa.io")
+const jsc8 = require('jsc8')
+const client = new jsc8("https://gdn1.macrometa.io")
 
 async function callback_fn(collection){
   await console.log("Connection open on ", collection.name)
@@ -371,16 +371,16 @@ async function callback_fn(collection){
 
 async function realTimeListener() {
   await console.log("Logging in...");
-  await fabric.login(email, password);
+  await client.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant(tenant-name);
+  client.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
-  fabric.useFabric("demoFabric");
+  client.useFabric("demoFabric");
 
   await console.log("Creating the collection object to be used...");
-  let collection = fabric.collection('employees');
+  let collection = client.collection('employees');
 
   collection.onChange({
       onmessage: (msg) => console.log("message=>", msg),
@@ -399,8 +399,8 @@ realTimeListener()
 Creating streams in C8 is a 1 step operation.  The stream can be either a `local` stream or could be a `geo-replicated` stream.
 
 ```js
-Fabric = require('jsc8')
-fabric = new Fabric("https://gdn1.macrometa.io")
+const jsc8 = require('jsc8')
+const client = new jsc8("https://gdn1.macrometa.io")
 
 async function subscribe(stream){
   await stream.consumer("my-sub", { onmessage:(msg)=>{ console.log(msg) } }, "gdn1.macrometa.io");
@@ -412,12 +412,12 @@ async function publish(stream){
 
 async function streamDemo() {
   await console.log("Logging in...");
-  await fabric.login(email, password);
+  await client.login(email, password);
 
   await console.log("Using the demotenant");
-  fabric.useTenant(tenant-name);
+  client.useTenant(tenant-name);
 
-  stream = fabric.stream("newStreamFromJSC8", false);
+  stream = client.stream("newStreamFromJSC8", false);
   //Here the last boolean value tells if the stream is local or global. false means that it is global.
 
   await stream.createStream();
@@ -435,49 +435,49 @@ streamDemo()
 On using a geo-distributed database as backend as service eliminating the need for separate backend servers & containers.
 
 ```js
-Fabric = require('jsc8')
+const jsc8 = require('jsc8')
 
 //Variables
-fed_url = "https://gdn1.macrometa.io"
-guest_tenant = "guest"
-guest_password = "guest5"
-guest_user = "guest5"
-geo_fabric = "guest5"
-collection_name = "addresses" + Math.floor(1000 + Math.random() * 9000).toString()
+const fed_url = "https://gdn1.macrometa.io"
+const guest_tenant = "guest"
+const guest_password = "guest5"
+const guest_user = "guest5"
+const geo_fabric = "guest5"
+const collection_name = "addresses" + Math.floor(1000 + Math.random() * 9000).toString()
 
 //Queries
-insert_data = "INSERT {'firstname':@firstname, 'lastname':@lastname, 'email':@email, 'zipcode':@zipcode, '_key': 'abc'} IN " + collection_name
+const insert_data = "INSERT {'firstname':@firstname, 'lastname':@lastname, 'email':@email, 'zipcode':@zipcode, '_key': 'abc'} IN " + collection_name
 
-get_data = "FOR doc IN " + collection_name + " RETURN doc"
+const get_data = "FOR doc IN " + collection_name + " RETURN doc"
 
-update_data = "UPDATE 'abc' WITH {'lastname': @lastname } IN " + collection_name
+const update_data = "UPDATE 'abc' WITH {'lastname': @lastname } IN " + collection_name
 
-delete_data = "REMOVE 'abc' IN " + collection_name
+const delete_data = "REMOVE 'abc' IN " + collection_name
 
-get_count = "RETURN COUNT(FOR doc IN " + collection_name + " RETURN 1)"
+const get_count = "RETURN COUNT(FOR doc IN " + collection_name + " RETURN 1)"
 
-fabric = new Fabric(fed_url)
+const client = new jsc8(fed_url)
 
 
 async function restqldemo() {
-  await fabric.login(guest_tenant_email, guest_password);
-  fabric.useTenant(guest_tenant);
-  fabric.useFabric(geo_fabric);
+  await client.login(guest_tenant_email, guest_password);
+  client.useTenant(guest_tenant);
+  client.useFabric(geo_fabric);
   console.log("------- CREATE GEO-REPLICATED COLLECTION  ------")
-  const collection = fabric.collection(collection_name);
+  const collection = client.collection(collection_name);
   await collection.create()
   console.log("Collection " + collection_name + " created.\n")
 
   console.log("------- SAVING THE QUERIES  ------")
 
-  await fabric.saveQuery("insertData", {}, insert_data)
+  await client.saveQuery("insertData", {}, insert_data)
 
-  await fabric.saveQuery("getData", {}, get_data)
-  await fabric.saveQuery("updateData", {}, update_data)
+  await client.saveQuery("getData", {}, get_data)
+  await client.saveQuery("updateData", {}, update_data)
 
-  await fabric.saveQuery("deleteData", {}, delete_data)
+  await client.saveQuery("deleteData", {}, delete_data)
 
-  await fabric.saveQuery("getCount", {}, get_count)
+  await client.saveQuery("getCount", {}, get_count)
 
   console.log("Saved Queries Successfully\n")
 
@@ -488,26 +488,26 @@ async function restqldemo() {
     "email": "john.doe@macrometa.io", "zipcode": "511037"
   }
 
-  await fabric.executeSavedQuery("insertData", bindVars)
+  await client.executeSavedQuery("insertData", bindVars)
   console.log("Data Inserted \n")
 
-  const res = await fabric.executeSavedQuery("getData")
+  const res = await client.executeSavedQuery("getData")
   console.log("Output of get data query:")
   console.log(res.result)
   console.log("\n")
 
-  await fabric.executeSavedQuery("updateData", { "lastname": "mathews" })
+  await client.executeSavedQuery("updateData", { "lastname": "mathews" })
   console.log("Data updated \n")
 
-  const data = await fabric.executeSavedQuery("getData")
+  const data = await client.executeSavedQuery("getData")
   console.log("Output of get data query after update:")
   console.log(data.result)
   console.log("\n")
 
-  const count = await fabric.executeSavedQuery("getCount")
+  const count = await client.executeSavedQuery("getCount")
   console.log("Count:")
   console.log(count.result)
-  await fabric.executeSavedQuery("deleteData")
+  await client.executeSavedQuery("deleteData")
 
 }
 
