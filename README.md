@@ -11,7 +11,7 @@ C8 is a fully managed geo-distributed fast data service with turnkey global dist
 In jsC8, a **document** is an object that is a JSON serializable object with the following properties:
 
 * Contains the `_key` field, which identifies the document uniquely within a specific collection.
-* Contains the `_id` field (also called the *handle*), which identifies the document uniquely across all collections within a client. This ID is a combination of the collection name and the document key using the format `{collection}/{key}` (see example below).
+* Contains the `_id` field (also called the *handle*), which identifies the document uniquely across all collections within a fabric. This ID is a combination of the collection name and the document key using the format `{collection}/{key}` (see example below).
 * Contains the `_rev` field. C8  supports MVCC (Multiple Version Concurrency Control) and is capable of storing each document in multiple revisions. Latest revision of a document is indicated by this field. The field is populated by C8 and is not required as input unless you want to validate a document against its current revision.
 
 Here is an example of a valid document:
@@ -77,7 +77,7 @@ npm run dist
 
 ## Connect to C8
 
-The first step in using C8 is to establish a connection to a local region. When this code executes, it initializes the server connection to the region URL you sepcified and returns a client. Then this fabric can be used to perform operations. 
+The first step in using C8 is to establish a connection to a local region. When this code executes, it initializes the server connection to the region URL you sepcified and returns a client. Then this client can be used to perform operations. 
 
 ```js
 const jsc8 = require('jsc8')
