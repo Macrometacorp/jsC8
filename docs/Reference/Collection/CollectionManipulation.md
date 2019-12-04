@@ -16,17 +16,17 @@ Creates a collection with the given `properties` for this collection's name, the
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
 
-const collection = fabric.collection('potatoes');
+const collection = client.collection('potatoes');
 await collection.create()
 // the document collection "potatoes" now exists
 
 // -- or --
 
-const collection = fabric.edgeCollection('friends');
+const collection = client.edgeCollection('friends');
 await collection.create({
   waitForSync: true // always sync document changes to disk
 });
@@ -80,10 +80,10 @@ Renames the collection. The  `Collection` instance will automatically update its
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const result = await collection.rename('new-collection-name')
 assert.equal(result.name, 'new-collection-name');
 assert.equal(collection.name, result.name);
@@ -95,15 +95,15 @@ assert.equal(collection.name, result.name);
 
 `async collection.truncate(): Object`
 
-Deletes **all documents** in the collection in the fabric.
+Deletes **all documents** in the collection in the client.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 await collection.truncate();
 // the collection "some-collection" is now empty
 ```
@@ -112,7 +112,7 @@ await collection.truncate();
 
 `async collection.drop([properties]): Object`
 
-Deletes the collection from the fabric.
+Deletes the collection from the client.
 
 **Arguments**
 
@@ -129,10 +129,10 @@ Deletes the collection from the fabric.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 await collection.drop();
 // the collection "some-collection" no longer exists
 ```

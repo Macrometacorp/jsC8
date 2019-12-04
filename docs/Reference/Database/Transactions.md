@@ -2,9 +2,9 @@
 
 This function implements the [HTTP API for transactions](https://developer.document360.io/docs/transactions).
 
-## fabric.transaction
+## client.transaction
 
-`async fabric.transaction(collections, action, [params, [options]]):
+`async client.transaction(collections, action, [params, [options]]):
 Object`
 
 Performs a server-side transaction and returns its return value.
@@ -71,20 +71,20 @@ For more information on transactions, see [the HTTP API documentation for transa
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
 const action = String(function (params) {
   // This code will be executed inside C8!
   const fabric = require('@c8').fabric;
-  return fabric._query(c8ql`
+  return client._query(c8ql`
     FOR user IN _users
     FILTER user.age > ${params.age}
     RETURN u.user
   `).toArray();
 });
 
-const result = await fabric.transaction(
+const result = await client.transaction(
   {read: '_users'},
   action,
   {age: 12}

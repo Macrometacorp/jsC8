@@ -1,25 +1,25 @@
 ## Manipulating events
 
-## fabric.getEvents
+## client.getEvents
 
-`async fabric.getEvents(): Array<Object>`
+`async client.getEvents(): Array<Object>`
 
 Fetches all events from the fabric and returns an array of event descriptions.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const allEvents = fabric.getEvents();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const allEvents = client.getEvents();
 ```
 
-## fabric.deleteEvents
+## client.deleteEvents
 
-`async fabric.deleteEvents(eventIds): Array<Object>`
+`async client.deleteEvents(eventIds): Array<Object>`
 
-Deletes the event/events from the fabric.
+Deletes the event/events from the client.
 
 **Arguments**
 
@@ -30,15 +30,15 @@ Deletes the event/events from the fabric.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.deleteEvents(["215660321","215660322"]);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.deleteEvents(["215660321","215660322"]);
 ```
 
-## fabric.event
+## client.event
 
-`fabric.event(entityName, eventId): Event`
+`client.event(entityName, eventId): Event`
 
 Returns a _Event_ instance representing the event with the given entity name or the given eventId.
 
@@ -55,11 +55,11 @@ Returns a _Event_ instance representing the event with the given entity name or 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const event = fabric.event("testEvent"); // To create a event
-const eventDetails = fabric.event(null, 258849024);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const event = client.event("testEvent"); // To create a event
+const eventDetails = client.event(null, 258849024);
 ```
 
 ## event.create
@@ -95,10 +95,10 @@ Creates an event. The request object contains the below properties.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const event = fabric.event("testEvent");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const event = client.event("testEvent");
 await event.create({
     status: "OK",
     description: "description about the event",
@@ -118,9 +118,9 @@ Fetches the details of a particular event.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const event = fabric.event(null, 215602123);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const event = client.event(null, 215602123);
 const eventDetails = await pipeline.details();
 ```

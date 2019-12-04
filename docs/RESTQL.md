@@ -1,8 +1,8 @@
 # RESTQL 
 
-## fabric.saveQuery
+## client.saveQuery
 
-`fabric.saveQuery(queryName, parameter, value): this`
+`client.saveQuery(queryName, parameter, value): this`
 
 Saves the Query with queryName and value.
 
@@ -25,25 +25,25 @@ Saves the Query with queryName and value.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-fabric.saveQuery("testQuery", {}, "FOR x IN TestCollection RETURN x");
+const client = new jsc8();
+client.saveQuery("testQuery", {}, "FOR x IN TestCollection RETURN x");
 ```
 
-## fabric.listSavedQueries
+## client.listSavedQueries
 
-`fabric.listSavedQueries()`
+`client.listSavedQueries()`
 
-Returns a list of all saved queries for a particular tenant and fabric.
+Returns a list of all saved queries for a particular tenant and client.
 
 
 ```js
-const fabric = new Fabric();
-const tenant = fabric.listSavedQueries();
+const client = new jsc8();
+const tenant = client.listSavedQueries();
 ```
 
-## fabric.executeSavedQuery
+## client.executeSavedQuery
 
-`  fabric.executeSavedQuery(queryName: string, bindVars: any)`
+`  client.executeSavedQuery(queryName: string, bindVars: any)`
 
 Executes a saves query
 
@@ -61,11 +61,11 @@ Executes a saves query
 **Examples**
 
 ```js
-const fabric = new Fabric();
-fabric.executeSavedQuery("testQuery", {});
+const client = new jsc8();
+client.executeSavedQuery("testQuery", {});
 ```
 
-## fabric.updateSavedQuery
+## client.updateSavedQuery
 
 ` updateSavedQuery(queryName: string, parameter: Object, value: string) `
 
@@ -84,15 +84,15 @@ Updates a query that is already saved.
 **Examples**
 
 ```js
-const fabric = new Fabric();
+const client = new jsc8();
 
 faric.updateSavedQuery("testQuery", {}, "FOR x IN _routing RETURN x" )
 ```
 
-## fabric.deleteSavedQuery
+## client.deleteSavedQuery
 
 
-`fabric.deleteSavedQuery(queryName: string) `
+`client.deleteSavedQuery(queryName: string) `
 
 Deletes the saved query.
 
@@ -106,11 +106,11 @@ Deletes the saved query.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-fabric.deleteSavedQuery("testQuery")
+const client = new jsc8();
+client.deleteSavedQuery("testQuery")
 ```
 
-## fabric.createRestqlCursor(query: string, bindVars: any)
+## client.createRestqlCursor(query: string, bindVars: any)
 
 
 `  createRestqlCursor(query: string, bindVars: any)`
@@ -130,7 +130,7 @@ Creates a restql cursor for running a query.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-fabric.createRestqlCursor(query: "FOR x IN TestCollection RETURN x", bindVars: {})
+const client = new jsc8();
+client.createRestqlCursor(query: "FOR x IN TestCollection RETURN x", bindVars: {})
 
 ```

@@ -2,9 +2,9 @@
 
 These functions implement the [HTTP API for accessing collections](https://developer.document360.io/docs/collections).
 
-## fabric.collection
+## client.collection
 
-`fabric.collection(collectionName): DocumentCollection`
+`client.collection(collectionName): DocumentCollection`
 
 Returns a `DocumentCollection` instance for the given collection name.
 
@@ -17,15 +17,15 @@ Returns a `DocumentCollection` instance for the given collection name.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection("potatoes");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection("potatoes");
 ```
 
-## fabric.edgeCollection
+## client.edgeCollection
 
-`fabric.edgeCollection(collectionName): EdgeCollection`
+`client.edgeCollection(collectionName): EdgeCollection`
 
 Returns an `EdgeCollection` instance for the given collection name.
 
@@ -38,15 +38,15 @@ Returns an `EdgeCollection` instance for the given collection name.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const collection = fabric.edgeCollection("potatoes");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const collection = client.edgeCollection("potatoes");
 ```
 
-## fabric.listCollections
+## client.listCollections
 
-`async fabric.listCollections([excludeSystem]): Array<Object>`
+`async client.listCollections([excludeSystem]): Array<Object>`
 
 Fetches all collections from the fabric and returns an array of collection descriptions.
 
@@ -59,23 +59,23 @@ Fetches all collections from the fabric and returns an array of collection descr
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collections = await fabric.listCollections();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collections = await client.listCollections();
 // collections is an array of collection descriptions
 // not including system collections
 
 // -- or --
 
-const collections = await fabric.listCollections(false);
+const collections = await client.listCollections(false);
 // collections is an array of collection descriptions
 // including system collections
 ```
 
-## fabric.collections
+## client.collections
 
-`async fabric.collections([excludeSystem]): Array<Collection>`
+`async client.collections([excludeSystem]): Array<Collection>`
 
 Fetches all collections from the fabric and returns an array of
 `DocumentCollection` and `EdgeCollection` instances for the collections.
@@ -89,17 +89,17 @@ Fetches all collections from the fabric and returns an array of
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collections = await fabric.collections()
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collections = await client.collections()
 // collections is an array of DocumentCollection
 // and EdgeCollection instances
 // not including system collections
 
 // -- or --
 
-const collections = await fabric.collections(false)
+const collections = await client.collections(false)
 // collections is an array of DocumentCollection
 // and EdgeCollection instances
 // including system collections
