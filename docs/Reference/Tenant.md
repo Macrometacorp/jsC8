@@ -65,7 +65,7 @@ const allTenants = fabric.listTenants();
 
 ## tenant.createTenant
 
-`async tenant.createTenant(dcList, password, extra): Object`
+`async tenant.createTenant(password, dcList, extra): Object`
 
 Creates a tenant.
 
@@ -89,7 +89,7 @@ const fabric = new Fabric();
 await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const tenant = fabric.tenant(tenant-email);
-await tenant.createTenant("test-eu-west-1,test-us-west-2","myPassword", {});
+await tenant.createTenant("myPassword", "test-eu-west-1,test-us-west-2", {});
 // creates a new tenant with email as tenant-email with password as "myPassword".
 ```
 
@@ -106,7 +106,7 @@ const fabric = new Fabric();
 await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const tenant = fabric.tenant("testTenant@macrometa.io");
-await tenant.createTenant("myPassword", {});
+await tenant.createTenant("myPassword");
 await tenant.dropTenant();
 ```
 
@@ -139,7 +139,7 @@ const fabric = new Fabric();
 await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const tenant = fabric.tenant("testTenant@macrometa.io");
-await tenant.createTenant("myPassword", {});
+await tenant.createTenant("myPassword");
 await tenant.tenantDetails();
 ```
 
@@ -166,6 +166,6 @@ const fabric = new Fabric();
 await fabric.login(email, password);
 fabric.useTenant(tenant-name);
 const tenant = fabric.tenant("testTenant@macrometa.io");
-await tenant.createTenant("myPassword", {});
+await tenant.createTenant("myPassword");
 await tenant.modifyTenant("myPassword", { info: "string"});
 ```
