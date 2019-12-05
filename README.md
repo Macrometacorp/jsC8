@@ -439,6 +439,7 @@ const jsc8 = require('jsc8')
 
 //Variables
 const fed_url = "https://gdn1.macrometa.io"
+const guest_tenant_email = "guest@macrometa.io"
 const guest_tenant = "guest"
 const guest_password = "guest5"
 const guest_user = "guest5"
