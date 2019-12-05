@@ -17,9 +17,9 @@ Deletes the edge with the given `documentHandle` from the collection.
 **Examples**
 
 ```js
-const graph = fabric.graph('some-graph');
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
+const graph = client.graph('some-graph');
+await client.login(email, password);
+client.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
 await collection.remove('some-key')
@@ -48,9 +48,9 @@ Checks whether the edge with the given `documentHandle` exists.
 **Examples**
 
 ```js
-const graph = fabric.graph('some-graph');
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
+const graph = client.graph('some-graph');
+await client.login(email, password);
+client.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
 const exists = await collection.documentExists('some-key');
@@ -80,9 +80,9 @@ Retrieves the edge with the given `documentHandle` from the collection.
 **Examples**
 
 ```js
-const graph = fabric.graph('some-graph');
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
+const graph = client.graph('some-graph');
+await client.login(email, password);
+client.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
 const edge = await collection.document('some-key');
@@ -128,10 +128,10 @@ Creates a new edge between the vertices `fromId` and `toId` with the given `data
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 const edge = await collection.save(
   {some: 'data'},
@@ -159,10 +159,10 @@ Retrieves a list of all edges of the document with the given `documentHandle`.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
@@ -190,8 +190,8 @@ Retrieves a list of all incoming edges of the document with the given `documentH
 **Examples**
 
 ```js
-const fabric = new Fabric();
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
@@ -219,10 +219,10 @@ Retrieves a list of all outgoing edges of the document with the given `documentH
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
@@ -254,10 +254,10 @@ Note:-Please note that while `opts.filter`, `opts.visitor`, `opts.init`, `opts.e
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],

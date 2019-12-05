@@ -15,11 +15,11 @@ Returns a new [GraphEdgeCollection  instance](https://developer.document360.io/d
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
 // assuming the collections "edges" and "vertices" exist
-const graph = fabric.graph("some-graph");
+const graph = client.graph("some-graph");
 const collection = graph.edgeCollection("edges");
 assert.equal(collection.name, "edges");
 // collection is a GraphEdgeCollection
@@ -40,11 +40,11 @@ Adds the given edge definition `definition` to the graph.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
 // assuming the collections "edges" and "vertices" exist
-const graph = fabric.graph('some-graph');
+const graph = client.graph('some-graph');
 await graph.addEdgeDefinition({
   collection: 'edges',
   from: ['vertices'],
@@ -73,11 +73,11 @@ the given `definition`.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
 // assuming the collections "edges", "vertices" and "more-vertices" exist
-const graph = fabric.graph('some-graph');
+const graph = client.graph('some-graph');
 await graph.replaceEdgeDefinition('edges', {
   collection: 'edges',
   from: ['vertices'],
@@ -100,15 +100,15 @@ Removes the edge definition with the given `definitionName` form the graph.
 
 * **dropCollection**: `boolean` (optional)
 
-  If set to `true`, the edge collection associated with the definition will also be deleted from the fabric.
+  If set to `true`, the edge collection associated with the definition will also be deleted from the client.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 
 await graph.removeEdgeDefinition('edges')
 // the edge definition has been removed
@@ -142,10 +142,10 @@ Note:-Please note that while `opts.filte`, `opts.visitor`, `opts.init`, `opts.ex
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],

@@ -111,9 +111,9 @@ If `config` is a string, it will be interpreted as `config.url`.
     **Note**: Requests bound to a specific server (e.g. fetching query results)
     will never be retried automatically and ignore this setting.
 
-## fabric.close
+## client.close
 
-`fabric.close(): void`
+`client.close(): void`
 
 Closes all active connections of the fabric instance.
 Can be used to clean up idling connections during longer periods of inactivity.
@@ -123,18 +123,18 @@ Can be used to clean up idling connections during longer periods of inactivity.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const sessions = fabric.collection("sessions");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const sessions = client.collection("sessions");
 // Clean up expired sessions once per hour
 setInterval(async () => {
-  await fabric.query(c8ql`
+  await client.query(c8ql`
     FOR session IN ${sessions}
     FILTER session.expires < DATE_NOW()
     REMOVE session IN ${sessions}
   `);
   // Make sure to close the connections because they're no longer used
-  fabric.close();
+  client.close();
 }, 1000 * 60 * 60);
 ```

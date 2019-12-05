@@ -25,10 +25,10 @@ Note:- If set to `true`, the method will return `null` instead of throwing an er
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.edgeCollection('edges');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.edgeCollection('edges');
 
 const edge = await collection.document('some-key');
 // the edge exists
@@ -67,10 +67,10 @@ Checks whether the edge with the given `documentHandle` exists.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.edgeCollection('my-docs');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.edgeCollection('my-docs');
 
 const exists = await collection.documentExists('some-key');
 if (exists === false) {
@@ -138,10 +138,10 @@ Note:-If a boolean is passed instead of an options object, it will be interprete
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.edgeCollection('edges');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.edgeCollection('edges');
 const data = {some: 'data'};
 
 const info = await collection.save(
@@ -184,10 +184,10 @@ Retrieves a list of all edges of the document with the given `documentHandle`.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.edgeCollection('edges');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
   ['x', 'vertices/a', 'vertices/b'],
@@ -216,10 +216,10 @@ Retrieves a list of all incoming edges of the document with the given `documentH
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.edgeCollection('edges');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
   ['x', 'vertices/a', 'vertices/b'],
@@ -248,10 +248,10 @@ Retrieves a list of all outgoing edges of the document with the given `documentH
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.edgeCollection('edges');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
   ['x', 'vertices/a', 'vertices/b'],
@@ -286,10 +286,10 @@ Note:-Please note that while `opts.filter`, `opts.visitor`, `opts.init`, `opts.e
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.edgeCollection('edges');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
   ['x', 'vertices/a', 'vertices/b'],

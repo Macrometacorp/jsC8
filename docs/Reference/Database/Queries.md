@@ -2,9 +2,9 @@
 
 This function implements the [HTTP API for single roundtrip C8QL queries](https://developer.document360.io/docs/queries).
 
-## fabric.query
+## client.query
 
-`async fabric.query(query, [bindVars,] [opts]): Cursor`
+`async client.query(query, [bindVars,] [opts]): Cursor`
 
 Performs a fabric query using the given `query` and `bindVars`, then returns a [new _Cursor_ instance](https://developer.document360.io/docs/cursor) for the result list.
 
@@ -32,13 +32,13 @@ If `query` is an object with `query` and `bindVars` properties, those will be us
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
 const active = true;
 
 // Using the c8ql template tag
-const cursor = await fabric.query(c8ql`
+const cursor = await client.query(c8ql`
   FOR u IN _users
   FILTER u.authData.active == ${active}
   RETURN u.user
@@ -48,7 +48,7 @@ const cursor = await fabric.query(c8ql`
 // -- or --
 
 // Old-school JS with explicit bindVars:
-fabric.query(
+client.query(
   'FOR u IN _users ' +
   'FILTER u.authData.active == @active ' +
   'RETURN u.user',
@@ -58,9 +58,9 @@ fabric.query(
 });
 ```
 
-## fabric.validateQuery
+## client.validateQuery
 
-`async fabric.validateQuery(query)`
+`async client.validateQuery(query)`
 
 Checks if the query is a valid C8QL query without executing it.
 
@@ -73,15 +73,15 @@ Checks if the query is a valid C8QL query without executing it.
   **Examples**
 
 ```js
-const fabric = new Fabric();
+const client = new jsc8();
 const query = "FOR doc in docs return doc";
-const cursor = await fabric.validateQuery(query);
+const cursor = await client.validateQuery(query);
 });
 ```
 
-## fabric.explainQuery
+## client.explainQuery
 
-`async fabric.explainQuery(Object)`
+`async client.explainQuery(Object)`
 
 Explain a C8QL query
 
@@ -109,52 +109,52 @@ Explain a C8QL query
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const collection = fabric.collection("myColl");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const collection = client.collection("myColl");
 await collection.create();
 const query = "FOR doc in myColl return doc";
-const cursor = await fabric.explainQuery({query});
+const cursor = await client.explainQuery({query});
 });
 ```
 
 
-## fabric.getCurrentQueries
+## client.getCurrentQueries
 
-`async fabric.getCurrentQueries()`
+`async client.getCurrentQueries()`
 
 Returns an array containing the C8QL queries currently running in the selected database.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const cursor = await fabric.getCurrentQueries();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const cursor = await client.getCurrentQueries();
 });
 ```
 
-## fabric.clearSlowQueries
+## client.clearSlowQueries
 
-`async fabric.clearSlowQueries()`
+`async client.clearSlowQueries()`
 
 Clears the list of slow C8QL queries
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const cursor = await fabric.clearSlowQueries();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const cursor = await client.clearSlowQueries();
 });
 ```
 
-## fabric.getSlowQueries
+## client.getSlowQueries
 
-`async fabric.getSlowQueries()`
+`async client.getSlowQueries()`
 
 Returns the list of slow C8QL queries
 
@@ -163,16 +163,16 @@ Returns an array containing the last C8QL queries that are finished and have exc
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const cursor = await fabric.getSlowQueries();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const cursor = await client.getSlowQueries();
 });
 ```
 
-## fabric.terminateRunningQuery
+## client.terminateRunningQuery
 
-`async fabric.terminateRunningQuery(queryId)`
+`async client.terminateRunningQuery(queryId)`
 
 **Arguments**
 * **queryId**: `string`
@@ -184,10 +184,10 @@ Kills a running query. The query will be terminated at the next cancelation poin
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const cursor = await fabric.terminateRunningQuery();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const cursor = await client.terminateRunningQuery();
 });
 ```
 
@@ -195,14 +195,14 @@ const cursor = await fabric.terminateRunningQuery();
 
 `c8ql(strings, ...args): Object`
 
-Template string handler (aka template tag) for C8QL queries. Converts a template string to an object that can be passed to `fabric.query` by converting arguments to bind variables.
+Template string handler (aka template tag) for C8QL queries. Converts a template string to an object that can be passed to `client.query` by converting arguments to bind variables.
 
-Note:-If you want to pass a collection name as a bind variable, you need to pass a `Collection` instance (e.g. what you get by passing the collection name to `fabric.collection` instead). If you see the error `"array expected as operand to FOR loop"`, you're likely passing a collection name instead of a collection instance.
+Note:-If you want to pass a collection name as a bind variable, you need to pass a `Collection` instance (e.g. what you get by passing the collection name to `client.collection` instead). If you see the error `"array expected as operand to FOR loop"`, you're likely passing a collection name instead of a collection instance.
 
 **Examples**
 
 ```js
-const userCollection = fabric.collection("_users");
+const userCollection = client.collection("_users");
 const role = "admin";
 
 const query = c8ql`

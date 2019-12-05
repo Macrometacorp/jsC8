@@ -17,10 +17,10 @@ Checks whether the collection exists.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const result = await collection.exists();
 // result indicates whether the collection exists
 ```
@@ -34,10 +34,10 @@ Retrieves general information about the collection.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const data = await collection.get();
 // data contains general information about the collection
 ```
@@ -51,8 +51,8 @@ Retrieves the collection's properties.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+const collection = client.collection('some-collection');
 const data = await collection.properties();
 // data contains the collection's properties
 ```
@@ -66,10 +66,10 @@ Retrieves information about the number of documents in a collection.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const data = await collection.count();
 // data contains the collection's count
 ```
@@ -83,10 +83,10 @@ Retrieves statistics for a collection.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const data = await collection.figures();
 // data contains the collection's figures
 ```
@@ -100,10 +100,10 @@ Retrieves the collection revision ID.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const data = await collection.revision();
 // data contains the collection's revision
 ```
@@ -124,10 +124,10 @@ Retrieves the collection checksum.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const data = await collection.checksum();
 // data contains the collection's checksum
 ```

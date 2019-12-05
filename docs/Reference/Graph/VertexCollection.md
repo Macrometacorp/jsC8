@@ -11,10 +11,10 @@ Checks whether the graph exists.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 const result = await graph.exists();
 // result indicates whether the graph exists
 ```
@@ -28,10 +28,10 @@ Retrieves general information about the graph.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 const data = await graph.get();
 // data contains general information about the graph
 ```
@@ -52,10 +52,10 @@ Creates a graph with the given `properties` for this graph's name, then returns 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 const info = await graph.create({
   edgeDefinitions: [{
     collection: 'edges',
@@ -70,7 +70,7 @@ const info = await graph.create({
 
 `async graph.drop([dropCollections]): Object`
 
-Deletes the graph from the fabric.
+Deletes the graph from the client.
 
 **Arguments**
 
@@ -81,10 +81,10 @@ Deletes the graph from the fabric.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 await graph.drop();
 // the graph "some-graph" no longer exists
 ```

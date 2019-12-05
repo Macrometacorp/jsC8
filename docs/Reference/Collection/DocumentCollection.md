@@ -24,10 +24,10 @@ Retrieves the document with the given `documentHandle` from the collection.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('my-docs');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('my-docs');
 
 try {
   const doc = await collection.document('some-key');
@@ -76,10 +76,10 @@ Checks whether the document with the given `documentHandle` exists.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('my-docs');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('my-docs');
 
 const exists = await collection.documentExists('some-key');
 if (exists === false) {
@@ -138,10 +138,10 @@ For more information on the _opts_ object, see
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('my-docs');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('my-docs');
 const data = {some: 'data'};
 const info = await collection.save(data);
 assert.equal(info._id, 'my-docs/' + info._key);
@@ -152,10 +152,10 @@ assert.equal(doc2.some, data.some);
 
 // -- or --
 
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('my-docs');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('my-docs');
 const data = {some: 'data'};
 const opts = {returnNew: true};
 const doc = await collection.save(data, opts)

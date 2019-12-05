@@ -1,8 +1,8 @@
 ## Manipulating tenants
 
-## fabric.useTenant
+## client.useTenant
 
-`fabric.useTenant(tenantName): this`
+`client.useTenant(tenantName): this`
 
 Updates the `Fabric` instance and its connection string to use the given `tenantName`, then returns itself.
 
@@ -17,16 +17,16 @@ Note:-This method can not be used when the jsC8 instance was created with `isAbs
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-fabric.useTenant("testTenant");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+client.useTenant("testTenant");
 // The fabric instance now uses the tenant "testTenant".
 ```
 
-## fabric.tenant
+## client.tenant
 
-`fabric.tenant(tenantEmail, tenantName): Tenant`
+`client.tenant(tenantEmail, tenantName): Tenant`
 
 Returns a _Tenant_ instance representing the tenant with the given tenant name.
 
@@ -42,25 +42,25 @@ Returns a _Tenant_ instance representing the tenant with the given tenant name.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const tenant = fabric.tenant(tenant-email);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const tenant = client.tenant(tenant-email);
 ```
 
-## fabric.listTenants
+## client.listTenants
 
-`async fabric.listTenants(): Array<Object>`
+`async client.listTenants(): Array<Object>`
 
 Fetches all tenants from the fabric and returns an array of tenant descriptions.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const allTenants = fabric.listTenants();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const allTenants = client.listTenants();
 ```
 
 ## tenant.createTenant
@@ -85,10 +85,10 @@ Creates a tenant.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const tenant = fabric.tenant(tenant-email);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const tenant = client.tenant(tenant-email);
 await tenant.createTenant("test-eu-west-1,test-us-west-2","myPassword", {});
 // creates a new tenant with email as tenant-email with password as "myPassword".
 ```
@@ -102,10 +102,10 @@ Deletes the tenant.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const tenant = fabric.tenant("testTenant@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword", {});
 await tenant.dropTenant();
 ```
@@ -118,10 +118,10 @@ Fetches data about the Edge Locations specific to this tenant.
 
 **Examples**
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const tenant = fabric.tenant(tenant-email, tenant-name);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const tenant = client.tenant(tenant-email, tenant-name);
 const locations = await tenant.getTenantEdgeLocations();
 ```
 
@@ -135,10 +135,10 @@ Gets the details of a tenant.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const tenant = fabric.tenant("testTenant@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword", {});
 await tenant.tenantDetails();
 ```
@@ -162,10 +162,10 @@ Modifies the given tenant.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const tenant = fabric.tenant("testTenant@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword", {});
 await tenant.modifyTenant("myPassword", { info: "string"});
 ```

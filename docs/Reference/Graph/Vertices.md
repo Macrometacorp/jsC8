@@ -15,10 +15,10 @@ Returns a new [GraphVertexCollection  instance ](https://developer.document360.i
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph("some-graph");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph("some-graph");
 const collection = graph.vertexCollection("vertices");
 assert.equal(collection.name, "vertices");
 // collection is a GraphVertexCollection
@@ -33,7 +33,7 @@ Fetches all vertex collections from the graph and returns an array of collection
 **Examples**
 
 ```js
-const graph = fabric.graph('some-graph');
+const graph = client.graph('some-graph');
 
 const collections = await graph.listVertexCollections();
 // collections is an array of collection descriptions
@@ -55,7 +55,7 @@ Fetches all vertex collections from the fabric and returns an array of `GraphVer
 **Examples**
 
 ```js
-const graph = fabric.graph('some-graph');
+const graph = client.graph('some-graph');
 
 const collections = await graph.vertexCollections()
 // collections is an array of GraphVertexCollection
@@ -83,10 +83,10 @@ Adds the collection with the given `collectionName` to the graph's vertex collec
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 await graph.addVertexCollection('vertices');
 // the collection "vertices" has been added to the graph
 ```
@@ -105,15 +105,15 @@ Removes the vertex collection with the given `collectionName`  from the graph.
 
 * **dropCollection**: `boolean` (optional)
 
-  If set to `true`, the collection will also be deleted from the fabric.
+  If set to `true`, the collection will also be deleted from the client.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const graph = fabric.graph('some-graph');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const graph = client.graph('some-graph');
 await graph.removeVertexCollection('vertices')
 // collection "vertices" has been removed from the graph
 

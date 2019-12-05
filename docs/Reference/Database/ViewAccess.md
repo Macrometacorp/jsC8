@@ -2,9 +2,9 @@
 
 These functions implement the HTTP API for accessing views.
 
-## fabric.c8SearchView
+## client.c8SearchView
 
-`fabric.c8SearchView(viewName): c8SearchView`
+`client.c8SearchView(viewName): c8SearchView`
 
 Returns a `c8SearchView`  instance for the given view name.
 
@@ -17,13 +17,13 @@ Returns a `c8SearchView`  instance for the given view name.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-const view = fabric.c8SearchView("potatoes");
+const client = new jsc8();
+const view = client.c8SearchView("potatoes");
 ```
 
-## fabric.listViews
+## client.listViews
 
-`async fabric.listViews(): Array<Object>`
+`async client.listViews(): Array<Object>`
 
 Fetches all views from the fabric and returns an array of view
 descriptions.
@@ -31,15 +31,15 @@ descriptions.
 **Examples**
 
 ```js
-const fabric = new Fabric();
+const client = new jsc8();
 
-const views = await fabric.listViews();
+const views = await client.listViews();
 // views is an array of view descriptions
 ```
 
-## fabric.views
+## client.views
 
-`async fabric.views([excludeSystem]): Array<View>`
+`async client.views([excludeSystem]): Array<View>`
 
 Fetches all views from the fabric and returns an array of
 `c8SearchView` instances for the views.
@@ -47,10 +47,10 @@ Fetches all views from the fabric and returns an array of
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
 
-const views = await fabric.views()
+const views = await client.views()
 // views is an array of c8SearchView instances
 ```
