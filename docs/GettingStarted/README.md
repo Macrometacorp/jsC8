@@ -59,7 +59,7 @@ npm run dist
 For production use jsC8 can be installed with Yarn or NPM like any other dependency. Just use jsC8 like you would in your server code:
 
 ```js
-import { Fabric } from "jsc8";
+import { jsc8 } from "jsc8";
 // -- or --
 var jsC8 = require("jsc8");
 ```
@@ -76,8 +76,8 @@ You can also use [unpkg](https://unpkg.com) during development:
 < !-- note the path includes the version number (e.g. 0.10.2) -- >
 <script src="https://unpkg.com/jsc8/lib/web.js"></script>
 <script>
-var fabric = new jsC8.Fabric();
-fabric.listCollections().then(function (collections) {
+var client = new jsC8.Fabric();
+client.listCollections().then(function (collections) {
   alert("Your collections: " + collections.map(function (collection) {
     return collection.name;
   }).join(", "));
@@ -102,7 +102,7 @@ When loading the browser build with a script tag make sure to load the polyfill 
 This section aims to provide a basic understanding of all the features.
 
 ```js
-import { Fabric, c8ql } from "jsc8";
+import { jsc8, c8ql } from "jsc8";
 
 const regionURL = "gdn1.macrometa.io";
   const region = "try-eu-west-1";
@@ -115,27 +115,27 @@ const regionURL = "gdn1.macrometa.io";
 
   //--------------------------------------------------------------------------------------
   // create a fabric handler
-  const fabric = new Fabric(`https://${regionURL}`);
+  const client = new jsc8(`https://${regionURL}`);
 
   // login with root user
-  await fabric.login(email, rootPassword);
+  await client.login(email, rootPassword);
 
   //--------------------------------------------------------------------------------------
   // create a tenant
-  const guestTenant = fabric.tenant(tenantEmail);
+  const guestTenant = client.tenant(tenantEmail);
   await guestTenant.createTenant(tenantPassword,['region-name']);
   // log in with the newly created tenant
-  await fabric.login(tenantEmail, tenantPassword);
-  fabric.useTenant(guestTenant.name);
+  await client.login(tenantEmail, tenantPassword);
+  client.useTenant(guestTenant.name);
 
   //--------------------------------------------------------------------------------------
   // create a new geo fabric in the newly created tenant
-  await fabric.createFabric(fabricName, [{ username: "root" }], { dcList: region });
-  fabric.useFabric(fabricName);
+  await client.createFabric(fabricName, [{ username: "root" }], { dcList: region });
+  client.useFabric(fabricName);
 
   //--------------------------------------------------------------------------------------
   // create and populate employees collection in the above tenant and geo fabric
-  const collection = fabric.collection(collectionName);
+  const collection = client.collection(collectionName);
   await collection.create();
 
   //--------------------------------------------------------------------------------------
@@ -158,27 +158,27 @@ const regionURL = "gdn1.macrometa.io";
   // Querying is done by C8QL
   // you can directly pass the query
   // or use restql to save the query once and call it multiple times
-  const cursor = await fabric.query(c8ql`FOR employee IN employees RETURN employee`);
+  const cursor = await client.query(c8ql`FOR employee IN employees RETURN employee`);
   const result = await cursor.next();
 
   // RESTQL
   // now we save the same query and will call it later directly by its name
   const query = "FOR employee IN employees RETURN employee";
   const queryName = "listEmployees";
-  await fabric.saveQuery(queryName, {}, query);
-  const res = await fabric.executeSavedQuery(queryName);
+  await client.saveQuery(queryName, {}, query);
+  const res = await client.executeSavedQuery(queryName);
 
   //--------------------------------------------------------------------------------------
   // Create persistent, global and local streams in demofabric
-  const persistent_globalStream = fabric.stream(streamName, false);
+  const persistent_globalStream = client.stream(streamName, false);
   await persistent_globalStream.createStream();
 
-  const persistent_localStream = fabric.stream(streamName, true);
+  const persistent_localStream = client.stream(streamName, true);
   await persistent_localStream.createStream();
 
   //--------------------------------------------------------------------------------------
   // Subscribe to a stream
-  const stream = fabric.stream(streamName, false);
+  const stream = client.stream(streamName, false);
   await stream.createStream();
   stream.consumer("my-sub", { onmessage: (msg) => { console.log(msg) } }, regionURL);
 
@@ -190,28 +190,28 @@ const regionURL = "gdn1.macrometa.io";
 
   //--------------------------------------------------------------------------------------
   // Spot Collections
-  await fabric.login(rootEmail, rootPassword);
-  fabric.useTenant("_mm");
-  fabric.useFabric("_system");
+  await client.login(rootEmail, rootPassword);
+  client.useTenant("_mm");
+  client.useFabric("_system");
   // Make a geo location as spot enabled
-  await fabric.changeEdgeLocationSpotStatus(region, true);
+  await client.changeEdgeLocationSpotStatus(region, true);
   // Create a geo-fabric with spot region capabilities.
-  fabric.createFabric("spotFabric", [{ username: "root" }], { dcList: region, spotDc: true });
+  client.createFabric("spotFabric", [{ username: "root" }], { dcList: region, spotDc: true });
   // Then create a collection that is designated as a spot collection. 
-  const collection = fabric.collection(collectionName);
+  const collection = client.collection(collectionName);
   await collection.create({ isSpot: true });
 
   //--------------------------------------------------------------------------------------
   // Local Collections
-  await fabric.login(rootEmail, rootPassword);
-  fabric.useTenant("_mm");
-  fabric.useFabric("_system");
+  await client.login(rootEmail, rootPassword);
+  client.useTenant("_mm");
+  client.useFabric("_system");
   // Make a geo location as spot enabled
-  await fabric.changeEdgeLocationSpotStatus(region, true);
+  await client.changeEdgeLocationSpotStatus(region, true);
   // Create a geo-fabric with spot region capabilities.
-  fabric.createFabric("spotFabric", [{ username: "root" }], { dcList: region, spotDc: true });
+  client.createFabric("spotFabric", [{ username: "root" }], { dcList: region, spotDc: true });
   // Then create a collection that is designated as a local collection. 
-  const collection = fabric.collection(collectionName);
+  const collection = client.collection(collectionName);
   await collection.create({ isLocal: true });
 ```
 
@@ -234,14 +234,14 @@ If the request failed at a network level or the connection was closed without re
 ```js
 // Using async/await
 try {
-  const info = await fabric.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1' });
+  const info = await client.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1' });
   // fabric created
 } catch (err) {
   console.error(err.stack);
 }
 
 // Using promises with arrow functions
-fabric.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1' }).then(
+client.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1' }).then(
   info => {
     // fabric created
   },

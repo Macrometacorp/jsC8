@@ -1,23 +1,23 @@
 ## Manipulating pipelines
 
-## fabric.getPipelines
+## client.getPipelines
 
-`async fabric.getPipelines(): Array<Object>`
+`async client.getPipelines(): Array<Object>`
 
 Fetches all pipelines from the fabric and returns an array of pipeline descriptions.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const allPipelines = fabric.getPipelines();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const allPipelines = client.getPipelines();
 ```
 
-## fabric.pipeline
+## client.pipeline
 
-`fabric.pipeline(pipelineName): Pipeline`
+`client.pipeline(pipelineName): Pipeline`
 
 Returns a _Pipeline_ instance representing the pipeline with the given pipeline name.
 
@@ -30,10 +30,10 @@ Returns a _Pipeline_ instance representing the pipeline with the given pipeline 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const pipeline = fabric.pipeline("testPipeline");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const pipeline = client.pipeline("testPipeline");
 ```
 
 ## pipeline.create
@@ -58,10 +58,10 @@ Creates a pipeline.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const pipeline = fabric.pipeline("testPipeline");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const pipeline = client.pipeline("testPipeline");
 await pipeline.create(["test-eu-west-1", "test-us-west-2"], true , {});
 ```
 
@@ -74,10 +74,10 @@ Deletes the pipeline.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const pipeline = fabric.pipeline("testPipeline");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const pipeline = client.pipeline("testPipeline");
 await pipeline.create(["test-eu-west-1", "test-us-west-2"], true , {});
 await pipeline.drop();
 ```
@@ -91,10 +91,10 @@ Gets the details of a particular pipeline.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const pipeline = fabric.pipeline("testPipeline");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const pipeline = client.pipeline("testPipeline");
 await pipeline.create(["test-eu-west-1", "test-us-west-2"], true , {});
 await pipeline.details();
 ```
@@ -121,10 +121,10 @@ Modifies the given pipeline.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const pipeline = fabric.pipeline("testPipeline");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const pipeline = client.pipeline("testPipeline");
 await pipeline.create(["test-eu-west-1", "test-us-west-2"], true , {});
 await pipeline.update(["test-eu-west-1"], false , {});
 ```

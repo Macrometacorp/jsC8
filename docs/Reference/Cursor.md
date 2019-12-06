@@ -3,10 +3,10 @@
 `Cursor` instances provide an abstraction over the HTTP API's limitations.Unless a method explicitly exhausts the cursor, the driver will only fetch as many batches from the server as necessary. Like the server-side cursors,`Cursor` instances are incrementally depleted as they are read from.
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const cursor = await fabric.query('FOR x IN 1..5 RETURN x');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const cursor = await client.query('FOR x IN 1..5 RETURN x');
 // query result list: [1, 2, 3, 4, 5]
 const value = await cursor.next();
 assert.equal(value, 1);
@@ -29,7 +29,7 @@ Exhausts the cursor, then returns an array containing all values in the cursor's
 **Examples**
 
 ```js
-const cursor = await fabric._query('FOR x IN 1..5 RETURN x');
+const cursor = await client._query('FOR x IN 1..5 RETURN x');
 const result = await cursor.all()
 // result is an array containing the entire query result
 assert.deepEqual(result, [1, 2, 3, 4, 5]);
@@ -108,7 +108,7 @@ function doStuff(value) {
   return VALUE;
 }
 
-const cursor = await fabric.query('FOR x IN ["a", "b", "c"] RETURN x')
+const cursor = await client.query('FOR x IN ["a", "b", "c"] RETURN x')
 const last = await cursor.each(doStuff);
 assert.deepEqual(results, ['A', 'B', 'C']);
 assert.equal(cursor.hasNext(), false);
@@ -147,7 +147,7 @@ Equivalent to `Array.prototype.every`(except async).
 ```js
 const even = value => value % 2 === 0;
 
-const cursor = await fabric.query('FOR x IN 2..5 RETURN x');
+const cursor = await client.query('FOR x IN 2..5 RETURN x');
 const result = await cursor.every(even);
 assert.equal(result, false); // 3 is not even
 assert.equal(cursor.hasNext(), true);
@@ -171,7 +171,7 @@ Equivalent to `Array.prototype.some` (except async).
 ```js
 const even = value => value % 2 === 0;
 
-const cursor = await fabric.query('FOR x IN 1..5 RETURN x');
+const cursor = await client.query('FOR x IN 1..5 RETURN x');
 const result = await cursor.some(even);
 assert.equal(result, true); // 2 is even
 assert.equal(cursor.hasNext(), true);
@@ -216,7 +216,7 @@ Note:-This creates an array of all return values. It is probably a bad idea to d
 
 ```js
 const square = value => value * value;
-const cursor = await fabric.query('FOR x IN 1..5 RETURN x');
+const cursor = await client.query('FOR x IN 1..5 RETURN x');
 const result = await cursor.map(square);
 assert.equal(result.length, 5);
 assert.deepEqual(result, [1, 4, 9, 16, 25]);
@@ -264,7 +264,7 @@ Equivalent to `Array.prototype.reduce` (except async).
 const add = (a, b) => a + b;
 const baseline = 1000;
 
-const cursor = await fabric.query('FOR x IN 1..5 RETURN x');
+const cursor = await client.query('FOR x IN 1..5 RETURN x');
 const result = await cursor.reduce(add, baseline)
 assert.equal(result, baseline + 1 + 2 + 3 + 4 + 5);
 assert.equal(cursor.hasNext(), false);
@@ -289,6 +289,6 @@ Note:-C8 will also destroy abandoned cursors automatically after a certain serve
 **Examples**
 
 ```js
-const cursor = await fabric.query('FOR x IN 1..5 RETURN x');
+const cursor = await client.query('FOR x IN 1..5 RETURN x');
 await cursor.delete();
 ```

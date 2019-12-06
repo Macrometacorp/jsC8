@@ -16,10 +16,10 @@ Creates an arbitrary index on the collection.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const index = await collection.createIndex({type: 'hash', fields: ['a', 'a.b']});
 // the index has been created with the handle `index.id`
 ```
@@ -47,10 +47,10 @@ For more information on hash indexes, see [the HTTP API for hash indexes](https:
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 
 const index = await collection.createHashIndex('favorite-color');
 // the index has been created with the handle `index.id`
@@ -82,10 +82,10 @@ Creates a skiplist index on the collection.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 
 const index = await collection.createSkipList('favorite-color')
 // the index has been created with the handle `index.id`
@@ -117,10 +117,10 @@ Creates a geo-spatial index on the collection.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 
 const index = await collection.createGeoIndex(['latitude', 'longitude']);
 // the index has been created with the handle `index.id`
@@ -152,10 +152,10 @@ Creates a fulltext index on the collection.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 
 const index = await collection.createFulltextIndex('description');
 // the index has been created with the handle `index.id`
@@ -189,10 +189,10 @@ For more information on the properties of the `opts` object see [the HTTP API fo
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 
 const index = await collection.createPersistentIndex(['name', 'email']);
 // the index has been created with the handle `index.id`
@@ -214,10 +214,10 @@ Fetches information about the index with the given `indexHandle` and returns it.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
 const result = await collection.index(index.id);
 assert.equal(result.id, index.id);
@@ -239,10 +239,10 @@ Fetches a list of all indexes on this collection.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 await collection.createFulltextIndex('description')
 const indexes = await collection.indexes();
 assert.equal(indexes.length, 1);
@@ -264,10 +264,10 @@ Deletes the index with the given `indexHandle` from the collection.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
 await collection.dropIndex(index.id);
 // the index has been removed from the collection
@@ -305,10 +305,10 @@ If `size` is a number, it will be interpreted as `size.size`.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 
 const index = await collection.createCapConstraint(20)
 // the index has been created with the handle `index.id`

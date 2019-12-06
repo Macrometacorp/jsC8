@@ -50,10 +50,10 @@ Note:-If a string is passed instead of an options object, it will be interpreted
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const data = {number: 1, hello: 'world'};
 const info1 = await collection.save(data);
 const info2 = await collection.replace(info1, {number: 2});
@@ -141,10 +141,10 @@ Note:- If a string is passed instead of an options object, it will be interprete
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name)
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name)
+const collection = client.collection('some-collection');
 const doc = {number: 1, hello: 'world'};
 const doc1 = await collection.save(doc);
 const doc2 = await collection.update(doc1, {number: 2});
@@ -202,8 +202,8 @@ For more information on the `opts` object, see [the HTTP API documentation for w
 **Examples**
 
 ```js
-const fabric = new Fabric();
-const collection = fabric.collection('some-collection');
+const client = new jsc8();
+const collection = client.collection('some-collection');
 
 await collection.remove('some-doc');
 // document 'some-collection/some-doc' no longer exists

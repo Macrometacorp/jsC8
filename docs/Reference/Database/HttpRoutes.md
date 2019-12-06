@@ -1,8 +1,8 @@
 ## Arbitrary HTTP routes
 
-## fabric.route
+## client.route
 
-`fabric.route([path,] [headers]): Route`
+`client.route([path,] [headers]): Route`
 
 Returns a new `Route` instance for the given path (relative to the fabric) that can be used to perform arbitrary HTTP requests.
 
@@ -16,17 +16,17 @@ Returns a new `Route` instance for the given path (relative to the fabric) that 
 
   Default headers that should be sent with each request to the route.
 
-If `path` is missing, the route will refer to the base URL of the fabric.
+If `path` is missing, the route will refer to the base URL of the client.
 
 For more information on `Route` instances see the [Route API_ below](https://developer.document360.io/docs/route).
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const myFoxxService = fabric.route('my-foxx-service');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const myFoxxService = client.route('my-foxx-service');
 const response = await myFoxxService.post('users', {
   username: 'admin',
   password: 'hunter2'

@@ -1,8 +1,8 @@
 ## Manipulating streams
 
-## fabric.stream
+## client.stream
 
-`fabric.stream(streamName, local, isCollectionStream): Stream`
+`client.stream(streamName, local, isCollectionStream): Stream`
 
 Returns a `Stream` instance representing the stream with the given stream name.
 
@@ -23,31 +23,31 @@ Returns a `Stream` instance representing the stream with the given stream name.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("testStream", true, false);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("testStream", true, false);
 ```
 
-## fabric.getStreams
+## client.getStreams
 
-`async fabric.getStreams(): Object`
+`async client.getStreams(): Object`
 
 Get list of all streams under given database.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const streams = await fabric.getStreams();
-// To change the fabric and tenant, fabric.useFabric and fabric.useTenant respectively
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const streams = await client.getStreams();
+// To change the fabric and tenant, client.useFabric and client.useTenant respectively
 ```
 
-## fabric.listPersistentStreams
+## client.listPersistentStreams
 
-`async fabric.listPersistentStreams(local)`
+`async client.listPersistentStreams(local)`
 
 Get list of persistent streams under the given stream db. Returns either a list of global or of local streams.
 
@@ -60,31 +60,31 @@ Get list of persistent streams under the given stream db. Returns either a list 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const streams = await fabric.listPersistentStreams(true);
-// To change the fabric and tenant, fabric.useFabric and fabric.useTenant respectively
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const streams = await client.listPersistentStreams(true);
+// To change the fabric and tenant, client.useFabric and client.useTenant respectively
 ```
 
-## fabric.clearBacklog
+## client.clearBacklog
 
-`async fabric.clearBacklog()`
+`async client.clearBacklog()`
 
 Clear backlog for all streams for given subscription.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.clearBacklog();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.clearBacklog();
 ```
 
-## fabric.clearSubscriptionBacklog
+## client.clearSubscriptionBacklog
 
-`async fabric.clearSubscriptionBacklog(subscription)`
+`async client.clearSubscriptionBacklog(subscription)`
 
 Clear backlog for all streams for given subscription.
 
@@ -97,15 +97,15 @@ Clear backlog for all streams for given subscription.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.clearSubscriptionBacklog("my-subscription");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.clearSubscriptionBacklog("my-subscription");
 ```
 
-## fabric.unsubscribe
+## client.unsubscribe
 
-`async fabric.unsubscribe(subscription)`
+`async client.unsubscribe(subscription)`
 
 Unsubscribes the given subscription on all streams on a stream db.
 
@@ -118,10 +118,10 @@ Unsubscribes the given subscription on all streams on a stream db.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.unsubscribe("my-subscription");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.unsubscribe("my-subscription");
 ```
 
 ## stream.createStream
@@ -133,10 +133,10 @@ Create asynchronously a stream for a given database.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 ```
 
@@ -149,10 +149,10 @@ Expire messages on all subscriptions of a stream.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.expireMessagesOnAllSubscriptions(5);
 ```
@@ -164,10 +164,10 @@ await stream.expireMessagesOnAllSubscriptions(5);
 Get estimated backlog for offline stream.
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.backlog();
 ```
@@ -181,10 +181,10 @@ Get the status of a compaction operation for a stream.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.compaction();
 ```
@@ -198,10 +198,10 @@ Trigger a compaction operation on a stream.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.triggerCompaction();
 ```
@@ -215,10 +215,10 @@ Get the statistics for the given stream.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.getStreamStatistics();
 ```
@@ -238,10 +238,10 @@ Delete a subscription.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.deleteSubscription("my-subscription");
 ```
@@ -261,10 +261,10 @@ Reset subscription to message position closest to given position.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.resetSubscriptionToPosition("my-subscription");
 ```
@@ -288,10 +288,10 @@ Expire messages on a stream subscription.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.expireMessages("my-subscription", 5);
 ```
@@ -311,10 +311,10 @@ Disconnect all active consumers for a cursor and reset the cursor.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.resetCursor("my-subscription");
 ```
@@ -338,10 +338,10 @@ Reset subscription to message position closest to absolute timestamp (in milisec
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.resetSubscriptionToTimestamp("my-subscription", 2000);
 ```
@@ -365,10 +365,10 @@ Skip num messages on a topic subscription.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.skipNumberOfMessages("my-subscription", 2);
 ```
@@ -388,10 +388,10 @@ Skip all messages on a stream subscription.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.skipAllMessages("my-subscription");
 ```
@@ -405,10 +405,10 @@ Get the list of persistent subscriptions for a given stream.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.getSubscriptionList();
 ```
@@ -422,10 +422,10 @@ Terminate a stream. A stream that is terminated will not accept any more message
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.terminateStream();
 ```
@@ -453,10 +453,10 @@ Creates a consumer for a stream.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 stream.consumer("my-subscription", {onmessage: (msg)=>{console.log(msg)}}, "test.macrometa.io");
 ```
@@ -480,10 +480,10 @@ Creates a producer for a stream.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 stream.producer("hello world", "test.macrometa.io");
 ```
@@ -497,10 +497,10 @@ Closes all the websocket connections made by producer and consumers.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const stream = fabric.stream("my-stream", true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const stream = client.stream("my-stream", true);
 await stream.createStream();
 stream.closeConnections();
 ```

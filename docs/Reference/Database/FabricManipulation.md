@@ -3,9 +3,9 @@
 These functions implement the [HTTP API for manipulating fabrics](https://developer.document360.io/docs/geo-fabrics)
 
 
-## fabric.useFabric
+## client.useFabric
 
-`fabric.useFabric(fabricName): this`
+`client.useFabric(fabricName): this`
 
 Updates the `Fabric` instance and its connection string to use the given `fabricName`, then returns itself.
 
@@ -20,16 +20,16 @@ Note:-This method can not be used when the jsC8 instance was created with `isAbs
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-fabric.useFabric("test");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+client.useFabric("test");
 // The fabric instance now uses the fabric "test".
 ```
 
-## fabric.version
+## client.version
 
-`async fabric.version(detail)`
+`async client.version(detail)`
 
 Returns the server name and version number.
 
@@ -42,15 +42,15 @@ Returns the server name and version number.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const response = await fabric.version(true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const response = await client.version(true);
 ```
 
-## fabric.useBasicAuth
+## client.useBasicAuth
 
-`fabric.useBasicAuth([username, [password]]): this`
+`client.useBasicAuth([username, [password]]): this`
 
 Updates the `Fabric` instance's `authorization` header to use Basic authentication with the given `username` and `password`, then returns itself.
 
@@ -67,16 +67,16 @@ Updates the `Fabric` instance's `authorization` header to use Basic authenticati
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-fabric.useBasicAuth("admin", "hunter2");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+client.useBasicAuth("admin", "hunter2");
 // with the username "admin" and password "hunter2".
 ```
 
-## fabric.useBearerAuth
+## client.useBearerAuth
 
-`fabric.useBearerAuth(token): this`
+`client.useBearerAuth(token): this`
 
 Updates the `Fabric` instance's `authorization` header to use Bearer authentication with the given authentication token, then returns itself.
 
@@ -89,16 +89,16 @@ Updates the `Fabric` instance's `authorization` header to use Bearer authenticat
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-fabric.useBearerAuth("keyboardcat");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+client.useBearerAuth("keyboardcat");
 // The fabric instance now uses Bearer authentication.
 ```
 
-## fabric.login
+## client.login
 
-`async fabric.login(email, password): object`
+`async client.login(email, password): object`
 
 Validates the given fabric credentials and exchanges them for an authentication token, then uses the authentication token for future requests and uses the tenant returned by the auth to be used in the URLs.
 
@@ -115,34 +115,34 @@ Validates the given fabric credentials and exchanges them for an authentication 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.login("hunter@test.com", "hunter2");
-fabric.useFabric("hunter_test.com");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.login("hunter@test.com", "hunter2");
+client.useFabric("hunter_test.com");
 // The fabric instance now uses the fabric "test"
 // with an authentication token for the "admin" user.
 ```
 
-## fabric.version
+## client.version
 
-`async fabric.version(): Object`
+`async client.version(): Object`
 
 Fetches the C8 version information for the active fabric from the server.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const version = await fabric.version();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const version = await client.version();
 // the version object contains the C8 version information.
 ```
 
-## fabric.createFabric
+## client.createFabric
 
-`async fabric.createFabric(fabricName, options, [users]): Object`
+`async client.createFabric(fabricName, options, [users]): Object`
 
 Creates a new Fabric with the given `fabricName`.
 
@@ -159,13 +159,13 @@ Creates a new Fabric with the given `fabricName`.
 to the local Edge Location.
 
   - **spotDc**: `String` (optional)
-    The data center to be made as spot data center for this fabric. It has three different behaviour depending upon the value.
+    The data center to be made as spot data center for this client. It has three different behaviour depending upon the value.
 
       `AUTOMATIC` -  The spot DC is chosen automatically if this key is not present in the `options` object.
 
       `NONE` - No spot Dc is made for this fabric if empty string is passed. E.g. `spotDc:''`
 
-      `DC name` - If passed a valid DC name as the value, then that DC will be made the spot DC for this fabric.
+      `DC name` - If passed a valid DC name as the value, then that DC will be made the spot DC for this client.
 
 - **users**: `Array<Object>` (optional)
 
@@ -173,7 +173,7 @@ to the local Edge Location.
 
   - **username**: `string`
 
-    The username of the user to create for the fabric.
+    The username of the user to create for the client.
 
   - **passwd**: `string` (Default: empty)
 
@@ -190,110 +190,110 @@ to the local Edge Location.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const info = await fabric.createFabric('mydb', [{username: 'root'}]);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const info = await client.createFabric('mydb', [{username: 'root'}]);
 // the fabric has been created
 ```
 
-## fabric.updateFabricSpotRegion
+## client.updateFabricSpotRegion
 
-`async fabric.updateFabricSpotRegion(tenantName, fabricName, datacenter = ""): Object`
+`async client.updateFabricSpotRegion(tenantName, fabricName, datacenter = ""): Object`
 
-Updates the spot primary region of a fabric.
+Updates the spot primary region of a client.
 
 **Examples**
 
 ```js
-await fabric.updateFabricSpotRegion("guestTenant", "guestDB", "myfederation-ap-south-1");
+await client.updateFabricSpotRegion("guestTenant", "guestDB", "myfederation-ap-south-1");
 ```
 
 The above code changes the spot DC for `guestDB` in `guestTenant` to `myfederation-ap-south-1`.
 
-## fabric.exists
+## client.exists
 
-`async fabric.exists(): boolean`
+`async client.exists(): boolean`
 
 Checks whether the fabric exists.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const result = await fabric.exists();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const result = await client.exists();
 // result indicates whether the fabric exists
 ```
 
-## fabric.get
+## client.get
 
-`async fabric.get(): Object`
+`async client.get(): Object`
 
 Fetches the fabric description for the active fabric from the server.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const info = await fabric.get();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const info = await client.get();
 // the fabric exists
 ```
 
-## fabric.listFabrics
+## client.listFabrics
 
-`async fabric.listFabrics(): Array<string>`
+`async client.listFabrics(): Array<string>`
 
 Fetches all fabrics from the server and returns an array of their names.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const names = await fabric.listFabrics();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const names = await client.listFabrics();
 // fabrics is an array of fabric names
 ```
 
-## fabric.listUserFabrics
+## client.listUserFabrics
 
-`async fabric.listUserFabrics(): Array<string>`
+`async client.listUserFabrics(): Array<string>`
 
 Fetches all fabrics accessible to the active user from the server and returns an array of their names.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const names = await fabric.listUserFabrics();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const names = await client.listUserFabrics();
 // fabrics is an array of fabric names
 ```
 
-## fabric.dropFabric
+## client.dropFabric
 
-`async fabric.dropFabric(fabricName): Object`
+`async client.dropFabric(fabricName): Object`
 
 Deletes the fabric with the given `fabricName` from the server.
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.dropFabric('mydb');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.dropFabric('mydb');
 // fabric "mydb" no longer exists
 ```
 
-## fabric.truncate
+## client.truncate
 
-`async fabric.truncate([excludeSystem]): Object`
+`async client.truncate([excludeSystem]): Object`
 
-Deletes **all documents in all collections** in the active fabric.
+Deletes **all documents in all collections** in the active client.
 
 **Arguments**
 
@@ -304,55 +304,55 @@ Deletes **all documents in all collections** in the active fabric.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.truncate();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.truncate();
 // all non-system collections in this fabric are now empty
 ```
 
-## fabric.getAllEdgeLocations
+## client.getAllEdgeLocations
 
-`async fabric.getAllEdgeLocations(): Object`
+`async client.getAllEdgeLocations(): Object`
 
-Return a list of all Edge Locations (AKA Datacenters) deployed in the Macrometa Fabric.
+Return a list of all Edge Locations (AKA Datacenters) deployed in the Macrometa client.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.createFabric('mydb', [{username: 'root'}]);
-await fabric.getAllEdgeLocations();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.createFabric('mydb', [{username: 'root'}]);
+await client.getAllEdgeLocations();
 ```
 
-## fabric.getLocalEdgeLocation
+## client.getLocalEdgeLocation
 
-`async fabric.getLocalEdgeLocation(): Object`
+`async client.getLocalEdgeLocation(): Object`
 
 Fetches data about the local Edge Location specific to this Datacenter/Location.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.getLocalEdgeLocation();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.getLocalEdgeLocation();
 ```
 
-## fabric.changeEdgeLocationSpotStatus
+## client.changeEdgeLocationSpotStatus
 
-`async fabric.changeEdgeLocationSpotStatus(): Object`
+`async client.changeEdgeLocationSpotStatus(): Object`
 
 Change the spot status of a datacenter.
 
 **Examles**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.changeEdgeLocationSpotStatus('myfederation-us-east-1', true);
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.changeEdgeLocationSpotStatus('myfederation-us-east-1', true);
 ```

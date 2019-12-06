@@ -1,6 +1,6 @@
 ## Setting User Permissions and related Operations
 
-## fabric.user
+## client.user
 
 `user(user: string, email: string): User`
 
@@ -19,40 +19,40 @@ Returns a User instance representing the user with the given username.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 ```
 
-## fabric.getAllUsers
+## client.getAllUsers
 
-`async fabric.getAllUsers()`
+`async client.getAllUsers()`
 
 Returns the list of all the users for this fabric
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-await fabric.getAllUsers();
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+await client.getAllUsers();
 ```
 
 ## user.getUserDetails
 
-`async fabric.getUserDetails()`
+`async client.getUserDetails()`
 
 Returns the details of a user
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.getUserDetails();
 ```
 
@@ -79,10 +79,10 @@ Asynchronously creates a user
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.createUser("sample_password", active, extra);
 ```
 
@@ -95,10 +95,10 @@ deletes a user
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.deleteUser();
 ```
 
@@ -123,10 +123,10 @@ Partially updates the data of an existing user.
     "queries": [ {"name":"query_name", "value":"query_command"},…]
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 const config = {
   active: false // only updating active status
 };
@@ -154,10 +154,10 @@ Partially updates the data of an existing user.
     "queries": [ {"name":"query_name", "value":"query_command"},…]
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 const config = {
   passwd: "sample_password",
   active: false
@@ -180,10 +180,10 @@ Lists all the databases' access levels associated with the user
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.getAllDatabases();
 ```
 
@@ -202,10 +202,10 @@ gets access level of the given database associated with the user
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.getDatabaseAccessLevel("sample_database");
 ```
 
@@ -228,10 +228,10 @@ Get the access level of a specific collection in a given database
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.getCollectionAccessLevel(
   "sample_databaseName",
   "sample_collectionName"
@@ -253,10 +253,10 @@ clear access level for the database
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.clearDatabaseAccessLevel("sample_database");
 ```
 
@@ -279,10 +279,10 @@ clears the access level of a specific collection in a given database
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.clearCollectionAccessLevel(
   "sample_databaseName",
   "sample_collectionName"
@@ -308,10 +308,10 @@ Sets the database access level
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.setDatabaseAccessLevel(databaseName, permission);
 ```
 
@@ -338,9 +338,9 @@ Sets Access level of a collection in a database
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const user = fabric.user("sample_user", "sample_user@macrometa.io");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.setCollectionAccessLevel(databaseName, collectionName, permission);
 ```

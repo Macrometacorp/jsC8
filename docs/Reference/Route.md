@@ -18,17 +18,17 @@ Returns a new `Route` instance for the given path (relative to the current route
 
   Default headers that should be sent with each request to the route.
 
-If `path` is missing, the route will refer to the base URL of the fabric.
+If `path` is missing, the route will refer to the base URL of the client.
 
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const route = fabric.route("my-foxx-service");
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const route = client.route("my-foxx-service");
 const users = route.route("users");
-// equivalent to fabric.route('my-foxx-service/users')
+// equivalent to client.route('my-foxx-service/users')
 ```
 
 ## route.get
@@ -50,10 +50,10 @@ Performs a GET request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const route = fabric.route('my-foxx-service');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const route = client.route('my-foxx-service');
 const response = await route.get();
 // response.body is the response body of calling
 // GET _db/_system/my-foxx-service
@@ -94,10 +94,10 @@ Performs a POST request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const route = fabric.route('my-foxx-service');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const route = client.route('my-foxx-service');
 const response = await route.post()
 // response.body is the response body of calling
 // POST _db/_system/my-foxx-service
@@ -152,10 +152,10 @@ Performs a PUT request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const route = fabric.route('my-foxx-service');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const route = client.route('my-foxx-service');
 const response = await route.put();
 // response.body is the response body of calling
 // PUT _db/_system/my-foxx-service
@@ -210,10 +210,10 @@ Performs a PATCH request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const route = fabric.route('my-foxx-service');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const route = client.route('my-foxx-service');
 const response = await route.patch();
 // response.body is the response body of calling
 // PATCH _db/_system/my-foxx-service
@@ -263,10 +263,10 @@ Performs a DELETE request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const route = fabric.route('my-foxx-service');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const route = client.route('my-foxx-service');
 const response = await route.delete()
 // response.body is the response body of calling
 // DELETE _db/_system/my-foxx-service
@@ -303,8 +303,8 @@ Performs a HEAD request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-const route = fabric.route('my-foxx-service');
+const client = new jsc8();
+const route = client.route('my-foxx-service');
 const response = await route.head();
 // response is the response object for
 // HEAD _db/_system/my-foxx-service
@@ -352,10 +352,10 @@ Performs an arbitrary request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const fabric = new Fabric();
-await fabric.login(email, password);
-fabric.useTenant(tenant-name);
-const route = fabric.route('my-foxx-service');
+const client = new jsc8();
+await client.login(email, password);
+client.useTenant(tenant-name);
+const route = client.route('my-foxx-service');
 const response = await route.request({
   path: 'hello-world',
   method: 'POST',
