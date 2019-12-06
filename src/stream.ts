@@ -232,7 +232,6 @@ export class Stream {
         });
 
         consumer.on('error', (e: Error) => {
-            console.log("Consumer connection errored ", e);
             typeof onerror === 'function' && onerror(e);
         });
 
@@ -305,7 +304,6 @@ export class Stream {
             this._producer = ws(producerUrl);
 
             this._producer.on("message", (msg: string) => {
-                console.log('received ack: %s', msg);
                 typeof onmessage === 'function' && onmessage(msg);
             });
 
@@ -320,12 +318,10 @@ export class Stream {
                 typeof onopen === 'function' && onopen();
             });
             this._producer.on('close', (e: any) => {
-                console.log("Producer connection closed ", e);
                 typeof onclose === 'function' && onclose();
             });
 
             this._producer.on('error', (e: Error) => {
-                console.log("Producer connection errored ", e);
                 typeof onerror === 'function' && onerror(e);
             });
 
