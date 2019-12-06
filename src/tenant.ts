@@ -12,14 +12,14 @@ export class Tenant {
         this.email = email;
     }
 
-    createTenant(passwd: string, extra: object = {}, dcList: string = "") {
+    createTenant(passwd: string, dcList: string | string[], extra: object = {}) {
         return this._connection.request(
             {
                 method: "POST",
                 path: "/tenant",
                 absolutePath: true,
                 body: {
-                    dcList,
+                    dcList: Array.isArray(dcList) ? dcList.join(',') : dcList,
                     email: this.email,
                     passwd,
                     extra

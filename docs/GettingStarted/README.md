@@ -123,7 +123,7 @@ const regionURL = "gdn1.macrometa.io";
   //--------------------------------------------------------------------------------------
   // create a tenant
   const guestTenant = client.tenant(tenantEmail);
-  await guestTenant.createTenant(tenantPassword);
+  await guestTenant.createTenant(tenantPassword,['region-name']);
   // log in with the newly created tenant
   await client.login(tenantEmail, tenantPassword);
   client.useTenant(guestTenant.name);

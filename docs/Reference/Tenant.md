@@ -65,7 +65,7 @@ const allTenants = client.listTenants();
 
 ## tenant.createTenant
 
-`async tenant.createTenant(dcList, password, extra): Object`
+`async tenant.createTenant(password, dcList, extra): Object`
 
 Creates a tenant.
 
@@ -89,7 +89,7 @@ const client = new jsc8();
 await client.login(email, password);
 client.useTenant(tenant-name);
 const tenant = client.tenant(tenant-email);
-await tenant.createTenant("test-eu-west-1,test-us-west-2","myPassword", {});
+await tenant.createTenant("myPassword", "test-eu-west-1,test-us-west-2");
 // creates a new tenant with email as tenant-email with password as "myPassword".
 ```
 
@@ -106,7 +106,7 @@ const client = new jsc8();
 await client.login(email, password);
 client.useTenant(tenant-name);
 const tenant = client.tenant("testTenant@macrometa.io");
-await tenant.createTenant("myPassword", {});
+await tenant.createTenant("myPassword","region-name");
 await tenant.dropTenant();
 ```
 
@@ -139,7 +139,7 @@ const client = new jsc8();
 await client.login(email, password);
 client.useTenant(tenant-name);
 const tenant = client.tenant("testTenant@macrometa.io");
-await tenant.createTenant("myPassword", {});
+await tenant.createTenant("myPassword", "region-name");
 await tenant.tenantDetails();
 ```
 
@@ -166,6 +166,6 @@ const client = new jsc8();
 await client.login(email, password);
 client.useTenant(tenant-name);
 const tenant = client.tenant("testTenant@macrometa.io");
-await tenant.createTenant("myPassword", {});
+await tenant.createTenant("myPassword" "region-name");
 await tenant.modifyTenant("myPassword", { info: "string"});
 ```
