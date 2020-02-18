@@ -43,7 +43,7 @@
   ],
   "scripts": {
     "pretest": "yarn dist",
-    "test": "mocha --growl --reporter spec --require source-map-support/register --timeout 20000 lib/async/test",
+    "test": "env TEST_C8_URL=https://qa1-lon1.eng3.macrometa.io mocha --growl --reporter mochawesome --require source-map-support/register --timeout 20000 lib/async/test",
     "ci": "mocha --reporter spec --require source-map-support/register --timeout 10000 lib/cjs/test",
     "preci": "yarn install",
     "jenkins": "yarn ci -- --timeout 0 --reporter xunit-file",
@@ -79,6 +79,7 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.3.1",
     "mocha": "^5.2.0",
+    "mochawesome": "^4.1.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.9.1",
     "regenerator-runtime": "^0.11.1",
