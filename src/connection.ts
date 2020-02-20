@@ -67,15 +67,15 @@ export type Config =
   | string
   | string[]
   | Partial<{
-    url: string | string[];
-    isAbsolute: boolean;
-    c8Version: number;
-    loadBalancingStrategy: LoadBalancingStrategy;
-    maxRetries: false | number;
-    agent: any;
-    agentOptions: { [key: string]: any };
-    headers: { [key: string]: string };
-  }>;
+      url: string | string[];
+      isAbsolute: boolean;
+      c8Version: number;
+      loadBalancingStrategy: LoadBalancingStrategy;
+      maxRetries: false | number;
+      agent: any;
+      agentOptions: { [key: string]: any };
+      headers: { [key: string]: string };
+    }>;
 
 export class Connection {
   private _activeTasks: number = 0;
@@ -110,11 +110,11 @@ export class Connection {
     this._agentOptions = isBrowser
       ? { ...config.agentOptions! }
       : {
-        maxSockets: 3,
-        keepAlive: true,
-        keepAliveMsecs: 1000,
-        ...config.agentOptions
-      };
+          maxSockets: 3,
+          keepAlive: true,
+          keepAliveMsecs: 1000,
+          ...config.agentOptions
+        };
     this._maxTasks = this._agentOptions.maxSockets || 3;
     if (this._agentOptions.keepAlive) this._maxTasks *= 2;
 
@@ -136,8 +136,7 @@ export class Connection {
       : ["https://test.macrometa.io"];
     const apiUrls = urls.map(url => {
       return `https://api-${url.split("https://")[1]}`;
-      ;
-    })
+    });
     this.addToHostList(apiUrls);
 
     if (this._loadBalancingStrategy === "ONE_RANDOM") {
@@ -148,7 +147,7 @@ export class Connection {
   }
 
   private get _fabricPath() {
-    return this._fabricName === false ? "" : `/_tenant/${this._tenantName}/_fabric/${this._fabricName}`;
+    return this._fabricName === false ? "" : `/_fabric/${this._fabricName}`;
   }
 
   private _runQueue() {
