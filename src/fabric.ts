@@ -19,7 +19,6 @@ import { Tenant } from "./tenant";
 import { Stream } from "./stream";
 import { Route } from "./route";
 import { btoa } from "./util/btoa";
-import { Pipeline } from './pipeline';
 import { Event } from './event';
 import User from "./user";
 
@@ -233,16 +232,6 @@ export class Fabric {
     );
   }
 
-  getPipelines() {
-    return this._connection.request(
-      {
-        method: "GET",
-        path: `/pipelines`,
-      },
-      res => res.body
-    );
-  }
-
   getEvents() {
     return this._connection.request(
       {
@@ -262,10 +251,6 @@ export class Fabric {
       },
       res => res.body
     );
-  }
-
-  pipeline(pipelineName: string) {
-    return new Pipeline(this._connection, pipelineName);
   }
 
   event(entityName: string, eventId?: number) {
@@ -532,7 +517,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: `/_tenant/${this._connection.getTenantName()}/_admin/version`,
+        path: `/_fabric/${this._connection.getFabricName()}/_api/version`,
         absolutePath: true,
         qs: { details }
       },

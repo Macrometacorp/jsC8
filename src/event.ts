@@ -9,7 +9,6 @@ export const enum Status {
 export const enum EntityType {
     COLLECTION = 'COLLECTION',
     GRAPH = 'GRAPH',
-    PIPELINE = 'PIPELINE',
     AUTH = 'AUTH',
     STREAM = 'STREAM',
     GEOFABRIC = 'GEOFABRIC',
