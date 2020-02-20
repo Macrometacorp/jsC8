@@ -147,7 +147,7 @@ export class Connection {
   }
 
   private get _fabricPath() {
-    return this._fabricName === false ? "" : `/_fabric/${this._fabricName}`;
+    return this._fabricName === false ? "" : `/_tenant/${this._tenantName}/_fabric/${this._fabricName}`;
   }
 
   private _runQueue() {

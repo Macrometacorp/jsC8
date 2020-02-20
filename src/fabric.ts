@@ -434,6 +434,7 @@ export class Fabric {
   }
 
   explainQuery(explainQueryObj: C8QLQuery) {
+    // Sulom : change path to /_api/explain
     return this._connection.request(
       {
         method: "POST",
@@ -758,5 +759,21 @@ export class Fabric {
     );
 
   }
+
+  // Stream Applications
+
+  createStreamApp(regions: Array<string>, appDefinition: string){
+    return this._connection.request(
+        {
+            method: "POST",
+            path: "/streamapps",
+            body: {
+                "appDefinition": appDefinition, 
+                "regions": regions,
+            }
+        },
+        res => res.body
+    );
+}
 
 }

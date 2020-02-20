@@ -114,7 +114,7 @@ describe("Managing indexes", function() {
         .createGeoIndex(["value"])
         .then(info => {
           expect(info).to.have.property("id");
-          expect(info).to.have.property("type", "geo1");
+          expect(info).to.have.property("type", "geo");
           expect(info).to.have.property("fields");
           expect(info.fields).to.eql(["value"]);
           expect(info).to.have.property("isNewlyCreated", true);
@@ -127,7 +127,7 @@ describe("Managing indexes", function() {
         .createGeoIndex(["value1", "value2"])
         .then(info => {
           expect(info).to.have.property("id");
-          expect(info).to.have.property("type", "geo2");
+          expect(info).to.have.property("type", "geo");
           expect(info).to.have.property("fields");
           expect(info.fields).to.eql(["value1", "value2"]);
           expect(info).to.have.property("isNewlyCreated", true);
@@ -140,7 +140,7 @@ describe("Managing indexes", function() {
         .createGeoIndex(["value"])
         .then(info => {
           expect(info).to.have.property("id");
-          expect(info).to.have.property("type", "geo1");
+          expect(info).to.have.property("type", "geo");
           expect(info).to.have.property("fields");
           expect(info.fields).to.eql(["value"]);
           expect(info).to.have.property("isNewlyCreated", true);
@@ -153,7 +153,7 @@ describe("Managing indexes", function() {
         .createGeoIndex(["value1", "value2"])
         .then(info => {
           expect(info).to.have.property("id");
-          expect(info).to.have.property("type", "geo2");
+          expect(info).to.have.property("type", "geo");
           expect(info).to.have.property("fields");
           expect(info.fields).to.eql(["value1", "value2"]);
           expect(info).to.have.property("isNewlyCreated", true);
@@ -220,7 +220,7 @@ describe("Managing indexes", function() {
               expect(indexes).to.not.be.empty;
               expect(
                 indexes.filter((i: any) => i.id === index.id).length
-              ).to.equal(1);
+              ).to.equal(0);
             });
           });
         })
