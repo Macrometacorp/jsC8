@@ -60,13 +60,14 @@ describe34("C8QL Stream queries", function() {
     });
     it("supports options", done => {
       fabric
-        .query("FOR x IN 1..10 RETURN x", undefined, {
+        .query("FOR x IN 1..10 RETURN x", {}, {
           batchSize: 2,
           count: true,
           options: { stream: true }
         })
         .then(cursor => {
-          expect(cursor.count).to.equal(10);
+          let count =  cursor.count;      
+          expect(count).to.equal(10);
           expect((cursor as any)._hasMore).to.equal(true);
           done();
         })
