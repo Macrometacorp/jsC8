@@ -21,6 +21,7 @@ import { Route } from "./route";
 import { btoa } from "./util/btoa";
 import { Event } from './event';
 import User from "./user";
+import { Streamapps } from "./streamapps"
 
 function colToString(collection: string | C8Collection): string {
   if (isC8Collection(collection)) {
@@ -97,6 +98,7 @@ export interface CreateFabricOptions {
 }
 
 const FABRIC_NOT_FOUND = 1228;
+
 export class Fabric {
   private _connection: Connection;
 
@@ -629,11 +631,11 @@ export class Fabric {
     );
   }
 
-  changeEdgeLocationSpotStatus(dcName: string, status: boolean) {
+  changeEdgeLocationSpotStatus(dcName: string) {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/datacenter/${dcName}/${status}`,
+        path: `_api/database/${dcName}`,
         absolutePath: true
       },
       res => res.body
@@ -762,18 +764,57 @@ export class Fabric {
 
   // Stream Applications
 
-  createStreamApp(regions: Array<string>, appDefinition: string){
+  streamApp(appName: string): Streamapps {
+  
+    return new Streamapps(this._connection, appName);
+  }
+
+  createStreamApp(regions: Array<string>, appDefinition: string): Promise<any>{
     return this._connection.request(
         {
             method: "POST",
-            path: "/streamapps",
-            body: {
-                "appDefinition": appDefinition, 
+            path: "/_api/streamapps",
+            body: JSON.stringify({
+                "definition": appDefinition, 
                 "regions": regions,
-            }
+            })
         },
         res => res.body
-    );
+    )
 }
+
+  getAllStreamApps(){
+    return this._connection.request(
+      {
+          method: "GET",
+          path: "/_api/streamapps",
+      },
+      res => res.body
+  );
+
+  }
+
+  validateStreamappDefinition(appDefinition: string){
+    return this._connection.request(
+      {
+          method: "POST",
+          path: "/_api/streamapps/validate",
+          body: {
+            "definition" : appDefinition,
+          }
+      },
+      res => res.body
+    );
+  }
+
+  getSampleStreamApps(){
+    return this._connection.request(
+      {
+          method: "GET",
+          path: "/_api/streamapps/samples",
+      },
+      res => res.body
+    );
+  }
 
 }

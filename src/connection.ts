@@ -67,15 +67,15 @@ export type Config =
   | string
   | string[]
   | Partial<{
-      url: string | string[];
-      isAbsolute: boolean;
-      c8Version: number;
-      loadBalancingStrategy: LoadBalancingStrategy;
-      maxRetries: false | number;
-      agent: any;
-      agentOptions: { [key: string]: any };
-      headers: { [key: string]: string };
-    }>;
+    url: string | string[];
+    isAbsolute: boolean;
+    c8Version: number;
+    loadBalancingStrategy: LoadBalancingStrategy;
+    maxRetries: false | number;
+    agent: any;
+    agentOptions: { [key: string]: any };
+    headers: { [key: string]: string };
+  }>;
 
 export class Connection {
   private _activeTasks: number = 0;
@@ -110,11 +110,11 @@ export class Connection {
     this._agentOptions = isBrowser
       ? { ...config.agentOptions! }
       : {
-          maxSockets: 3,
-          keepAlive: true,
-          keepAliveMsecs: 1000,
-          ...config.agentOptions
-        };
+        maxSockets: 3,
+        keepAlive: true,
+        keepAliveMsecs: 1000,
+        ...config.agentOptions
+      };
     this._maxTasks = this._agentOptions.maxSockets || 3;
     if (this._agentOptions.keepAlive) this._maxTasks *= 2;
 
