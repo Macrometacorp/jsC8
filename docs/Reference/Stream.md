@@ -469,13 +469,17 @@ Creates a producer for a stream.
 
 **Arguments**
 
-- **message**: `string`
+- **message**: `string` | Array<string>
 
   The message to be published to the stream.
 
 - **dcName**: `string``
 
   The dcName for the producer.
+  
+- **callbackObj**: `{ onopen, onclose, onerror, onmessage }`
+
+  An object having required callbacks.
 
 **Examples**
 
