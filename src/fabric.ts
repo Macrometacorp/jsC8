@@ -19,9 +19,9 @@ import { Tenant } from "./tenant";
 import { Stream } from "./stream";
 import { Route } from "./route";
 import { btoa } from "./util/btoa";
-import { Event } from './event';
+import { Event } from "./event";
 import User from "./user";
-import { Streamapps } from "./streamapps"
+import { Streamapps } from "./streamapps";
 
 function colToString(collection: string | C8Collection): string {
   if (isC8Collection(collection)) {
@@ -67,9 +67,9 @@ export type TransactionCollections =
   | C8Collection
   | (string | C8Collection)[]
   | {
-    write?: string | C8Collection | (string | C8Collection)[];
-    read?: string | C8Collection | (string | C8Collection)[];
-  };
+      write?: string | C8Collection | (string | C8Collection)[];
+      read?: string | C8Collection | (string | C8Collection)[];
+    };
 
 export type TransactionOptions = {
   lockTimeout?: number;
@@ -114,8 +114,6 @@ export class Fabric {
     return new Route(this._connection, path, headers);
   }
 
-
-
   close(): void {
     this._connection.close();
   }
@@ -132,10 +130,7 @@ export class Fabric {
     return this;
   }
 
-  useBasicAuth(
-    username: string,
-    password: string
-  ): this {
+  useBasicAuth(username: string, password: string): this {
     this._connection.setHeader(
       "authorization",
       `Basic ${btoa(`${username}:${password}`)}`
@@ -200,10 +195,7 @@ export class Fabric {
     );
   }
 
-  login(
-    email: string,
-    password: string
-  ): Promise<object> {
+  login(email: string, password: string): Promise<object> {
     return this._connection.request(
       {
         method: "POST",
@@ -238,7 +230,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: `/events`,
+        path: `/events`
       },
       res => res.body
     );
@@ -249,7 +241,7 @@ export class Fabric {
       {
         method: "DELETE",
         path: `/events`,
-        body: JSON.stringify(eventIds),
+        body: JSON.stringify(eventIds)
       },
       res => res.body
     );
@@ -552,7 +544,11 @@ export class Fabric {
 
   //Stream
 
-  stream(streamName: string, local: boolean, isCollectionStream: boolean = false): Stream {
+  stream(
+    streamName: string,
+    local: boolean,
+    isCollectionStream: boolean = false
+  ): Stream {
     return new Stream(this._connection, streamName, local, isCollectionStream);
   }
 
@@ -631,11 +627,11 @@ export class Fabric {
     );
   }
 
-  changeEdgeLocationSpotStatus(dcName: string) {
+  changeEdgeLocationSpotStatus(dcName: string, isSpot: boolean) {
     return this._connection.request(
       {
         method: "PUT",
-        path: `_api/database/${dcName}`,
+        path: `_api/datacenter/${dcName}/${isSpot}`,
         absolutePath: true
       },
       res => res.body
@@ -668,33 +664,29 @@ export class Fabric {
       },
       res => res.body
     );
-
   }
 
   saveQuery(name: string, parameter: any = {}, value: string) {
     try {
-
-      if (name.includes(" ")) throw ("Spaces are not allowed in query name")
+      if (name.includes(" ")) throw "Spaces are not allowed in query name";
 
       return this._connection.request(
         {
           method: "POST",
           path: "/restql",
           body: {
-            "query": {
-              "name": name,
-              "parameter": parameter,
-              "value": value
+            query: {
+              name: name,
+              parameter: parameter,
+              value: value
             }
           }
         },
         res => res.body
       );
+    } catch (err) {
+      return err;
     }
-    catch (err) {
-      return err
-    }
-
   }
 
   executeSavedQuery(queryName: string, bindVars: any = {}) {
@@ -703,12 +695,11 @@ export class Fabric {
         method: "POST",
         path: `/restql/execute/${queryName}`,
         body: {
-          "bindVars": bindVars
+          bindVars: bindVars
         }
       },
       res => res.body
     );
-
   }
 
   updateSavedQuery(queryName: string, parameter: any = {}, value: string) {
@@ -717,10 +708,10 @@ export class Fabric {
         method: "PUT",
         path: `/restql/${queryName}`,
         body: {
-          "query": {
-            "name": name,
-            "parameter": parameter,
-            "value": value
+          query: {
+            name: name,
+            parameter: parameter,
+            value: value
           }
         }
       },
@@ -736,7 +727,6 @@ export class Fabric {
       },
       res => res.body
     );
-
   }
 
   createRestqlCursor(query: string, bindVars: any = {}) {
@@ -745,32 +735,28 @@ export class Fabric {
         method: "POST",
         path: `/restql/dynamic`,
         body: {
-          "bindVars": [
-            bindVars
-          ],
-          "cache": true,
-          "count": true,
-          "options": {
-            "profile": true
+          bindVars: [bindVars],
+          cache: true,
+          count: true,
+          options: {
+            profile: true
           },
-          "query": query
+          query: query
         }
-
       },
       res => res.body
     );
-
   }
 
   // Stream Applications
 
   streamApp(appName: string): Streamapps {
-  
     return new Streamapps(this._connection, appName);
   }
 
-  createStreamApp(regions: Array<string>, appDefinition: string): Promise<any>{
+  createStreamApp(regions: Array<string>, appDefinition: string): Promise<any> {
     return this._connection.request(
+<<<<<<< HEAD
         {
             method: "POST",
             path: "/_api/streamapps",
@@ -785,39 +771,50 @@ export class Fabric {
 
 
 }
-
-  getAllStreamApps(){
-    return this._connection.request(
+=======
       {
-          method: "GET",
-          path: "/_api/streamapps",
+        method: "POST",
+        path: "/_api/streamapps",
+        body: JSON.stringify({
+          definition: appDefinition,
+          regions: regions
+        })
       },
       res => res.body
-  );
-
+    );
   }
+>>>>>>> fabac51dee56054a458399600932b1c688f0d721
 
-  validateStreamappDefinition(appDefinition: string){
+  getAllStreamApps() {
     return this._connection.request(
       {
-          method: "POST",
-          path: "/_api/streamapps/validate",
-          body: {
-            "definition" : appDefinition,
-          }
+        method: "GET",
+        path: "/_api/streamapps"
       },
       res => res.body
     );
   }
 
-  getSampleStreamApps(){
+  validateStreamappDefinition(appDefinition: string) {
     return this._connection.request(
       {
-          method: "GET",
-          path: "/_api/streamapps/samples",
+        method: "POST",
+        path: "/_api/streamapps/validate",
+        body: {
+          definition: appDefinition
+        }
       },
       res => res.body
     );
   }
 
+  getSampleStreamApps() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: "/_api/streamapps/samples"
+      },
+      res => res.body
+    );
+  }
 }
