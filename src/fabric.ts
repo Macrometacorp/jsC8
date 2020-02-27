@@ -779,8 +779,11 @@ export class Fabric {
                 "regions": regions,
             })
         },
+
         res => res.body
     )
+
+
 }
 
   getAllStreamApps(){

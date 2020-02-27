@@ -33,8 +33,19 @@ describe(" StreamApps ", function () {
             let dcListAll = getDCListString(response)
             let dcList = dcListAll.split(",")
 
-            let appDefinition = "@App:name('Sample-Cargo-App')\r\n\r\n-- Stream\r\ndefine stream srcCargoStream (weight int);\r\n\r\n-- Table\r\ndefine table destCargoTable (weight int, totalWeight long);\r\n\r\n-- Data Processing\r\n@info(name='Query')\r\nselect weight, sum(weight) as totalWeight\r\nfrom srcCargoStream\r\ninsert into destCargoTable;"
+            let appDefinition = 
+            `@App:name('Sample-Cargo-App')
+                -- Stream
+                define stream srcCargoStream (weight int);
+                -- Table
+                define table destCargoTable (weight int, totalWeight long);
+                -- Data Processing
+                @info(name='Query')
+                select weight, sum(weight) as totalWeight
+                from srcCargoStream
+                insert into destCargoTable;`
             let resp = await fabric.createStreamApp(dcList, appDefinition)
+            console.log(resp)
             expect(resp.error).to.be.false;
 
         });
@@ -51,7 +62,17 @@ describe(" StreamApps ", function () {
 
     describe("fabric.validateStreamappDefinition", () => {
         it("validate the streamapp definition", async () => {
-            let appDefinition = "@App:name('Sample-Cargo-App')\r\n\r\n-- Stream\r\ndefine stream srcCargoStream (weight int);\r\n\r\n-- Table\r\ndefine table destCargoTable (weight int, totalWeight long);\r\n\r\n-- Data Processing\r\n@info(name='Query')\r\nselect weight, sum(weight) as totalWeight\r\nfrom srcCargoStream\r\ninsert into destCargoTable;"
+            let appDefinition = 
+            `@App:name('Sample-Cargo-App')
+                -- Stream
+                define stream srcCargoStream (weight int);
+                -- Table
+                define table destCargoTable (weight int, totalWeight long);
+                -- Data Processing
+                @info(name='Query')
+                select weight, sum(weight) as totalWeight
+                from srcCargoStream
+                insert into destCargoTable;`
             let response = await fabric.validateStreamappDefinition(appDefinition)
             expect(response.error).to.be.false;
         })
@@ -85,21 +106,31 @@ describe(" StreamApps ", function () {
             const resp = await fabric.getAllEdgeLocations();
             let dcListAll = getDCListString(resp)
             let dcList = dcListAll.split(",")
-            let appdef = "@App:name('Sample-Cargo-App')\r\n\r\n-- Stream\r\ndefine stream srcCargoStream (weight int);\r\n\r\n-- Table\r\ndefine table destCargoTable (weight int, totalWeight long);\r\n\r\n-- Data Processing\r\n@info(name='Query')\r\nselect weight, sum(weight) as totalWeight\r\nfrom srcCargoStream\r\ninsert into destCargoTable;";
+            let appdef = 
+            `@App:name('Sample-Cargo-App')
+                -- Stream
+                define stream srcCargoStream (weight int);
+                -- Table
+                define table destCargoTable (weight int, totalWeight long);
+                -- Data Processing
+                @info(name='Query')
+                select weight, sum(weight) as totalWeight
+                from srcCargoStream
+                insert into destCargoTable;`;
             const app = fabric.streamApp("Sample-Cargo-App")
             let response = await app.updateApplication(dcList, appdef)
             expect(response.error).to.be.false;
         })
     });
 
-
     
     describe("streamapps.deleteApplication",  () => {
         it("Delete a stream App", async () => {
             const app = fabric.streamApp("Sample-Cargo-App")
             let response = await app.deleteApplication()
+            console.log(response)
             expect(response.error).to.be.false;
         })
     });
-})
 
+})

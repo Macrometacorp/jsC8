@@ -28,8 +28,8 @@ describe("manipulating spot", () => {
 
   describe("spot_region status of a region", function() {
     it("should change the spot_region of a region", async () => {
-      const currentSpotStatus = localLocation.spot_region;
-      await fabric.changeEdgeLocationSpotStatus(name, !currentSpotStatus);
+      //const currentSpotStatus = localLocation.spot_region;
+      await fabric.changeEdgeLocationSpotStatus(name);
       const changedLocation = await fabric.getLocalEdgeLocation();
       const changedSpotStatus = changedLocation.spot_region;
       expect(changedLocation).to.equal(!changedSpotStatus);
@@ -46,7 +46,7 @@ describe("manipulating spot", () => {
       fabric.dropFabric(fabricName);
     });
     it("should create a fabric with a spot primary region", async () => {
-      await fabric.changeEdgeLocationSpotStatus(name, true);
+      await fabric.changeEdgeLocationSpotStatus(name);
 
       const options = {
         dcList: name,

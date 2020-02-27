@@ -53,7 +53,7 @@
     "dist": "rimraf lib && npm-run-all --parallel dist:* && cpy src/index.all.js --rename index.js lib/",
     "prepare": "yarn dist && node -e 'require(\".\");'",
     "predevTest": "npm run dist",
-    "devTest": "env TEST_C8_URL=https://lohani.eng1.macrometa.io mocha --reporter spec --timeout 50000 lib/async/test/16-graphs.js"
+    "devTest": "env TEST_C8_URL=https://qa1.eng3.macrometa.io mocha --reporter spec --timeout 50000 lib/async/test/32-streamapps"
   },
   "dependencies": {
     "es6-error": "^4.0.1",
