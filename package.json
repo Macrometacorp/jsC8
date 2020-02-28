@@ -1,6 +1,6 @@
 {
   "name": "jsc8",
-  "version": "0.14.3",
+  "version": "0.15.0",
   "license": "Apache-2.0",
   "description": "The official C8 JavaScript driver.",
   "homepage": "https://github.com/macrometacorp/jsC8",
@@ -43,7 +43,7 @@
   ],
   "scripts": {
     "pretest": "npm run dist",
-    "test": "env TEST_C8_URL=https://test.eng1.macrometa.io mocha --timeout 60000 --growl --reporter mochawesome --require source-map-support/register lib/async/test",
+    "test": "env TEST_C8_URL=https://lohani.eng1.macrometa.io mocha --timeout 60000 --growl --reporter mochawesome --require source-map-support/register lib/async/test",
     "ci": "mocha --reporter spec --require source-map-support/register --timeout 10000 lib/cjs/test",
     "preci": "yarn install",
     "jenkins": "yarn ci -- --timeout 0 --reporter xunit-file",
