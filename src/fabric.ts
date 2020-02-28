@@ -428,11 +428,10 @@ export class Fabric {
   }
 
   explainQuery(explainQueryObj: C8QLQuery) {
-    // Sulom : change path to /_api/explain
     return this._connection.request(
       {
         method: "POST",
-        path: "/query/explain",
+        path: "/_api/explain",
         body: { ...explainQueryObj }
       },
       res => res.body
