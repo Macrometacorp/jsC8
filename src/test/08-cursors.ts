@@ -156,7 +156,6 @@ describe("Cursor API", () => {
         })
         .catch(done);
     });
-    // ABHISHEK: LOOK INTO THIS
     it.skip("returns false after last result is consumed (with large amount of results)", done => {
       const EXPECTED_LENGTH = 100000;
       const loadMore = function(cursor: any, totalLength: any) {

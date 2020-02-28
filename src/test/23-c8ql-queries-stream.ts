@@ -91,8 +91,7 @@ describe34("C8QL Stream queries", function() {
         .catch(done);
     });
   });
-  // ABHISHEK: look into this
-  describe("with some data", () => {
+  describe.skip("with some data", () => {
     let cname = "MyTestCollection";
     before(done => {
       let collection = fabric.collection(cname);
