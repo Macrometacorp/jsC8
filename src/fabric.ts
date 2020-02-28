@@ -755,6 +755,22 @@ export class Fabric {
 
   createStreamApp(regions: Array<string>, appDefinition: string): Promise<any> {
     return this._connection.request(
+<<<<<<< HEAD
+        {
+            method: "POST",
+            path: "/_api/streamapps",
+            body: JSON.stringify({
+                "definition": appDefinition, 
+                "regions": regions,
+            })
+        },
+
+        res => res.body
+    )
+
+
+}
+=======
       {
         method: "POST",
         path: "/_api/streamapps",
@@ -766,6 +782,7 @@ export class Fabric {
       res => res.body
     );
   }
+>>>>>>> fabac51dee56054a458399600932b1c688f0d721
 
   getAllStreamApps() {
     return this._connection.request(
