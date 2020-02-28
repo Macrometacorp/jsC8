@@ -79,7 +79,7 @@ Creates an event. The request object contains the below properties.
 
 - **entityType**: `string`
 
-  The type of the event can be one of the following: "COLLECTION", "GRAPH", "PIPELINE", "AUTH", "STREAM" or "GEOFABRIC"
+  The type of the event can be one of the following: "COLLECTION", "GRAPH", "AUTH", "STREAM" or "GEOFABRIC"
 
 - **details**: `string`
   Additional details about the event. Ex: error message.
@@ -122,5 +122,5 @@ const client = new jsc8();
 await client.login(email, password);
 client.useTenant(tenant-name);
 const event = client.event(null, 215602123);
-const eventDetails = await pipeline.details();
+const eventDetails = await event.details();
 ```

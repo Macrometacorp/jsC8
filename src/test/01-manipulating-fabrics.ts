@@ -52,12 +52,12 @@ describe("Manipulating fabrics", function () {
     });
     it("should return the version object when no details are required", async () => {
       const response = await fabric.version();
-      expect(response.server).to.equal("C8");
+      expect(response.server).to.equal("C8DB");
     });
     it("should return the version object when details are required", async () => {
       const response = await fabric.version(true);
-      expect(response.server).to.equal("C8");
-      expect(response.details).to.haveOwnProperty("C8DB");
+      expect(response.server).to.equal("C8DB");
+      expect(response.details).to.haveOwnProperty("architecture");
     });
   });
   describe("fabric.useFabric", () => {

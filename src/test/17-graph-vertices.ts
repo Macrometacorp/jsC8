@@ -96,7 +96,7 @@ describe("Manipulating graph vertices", function() {
   describe("graph.addVertexCollection", () => {
     let vertexCollection: BaseCollection;
     beforeEach(done => {
-      vertexCollection = fabric.collection(`xc${Date.now()}`);
+      vertexCollection = fabric.collection(`coll${Date.now()}`);
       vertexCollection
         .create()
         .then(() => void done())

@@ -134,7 +134,10 @@ export class Connection {
         ? config.url
         : [config.url]
       : ["https://test.macrometa.io"];
-    this.addToHostList(urls);
+    const apiUrls = urls.map(url => {
+      return `https://api-${url.split("https://")[1]}`;
+    });
+    this.addToHostList(apiUrls);
 
     if (this._loadBalancingStrategy === "ONE_RANDOM") {
       this._activeHost = Math.floor(Math.random() * this._hosts.length);

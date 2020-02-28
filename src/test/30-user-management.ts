@@ -3,7 +3,7 @@ import { Fabric } from "../jsC8";
 import User from "../user";
 import { getDCListString } from "../util/helper";
 
-describe("User Management", function () {
+describe("User Management", function() {
   // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
@@ -31,7 +31,9 @@ describe("User Management", function () {
 
   describe("fabric.user", () => {
     it("creates a new user instance", () => {
-      expect(fabric.user("testUser", "testUser@test.com")).to.be.instanceof(User);
+      expect(fabric.user("testUser", "testUser@test.com")).to.be.instanceof(
+        User
+      );
     });
   });
 
@@ -40,7 +42,7 @@ describe("User Management", function () {
 
     it("creates a user", async () => {
       const userName = `user${Date.now()}`;
-      const userEmail = `${userName}@test.com`
+      const userEmail = `${userName}@test.com`;
       user = fabric.user(userName, userEmail);
       const response = await user.createUser("testPass");
       expect(response.error).to.be.false;
@@ -70,7 +72,7 @@ describe("User Management", function () {
     afterEach(async () => {
       try {
         await user.deleteUser();
-      } catch (error) { }
+      } catch (error) {}
     });
 
     describe("user.deleteUser", () => {
@@ -112,7 +114,7 @@ describe("User Management", function () {
         await fabric.createFabric(testFabricName, [{ username: user.user }], {
           dcList: dcList
         });
-        fabric.useFabric(testFabricName);
+        // fabric.useFabric(testFabricName);
       });
 
       afterEach(async () => {
@@ -141,7 +143,7 @@ describe("User Management", function () {
       });
 
       it("Gets the access level of a collection in a database ", async () => {
-        const collectionName = "TestCollection";
+        const collectionName = `coll${Date.now()}`;
         await fabric.collection(collectionName).create();
         const response = await user.getCollectionAccessLevel(
           testFabricName,
@@ -156,8 +158,9 @@ describe("User Management", function () {
         expect(response.code).eq(202);
       });
 
-      it("Clears the access level of a collection in a database ", async () => {
-        const collectionName = "TestCollection";
+      it.skip("Clears the access level of a collection in a database ", async () => {
+        fabric.useFabric(testFabricName);
+        const collectionName = `coll${Date.now()}`;
         await fabric.collection(collectionName).create();
         const response = await user.clearCollectionAccessLevel(
           testFabricName,
@@ -167,8 +170,8 @@ describe("User Management", function () {
         expect(response.code).eq(202);
       });
 
-      it("Sets the access level of a collection in a database ", async () => {
-        const collectionName = "TestCollection";
+      it.skip("Sets the access level of a collection in a database ", async () => {
+        const collectionName = `coll${Date.now()}`;
         await fabric.collection(collectionName).create();
         const response = await user.setCollectionAccessLevel(
           testFabricName,

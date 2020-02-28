@@ -26,7 +26,7 @@ export class GraphVertexCollection extends BaseCollection {
   ): Promise<any> {
     const result = this._connection.request(
       {
-        path: `/graph/${this.graph.name}/vertex/${this._documentHandle(
+        path: `/_api/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
         )}`
       },
@@ -52,7 +52,7 @@ export class GraphVertexCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "POST",
-        path: `/graph/${this.graph.name}/vertex/${this.name}`,
+        path: `/_api/graph/${this.graph.name}/vertex/${this.name}`,
         body: data,
         qs: opts
       },
@@ -73,7 +73,7 @@ export class GraphVertexCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/graph/${this.graph.name}/vertex/${this._documentHandle(
+        path: `/_api/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
         )}`,
         body: newValue,
@@ -97,7 +97,7 @@ export class GraphVertexCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "PATCH",
-        path: `/graph/${this.graph.name}/vertex/${this._documentHandle(
+        path: `/_api/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
         )}`,
         body: newValue,
@@ -121,7 +121,7 @@ export class GraphVertexCollection extends BaseCollection {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/graph/${this.graph.name}/vertex/${this._documentHandle(
+        path: `/_api/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
         )}`,
         qs: opts,
@@ -149,7 +149,7 @@ export class GraphEdgeCollection extends EdgeCollection {
   ): Promise<any> {
     const result = this._connection.request(
       {
-        path: `/graph/${this.graph.name}/edge/${this._documentHandle(
+        path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(
           documentHandle
         )}`
       },
@@ -188,7 +188,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     return this._connection.request(
       {
         method: "POST",
-        path: `/graph/${this.graph.name}/edge/${this.name}`,
+        path: `/_api/graph/${this.graph.name}/edge/${this.name}`,
         body: data,
         qs: opts
       },
@@ -209,7 +209,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/graph/${this.graph.name}/edge/${this._documentHandle(
+        path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(
           documentHandle
         )}`,
         body: newValue,
@@ -233,7 +233,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     return this._connection.request(
       {
         method: "PATCH",
-        path: `/graph/${this.graph.name}/edge/${this._documentHandle(
+        path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(
           documentHandle
         )}`,
         body: newValue,
@@ -257,7 +257,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/graph/${this.graph.name}/edge/${this._documentHandle(
+        path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(
           documentHandle
         )}`,
         qs: opts,
@@ -348,7 +348,8 @@ export class Graph {
     return this._connection.request(
       {
         method: "POST",
-        path: `/_api/graph/${this.name}/vertex`
+        path: `/_api/graph/${this.name}/vertex`,
+        body: { collection }
       },
       res => res.body.graph
     );

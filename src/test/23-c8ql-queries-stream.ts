@@ -60,13 +60,17 @@ describe34("C8QL Stream queries", function() {
     });
     it("supports options", done => {
       fabric
-        .query("FOR x IN 1..10 RETURN x", undefined, {
-          batchSize: 2,
-          count: true,
-          options: { stream: true }
-        })
+        .query(
+          "FOR x IN 1..10 RETURN x",
+          {},
+          {
+            batchSize: 2,
+            count: true
+          }
+        )
         .then(cursor => {
-          expect(cursor.count).to.equal(10);
+          let count = cursor.count;
+          expect(count).to.equal(10);
           expect((cursor as any)._hasMore).to.equal(true);
           done();
         })
@@ -78,7 +82,7 @@ describe34("C8QL Stream queries", function() {
         bindVars: { max: 10 }
       };
       fabric
-        .query(query, { batchSize: 2, count: true, options: { stream: true } })
+        .query(query, { batchSize: 2, count: true })
         .then(cursor => {
           expect(cursor.count).to.equal(10);
           expect((cursor as any)._hasMore).to.equal(true);
@@ -87,9 +91,9 @@ describe34("C8QL Stream queries", function() {
         .catch(done);
     });
   });
-  describe("with some data", () => {
+  describe.skip("with some data", () => {
     let cname = "MyTestCollection";
-    /*before(done => {
+    before(done => {
       let collection = fabric.collection(cname);
       collection
         .create()
@@ -102,11 +106,15 @@ describe34("C8QL Stream queries", function() {
         })
         .then(() => void done())
         .catch(done);
-    });*/
-    /*after(done => {
-      fabric.collection(cname).drop().then(() => done()).catch(done);
-    });*/
-    /*
+    });
+    after(done => {
+      fabric
+        .collection(cname)
+        .drop()
+        .then(() => done())
+        .catch(done);
+    });
+
     it("can access large collection in parallel", done => {
       let collection = fabric.collection(cname);
       let query = c8ql`FOR doc in ${collection} RETURN doc`;
@@ -130,7 +138,7 @@ describe34("C8QL Stream queries", function() {
           done();
         })
         .catch(done);
-    });*/
+    });
     it("can do writes and reads", done => {
       let collection = fabric.collection(cname);
       let readQ = c8ql`FOR doc in ${collection} RETURN doc`;
