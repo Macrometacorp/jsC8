@@ -28,7 +28,8 @@ export class Stream {
   private _producer: any;
   private _noopProducer: any;
   private _consumers: any[];
-  private setIntervalId?: any;
+  private _setIntervalId?: any;
+  private _producerIntervalId?: any;
 
   constructor(
     connection: Connection,
@@ -40,7 +41,8 @@ export class Stream {
     this.isCollectionStream = isCollectionStream;
     this.local = local;
     this._consumers = [];
-    this.setIntervalId = undefined;
+    this._setIntervalId = undefined;
+    this._producerIntervalId = undefined;
     this.name = name;
 
     let topic = this.name;
@@ -241,7 +243,7 @@ export class Stream {
     });
 
     consumer.on("close", () => {
-      this.setIntervalId && clearInterval(this.setIntervalId);
+      this._setIntervalId && clearInterval(this._setIntervalId);
       typeof onclose === "function" && onclose();
     });
 
@@ -285,7 +287,7 @@ export class Stream {
     this._noopProducer = ws(noopProducerUrl);
 
     this._noopProducer.on("open", () => {
-      this.setIntervalId = setInterval(() => {
+      this._setIntervalId = setInterval(() => {
         this._noopProducer.send(JSON.stringify({ payload: "noop" }));
       }, 30000);
     });
@@ -336,6 +338,9 @@ export class Stream {
       });
 
       this._producer.on("open", () => {
+        this._producerIntervalId = setInterval(() => {
+          this._producer.send(JSON.stringify({ payload: "noop" }));
+        }, 30000);
         if (!Array.isArray(message)) {
           this._producer.send(JSON.stringify({ payload: btoa(message) }));
         } else {
@@ -346,6 +351,7 @@ export class Stream {
         typeof onopen === "function" && onopen();
       });
       this._producer.on("close", () => {
+        clearInterval(this._producerIntervalId);
         typeof onclose === "function" && onclose();
       });
 
@@ -368,7 +374,8 @@ export class Stream {
   }
 
   closeConnections() {
-    this.setIntervalId && clearInterval(this.setIntervalId);
+    this._setIntervalId && clearInterval(this._setIntervalId);
+    this._producerIntervalId && clearInterval(this._producerIntervalId);
     this._producer && this._producer.terminate();
     this._noopProducer && this._noopProducer.terminate();
     this._consumers &&
