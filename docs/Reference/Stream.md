@@ -458,7 +458,8 @@ await client.login(email, password);
 client.useTenant(tenant-name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
-stream.consumer("my-subscription", {onmessage: (msg)=>{console.log(msg)}}, "test.macrometa.io");
+let params = {} // { subscriptionType : 'Exclusive' or 'Failover' or 'Shared' }
+stream.consumer("my-subscription", {onmessage: (msg)=>{console.log(msg)}}, "test.macrometa.io", params);
 ```
 
 ## stream.producer
