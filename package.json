@@ -59,6 +59,7 @@
     "es6-error": "^4.0.1",
     "linkedlist": "^1.0.1",
     "multi-part": "^2.0.0",
+    "query-string": "^6.11.1",
     "ws": "^6.1.0",
     "xhr": "^2.4.1"
   },

@@ -1,6 +1,7 @@
 import { Connection } from "./connection";
 import { getFullStreamPath } from "./util/helper";
 import { btoa } from "./util/btoa";
+import { stringify } from 'query-string';
 
 // 2 document
 // 3 edge
@@ -216,7 +217,8 @@ export class Stream {
   consumer(
     subscriptionName: string,
     callbackObj: wsCallbackObj,
-    dcName: string
+    dcName: string,
+    params: { [key: string]: any } = {}
   ) {
     const lowerCaseUrl = dcName.toLocaleLowerCase();
     if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https"))
@@ -226,12 +228,13 @@ export class Stream {
     const region = this.local ? "c8local" : "c8global";
     const tenant = this._connection.getTenantName();
     let dbName = this._connection.getFabricName();
+    let queryParams = stringify(params)
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
     const consumerUrl = `wss://${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-    }/${subscriptionName}`;
+      }/${subscriptionName}?${queryParams}`;
 
     this._consumers.push(ws(consumerUrl));
     const lastIndex = this._consumers.length - 1;
@@ -284,7 +287,7 @@ export class Stream {
 
     const noopProducerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-    }`;
+      }`;
 
     this._noopProducer = ws(noopProducerUrl);
 
@@ -331,7 +334,7 @@ export class Stream {
 
       const producerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
         this.topic
-      }`;
+        }`;
 
       this._producer = ws(producerUrl);
 
