@@ -272,6 +272,8 @@ export class Stream {
     });
 
     !this._noopProducer && this.noopProducer(dcName);
+    
+    return consumer;
   }
 
   private noopProducer(dcName: string) {
