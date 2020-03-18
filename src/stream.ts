@@ -254,14 +254,14 @@ export class Stream {
       typeof onerror === "function" && onerror(e);
     });
 
-    consumer.on("message", (msg: string) => {
+    consumer.on("message", async (msg: string) => {
       const message = JSON.parse(msg);
       const ackMsg = { messageId: message.messageId };
       const { payload } = message;
 
       if (payload !== btoa("noop") && payload !== "noop") {
         if (typeof onmessage === "function") {
-          const shouldAck = onmessage(msg);
+          const shouldAck = await onmessage(msg);
           if (shouldAck !== false) {
             consumer.send(JSON.stringify(ackMsg));
           }
