@@ -206,7 +206,7 @@ const client = new jsc8();
 await client.login(email, password);
 client.useTenant(tenant-name);
 const app = client.streamApp("Sample-Cargo-App");
-const streamApp = await app.query("Sample-Cargo-App", "select * from destCargoTable limit 3");
+const streamApp = await app.query("select * from destCargoTable limit 3");
 ```
 
 ## streamapps.deleteApplication
