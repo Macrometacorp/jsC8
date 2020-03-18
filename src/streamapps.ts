@@ -57,13 +57,13 @@ export class Streamapps {
         );
     }
 
-    query(appName: string, query: string){
+    query(query: string){
         return this._connection.request({
             method: "POST",
-            path: `/_api/streamapps/query/${appName}`,
+            path: `/_api/streamapps/query/${this.name}`,
             body: {
-              "query" : query,
-            }
+                "query": query
+              }
         },
         res => res.body
       );

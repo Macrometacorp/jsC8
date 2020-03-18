@@ -112,20 +112,20 @@ describe(" StreamApps ", function() {
     });
   });
 
-  describe("streamapps.query", () => {
-    it("runs query", async () => {
-      const app = fabric.streamApp("Sample-Cargo-App");
-      let response = await app.query("Sample-Cargo-App", "select * from destCargoTable limit 3");
-      expect(response.error).to.be.false;
-    });
-  });
+   describe("streamapps.query", () => {
+     it("runs query", async () => {
+       const app = fabric.streamApp("Sample-Cargo-App");
+       let response = await app.query("select * from destCargoTable limit 3");
+       expect(response.error).to.be.false;
+     });
+   });
 
-  describe("streamapps.deleteApplication", () => {
-    it("Delete a stream App", async () => {
-      const app = fabric.streamApp("Sample-Cargo-App");
-      let response = await app.deleteApplication();
-      console.log(response);
-      expect(response.error).to.be.false;
-    });
-  });
+   describe("streamapps.deleteApplication", () => {
+     it("Delete a stream App", async () => {
+       const app = fabric.streamApp("Sample-Cargo-App");
+       let response = await app.deleteApplication();
+       console.log(response);
+       expect(response.error).to.be.false;
+     });
+   });
 });
