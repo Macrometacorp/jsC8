@@ -1,6 +1,7 @@
 import { Connection } from "./connection";
 import { getFullStreamPath } from "./util/helper";
 import { btoa } from "./util/btoa";
+import { stringify } from 'query-string';
 
 // 2 document
 // 3 edge
@@ -16,7 +17,7 @@ export type wsCallbackObj = {
   onopen?: () => void;
   onclose?: () => void;
   onerror?: (e: Error) => void;
-  onmessage: (msg: string) => void;
+  onmessage: (msg: string) => Promise<boolean> | boolean | void;
 };
 
 export class Stream {
@@ -216,7 +217,8 @@ export class Stream {
   consumer(
     subscriptionName: string,
     callbackObj: wsCallbackObj,
-    dcName: string
+    dcName: string,
+    params: { [key: string]: any } = {}
   ) {
     const lowerCaseUrl = dcName.toLocaleLowerCase();
     if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https"))
@@ -226,12 +228,13 @@ export class Stream {
     const region = this.local ? "c8local" : "c8global";
     const tenant = this._connection.getTenantName();
     let dbName = this._connection.getFabricName();
+    let queryParams = stringify(params)
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
     const consumerUrl = `wss://${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-    }/${subscriptionName}`;
+      }/${subscriptionName}?${queryParams}`;
 
     this._consumers.push(ws(consumerUrl));
     const lastIndex = this._consumers.length - 1;
@@ -251,22 +254,27 @@ export class Stream {
       typeof onerror === "function" && onerror(e);
     });
 
-    consumer.on("message", (msg: string) => {
+    consumer.on("message", async (msg: string) => {
       const message = JSON.parse(msg);
       const ackMsg = { messageId: message.messageId };
       const { payload } = message;
 
       if (payload !== btoa("noop") && payload !== "noop") {
         if (typeof onmessage === "function") {
-          consumer.send(JSON.stringify(ackMsg));
-          onmessage(msg);
+          const shouldAck = await onmessage(msg);
+          if (shouldAck !== false) {
+            consumer.send(JSON.stringify(ackMsg));
+          }
         }
       } else {
         consumer.send(JSON.stringify(ackMsg));
       }
+
     });
 
     !this._noopProducer && this.noopProducer(dcName);
+
+    return consumer;
   }
 
   private noopProducer(dcName: string) {
@@ -282,7 +290,7 @@ export class Stream {
 
     const noopProducerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-    }`;
+      }`;
 
     this._noopProducer = ws(noopProducerUrl);
 
@@ -305,7 +313,7 @@ export class Stream {
     type CallbackFunction = () => void;
     let onopen: CallbackFunction | undefined;
     let onclose: CallbackFunction | undefined;
-    let onmessage: (msg: string) => void | undefined;
+    let onmessage: (msg: string) => Promise<boolean> | boolean | void;
     let onerror: ((e: Error) => void) | undefined;
     if (callbackObj !== undefined) {
       onopen = callbackObj.onopen;
@@ -329,7 +337,7 @@ export class Stream {
 
       const producerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
         this.topic
-      }`;
+        }`;
 
       this._producer = ws(producerUrl);
 
