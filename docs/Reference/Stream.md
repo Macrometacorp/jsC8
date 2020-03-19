@@ -35,6 +35,8 @@ const stream = client.stream("testStream", true, false);
 
 Get list of all streams under given database.
 
+To change the fabric and tenant, `client.useFabric` and `client.useTenant` respectively.
+
 **Examples**
 
 ```js
@@ -42,7 +44,6 @@ const client = new jsc8();
 await client.login(email, password);
 client.useTenant(tenant-name);
 const streams = await client.getStreams();
-// To change the fabric and tenant, client.useFabric and client.useTenant respectively
 ```
 
 ## client.listPersistentStreams
@@ -50,6 +51,8 @@ const streams = await client.getStreams();
 `async client.listPersistentStreams(local)`
 
 Get list of persistent streams under the given stream db. Returns either a list of global or of local streams.
+
+To change the fabric and tenant, `client.useFabric` and `client.useTenant` respectively.
 
 **Arguments**
 
@@ -64,7 +67,6 @@ const client = new jsc8();
 await client.login(email, password);
 client.useTenant(tenant-name);
 const streams = await client.listPersistentStreams(true);
-// To change the fabric and tenant, client.useFabric and client.useTenant respectively
 ```
 
 ## client.clearBacklog
@@ -446,9 +448,15 @@ Creates a consumer for a stream.
 
   An object having required callbacks. `onmessage` is necessary.
 
-- **dcName**: `string``
+- **dcName**: `string`
 
   The dcName for the consumer.
+
+- **params**: `{ subscriptionType: string }`
+
+  Can be one of `Exclusive, Failover or Shared`
+
+> Note: If `onmessage` function returns false the message will not be acknowledged.
 
 **Examples**
 
@@ -460,14 +468,6 @@ const stream = client.stream("my-stream", true);
 await stream.createStream();
 let params = {} // { subscriptionType : 'Exclusive' or 'Failover' or 'Shared' }
 stream.consumer("my-subscription", {onmessage: (msg)=>{ console.log(msg) }}, "test.macrometa.io", params);
-
-// if onmessage function return false the msg will not be acknowledged.
-// i.e 
-// stream.consumer("my-subscription", {
-//                      onmessage: (msg)=> { 
-//                        console.log(msg)
-//                        return false;
-//                  }}, "test.macrometa.io", params);
 ```
 
 
