@@ -20,6 +20,11 @@ export type wsCallbackObj = {
   onmessage: (msg: string) => Promise<boolean> | boolean | void;
 };
 
+type consumerObj = {
+  consumer: any;
+  intervalId: any;
+};
+
 export class Stream {
   private _connection: Connection;
   name: string;
@@ -27,8 +32,7 @@ export class Stream {
   isCollectionStream: boolean;
   topic: string;
   private _producer: any;
-  private _consumers: any[];
-  private _setIntervalId?: any;
+  private _consumers: Array<consumerObj>;
   private _producerIntervalId?: any;
 
   constructor(
@@ -41,7 +45,6 @@ export class Stream {
     this.isCollectionStream = isCollectionStream;
     this.local = local;
     this._consumers = [];
-    this._setIntervalId = undefined;
     this._producerIntervalId = undefined;
     this.name = name;
 
@@ -235,21 +238,25 @@ export class Stream {
       this.topic
     }/${subscriptionName}?${queryParams}`;
 
-    this._consumers.push(ws(consumerUrl));
-    const lastIndex = this._consumers.length - 1;
+    const consumerObj: consumerObj = {
+      consumer: ws(consumerUrl),
+      intervalId: null
+    };
 
-    const consumer = this._consumers[lastIndex];
+    this._consumers.push(consumerObj);
+
+    const { consumer } = consumerObj;
 
     consumer.on("open", () => {
       typeof onopen === "function" && onopen();
 
-      setInterval(()=>{
+      consumerObj["intervalId"] = setInterval(() => {
         consumer.send(JSON.stringify("noop"));
       }, 30000);
     });
 
     consumer.on("close", () => {
-      this._setIntervalId && clearInterval(this._setIntervalId);
+      clearInterval(consumerObj.intervalId);
       typeof onclose === "function" && onclose();
     });
 
@@ -272,7 +279,6 @@ export class Stream {
       } else {
         consumer.send(JSON.stringify(ackMsg));
       }
-
     });
 
     return consumer;
@@ -355,10 +361,12 @@ export class Stream {
   }
 
   closeConnections() {
-    this._setIntervalId && clearInterval(this._setIntervalId);
     this._producerIntervalId && clearInterval(this._producerIntervalId);
     this._producer && this._producer.terminate();
     this._consumers &&
-      this._consumers.forEach(consumer => consumer.terminate());
+      this._consumers.forEach(consumerObj => {
+        consumerObj.consumer.terminate();
+        clearInterval(consumerObj.intervalId);
+      });
   }
 }
