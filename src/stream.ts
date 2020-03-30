@@ -1,7 +1,7 @@
 import { Connection } from "./connection";
 import { getFullStreamPath } from "./util/helper";
 import { btoa } from "./util/btoa";
-import { stringify } from 'query-string';
+import { stringify } from "query-string";
 
 // 2 document
 // 3 edge
@@ -20,6 +20,11 @@ export type wsCallbackObj = {
   onmessage: (msg: string) => Promise<boolean> | boolean | void;
 };
 
+type consumerObj = {
+  consumer: any;
+  intervalId: any;
+};
+
 export class Stream {
   private _connection: Connection;
   name: string;
@@ -27,9 +32,7 @@ export class Stream {
   isCollectionStream: boolean;
   topic: string;
   private _producer: any;
-  private _noopProducer: any;
-  private _consumers: any[];
-  private _setIntervalId?: any;
+  private _consumers: Array<consumerObj>;
   private _producerIntervalId?: any;
 
   constructor(
@@ -42,7 +45,6 @@ export class Stream {
     this.isCollectionStream = isCollectionStream;
     this.local = local;
     this._consumers = [];
-    this._setIntervalId = undefined;
     this._producerIntervalId = undefined;
     this.name = name;
 
@@ -228,25 +230,33 @@ export class Stream {
     const region = this.local ? "c8local" : "c8global";
     const tenant = this._connection.getTenantName();
     let dbName = this._connection.getFabricName();
-    let queryParams = stringify(params)
+    let queryParams = stringify(params);
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
     const consumerUrl = `wss://${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-      }/${subscriptionName}?${queryParams}`;
+    }/${subscriptionName}?${queryParams}`;
 
-    this._consumers.push(ws(consumerUrl));
-    const lastIndex = this._consumers.length - 1;
+    const consumerObj: consumerObj = {
+      consumer: ws(consumerUrl),
+      intervalId: null
+    };
 
-    const consumer = this._consumers[lastIndex];
+    this._consumers.push(consumerObj);
+
+    const { consumer } = consumerObj;
 
     consumer.on("open", () => {
       typeof onopen === "function" && onopen();
+
+      consumerObj["intervalId"] = setInterval(() => {
+        consumer.send(JSON.stringify("noop"));
+      }, 30000);
     });
 
     consumer.on("close", () => {
-      this._setIntervalId && clearInterval(this._setIntervalId);
+      clearInterval(consumerObj.intervalId);
       typeof onclose === "function" && onclose();
     });
 
@@ -269,40 +279,9 @@ export class Stream {
       } else {
         consumer.send(JSON.stringify(ackMsg));
       }
-
     });
-
-    !this._noopProducer && this.noopProducer(dcName);
 
     return consumer;
-  }
-
-  private noopProducer(dcName: string) {
-    const lowerCaseUrl = dcName.toLocaleLowerCase();
-    if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https"))
-      throw "Invalid DC name";
-    const persist = StreamConstants.PERSISTENT;
-    const region = this.local ? "c8local" : "c8global";
-    const tenant = this._connection.getTenantName();
-    let dbName = this._connection.getFabricName();
-    if (!dbName || !tenant)
-      throw "Set correct DB and/or tenant name before using.";
-
-    const noopProducerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
-      this.topic
-      }`;
-
-    this._noopProducer = ws(noopProducerUrl);
-
-    this._noopProducer.on("open", () => {
-      this._setIntervalId = setInterval(() => {
-        this._noopProducer.send(JSON.stringify({ payload: "noop" }));
-      }, 30000);
-    });
-
-    this._noopProducer.on("error", (e: Event) =>
-      console.log("noop producer errored ", e)
-    );
   }
 
   producer(
@@ -337,7 +316,7 @@ export class Stream {
 
       const producerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
         this.topic
-        }`;
+      }`;
 
       this._producer = ws(producerUrl);
 
@@ -382,11 +361,12 @@ export class Stream {
   }
 
   closeConnections() {
-    this._setIntervalId && clearInterval(this._setIntervalId);
     this._producerIntervalId && clearInterval(this._producerIntervalId);
     this._producer && this._producer.terminate();
-    this._noopProducer && this._noopProducer.terminate();
     this._consumers &&
-      this._consumers.forEach(consumer => consumer.terminate());
+      this._consumers.forEach(consumerObj => {
+        consumerObj.consumer.terminate();
+        clearInterval(consumerObj.intervalId);
+      });
   }
 }
