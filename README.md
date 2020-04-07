@@ -172,7 +172,7 @@ To get details of `fabric` geo-fabric
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8("https:gdn1.macrometa.io");
+const client = new jsc8("https://gdn1.macrometa.io");
 
 async function getFabric() {
     await console.log("Logging in...");
