@@ -185,9 +185,6 @@ const regionURL = "gdn1.macrometa.io";
   // Publish to a stream
   stream.producer("hello world", regionURL);
 
-  // Close all connections to a stream
-  stream.closeConnections();
-
   //--------------------------------------------------------------------------------------
   // Spot Collections
   await client.login(rootEmail, rootPassword);
