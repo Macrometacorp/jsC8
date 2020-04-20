@@ -25,7 +25,7 @@ Returns a `Stream` instance representing the stream with the given stream name.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant - name);
+client.useTenant(tenantName);
 const stream = client.stream("testStream", true, false);
 ```
 
@@ -434,7 +434,7 @@ await stream.terminateStream();
 
 ## stream.consumer
 
-`stream.consumer(subscriptionName, dcName)`
+`stream.consumer(subscriptionName, dcName, params)`
 
 Creates a consumer for a stream.
 
@@ -448,11 +448,12 @@ Creates a consumer for a stream.
 
   The dcName for the consumer.
 
-- **params**:
+- **params**: `object`
 
 ```
 {
-  subscriptionType: 'Exclusive' || 'Failover' || 'Shared',  receiverQueueSize: number
+  subscriptionType: 'Exclusive' || 'Failover' || 'Shared',  
+  receiverQueueSize: number
 }
 ```
 
@@ -495,15 +496,18 @@ consumer.on("message", (msg) => {
 
 ## stream.producer
 
-`stream.producer(dcName)`
+`stream.producer(dcName, params)`
 
 Creates a producer for a stream and returns producer object.
 
 **Arguments**
 
-- **dcName**: `string``
+- **dcName**: `string`
 
   The dcName for the producer.
+- **params**: `object`
+
+  Options for stream configuration
 
 **Methods**
 
