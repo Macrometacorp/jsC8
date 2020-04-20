@@ -450,21 +450,13 @@ Creates a consumer for a stream.
 
 - **params**: `object`
 
-```
-{
-  subscriptionType: 'Exclusive' || 'Failover' || 'Shared',  
-  receiverQueueSize: number
-}
-```
+|       Option      	|                   Description                  	|  Default  	|
+|:-----------------:	|:----------------------------------------------:	|:---------:	|
+| ackTimeoutMillis  	| Send timeout                                   	| 0         	|
+| subscriptionType  	| Subscription type: Exclusive, Failover, Shared 	| Exclusive 	|
+| receiverQueueSize 	| Size of the consumer receive queue             	| 1000      	|
+| priorityLevel     	| Define a priority for the consumer             	| -         	|
 
-defaults
-
-```
-{
-  subscriptionType: 'Exclusive',
-  receiverQueueSize: 1000
-}
-```
 **Methods**
 
 `consumer.on('open', callback )`
@@ -507,7 +499,13 @@ Creates a producer for a stream and returns producer object.
   The dcName for the producer.
 - **params**: `object`
 
-  Options for stream configuration
+|          Option         	|                         Description                         	| Default 	|
+|:-----------------------:	|:-----------------------------------------------------------:	|:-------:	|
+| sendTimeoutMillis       	| Send timeout                                                	| 30 secs 	|
+| batchingEnabled         	| Enable batching of messages                                 	| false   	|
+| batchingMaxMessages     	| Maximum number of messages permitted in a batch             	| 1000    	|
+| maxPendingMessages      	| Set the max size of the internal-queue holding the messages 	| 1000    	|
+| batchingMaxPublishDelay 	| Time period within which the messages will be batched       	| 10ms    	|
 
 **Methods**
 
