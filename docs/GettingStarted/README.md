@@ -105,111 +105,132 @@ This section aims to provide a basic understanding of all the features.
 import { jsc8, c8ql } from "jsc8";
 
 const regionURL = "gdn1.macrometa.io";
-  const region = "try-eu-west-1";
-  const rootPassword = "root-password";
-  const tenantEmail = "myTenant@macrometa.io";
-  const tenantPassword = "myTenant-password";
-  const fabricName = "myFabric";
-  const collectionName = "employees";
-  const streamName = "myStream";
+const region = "try-eu-west-1";
+const rootPassword = "root-password";
+const tenantEmail = "myTenant@macrometa.io";
+const tenantPassword = "myTenant-password";
+const fabricName = "myFabric";
+const collectionName = "employees";
+const streamName = "myStream";
 
-  //--------------------------------------------------------------------------------------
-  // create a fabric handler
-  const client = new jsc8(`https://${regionURL}`);
+//--------------------------------------------------------------------------------------
+// create a fabric handler
+const client = new jsc8(`https://${regionURL}`);
 
-  // login with root user
-  await client.login(email, rootPassword);
+// login with root user
+await client.login(email, rootPassword);
 
-  //--------------------------------------------------------------------------------------
-  // create a tenant
-  const guestTenant = client.tenant(tenantEmail);
-  await guestTenant.createTenant(tenantPassword,['region-name']);
-  // log in with the newly created tenant
-  await client.login(tenantEmail, tenantPassword);
-  client.useTenant(guestTenant.name);
+//--------------------------------------------------------------------------------------
+// create a tenant
+const guestTenant = client.tenant(tenantEmail);
+await guestTenant.createTenant(tenantPassword, ["region-name"]);
+// log in with the newly created tenant
+await client.login(tenantEmail, tenantPassword);
+client.useTenant(guestTenant.name);
 
-  //--------------------------------------------------------------------------------------
-  // create a new geo fabric in the newly created tenant
-  await client.createFabric(fabricName, [{ username: "root" }], { dcList: region });
-  client.useFabric(fabricName);
+//--------------------------------------------------------------------------------------
+// create a new geo fabric in the newly created tenant
+await client.createFabric(fabricName, [{ username: "root" }], {
+  dcList: region,
+});
+client.useFabric(fabricName);
 
-  //--------------------------------------------------------------------------------------
-  // create and populate employees collection in the above tenant and geo fabric
-  const collection = client.collection(collectionName);
-  await collection.create();
+//--------------------------------------------------------------------------------------
+// create and populate employees collection in the above tenant and geo fabric
+const collection = client.collection(collectionName);
+await collection.create();
 
-  //--------------------------------------------------------------------------------------
-  // See what is happening to your collections in realtime
-  collection.onChange({
-    onmessage: (msg) => console.log("message=>", msg),
-    onopen: async () => {
-      console.log("connection open");
-      //manipulate the collection here
+//--------------------------------------------------------------------------------------
+// See what is happening to your collections in realtime
+ const listener = collection.onChange(regionURL);
 
-      // add new documents to the collection
-      await collection.save({ firstname: 'Jean', lastname: 'Picard' });
-      await collection.save({ firstname: 'Bruce', lastname: 'Wayne' });
+listener.on('message',(msg) => console.log("message=>", msg));
+listener.on('open',async () => {
+    console.log("connection open");
+    //manipulate the collection here
 
-    },
-    onclose: () => console.log("connection closed")
-  }, regionURL);
+    // add new documents to the collection
+    await collection.save({ firstname: "Jean", lastname: "Picard" });
+    await collection.save({ firstname: "Bruce", lastname: "Wayne" });
+  });
+listener.on('close',() => console.log("connection closed");
 
-  //--------------------------------------------------------------------------------------
-  // Querying is done by C8QL
-  // you can directly pass the query
-  // or use restql to save the query once and call it multiple times
-  const cursor = await client.query(c8ql`FOR employee IN employees RETURN employee`);
-  const result = await cursor.next();
+//--------------------------------------------------------------------------------------
+// Querying is done by C8QL
+// you can directly pass the query
+// or use restql to save the query once and call it multiple times
+const cursor = await client.query(
+  c8ql`FOR employee IN employees RETURN employee`
+);
+const result = await cursor.next();
 
-  // RESTQL
-  // now we save the same query and will call it later directly by its name
-  const query = "FOR employee IN employees RETURN employee";
-  const queryName = "listEmployees";
-  await client.saveQuery(queryName, {}, query);
-  const res = await client.executeSavedQuery(queryName);
+// RESTQL
+// now we save the same query and will call it later directly by its name
+const query = "FOR employee IN employees RETURN employee";
+const queryName = "listEmployees";
+await client.saveQuery(queryName, {}, query);
+const res = await client.executeSavedQuery(queryName);
 
-  //--------------------------------------------------------------------------------------
-  // Create persistent, global and local streams in demofabric
-  const persistent_globalStream = client.stream(streamName, false);
-  await persistent_globalStream.createStream();
+//--------------------------------------------------------------------------------------
+// Create persistent, global and local streams in demofabric
+const persistent_globalStream = client.stream(streamName, false);
+await persistent_globalStream.createStream();
 
-  const persistent_localStream = client.stream(streamName, true);
-  await persistent_localStream.createStream();
+const persistent_localStream = client.stream(streamName, true);
+await persistent_localStream.createStream();
 
-  //--------------------------------------------------------------------------------------
-  // Subscribe to a stream
-  const stream = client.stream(streamName, false);
-  await stream.createStream();
-  stream.consumer("my-sub", { onmessage: (msg) => { console.log(msg) } }, regionURL);
+//--------------------------------------------------------------------------------------
+// Subscribe to a stream
+const stream = client.stream(streamName, false);
+await stream.createStream();
 
-  // Publish to a stream
-  stream.producer("hello world", regionURL);
+const consumer = stream.consumer("my-sub", regionURL);
+const publisher = stream.producer(regionURL);
 
-  //--------------------------------------------------------------------------------------
-  // Spot Collections
-  await client.login(rootEmail, rootPassword);
-  client.useTenant("_mm");
-  client.useFabric("_system");
-  // Make a geo location as spot enabled
-  await client.changeEdgeLocationSpotStatus(region, true);
-  // Create a geo-fabric with spot region capabilities.
-  client.createFabric("spotFabric", [{ username: "root" }], { dcList: region, spotDc: true });
-  // Then create a collection that is designated as a spot collection. 
-  const collection = client.collection(collectionName);
-  await collection.create({ isSpot: true });
+// Publish to a stream
+function publish(payload) {
+  return publisher.send({ payload });
+}
 
-  //--------------------------------------------------------------------------------------
-  // Local Collections
-  await client.login(rootEmail, rootPassword);
-  client.useTenant("_mm");
-  client.useFabric("_system");
-  // Make a geo location as spot enabled
-  await client.changeEdgeLocationSpotStatus(region, true);
-  // Create a geo-fabric with spot region capabilities.
-  client.createFabric("spotFabric", [{ username: "root" }], { dcList: region, spotDc: true });
-  // Then create a collection that is designated as a local collection. 
-  const collection = client.collection(collectionName);
-  await collection.create({ isLocal: true });
+consumer.on("message", (msg) => {
+  console.log(msg);
+});
+
+publisher.on("open", () => {
+  publish("Hello World");
+});
+
+//--------------------------------------------------------------------------------------
+// Spot Collections
+await client.login(rootEmail, rootPassword);
+client.useTenant("_mm");
+client.useFabric("_system");
+// Make a geo location as spot enabled
+await client.changeEdgeLocationSpotStatus(region, true);
+// Create a geo-fabric with spot region capabilities.
+client.createFabric("spotFabric", [{ username: "root" }], {
+  dcList: region,
+  spotDc: true,
+});
+// Then create a collection that is designated as a spot collection.
+const collection = client.collection(collectionName);
+await collection.create({ isSpot: true });
+
+//--------------------------------------------------------------------------------------
+// Local Collections
+await client.login(rootEmail, rootPassword);
+client.useTenant("_mm");
+client.useFabric("_system");
+// Make a geo location as spot enabled
+await client.changeEdgeLocationSpotStatus(region, true);
+// Create a geo-fabric with spot region capabilities.
+client.createFabric("spotFabric", [{ username: "root" }], {
+  dcList: region,
+  spotDc: true,
+});
+// Then create a collection that is designated as a local collection.
+const collection = client.collection(collectionName);
+await collection.create({ isLocal: true });
 ```
 
 For C8QL please check out the [c8ql template tag](https://macrometa.gitbook.io/c8/c8ql/fundamentals/bindparameters) for writing parametrized C8QL queries without making your code vulnerable to injection attacks.
@@ -231,19 +252,23 @@ If the request failed at a network level or the connection was closed without re
 ```js
 // Using async/await
 try {
-  const info = await client.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1' });
+  const info = await client.createFabric("mydb", [{ username: "root" }], {
+    dcList: "qa1-us-east-1",
+  });
   // fabric created
 } catch (err) {
   console.error(err.stack);
 }
 
 // Using promises with arrow functions
-client.createFabric("mydb", [{ username: 'root' }], { dcList: 'qa1-us-east-1' }).then(
-  info => {
-    // fabric created
-  },
-  err => console.error(err.stack)
-);
+client
+  .createFabric("mydb", [{ username: "root" }], { dcList: "qa1-us-east-1" })
+  .then(
+    (info) => {
+      // fabric created
+    },
+    (err) => console.error(err.stack)
+  );
 ```
 
 **Note**: the examples in the remainder of this documentation use async/await and other modern language features like multi-line strings and template tags. When developing for an environment without support for these language features, just use promises instead as in the above example.

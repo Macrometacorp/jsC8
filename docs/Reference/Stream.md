@@ -18,14 +18,14 @@ Returns a `Stream` instance representing the stream with the given stream name.
 
 - **isCollectionStream**: `boolean`
 
-   If the stream is a collection stream or not. The default is `false`.
+  If the stream is a collection stream or not. The default is `false`.
 
 **Examples**
 
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("testStream", true, false);
 ```
 
@@ -42,7 +42,7 @@ To change the fabric and tenant, `client.useFabric` and `client.useTenant` respe
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const streams = await client.getStreams();
 ```
 
@@ -65,7 +65,7 @@ To change the fabric and tenant, `client.useFabric` and `client.useTenant` respe
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const streams = await client.listPersistentStreams(true);
 ```
 
@@ -80,7 +80,7 @@ Clear backlog for all streams for given subscription.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 await client.clearBacklog();
 ```
 
@@ -101,7 +101,7 @@ Clear backlog for all streams for given subscription.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 await client.clearSubscriptionBacklog("my-subscription");
 ```
 
@@ -122,7 +122,7 @@ Unsubscribes the given subscription on all streams on a stream db.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 await client.unsubscribe("my-subscription");
 ```
 
@@ -137,7 +137,7 @@ Create asynchronously a stream for a given database.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 ```
@@ -153,7 +153,7 @@ Expire messages on all subscriptions of a stream.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.expireMessagesOnAllSubscriptions(5);
@@ -168,7 +168,7 @@ Get estimated backlog for offline stream.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.backlog();
@@ -185,7 +185,7 @@ Get the status of a compaction operation for a stream.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.compaction();
@@ -202,7 +202,7 @@ Trigger a compaction operation on a stream.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.triggerCompaction();
@@ -219,7 +219,7 @@ Get the statistics for the given stream.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.getStreamStatistics();
@@ -242,7 +242,7 @@ Delete a subscription.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.deleteSubscription("my-subscription");
@@ -265,7 +265,7 @@ Reset subscription to message position closest to given position.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.resetSubscriptionToPosition("my-subscription");
@@ -292,7 +292,7 @@ Expire messages on a stream subscription.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.expireMessages("my-subscription", 5);
@@ -315,7 +315,7 @@ Disconnect all active consumers for a cursor and reset the cursor.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.resetCursor("my-subscription");
@@ -342,7 +342,7 @@ Reset subscription to message position closest to absolute timestamp (in milisec
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.resetSubscriptionToTimestamp("my-subscription", 2000);
@@ -369,7 +369,7 @@ Skip num messages on a topic subscription.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.skipNumberOfMessages("my-subscription", 2);
@@ -392,7 +392,7 @@ Skip all messages on a stream subscription.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.skipAllMessages("my-subscription");
@@ -409,7 +409,7 @@ Get the list of persistent subscriptions for a given stream.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.getSubscriptionList();
@@ -426,7 +426,7 @@ Terminate a stream. A stream that is terminated will not accept any more message
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.terminateStream();
@@ -434,7 +434,7 @@ await stream.terminateStream();
 
 ## stream.consumer
 
-`stream.consumer(subscriptionName, callbackObj, dcName)`
+`stream.consumer(subscriptionName, dcName)`
 
 Creates a consumer for a stream.
 
@@ -444,77 +444,102 @@ Creates a consumer for a stream.
 
   The name of the subscription.
 
-- **callbackObj**: `{ onopen, onclose, onerror, onmessage }`
-
-  An object having required callbacks. `onmessage` is necessary.
-
 - **dcName**: `string`
 
   The dcName for the consumer.
 
-- **params**: `{ subscriptionType: string }`
+- **params**:
 
-  Can be one of `Exclusive, Failover or Shared`
+```
+{
+  subscriptionType: 'Exclusive' || 'Failover' || 'Shared',  receiverQueueSize: number
+}
+```
 
-> Note: If `onmessage` function returns false the message will not be acknowledged.
+defaults
+
+```
+{
+  subscriptionType: 'Exclusive',
+  receiverQueueSize: 1000
+}
+```
+**Methods**
+
+`consumer.on('open', callback )`
+
+`consumer.on('message', callback )`
+
+`consumer.on('close', callback )`
+
+`consumer.on('error', callback )`
+
+`consumer.close()`
+
 
 **Examples**
 
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenantName);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
-let params = {} // { subscriptionType : 'Exclusive' or 'Failover' or 'Shared' }
-stream.consumer("my-subscription", {onmessage: (msg)=>{ console.log(msg) }}, "test.macrometa.io", params);
-```
 
+const consumer = stream.consumer("my-subscription", "test.macrometa.io");
+
+consumer.on("message", (msg) => {
+  console.log(msg);
+});
+```
 
 ## stream.producer
 
-`stream.producer(message, dcName)`
+`stream.producer(dcName)`
 
-Creates a producer for a stream.
+Creates a producer for a stream and returns producer object.
 
 **Arguments**
-
-- **message**: `string` | Array<string>
-
-  The message to be published to the stream.
 
 - **dcName**: `string``
 
   The dcName for the producer.
-  
-- **callbackObj**: `{ onopen, onclose, onerror, onmessage }`
 
-  An object having required callbacks.
+**Methods**
 
-**Examples**
+`producer.on('open', callback )`
 
-```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
-const stream = client.stream("my-stream", true);
-await stream.createStream();
-stream.producer("hello world", "test.macrometa.io");
-```
+`producer.on('message', callback )`
 
-## stream.closeConnections
+`producer.on('close', callback )`
 
-`stream.closeConnections`
+`producer.on('error', callback )`
 
-Closes all the websocket connections made by producer and consumers.
+`producer.send(message)`
+
+`producer.close()`
 
 **Examples**
 
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name);
+client.useTenant(tenant - name);
 const stream = client.stream("my-stream", true);
 await stream.createStream();
-stream.closeConnections();
+
+const publisher = stream.producer("test.macrometa.io");
+
+// Publish to a stream
+function publish(payload) {
+  return publisher.send({ payload });
+}
+
+publisher.on("open", () => {
+  publish("Hello World!");
+});
+
+publisher.on("message", (msg) => {
+  console.log(msg, "Sent Successfully");
+});
 ```
