@@ -5,7 +5,7 @@ import { getDCListString } from "../util/helper";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("Manipulating collections", async function() {
+describe("Manipulating collections", async function () {
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
 
@@ -78,7 +78,7 @@ describe("Manipulating collections", async function() {
     it("creates a new local document collection", done => {
       const collection = fabric.collection(`documentcollection${Date.now()}`);
       collection
-        .create({isLocal: true})
+        .create({ isLocal: true })
         .then(() => {
           return fabric
             .collection(collection.name)
@@ -115,7 +115,7 @@ describe("Manipulating collections", async function() {
     it("creates a new local edge collection", done => {
       const collection = fabric.edgeCollection(`edgecollection${Date.now()}`);
       collection
-        .create({isLocal: true})
+        .create({ isLocal: true })
         .then(() => {
           return fabric
             .collection(collection.name)
@@ -132,18 +132,18 @@ describe("Manipulating collections", async function() {
         .catch(done);
     });
   });
- /* describe("collection.load", () => {
-    it("should load a collection", done => {
-      collection
-        .load()
-        .then(info => {
-          expect(info).to.have.property("name", collection.name);
-          expect(info).to.have.property("status", 3); // loaded
-        })
-        .then(() => void done())
-        .catch(done);
-    });
-  });*/
+  /* describe("collection.load", () => {
+     it("should load a collection", done => {
+       collection
+         .load()
+         .then(info => {
+           expect(info).to.have.property("name", collection.name);
+           expect(info).to.have.property("status", 3); // loaded
+         })
+         .then(() => void done())
+         .catch(done);
+     });
+   });*/
   /*describe("collection.unload", () => {
     it("should unload a collection", done => {
       collection
@@ -229,21 +229,26 @@ describe("Manipulating collections", async function() {
   });
   describe("collection.onChange", () => {
     it("should get the message on collection change", done => {
-      const callbackObj = {
-        onopen: () => {
-          collection.save({ name: "Anthony", lastname: "Gonsalvis" });
-        },
-        onmessage: (msg: string) => {
-          console.log("msg=>", msg);
-          done();
-        },
-        onerror: (err: any) => {
-          console.log("Connection Error->", err);
-          expect.fail("Websocket connection error");
-        },
-        onclose: () => console.log("Websoket connection closed")
-      };
-      collection.onChange(callbackObj, testUrl.substring(8));
+
+      const handler = collection.onChange(testUrl.substring(8));
+
+      handler.on('open', () => {
+        collection.save({ name: "Anthony", lastname: "Gonsalvis" });
+      })
+      
+      handler.on('message', (msg: string) => {
+        console.log("msg=>", msg);
+        done();
+      })
+      
+      handler.on('error', (err: any) => {
+        console.log("Connection Error->", err);
+        expect.fail("Websocket connection error");
+      })
+      
+      handler.on('close', () => console.log("Websoket connection closed"))
+
+
     });
   });
 });

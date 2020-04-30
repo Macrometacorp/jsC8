@@ -36,13 +36,9 @@ Note:-(To make the collection as `spot`, pass the `isSpot: true` in the `propert
 
 ## collection.onChange
 
-`async collection.onChange(callbackObject, dcName, subscriptionName): void`
+`collection.onChange(dcName, subscriptionName): void`
 
 **Arguments**
-
-- **callbackObj**: `{ onopen, onclose, onerror, onmessage }`
-
-  An object having required callbacks. `onmessage` is necessary.
 
 - **dcName**: `string``
 
@@ -52,22 +48,27 @@ Note:-(To make the collection as `spot`, pass the `isSpot: true` in the `propert
 
   The name of the subscription.
 
+**Methods**
+
+`listener.on('open', callback )`
+
+`listener.on('message', callback )`
+
+`listener.on('close', callback )`
+
+`listener.on('error', callback )`
+
+`listener.close()`
+
 **Examples**
 
 ```js
-  collection.onChange({
-    onmessage: (msg) => console.log("message=>", msg),
-    onopen: async () => {
-      console.log("connection open");
-      //manipulate the collection here
+const listener = collection.onChange("fed.macrometa.io", "mySub");
 
-      // add new documents to the collection
-      await collection.save({ firstname: 'Jean', lastname: 'Picard' });
-      await collection.save({ firstname: 'Bruce', lastname: 'Wayne' });
+listener.on('message',(msg) => console.log("message=>", msg));
+listener.on('open',() => console.log("connection open"));
+listener.on('close',() => console.log("connection closed");
 
-    },
-    onclose: () => console.log("connection closed")
-  }, "fed.macrometa.io", "mySub");
 ```
 
 

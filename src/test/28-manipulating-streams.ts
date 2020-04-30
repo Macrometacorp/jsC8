@@ -60,6 +60,8 @@ describe("Manipulating streams", function() {
 
   describe("stream.manipulate", function() {
     let stream: Stream;
+    let consumer:any;
+    let producer:any;
     this.beforeAll(async () => {
       stream = fabric.stream(`testStream${Date.now()}`, false);
       await stream.createStream();
@@ -84,25 +86,21 @@ describe("Manipulating streams", function() {
     });
     describe("stream.subscriptions", () => {
       let dcName: string;
+      
       this.beforeAll(async () => {
         const response = await fabric.getLocalEdgeLocation();
         dcName = response.tags.url;
       });
       this.afterAll(() => {
-        stream.closeConnections();
+        if(consumer) consumer.close();
+        if(producer) producer.close();
       });
       it.skip("stream.resetSubscriptionToPosition", done => {
         let numberOfMessages: number = 0;
         function callback(msg: string) {
           const parsedMsg = JSON.parse(msg);
           const { payload } = parsedMsg;
-          const array = [
-            "bmFuZGhh",
-            "YWJoaXNoZWs=",
-            "dmlwdWw=",
-            "c3Vsb20=",
-            "cHJhdGlr"
-          ];
+          const array = ["nandha", "abhishek", "rachit", "sulom", "pratik"];
           if (array.includes(payload)) {
             numberOfMessages++;
           }
@@ -110,20 +108,21 @@ describe("Manipulating streams", function() {
             done();
           }
         }
-        stream.consumer(
+        
+         consumer = stream.consumer(
           `streamSubscriptionTest`,
-          {
-            onmessage: callback,
-            onopen: () => {
-              stream.producer(
-                ["nandha", "abhishek", "vipul", "sulom", "pratik"],
-                dcName
-              );
-            }
-          },
           dcName
         );
-      });
+        
+         producer = stream.producer(dcName);
+
+
+        consumer.on('open',()=>{
+            ["nandha", "abhishek", "rachit", "sulom", "pratik"].map(payload=>{
+                producer.send(JSON.stringify({payload}));
+            })
+        })
+        consumer.on('message',callback);
 
       it("stream.expireMessages", () => {});
 
@@ -176,30 +175,40 @@ describe("Manipulating streams", function() {
 
     describe("stream.websocket", function() {
       let dcName: string;
+      let consumer:any;
+      let producer:any;
+  
       this.beforeAll(async () => {
         const response = await fabric.getLocalEdgeLocation();
         dcName = response.tags.url;
       });
       this.afterAll(() => {
-        stream.closeConnections();
+        if(consumer) consumer.close();
+        if(producer) producer.close();
       });
 
       it("gets data in consumer when sent by producer", function(done) {
         function callback(msg: string) {
           const parsedMsg = JSON.parse(msg);
           const { payload } = parsedMsg;
-          expect(payload).to.equal("dGVzdA==");
+          expect(payload).to.equal("test");
           done();
         }
-        stream.consumer(
-          `streamSubscription${Date.now()}`,
-          {
-            onmessage: callback,
-            onopen: () => stream.producer("test", dcName)
-          },
-          dcName
-        );
+        consumer = stream.consumer(
+            `streamSubscription${Date.now()}`,
+            dcName
+          );
+          
+           producer = stream.producer(dcName);
+  
+  
+          consumer.on('open',()=>{
+                  producer.send(JSON.stringify({payload:'test'}));
+          })
+          consumer.on('message',callback);
+  
       });
     });
   });
+});
 });

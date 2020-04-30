@@ -1,6 +1,6 @@
 import { Connection } from "./connection";
 import { isC8Error } from "./error";
-import { Stream, wsCallbackObj } from "./stream";
+import { Stream } from "./stream";
 
 export enum CollectionType {
   DOCUMENT_COLLECTION = 2,
@@ -156,15 +156,10 @@ export abstract class BaseCollection implements C8Collection {
   }
 
   onChange(
-    callback: wsCallbackObj,
     dcName: string,
     subscriptionName: string = "subs"
   ) {
-    this.stream.consumer(subscriptionName, callback, dcName);
-  }
-
-  closeOnChangeConnection() {
-    this.stream.closeConnections();
+    return this.stream.consumer(subscriptionName, dcName);
   }
 
   properties() {
