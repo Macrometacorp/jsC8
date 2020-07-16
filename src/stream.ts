@@ -9,7 +9,7 @@ import { stringify } from "query-string";
 import { ws } from "./util/webSocket";
 
 export enum StreamConstants {
-  PERSISTENT = "persistent"
+  PERSISTENT = "persistent",
 }
 
 export type wsCallbackObj = {
@@ -18,7 +18,6 @@ export type wsCallbackObj = {
   onerror?: (e: Error) => void;
   onmessage: (msg: string) => Promise<boolean> | boolean | void;
 };
-
 
 export class Stream {
   private _connection: Connection;
@@ -56,9 +55,9 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(true),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -68,9 +67,9 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -80,9 +79,9 @@ export class Stream {
       {
         method: "GET",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -92,9 +91,9 @@ export class Stream {
       {
         method: "GET",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -104,9 +103,9 @@ export class Stream {
       {
         method: "DELETE",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -116,9 +115,9 @@ export class Stream {
       {
         method: "PUT",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -128,9 +127,9 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -140,9 +139,9 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -152,9 +151,9 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -164,9 +163,9 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -176,9 +175,9 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -188,9 +187,9 @@ export class Stream {
       {
         method: "GET",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -200,9 +199,9 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`
+        qs: `local=${this.local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -219,25 +218,24 @@ export class Stream {
     const region = this.local ? "c8local" : "c8global";
     const tenant = this._connection.getTenantName();
     let dbName = this._connection.getFabricName();
-    let queryParams = stringify(params);
 
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
-    const consumerUrl = `wss://${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
+    let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-      }/${subscriptionName}?${queryParams}`;
+    }/${subscriptionName}`;
+
+    if (Object.keys(params).length > 0) {
+      const queryParams = stringify(params);
+      consumerUrl = `${consumerUrl}?${queryParams}`;
+    }
 
     return ws(consumerUrl);
   }
 
-  producer(
-    dcName: string,
-    params: { [key: string]: any } = {}
-  ) {
-
-    if (!dcName)
-      throw "DC name not provided to establish producer connection";
+  producer(dcName: string, params: { [key: string]: any } = {}) {
+    if (!dcName) throw "DC name not provided to establish producer connection";
 
     const lowerCaseUrl = dcName.toLocaleLowerCase();
     if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https"))
@@ -247,14 +245,18 @@ export class Stream {
     const region = this.local ? "c8local" : "c8global";
     const tenant = this._connection.getTenantName();
     let dbName = this._connection.getFabricName();
-    let queryParams = stringify(params);
 
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
-    const producerUrl = `wss://${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
+    let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-      }?${queryParams}`;
+    }`;
+
+    if (Object.keys(params).length > 0) {
+      const queryParams = stringify(params);
+      producerUrl = `${producerUrl}?${queryParams}`;
+    }
 
     return ws(producerUrl);
   }
