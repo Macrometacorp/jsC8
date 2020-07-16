@@ -2,14 +2,14 @@ import {
   C8QLLiteral,
   C8QLQuery,
   isC8QLLiteral,
-  isC8QLQuery
+  isC8QLQuery,
 } from "./c8ql-query";
 import {
   C8Collection,
   constructCollection,
   DocumentCollection,
   EdgeCollection,
-  isC8Collection
+  isC8Collection,
 } from "./collection";
 import { Config, Connection } from "./connection";
 import { ArrayCursor } from "./cursor";
@@ -141,14 +141,14 @@ export class Fabric {
   get() {
     return this._connection.request(
       { path: "/database/current" },
-      res => res.body.result
+      (res) => res.body.result
     );
   }
 
   exists(): Promise<boolean> {
     return this.get().then(
       () => true,
-      err => {
+      (err) => {
         if (isC8Error(err) && err.errorNum === FABRIC_NOT_FOUND) {
           return false;
         }
@@ -165,23 +165,23 @@ export class Fabric {
       {
         method: "POST",
         path: "/database",
-        body: { users: users || [], name: fabricName, options }
+        body: { users: users || [], name: fabricName, options },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   listFabrics() {
     return this._connection.request(
       { path: "/database" },
-      res => res.body.result
+      (res) => res.body.result
     );
   }
 
   listUserFabrics() {
     return this._connection.request(
       { path: "/database/user" },
-      res => res.body.result
+      (res) => res.body.result
     );
   }
 
@@ -189,9 +189,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/database/${fabricName}`
+        path: `/database/${fabricName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -201,9 +201,9 @@ export class Fabric {
         method: "POST",
         path: "/_open/auth",
         body: { email, password },
-        absolutePath: true
+        absolutePath: true,
       },
-      res => {
+      (res) => {
         this.useBearerAuth(res.body.jwt);
         this.useTenant(res.body.tenant);
         return res.body;
@@ -220,9 +220,9 @@ export class Fabric {
       {
         method: "PUT",
         path: `_tenant/${tenantName}/_fabric/${fabricName}/database/${datacenter}`,
-        absolutePath: true
+        absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -230,9 +230,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: `/events`
+        path: `/events`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -241,9 +241,9 @@ export class Fabric {
       {
         method: "DELETE",
         path: `/events`,
-        body: JSON.stringify(eventIds)
+        body: JSON.stringify(eventIds),
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -265,9 +265,9 @@ export class Fabric {
     return this._connection.request(
       {
         path: "/collection",
-        qs: { excludeSystem }
+        qs: { excludeSystem },
       },
-      res =>
+      (res) =>
         this._connection.c8Major <= 2 ? res.body.collections : res.body.result
     );
   }
@@ -286,9 +286,9 @@ export class Fabric {
         this._connection.request(
           {
             method: "PUT",
-            path: `/collection/${data.name}/truncate`
+            path: `/collection/${data.name}/truncate`,
           },
-          res => res.body
+          (res) => res.body
         )
       )
     );
@@ -303,7 +303,7 @@ export class Fabric {
   listGraphs() {
     return this._connection.request(
       { path: "/_api/graph" },
-      res => res.body.graphs
+      (res) => res.body.graphs
     );
   }
 
@@ -380,10 +380,10 @@ export class Fabric {
           collections,
           action,
           params,
-          ...options
-        }
+          ...options,
+        },
       },
-      res => res.body.result
+      (res) => res.body.result
     );
   }
 
@@ -410,9 +410,9 @@ export class Fabric {
       {
         method: "POST",
         path: "/cursor",
-        body: { ...opts, query, bindVars }
+        body: { ...opts, query, bindVars },
       },
-      res => new ArrayCursor(this._connection, res.body, res.host)
+      (res) => new ArrayCursor(this._connection, res.body, res.host)
     );
   }
 
@@ -421,9 +421,9 @@ export class Fabric {
       {
         method: "POST",
         path: "/query",
-        body: { query }
+        body: { query },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -432,18 +432,18 @@ export class Fabric {
       {
         method: "POST",
         path: "/_api/explain",
-        body: { ...explainQueryObj }
+        body: { ...explainQueryObj },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   getCurrentQueries() {
     return this._connection.request(
       {
-        path: "/query/current"
+        path: "/query/current",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -451,18 +451,18 @@ export class Fabric {
     return this._connection.request(
       {
         method: "DELETE",
-        path: "/query/slow"
+        path: "/query/slow",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   getSlowQueries() {
     return this._connection.request(
       {
-        path: "/query/slow"
+        path: "/query/slow",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -470,16 +470,19 @@ export class Fabric {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/query/${queryId}`
+        path: `/query/${queryId}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   // Function management
 
   listFunctions() {
-    return this._connection.request({ path: "/c8qlfunction" }, res => res.body);
+    return this._connection.request(
+      { path: "/c8qlfunction" },
+      (res) => res.body
+    );
   }
 
   createFunction(name: string, code: string, isDeterministic?: boolean) {
@@ -487,9 +490,9 @@ export class Fabric {
       {
         method: "POST",
         path: "/c8qlfunction",
-        body: { name, code, isDeterministic }
+        body: { name, code, isDeterministic },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -501,9 +504,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "DELETE",
-        path
+        path,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -513,9 +516,9 @@ export class Fabric {
         method: "GET",
         path: `/_fabric/${this._connection.getFabricName()}/_api/version`,
         absolutePath: true,
-        qs: { details }
+        qs: { details },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -535,9 +538,9 @@ export class Fabric {
       {
         method: "GET",
         path: "/tenants",
-        absolutePath: true
+        absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -551,13 +554,24 @@ export class Fabric {
     return new Stream(this._connection, streamName, local, isCollectionStream);
   }
 
-  getStreams() {
+  getStreams(global: boolean = false) {
     return this._connection.request(
       {
         method: "GET",
-        path: "/streams"
+        path: "/streams",
+        qs: `global=${global}`,
       },
-      res => res.body
+      (res) => res.body
+    );
+  }
+
+  getAllStreams() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: "/streams",
+      },
+      (res) => res.body
     );
   }
 
@@ -566,9 +580,9 @@ export class Fabric {
       {
         method: "GET",
         path: `/streams/persistent`,
-        qs: `local=${local}`
+        qs: `local=${local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -576,9 +590,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "POST",
-        path: "/streams/clearbacklog"
+        path: "/streams/clearbacklog",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -586,9 +600,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "POST",
-        path: `/streams/clearbacklog/${subscription}`
+        path: `/streams/clearbacklog/${subscription}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -596,9 +610,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "POST",
-        path: `/streams/unsubscribe/${subscription}`
+        path: `/streams/unsubscribe/${subscription}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -609,9 +623,9 @@ export class Fabric {
       {
         method: "GET",
         path: "/datacenter/all",
-        absolutePath: true
+        absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -620,9 +634,9 @@ export class Fabric {
       {
         method: "GET",
         path: "/datacenter/local",
-        absolutePath: true
+        absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -631,9 +645,9 @@ export class Fabric {
       {
         method: "PUT",
         path: `_api/datacenter/${dcName}/${isSpot}`,
-        absolutePath: true
+        absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -647,9 +661,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: `/_admin/user`
+        path: `/_admin/user`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -659,9 +673,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: `/restql/user`
+        path: `/restql/user`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -677,11 +691,11 @@ export class Fabric {
             query: {
               name: name,
               parameter: parameter,
-              value: value
-            }
-          }
+              value: value,
+            },
+          },
         },
-        res => res.body
+        (res) => res.body
       );
     } catch (err) {
       return err;
@@ -694,10 +708,10 @@ export class Fabric {
         method: "POST",
         path: `/restql/execute/${queryName}`,
         body: {
-          bindVars: bindVars
-        }
+          bindVars: bindVars,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -710,11 +724,11 @@ export class Fabric {
           query: {
             name: name,
             parameter: parameter,
-            value: value
-          }
-        }
+            value: value,
+          },
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -722,9 +736,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/restql/${queryName}`
+        path: `/restql/${queryName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -738,12 +752,12 @@ export class Fabric {
           cache: true,
           count: true,
           options: {
-            profile: true
+            profile: true,
           },
-          query: query
-        }
+          query: query,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -760,10 +774,10 @@ export class Fabric {
         path: "/_api/streamapps",
         body: JSON.stringify({
           definition: appDefinition,
-          regions: regions
-        })
+          regions: regions,
+        }),
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -771,9 +785,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: "/_api/streamapps"
+        path: "/_api/streamapps",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -783,10 +797,10 @@ export class Fabric {
         method: "POST",
         path: "/_api/streamapps/validate",
         body: {
-          definition: appDefinition
-        }
+          definition: appDefinition,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -794,9 +808,9 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: "/_api/streamapps/samples"
+        path: "/_api/streamapps/samples",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 }
