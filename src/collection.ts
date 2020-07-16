@@ -4,21 +4,21 @@ import { Stream } from "./stream";
 
 export enum CollectionType {
   DOCUMENT_COLLECTION = 2,
-  EDGE_COLLECTION = 3
+  EDGE_COLLECTION = 3,
 }
 
 export type DocumentHandle =
   | string
   | {
-    _key?: string;
-    _id?: string;
-  };
+      _key?: string;
+      _id?: string;
+    };
 
 export type IndexHandle =
   | string
   | {
-    id?: string;
-  };
+      id?: string;
+    };
 
 export interface ImportOptions {
   type?: null | "auto" | "documents" | "array";
@@ -106,7 +106,7 @@ export abstract class BaseCollection implements C8Collection {
   protected _get(path: string, qs?: any) {
     return this._connection.request(
       { path: `/collection/${this.name}/${path}`, qs },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -115,23 +115,23 @@ export abstract class BaseCollection implements C8Collection {
       {
         method: "PUT",
         path: `/collection/${this.name}/${path}`,
-        body
+        body,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   get() {
     return this._connection.request(
       { path: `/collection/${this.name}` },
-      res => res.body
+      (res) => res.body
     );
   }
 
   exists(): Promise<boolean> {
     return this.get().then(
       () => true,
-      err => {
+      (err) => {
         if (isC8Error(err) && err.errorNum === COLLECTION_NOT_FOUND) {
           return false;
         }
@@ -148,17 +148,14 @@ export abstract class BaseCollection implements C8Collection {
         body: {
           ...properties,
           name: this.name,
-          type: this.type
-        }
+          type: this.type,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
-  onChange(
-    dcName: string,
-    subscriptionName: string = "subs"
-  ) {
+  onChange(dcName: string, subscriptionName: string = "subs") {
     return this.stream.consumer(subscriptionName, dcName);
   }
 
@@ -175,15 +172,14 @@ export abstract class BaseCollection implements C8Collection {
       {
         method: "PUT",
         path: `/collection/${this.name}/rename`,
-        body: { name }
+        body: { name },
       },
-      res => res.body
+      (res) => res.body
     );
     this.name = name;
     this._idPrefix = `${name}/`;
     return result;
   }
-
 
   truncate() {
     return this._put("truncate", undefined);
@@ -194,9 +190,9 @@ export abstract class BaseCollection implements C8Collection {
       {
         method: "DELETE",
         path: `/collection/${this.name}`,
-        qs: opts
+        qs: opts,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -205,11 +201,11 @@ export abstract class BaseCollection implements C8Collection {
       .request(
         {
           method: "HEAD",
-          path: `/${this._documentPath(documentHandle)}`
+          path: `/${this._documentPath(documentHandle)}`,
         },
         () => true
       )
-      .catch(err => {
+      .catch((err) => {
         if (err.statusCode === 404) {
           return false;
         }
@@ -223,10 +219,10 @@ export abstract class BaseCollection implements C8Collection {
   ): Promise<any> {
     const result = this._connection.request(
       { path: `/${this._documentPath(documentHandle)}` },
-      res => res.body
+      (res) => res.body
     );
     if (!graceful) return result;
-    return result.catch(err => {
+    return result.catch((err) => {
       if (isC8Error(err) && err.errorNum === DOCUMENT_NOT_FOUND) {
         return null;
       }
@@ -250,9 +246,9 @@ export abstract class BaseCollection implements C8Collection {
         path: `/${this._documentPath(documentHandle)}`,
         body: newValue,
         qs: opts,
-        headers
+        headers,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -272,12 +268,11 @@ export abstract class BaseCollection implements C8Collection {
         path: `/${this._documentPath(documentHandle)}`,
         body: newValue,
         qs: opts,
-        headers
+        headers,
       },
-      res => res.body
+      (res) => res.body
     );
   }
-
 
   remove(documentHandle: DocumentHandle, opts: any = {}) {
     const headers: { [key: string]: string } = {};
@@ -294,9 +289,9 @@ export abstract class BaseCollection implements C8Collection {
         method: "DELETE",
         path: `/${this._documentPath(documentHandle)}`,
         qs: opts,
-        headers
+        headers,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -305,7 +300,7 @@ export abstract class BaseCollection implements C8Collection {
     { type = "auto", ...opts }: ImportOptions = {}
   ): Promise<ImportResult> {
     if (Array.isArray(data)) {
-      data = data.map(line => JSON.stringify(line)).join("\r\n") + "\r\n";
+      data = data.map((line) => JSON.stringify(line)).join("\r\n") + "\r\n";
     }
     return this._connection.request(
       {
@@ -316,10 +311,10 @@ export abstract class BaseCollection implements C8Collection {
         qs: {
           type: type === null ? undefined : type,
           ...opts,
-          collection: this.name
-        }
+          collection: this.name,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -327,16 +322,16 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         path: "/index",
-        qs: { collection: this.name }
+        qs: { collection: this.name },
       },
-      res => res.body.indexes
+      (res) => res.body.indexes
     );
   }
 
-  index(indexHandle: IndexHandle) {
+  index(indexName: string) {
     return this._connection.request(
-      { path: `/index/${this._indexHandle(indexHandle)}` },
-      res => res.body
+      { path: `/index/${this._idPrefix}${indexName}` },
+      (res) => res.body
     );
   }
 
@@ -346,19 +341,19 @@ export abstract class BaseCollection implements C8Collection {
         method: "POST",
         path: "/index",
         body: details,
-        qs: { collection: this.name }
+        qs: { collection: this.name },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
-  dropIndex(indexHandle: IndexHandle) {
+  dropIndex(indexName: string) {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/index/${this._indexHandle(indexHandle)}`
+        path: `/index/${this._idPrefix}${indexName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -371,9 +366,9 @@ export abstract class BaseCollection implements C8Collection {
         method: "POST",
         path: "/index",
         body: { ...opts, type: "cap" },
-        qs: { collection: this.name }
+        qs: { collection: this.name },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -389,9 +384,9 @@ export abstract class BaseCollection implements C8Collection {
         method: "POST",
         path: "/index",
         body: { unique: false, ...opts, type: "hash", fields: fields },
-        qs: { collection: this.name }
+        qs: { collection: this.name },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -407,9 +402,9 @@ export abstract class BaseCollection implements C8Collection {
         method: "POST",
         path: "/index",
         body: { unique: false, ...opts, type: "skiplist", fields: fields },
-        qs: { collection: this.name }
+        qs: { collection: this.name },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -425,9 +420,9 @@ export abstract class BaseCollection implements C8Collection {
         method: "POST",
         path: "/index",
         body: { unique: false, ...opts, type: "persistent", fields: fields },
-        qs: { collection: this.name }
+        qs: { collection: this.name },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -440,9 +435,9 @@ export abstract class BaseCollection implements C8Collection {
         method: "POST",
         path: "/index",
         body: { ...opts, fields, type: "geo" },
-        qs: { collection: this.name }
+        qs: { collection: this.name },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -455,9 +450,9 @@ export abstract class BaseCollection implements C8Collection {
         method: "POST",
         path: "/index",
         body: { fields, minLength, type: "fulltext" },
-        qs: { collection: this.name }
+        qs: { collection: this.name },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 }
@@ -489,10 +484,10 @@ export class DocumentCollection extends BaseCollection {
           body: data,
           qs: {
             ...opts,
-            collection: this.name
-          }
+            collection: this.name,
+          },
         },
-        res => res.body
+        (res) => res.body
       );
     }
 
@@ -501,9 +496,9 @@ export class DocumentCollection extends BaseCollection {
         method: "POST",
         path: `/document/${this.name}`,
         body: data,
-        qs: opts
+        qs: opts,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 }
@@ -561,10 +556,10 @@ export class EdgeCollection extends BaseCollection {
             ...opts,
             collection: this.name,
             from: data._from,
-            to: data._to
-          }
+            to: data._to,
+          },
         },
-        res => res.body
+        (res) => res.body
       );
     }
 
@@ -575,10 +570,10 @@ export class EdgeCollection extends BaseCollection {
         body: data,
         qs: {
           ...opts,
-          collection: this.name
-        }
+          collection: this.name,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -588,10 +583,10 @@ export class EdgeCollection extends BaseCollection {
         path: `/edges/${this.name}`,
         qs: {
           direction,
-          vertex: this._documentHandle(documentHandle)
-        }
+          vertex: this._documentHandle(documentHandle),
+        },
       },
-      res => res.body.edges
+      (res) => res.body.edges
     );
   }
 
@@ -615,10 +610,10 @@ export class EdgeCollection extends BaseCollection {
         body: {
           ...opts,
           startVertex,
-          edgeCollection: this.name
-        }
+          edgeCollection: this.name,
+        },
       },
-      res => res.body.result
+      (res) => res.body.result
     );
   }
 }
