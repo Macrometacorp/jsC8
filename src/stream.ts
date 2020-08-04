@@ -224,7 +224,7 @@ export class Stream {
 
     let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-    }/${subscriptionName}`;
+      }/${subscriptionName}`;
 
     if (Object.keys(params).length > 0) {
       const queryParams = stringify(params);
@@ -251,7 +251,7 @@ export class Stream {
 
     let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-    }`;
+      }`;
 
     if (Object.keys(params).length > 0) {
       const queryParams = stringify(params);

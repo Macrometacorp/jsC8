@@ -7,7 +7,7 @@ class User {
 
   urlPrefix: string = "/_admin/user";
 
-  constructor(connection: Connection, user: string, email: string) {
+  constructor(connection: Connection, user: string, email: string = '') {
     this.user = user;
     this._connection = connection;
     this.email = email;
@@ -37,6 +37,13 @@ class User {
         path: `${this.urlPrefix}/${this.user}`
       },
       res => res.body
+    );
+  }
+
+  hasUser(): Promise<boolean> {
+    return this.getUserDeatils().then(
+      () => true,
+      () => false,
     );
   }
 

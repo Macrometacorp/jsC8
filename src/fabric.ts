@@ -67,9 +67,9 @@ export type TransactionCollections =
   | C8Collection
   | (string | C8Collection)[]
   | {
-      write?: string | C8Collection | (string | C8Collection)[];
-      read?: string | C8Collection | (string | C8Collection)[];
-    };
+    write?: string | C8Collection | (string | C8Collection)[];
+    read?: string | C8Collection | (string | C8Collection)[];
+  };
 
 export type TransactionOptions = {
   lockTimeout?: number;
@@ -100,7 +100,7 @@ export interface CreateFabricOptions {
 const FABRIC_NOT_FOUND = 1228;
 
 export class Fabric {
-  private _connection: Connection;
+  protected _connection: Connection;
 
   constructor(config?: Config) {
     this._connection = new Connection(config);
@@ -565,11 +565,12 @@ export class Fabric {
     );
   }
 
-  getAllStreams() {
+  getAllStreams(local: boolean = false) {
     return this._connection.request(
       {
         method: "GET",
         path: "/streams",
+        qs: `local=${local}`,
       },
       (res) => res.body
     );
@@ -623,6 +624,17 @@ export class Fabric {
       {
         method: "GET",
         path: "/datacenter/all",
+        absolutePath: true,
+      },
+      (res) => res.body
+    );
+  }
+
+  getTenantEdgeLocations() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/datacenter/_tenant/${this._connection.getTenantName()}`,
         absolutePath: true,
       },
       (res) => res.body
@@ -722,7 +734,6 @@ export class Fabric {
         path: `/restql/${queryName}`,
         body: {
           query: {
-            name: name,
             parameter: parameter,
             value: value,
           },
