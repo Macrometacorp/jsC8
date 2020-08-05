@@ -290,20 +290,23 @@ export class C8Client extends Fabric {
     return stream.getStreamStatistics();
   }
 
-  createStreamProducer(streamName: string, local: boolean, isCollectionStream: boolean = false, dcName: string, params: { [key: string]: any } = {}) {
-    const stream = this.stream(streamName, local, isCollectionStream);
+  async createStreamProducer(streamName: string, local: boolean, isCollectionStream: boolean = false, dcName: string, params: { [key: string]: any } = {}) {
+    const otp = await this.getOtp();
+    const stream = this.stream(streamName, local, isCollectionStream, otp);
     return stream.producer(dcName, params);
   }
 
-  createStreamReader(streamName: string, local: boolean, isCollectionStream: boolean = false, subscriptionName: string, dcName: string, params: { [key: string]: any } = {}) {
-    const stream = this.stream(streamName, local, isCollectionStream);
+  async createStreamReader(streamName: string, local: boolean, isCollectionStream: boolean = false, subscriptionName: string, dcName: string, params: { [key: string]: any } = {}) {
+    const otp = await this.getOtp();
+    const stream = this.stream(streamName, local, isCollectionStream, otp);
     return stream.consumer(subscriptionName, dcName, params);
   }
 
-  subscribe(streamName: string, local: boolean, isCollectionStream: boolean = false, subscriptionName: string, dcName: string, params: { [key: string]: any } = {}) {
-    const stream = this.stream(streamName, local, isCollectionStream);
+  async subscribe(streamName: string, local: boolean, isCollectionStream: boolean = false, subscriptionName: string, dcName: string, params: { [key: string]: any } = {}) {
+    const otp = await this.getOtp();
+    const stream = this.stream(streamName, local, isCollectionStream, otp);
     return stream.consumer(subscriptionName, dcName, params);
-  } // how ot is it same as create  web socket handler
+  } // how is it same as create  web socket handler
 
   // unsubscribe(){} already available
   getStreamBacklog(streamName: string, local: boolean, isCollectionStream: boolean = false) {

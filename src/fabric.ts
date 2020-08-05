@@ -549,9 +549,10 @@ export class Fabric {
   stream(
     streamName: string,
     local: boolean,
-    isCollectionStream: boolean = false
+    isCollectionStream: boolean = false,
+    otp: string = ''
   ): Stream {
-    return new Stream(this._connection, streamName, local, isCollectionStream);
+    return new Stream(this._connection, streamName, local, isCollectionStream, otp);
   }
 
   getStreams(global: boolean = false) {
@@ -822,6 +823,17 @@ export class Fabric {
         path: "/_api/streamapps/samples",
       },
       (res) => res.body
+    );
+  }
+
+  getOtp() {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/apid/otp",
+        absolutePath: true,
+      },
+      (res) => res.body.otp
     );
   }
 }

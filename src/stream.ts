@@ -25,17 +25,20 @@ export class Stream {
   local: boolean;
   isCollectionStream: boolean;
   topic: string;
+  otp: string;
 
   constructor(
     connection: Connection,
     name: string,
     local: boolean = false,
-    isCollectionStream: boolean = false
+    isCollectionStream: boolean = false,
+    otp: string = '',
   ) {
     this._connection = connection;
     this.isCollectionStream = isCollectionStream;
     this.local = local;
     this.name = name;
+    this.otp = otp;
 
     let topic = this.name;
     if (!this.isCollectionStream) {
@@ -217,6 +220,10 @@ export class Stream {
     const persist = StreamConstants.PERSISTENT;
     const region = this.local ? "c8local" : "c8global";
     const tenant = this._connection.getTenantName();
+    const queryParams = stringify({
+      otp: this.otp,
+      ...params
+    });
     let dbName = this._connection.getFabricName();
 
     if (!dbName || !tenant)
@@ -226,10 +233,8 @@ export class Stream {
       this.topic
       }/${subscriptionName}`;
 
-    if (Object.keys(params).length > 0) {
-      const queryParams = stringify(params);
-      consumerUrl = `${consumerUrl}?${queryParams}`;
-    }
+    // Appending query params to the url
+    consumerUrl = `${consumerUrl}?${queryParams}`;
 
     return ws(consumerUrl);
   }
@@ -244,19 +249,19 @@ export class Stream {
     const persist = StreamConstants.PERSISTENT;
     const region = this.local ? "c8local" : "c8global";
     const tenant = this._connection.getTenantName();
+    const queryParams = stringify({
+      otp: this.otp,
+      ...params
+    });
     let dbName = this._connection.getFabricName();
-
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
     let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
       }`;
-
-    if (Object.keys(params).length > 0) {
-      const queryParams = stringify(params);
-      producerUrl = `${producerUrl}?${queryParams}`;
-    }
+    // Appending query params to the url
+    producerUrl = `${producerUrl}?${queryParams}`;
 
     return ws(producerUrl);
   }
