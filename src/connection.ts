@@ -7,6 +7,8 @@ import {
   RequestFunction
 } from "./util/request";
 
+const jwtDecode = require('jwt-decode');
+
 const LinkedList = require("linkedlist/lib/linkedlist") as typeof Array;
 
 const MIME_JSON = /\/(json|javascript)(\W|$)/;
@@ -68,6 +70,9 @@ export type Config =
   | string[]
   | Partial<{
     url: string | string[];
+    fabricName: string;
+    apiKey: string;
+    token: string;
     isAbsolute: boolean;
     c8Version: number;
     loadBalancingStrategy: LoadBalancingStrategy;
@@ -102,6 +107,9 @@ export class Connection {
     if (config.c8Version !== undefined) {
       this._c8Version = config.c8Version;
     }
+    if(config.fabricName) {
+      this._fabricName = config.fabricName;
+    }
     if (config.isAbsolute) {
       this._fabricName = false;
       this._tenantName = false;
@@ -119,6 +127,24 @@ export class Connection {
     if (this._agentOptions.keepAlive) this._maxTasks *= 2;
 
     this._headers = { ...config.headers };
+    
+    if(config.token) {
+      this._headers = {
+        ...this._headers,
+        authorization:`Bearer ${config.token}` 
+      }
+      const { tenant } = jwtDecode(config.token);
+      this._tenantName = tenant;
+    }
+
+    if(config.apiKey) {
+      this._headers = {
+        ...this._headers,
+        authorization:`apikey ${config.apiKey}` 
+      }
+      this._tenantName = this.extractTenantName(config.apiKey);
+    }
+
     this._loadBalancingStrategy = config.loadBalancingStrategy || "NONE";
     this._useFailOver = this._loadBalancingStrategy !== "ROUND_ROBIN";
     if (config.maxRetries === false) {
@@ -282,6 +308,12 @@ export class Connection {
     for (const host of this._hosts) {
       if (host.close) host.close();
     }
+  }
+
+  extractTenantName(apiKey: string) {
+    let apiKeyArr = apiKey.split('.')
+    apiKeyArr.splice(-2,2)
+    return apiKeyArr.join(".");
   }
 
   request<T = C8jsResponse>(

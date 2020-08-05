@@ -124,11 +124,6 @@ export class C8Client extends Fabric {
     return collection.updateDocuments(documentsHandle, opts);
   }
 
-  updateDocumentMatch(collectionName: string, documentHandle: any, newValue: any, opts: any = {}) { // Need to remove
-    const collection = this.collection(collectionName);
-    return collection.update(documentHandle, newValue, opts);
-  }
-
   replaceDocument(collectionName: string, documentHandle: any, newValue: any, opts: any = {}) {
     const collection = this.collection(collectionName);
     return collection.replace(documentHandle, newValue, opts);
@@ -139,11 +134,6 @@ export class C8Client extends Fabric {
     return collection.replaceDocuments(documentsHandle, opts);
   }
 
-  replaceDocumentMatch(collectionName: string, documentHandle: any, newValue: any, opts: any = {}) { // Need to remove
-    const collection = this.collection(collectionName);
-    return collection.replace(documentHandle, newValue, opts);
-  }
-
   deleteDocument(collectionName: string, documentHandle: any, opts: any = {}) {
     const collection = this.collection(collectionName);
     return collection.remove(documentHandle, opts);
@@ -152,11 +142,6 @@ export class C8Client extends Fabric {
   deleteDocumentMany(collectionName: string, documentsHandle: string[] | DocumentsHandle[], opts: any = {}) {
     const collection = this.collection(collectionName);
     return collection.removeDocuments(documentsHandle, opts);
-  }
-
-  deleteDocumentMatch(collectionName: string, documentHandle: any, opts: any = {}) { // Need to remove
-    const collection = this.collection(collectionName);
-    return collection.remove(documentHandle, opts);
   }
 
   listCollectionIndexes(collectionName: string) {
@@ -261,11 +246,6 @@ export class C8Client extends Fabric {
   createStream(streamName: string, local: boolean, isCollectionStream: boolean = false) {
     const stream = this.stream(streamName, local, isCollectionStream);
     return stream.createStream();
-  }
-
-  terminateStream(streamName: string, local: boolean, isCollectionStream: boolean = false) { // Need to remove
-    const stream = this.stream(streamName, local, isCollectionStream);
-    return stream.terminateStream();
   }
 
   hasStream(streamName: string, local: boolean): Promise<boolean> {
