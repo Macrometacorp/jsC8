@@ -1,17 +1,14 @@
-
 import { Config } from "./connection";
 import { Fabric } from "./fabric";
 import {
   DocumentHandle,
   DocumentsHandle,
-  DocumentSaveOptions
+  DocumentSaveOptions,
 } from "./collection";
-import {
-  C8QLLiteral,
-} from "./c8ql-query";
+import { C8QLLiteral } from "./c8ql-query";
 
 const csv = require("csvtojson");
-const jwtDecode = require('jwt-decode');
+const jwtDecode = require("jwt-decode");
 
 export class C8Client extends Fabric {
   constructor(config: Config) {
@@ -54,7 +51,7 @@ export class C8Client extends Fabric {
     if (error) {
       throw new Error(errorMessage);
     } else {
-      const { tenant } = result
+      const { tenant } = result;
       this.useTenant(tenant);
     }
   }
@@ -83,53 +80,94 @@ export class C8Client extends Fabric {
     return this.listCollections(excludeSystem);
   }
 
-  onCollectionChange(collectionName: string, dcName: string, subscriptionName: string) { // need to check not working
+  onCollectionChange(
+    collectionName: string,
+    dcName: string,
+    subscriptionName: string
+  ) {
+    // need to check not working
     const collection = this.collection(collectionName);
     return collection.onChange(dcName, subscriptionName);
   }
 
-  getDocument(collectionName: string, documentHandle: DocumentHandle, graceful: boolean = false) {
+  getDocument(
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    graceful: boolean = false
+  ) {
     const collection = this.collection(collectionName);
     return collection.document(documentHandle, graceful);
   }
 
   getDocumentMany(collectionName: string, limit?: number, skip?: number) {
-    const getDocumentsQuery = `FOR doc IN ${collectionName} ${limit ? `limit ${skip ? `${skip},` : ''}${limit}` : ''} return doc`;
+    const getDocumentsQuery = `FOR doc IN ${collectionName} ${
+      limit ? `limit ${skip ? `${skip},` : ""}${limit}` : ""
+    } return doc`;
     return this.executeQuery(getDocumentsQuery);
   }
 
-  insertDocument(collectionName: string, data: any, opts?: DocumentSaveOptions | boolean) {
+  insertDocument(
+    collectionName: string,
+    data: any,
+    opts?: DocumentSaveOptions | boolean
+  ) {
     const collection = this.collection(collectionName);
     return collection.save(data, opts);
   }
 
-  insertDocumentMany(collectionName: string, data: any, opts?: DocumentSaveOptions | boolean) {
+  insertDocumentMany(
+    collectionName: string,
+    data: any,
+    opts?: DocumentSaveOptions | boolean
+  ) {
     const collection = this.collection(collectionName);
     return collection.save(data, opts);
   }
 
-  async insertDocumentFromFile(collectionName: string, csvPath: string, opts?: DocumentSaveOptions | boolean) {
+  async insertDocumentFromFile(
+    collectionName: string,
+    csvPath: string,
+    opts?: DocumentSaveOptions | boolean
+  ) {
     const data = await csv().fromFile(csvPath);
     const collection = this.collection(collectionName);
     return collection.save(data, opts);
   }
 
-  updateDocument(collectionName: string, documentHandle: any, newValue: any, opts: any = {}) {
+  updateDocument(
+    collectionName: string,
+    documentHandle: any,
+    newValue: any,
+    opts: any = {}
+  ) {
     const collection = this.collection(collectionName);
     return collection.update(documentHandle, newValue, opts);
   }
 
-  updateDocumentMany(collectionName: string, documentsHandle: DocumentsHandle[], opts: any = {}) {
+  updateDocumentMany(
+    collectionName: string,
+    documentsHandle: DocumentsHandle[],
+    opts: any = {}
+  ) {
     const collection = this.collection(collectionName);
     return collection.updateDocuments(documentsHandle, opts);
   }
 
-  replaceDocument(collectionName: string, documentHandle: any, newValue: any, opts: any = {}) {
+  replaceDocument(
+    collectionName: string,
+    documentHandle: any,
+    newValue: any,
+    opts: any = {}
+  ) {
     const collection = this.collection(collectionName);
     return collection.replace(documentHandle, newValue, opts);
   }
 
-  replaceDocumentMany(collectionName: string, documentsHandle: DocumentsHandle[], opts: any = {}) {
+  replaceDocumentMany(
+    collectionName: string,
+    documentsHandle: DocumentsHandle[],
+    opts: any = {}
+  ) {
     const collection = this.collection(collectionName);
     return collection.replaceDocuments(documentsHandle, opts);
   }
@@ -139,7 +177,11 @@ export class C8Client extends Fabric {
     return collection.remove(documentHandle, opts);
   }
 
-  deleteDocumentMany(collectionName: string, documentsHandle: string[] | DocumentsHandle[], opts: any = {}) {
+  deleteDocumentMany(
+    collectionName: string,
+    documentsHandle: string[] | DocumentsHandle[],
+    opts: any = {}
+  ) {
     const collection = this.collection(collectionName);
     return collection.removeDocuments(documentsHandle, opts);
   }
@@ -159,22 +201,38 @@ export class C8Client extends Fabric {
     return collection.createGeoIndex(fields, opts);
   }
 
-  addSkiplistIndex(collectionName: string, fields: string[] | string, opts?: any) {
+  addSkiplistIndex(
+    collectionName: string,
+    fields: string[] | string,
+    opts?: any
+  ) {
     const collection = this.collection(collectionName);
     return collection.createSkipList(fields, opts);
   }
 
-  addPersistentIndex(collectionName: string, fields: string[] | string, opts?: any) {
+  addPersistentIndex(
+    collectionName: string,
+    fields: string[] | string,
+    opts?: any
+  ) {
     const collection = this.collection(collectionName);
     return collection.createPersistentIndex(fields, opts);
   }
 
-  addFullTextIndex(collectionName: string, fields: string[] | string, minLength?: number) {
+  addFullTextIndex(
+    collectionName: string,
+    fields: string[] | string,
+    minLength?: number
+  ) {
     const collection = this.collection(collectionName);
     return collection.createFulltextIndex(fields, minLength);
   }
 
-  addTtlIndex(collectionName: string, fields: string[] | string, expireAfter: number) {
+  addTtlIndex(
+    collectionName: string,
+    fields: string[] | string,
+    expireAfter: number
+  ) {
     const collection = this.collection(collectionName);
     return collection.createTtlIndex(fields, expireAfter);
   }
@@ -243,53 +301,91 @@ export class C8Client extends Fabric {
     return this.getLocalEdgeLocation();
   }
 
-  createStream(streamName: string, local: boolean, isCollectionStream: boolean = false) {
+  createStream(
+    streamName: string,
+    local: boolean,
+    isCollectionStream: boolean = false
+  ) {
     const stream = this.stream(streamName, local, isCollectionStream);
     return stream.createStream();
   }
 
   hasStream(streamName: string, local: boolean): Promise<boolean> {
-    const topic = local
-      ? `c8locals.${streamName}`
-      : `c8globals.${streamName}`;
+    const topic = local ? `c8locals.${streamName}` : `c8globals.${streamName}`;
 
-    return this.getAllStreams(local).then(
+    // @VIKAS Cant we use any other api eg: /_api/streams/c8locals.test/stats
+    // If 200 api exits else api does not exist
+
+    return this.getAllStreams().then(
       (res) => !!res.result.find((stream: any) => stream.topic === topic),
       (err) => {
         throw err.errorMessage;
-      });
+      }
+    );
   }
 
-  getStream(streamName: string, local: boolean, isCollectionStream: boolean = false) {
+  getStream(
+    streamName: string,
+    local: boolean,
+    isCollectionStream: boolean = false
+  ) {
     const stream = this.stream(streamName, local, isCollectionStream);
     return stream;
   }
   //getStreams() { } // already present
-  getStreamStats(streamName: string, local: boolean, isCollectionStream: boolean = false) {
+  getStreamStats(
+    streamName: string,
+    local: boolean,
+    isCollectionStream: boolean = false
+  ) {
     const stream = this.stream(streamName, local, isCollectionStream);
     return stream.getStreamStatistics();
   }
 
-  async createStreamProducer(streamName: string, local: boolean, isCollectionStream: boolean = false, dcName: string, params: { [key: string]: any } = {}) {
+  async createStreamProducer(
+    streamName: string,
+    local: boolean,
+    isCollectionStream: boolean = false,
+    dcName: string,
+    params: { [key: string]: any } = {}
+  ) {
     const otp = await this.getOtp();
     const stream = this.stream(streamName, local, isCollectionStream, otp);
     return stream.producer(dcName, params);
   }
 
-  async createStreamReader(streamName: string, local: boolean, isCollectionStream: boolean = false, subscriptionName: string, dcName: string, params: { [key: string]: any } = {}) {
+  async createStreamReader(
+    streamName: string,
+    local: boolean,
+    isCollectionStream: boolean = false,
+    subscriptionName: string,
+    dcName: string,
+    params: { [key: string]: any } = {}
+  ) {
     const otp = await this.getOtp();
     const stream = this.stream(streamName, local, isCollectionStream, otp);
     return stream.consumer(subscriptionName, dcName, params);
   }
 
-  async subscribe(streamName: string, local: boolean, isCollectionStream: boolean = false, subscriptionName: string, dcName: string, params: { [key: string]: any } = {}) {
+  async subscribe(
+    streamName: string,
+    local: boolean,
+    isCollectionStream: boolean = false,
+    subscriptionName: string,
+    dcName: string,
+    params: { [key: string]: any } = {}
+  ) {
     const otp = await this.getOtp();
     const stream = this.stream(streamName, local, isCollectionStream, otp);
     return stream.consumer(subscriptionName, dcName, params);
   } // how is it same as create  web socket handler
 
   // unsubscribe(){} already available
-  getStreamBacklog(streamName: string, local: boolean, isCollectionStream: boolean = false) {
+  getStreamBacklog(
+    streamName: string,
+    local: boolean,
+    isCollectionStream: boolean = false
+  ) {
     const stream = this.stream(streamName, local, isCollectionStream);
     return stream.backlog();
   }
@@ -302,12 +398,21 @@ export class C8Client extends Fabric {
     return this.clearBacklog();
   }
 
-  getStreamSubscriptions(streamName: string, local: boolean, isCollectionStream: boolean = false) {
+  getStreamSubscriptions(
+    streamName: string,
+    local: boolean,
+    isCollectionStream: boolean = false
+  ) {
     const stream = this.stream(streamName, local, isCollectionStream);
-    return stream.getSubscriptionList()
+    return stream.getSubscriptionList();
   }
 
-  deleteStreamSubscription(streamName: string, subscription: string, local: boolean, isCollectionStream: boolean = false, ) {
+  deleteStreamSubscription(
+    streamName: string,
+    subscription: string,
+    local: boolean,
+    isCollectionStream: boolean = false
+  ) {
     const stream = this.stream(streamName, local, isCollectionStream);
     return stream.deleteSubscription(subscription);
   }
@@ -369,19 +474,36 @@ export class C8Client extends Fabric {
     return graph.addEdgeDefinition(definition);
   }
 
-  updateEdge(graphName: string, collectionName: string, documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
+  updateEdge(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    newValue: any,
+    opts: any = {}
+  ) {
     const graph = this.graph(graphName);
     const graphEdgeCollection = graph.edgeCollection(collectionName);
     return graphEdgeCollection.update(documentHandle, newValue, opts);
   }
 
-  replaceEdge(graphName: string, collectionName: string, documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
+  replaceEdge(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    newValue: any,
+    opts: any = {}
+  ) {
     const graph = this.graph(graphName);
     const graphEdgeCollection = graph.edgeCollection(collectionName);
     return graphEdgeCollection.replace(documentHandle, newValue, opts);
   }
 
-  deleteEdge(graphName: string, collectionName: string, documentHandle: DocumentHandle, opts: any = {}) {
+  deleteEdge(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    opts: any = {}
+  ) {
     const graph = this.graph(graphName);
     const graphEdgeCollection = graph.edgeCollection(collectionName);
     return graphEdgeCollection.remove(documentHandle, opts);
@@ -392,23 +514,36 @@ export class C8Client extends Fabric {
     return graph.edgeCollections();
   }
 
-  linkEdge(graphName: string, collectionName: string, data: any, fromId: DocumentHandle, toId: DocumentHandle, opts?: { waitForSync?: boolean }) {
+  linkEdge(
+    graphName: string,
+    collectionName: string,
+    data: any,
+    fromId: DocumentHandle,
+    toId: DocumentHandle,
+    opts?: { waitForSync?: boolean }
+  ) {
     const graph = this.graph(graphName);
     const graphEdgeCollection = graph.edgeCollection(collectionName);
     return graphEdgeCollection.save(data, fromId, toId, opts);
   }
 
-  hasUser(userName: string, email: string = '') {
+  hasUser(userName: string, email: string = "") {
     const user = this.user(userName, email);
     return user.hasUser();
   }
 
-  createUser(userName: string, email: string, passwd: string = "", active: boolean = true, extra: object = {}) {
+  createUser(
+    userName: string,
+    email: string,
+    passwd: string = "",
+    active: boolean = true,
+    extra: object = {}
+  ) {
     const user = this.user(userName, email);
     return user.createUser(passwd, active, extra);
   }
 
-  deleteUser(userName: string, email: string = '') {
+  deleteUser(userName: string, email: string = "") {
     const user = this.user(userName, email);
     return user.deleteUser();
   }
@@ -417,27 +552,48 @@ export class C8Client extends Fabric {
     return this.getAllUsers();
   }
 
-  getUser(userName: string, email: string = '') {
+  getUser(userName: string, email: string = "") {
     const user = this.user(userName, email);
     return user.getUserDeatils();
   }
 
-  updateUser(userName: string, email: string = '', passwd?: string, active?: boolean, extra?: object) {
+  updateUser(
+    userName: string,
+    email: string = "",
+    passwd?: string,
+    active?: boolean,
+    extra?: object
+  ) {
     const user = this.user(userName, email);
     return user.modifyUser({ passwd, active, extra });
   }
 
-  replaceUser(userName: string, email: string = '', passwd: string, active?: boolean, extra?: object) {
+  replaceUser(
+    userName: string,
+    email: string = "",
+    passwd: string,
+    active?: boolean,
+    extra?: object
+  ) {
     const user = this.user(userName, email);
     return user.replaceUser({ passwd, active, extra });
   }
 
-  getPermissions(userName: string, email: string = '', isFullRequested?: boolean) {
+  getPermissions(
+    userName: string,
+    email: string = "",
+    isFullRequested?: boolean
+  ) {
     const user = this.user(userName, email);
     return user.getAllDatabases(isFullRequested);
   }
 
-  getPermission(userName: string, email: string = '', databaseName: string, collectionName?: string) {
+  getPermission(
+    userName: string,
+    email: string = "",
+    databaseName: string,
+    collectionName?: string
+  ) {
     const user = this.user(userName, email);
     if (!!collectionName) {
       return user.getCollectionAccessLevel(databaseName, collectionName);
@@ -445,15 +601,30 @@ export class C8Client extends Fabric {
     return user.getDatabaseAccessLevel(databaseName);
   }
 
-  updatePermission(userName: string, email: string = '', fabricName: string, permission: "rw" | "ro" | "none", collectionName?: string) {
+  updatePermission(
+    userName: string,
+    email: string = "",
+    fabricName: string,
+    permission: "rw" | "ro" | "none",
+    collectionName?: string
+  ) {
     const user = this.user(userName, email);
     if (!!collectionName) {
-      return user.setCollectionAccessLevel(fabricName, collectionName, permission)
+      return user.setCollectionAccessLevel(
+        fabricName,
+        collectionName,
+        permission
+      );
     }
     return user.setDatabaseAccessLevel(fabricName, permission);
   }
 
-  resetPermission(userName: string, email: string = '', fabricName: string, collectionName?: string) {
+  resetPermission(
+    userName: string,
+    email: string = "",
+    fabricName: string,
+    collectionName?: string
+  ) {
     const user = this.user(userName, email);
     if (!!collectionName) {
       return user.clearCollectionAccessLevel(fabricName, collectionName);
