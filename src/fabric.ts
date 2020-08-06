@@ -67,9 +67,9 @@ export type TransactionCollections =
   | C8Collection
   | (string | C8Collection)[]
   | {
-    write?: string | C8Collection | (string | C8Collection)[];
-    read?: string | C8Collection | (string | C8Collection)[];
-  };
+      write?: string | C8Collection | (string | C8Collection)[];
+      read?: string | C8Collection | (string | C8Collection)[];
+    };
 
 export type TransactionOptions = {
   lockTimeout?: number;
@@ -550,33 +550,43 @@ export class Fabric {
     streamName: string,
     local: boolean,
     isCollectionStream: boolean = false,
-    otp: string = ''
+    otp: string = ""
   ): Stream {
-    return new Stream(this._connection, streamName, local, isCollectionStream, otp);
+    return new Stream(
+      this._connection,
+      streamName,
+      local,
+      isCollectionStream,
+      otp
+    );
   }
 
-  getStreams(global: boolean = false) {
+  /* -------------------------------- DUPLICATE ------------------------------- */
+  // TODO: @RACHIT choose which Fn to deprecate
+
+  getStreams(global: boolean | undefined = undefined) {
     return this._connection.request(
       {
         method: "GET",
         path: "/streams",
-        qs: `global=${global}`,
+        qs: global === undefined ? "" : `global=${global}`,
       },
       (res) => res.body
     );
   }
 
-  getAllStreams(local: boolean = false) {
+  getAllStreams() {
     return this._connection.request(
       {
         method: "GET",
         path: "/streams",
-        qs: `local=${local}`,
       },
       (res) => res.body
     );
   }
 
+  /* ----------------------------------- --- ---------------------------------- */
+  // TODO: RACHIT/VIKAS DO WE STILL HAVE THIS API?
   listPersistentStreams(local: boolean = false) {
     return this._connection.request(
       {

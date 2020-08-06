@@ -22,7 +22,7 @@ export type wsCallbackObj = {
 export class Stream {
   private _connection: Connection;
   name: string;
-  local: boolean;
+  global: boolean;
   isCollectionStream: boolean;
   topic: string;
   otp: string;
@@ -32,17 +32,23 @@ export class Stream {
     name: string,
     local: boolean = false,
     isCollectionStream: boolean = false,
-    otp: string = '',
+    otp: string = ""
   ) {
     this._connection = connection;
     this.isCollectionStream = isCollectionStream;
-    this.local = local;
+
+    /**
+     * CHANGED this.local implementation to this.global
+     * keeping the stream as local so !local
+     */
+
+    this.global = !local;
     this.name = name;
     this.otp = otp;
 
     let topic = this.name;
     if (!this.isCollectionStream) {
-      if (this.local) topic = `c8locals.${this.name}`;
+      if (this.global) topic = `c8locals.${this.name}`;
       else topic = `c8globals.${this.name}`;
     }
     this.topic = topic;
@@ -58,7 +64,7 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(true),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -70,7 +76,7 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -82,7 +88,7 @@ export class Stream {
       {
         method: "GET",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -94,7 +100,7 @@ export class Stream {
       {
         method: "GET",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -106,7 +112,7 @@ export class Stream {
       {
         method: "DELETE",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -118,7 +124,7 @@ export class Stream {
       {
         method: "PUT",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -130,7 +136,7 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -142,7 +148,7 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -154,7 +160,7 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -166,7 +172,7 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -178,7 +184,7 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -190,7 +196,7 @@ export class Stream {
       {
         method: "GET",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -202,7 +208,7 @@ export class Stream {
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -218,20 +224,18 @@ export class Stream {
       throw "Invalid DC name";
 
     const persist = StreamConstants.PERSISTENT;
-    const region = this.local ? "c8local" : "c8global";
+    const region = this.global ? "c8local" : "c8global";
     const tenant = this._connection.getTenantName();
     const queryParams = stringify({
       otp: this.otp,
-      ...params
+      ...params,
     });
     let dbName = this._connection.getFabricName();
 
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
-    let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
-      this.topic
-      }/${subscriptionName}`;
+    let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${this.topic}/${subscriptionName}`;
 
     // Appending query params to the url
     consumerUrl = `${consumerUrl}?${queryParams}`;
@@ -247,19 +251,17 @@ export class Stream {
       throw "Invalid DC name";
 
     const persist = StreamConstants.PERSISTENT;
-    const region = this.local ? "c8local" : "c8global";
+    const region = this.global ? "c8local" : "c8global";
     const tenant = this._connection.getTenantName();
     const queryParams = stringify({
       otp: this.otp,
-      ...params
+      ...params,
     });
     let dbName = this._connection.getFabricName();
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
-    let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
-      this.topic
-      }`;
+    let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.topic}`;
     // Appending query params to the url
     producerUrl = `${producerUrl}?${queryParams}`;
 
