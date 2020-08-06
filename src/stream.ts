@@ -48,8 +48,8 @@ export class Stream {
 
     let topic = this.name;
     if (!this.isCollectionStream) {
-      if (this.global) topic = `c8locals.${this.name}`;
-      else topic = `c8globals.${this.name}`;
+      if (this.global) topic = `c8globals.${this.name}`;
+      else topic = `c8locals.${this.name}`;
     }
     this.topic = topic;
   }
@@ -224,7 +224,7 @@ export class Stream {
       throw "Invalid DC name";
 
     const persist = StreamConstants.PERSISTENT;
-    const region = this.global ? "c8local" : "c8global";
+    const region = this.global ? "c8global" : "c8local";
     const tenant = this._connection.getTenantName();
     const queryParams = stringify({
       otp: this.otp,
@@ -235,7 +235,9 @@ export class Stream {
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
-    let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${this.topic}/${subscriptionName}`;
+    let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
+      this.topic
+    }/${subscriptionName}`;
 
     // Appending query params to the url
     consumerUrl = `${consumerUrl}?${queryParams}`;
@@ -251,7 +253,7 @@ export class Stream {
       throw "Invalid DC name";
 
     const persist = StreamConstants.PERSISTENT;
-    const region = this.global ? "c8local" : "c8global";
+    const region = this.global ? "c8global" : "c8local";
     const tenant = this._connection.getTenantName();
     const queryParams = stringify({
       otp: this.otp,
@@ -261,7 +263,9 @@ export class Stream {
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
-    let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.topic}`;
+    let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
+      this.topic
+    }`;
     // Appending query params to the url
     producerUrl = `${producerUrl}?${queryParams}`;
 
