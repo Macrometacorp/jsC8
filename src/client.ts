@@ -80,14 +80,19 @@ export class C8Client extends Fabric {
     return this.listCollections(excludeSystem);
   }
 
-  onCollectionChange(
+  async onCollectionChange(
     collectionName: string,
     dcName: string,
     subscriptionName: string
   ) {
-    // need to check not working
-    const collection = this.collection(collectionName);
-    return collection.onChange(dcName, subscriptionName);
+    const dcList = await this.getDcList();
+    let dcUrl = dcList[0].dcInfo[0].tags.url;
+    if (dcName) {
+      dcUrl = dcName;
+    }
+    const otp = await this.getOtp();
+    const collection = this.collection(collectionName, otp);
+    return collection.onChange(dcUrl, subscriptionName);
   }
 
   getDocument(
@@ -102,7 +107,7 @@ export class C8Client extends Fabric {
   getDocumentMany(collectionName: string, limit?: number, skip?: number) {
     const getDocumentsQuery = `FOR doc IN ${collectionName} ${
       limit ? `limit ${skip ? `${skip},` : ""}${limit}` : ""
-    } return doc`;
+      } return doc`;
     return this.executeQuery(getDocumentsQuery);
   }
 
@@ -273,20 +278,20 @@ export class C8Client extends Fabric {
     return this.terminateRunningQuery(queryId);
   }
 
-  createRestql(name: string, parameter: any = {}, value: string) {
-    return this.saveQuery(name, parameter, value);
+  createRestql(restqlName: string, parameter: any = {}, value: string) {
+    return this.saveQuery(restqlName, parameter, value);
   }
 
-  executeRestql(queryName: string, bindVars: any = {}) {
-    return this.executeSavedQuery(queryName, bindVars);
+  executeRestql(restqlName: string, bindVars: any = {}) {
+    return this.executeSavedQuery(restqlName, bindVars);
   }
 
-  updateRestql(queryName: string, parameter: any = {}, value: string) {
-    return this.updateSavedQuery(queryName, parameter, value);
+  updateRestql(restqlName: string, parameter: any = {}, value: string) {
+    return this.updateSavedQuery(restqlName, parameter, value);
   }
 
-  deleteRestql(queryName: string) {
-    return this.deleteSavedQuery(queryName);
+  deleteRestql(restqlName: string) {
+    return this.deleteSavedQuery(restqlName);
   }
 
   getRestqls() {
@@ -316,7 +321,7 @@ export class C8Client extends Fabric {
     // @VIKAS Cant we use any other api eg: /_api/streams/c8locals.test/stats
     // If 200 api exits else api does not exist
 
-    return this.getAllStreams().then(
+    return this.getStreams(!local).then(
       (res) => !!res.result.find((stream: any) => stream.topic === topic),
       (err) => {
         throw err.errorMessage;
@@ -349,22 +354,32 @@ export class C8Client extends Fabric {
     dcName: string,
     params: { [key: string]: any } = {}
   ) {
+    const dcList = await this.getDcList();
+    let dcUrl = dcList[0].dcInfo[0].tags.url;
+    if (dcName) {
+      dcUrl = dcName;
+    }
     const otp = await this.getOtp();
     const stream = this.stream(streamName, local, isCollectionStream, otp);
-    return stream.producer(dcName, params);
+    return stream.producer(dcUrl, params);
   }
 
   async createStreamReader(
     streamName: string,
+    subscriptionName: string,
     local: boolean,
     isCollectionStream: boolean = false,
-    subscriptionName: string,
     dcName: string,
     params: { [key: string]: any } = {}
   ) {
+    const dcList = await this.getDcList();
+    let dcUrl = dcList[0].dcInfo[0].tags.url;
+    if (dcName) {
+      dcUrl = dcName;
+    }
     const otp = await this.getOtp();
     const stream = this.stream(streamName, local, isCollectionStream, otp);
-    return stream.consumer(subscriptionName, dcName, params);
+    return stream.consumer(subscriptionName, dcUrl, params);
   }
 
   async subscribe(
@@ -375,9 +390,14 @@ export class C8Client extends Fabric {
     dcName: string,
     params: { [key: string]: any } = {}
   ) {
+    const dcList = await this.getDcList();
+    let dcUrl = dcList[0].dcInfo[0].tags.url;
+    if (dcName) {
+      dcUrl = dcName;
+    }
     const otp = await this.getOtp();
     const stream = this.stream(streamName, local, isCollectionStream, otp);
-    return stream.consumer(subscriptionName, dcName, params);
+    return stream.consumer(subscriptionName, dcUrl, params);
   } // how is it same as create  web socket handler
 
   // unsubscribe(){} already available

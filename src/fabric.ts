@@ -253,8 +253,8 @@ export class Fabric {
 
   // Collection manipulation
 
-  collection(collectionName: string): DocumentCollection {
-    return new DocumentCollection(this._connection, collectionName);
+  collection(collectionName: string, otp?: string): DocumentCollection {
+    return new DocumentCollection(this._connection, collectionName, otp);
   }
 
   edgeCollection(collectionName: string): EdgeCollection {

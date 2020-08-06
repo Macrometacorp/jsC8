@@ -162,3 +162,74 @@ const doc = await collection.save(data, opts)
 assert.equal(doc1._id, 'my-docs/' + doc1._key);
 assert.equal(doc1.new.some, data.some);
 ```
+
+
+The Simple Way
+
+**Examples**
+
+```js
+//Instance with login
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+```
+
+## client.getDocument
+
+`async client.getDocument(collectionName, documentHandle, [graceful]): Object`
+
+Returns document for given collection
+
+```js
+const doc = await client.getDocument('some-collection', 'some-key');
+```
+
+## client.getDocumentMany
+
+`async client.getDocumentMany(collectionName, [limit], [skip]): Array<Object>`
+
+Returns documents for given collection
+
+**Arguments**
+
+- **limit**: `number`
+
+  returns the recent most documents of given limit
+
+- **skip**: `number`
+
+  skips the recent most documents from given limit
+
+```js
+const docs = await client.getDocumentMany('some-collection');
+```
+
+## client.insertDocument
+
+`async client.insertDocument(collectionName, data, [opts]): Object`
+
+Inserts document in collection
+
+```js
+const insertedDoc = await client.insertDocument("some-collection", {some: 'data'});
+```
+
+## client.insertDocumentMany
+
+`async client.insertDocumentMany(collectionName, data, [opts]): Array<Object>`
+
+Inserts documents in collection
+
+```js
+const insertedDocs = await client.insertDocumentMany("some-collection", [{some: 'data'}]);
+```
+
+## client.insertDocumentFromFile
+
+`async client.insertDocumentFromFile(collectionName, csvPath, [opts]): Array<Object>`
+
+Inserts documents from file. Only accepts CSV file.
+
+```js
+const insertedDocsFromFile  = await client.insertDocumentFromFile("some-collection", '~/data.csv');
+```

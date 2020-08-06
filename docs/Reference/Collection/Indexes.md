@@ -320,3 +320,103 @@ const index = await collection.createCapConstraint({size: 20})
 // the index has been created with the handle `index.id`
 assert.equal(index.size, 20);
 ```
+
+The Simple Way
+
+**Examples**
+
+```js
+//Instance with login
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+```
+
+## client.listCollectionIndexes
+
+`async client.listCollectionIndexes(collectionName): Array<Object>`
+
+Returns list of indexes for given collection
+
+```js
+const collectionIndexes = await client.listCollectionIndexes("some-collection");
+```
+
+## client.addHashIndex
+
+`async client.addHashIndex(collectionName, fields, [opts]): Object`
+
+Creates a Hash index on the collection.
+
+```js
+const hashIndex = await client.addHashIndex("some-collection", 'favorite-color');
+```
+
+## client.addGeoIndex
+
+`async client.addGeoIndex(collectionName, fields, [opts]): Object`
+
+Creates a Geo index on the collection.
+
+```js
+const geoIndex = await client.addGeoIndex("some-collection", 'favorite-color');
+```
+
+## client.addSkiplistIndex
+
+`async client.addSkiplistIndex(collectionName, fields, [opts]): Object`
+
+Creates a skiplist index on the collection.
+
+```js
+const skiplistIndex = await client.addSkiplistIndex("some-collection", 'favorite-color');
+```
+
+## client.addPersistentIndex
+
+`async client.addPersistentIndex(collectionName, fields, [opts]): Object`
+
+Creates a Persistent index on the collection.
+
+```js
+const persistentIndex = await client.addPersistentIndex("some-collection", 'favorite-color');
+```
+
+## client.addFullTextIndex
+
+`async client.addFullTextIndex(collectionName, fields, [minLength]): Object`
+
+Creates a FullText index on the collection.
+
+```js
+const fullTextIndex = await client.addFullTextIndex("some-collection", 'description');
+```
+
+## client.addTtlIndex
+
+`async client.addTtlIndex(collectionName, fields, expireAfter): Object`
+
+Creates a Ttl index on the collection.
+
+```js
+const ttlIndex = await client.addTtlIndex("some-collection", 'description', 0);
+```
+
+## client.deleteIndex
+
+`async client.deleteIndex(collectionName, indexName): Object`
+
+Deletes index with given index name from given collection
+
+```js
+const deletedIndex = await client.deleteIndex("some-collection", 'some-index');
+```
+
+## client.getCollectionIndexes
+
+`async client.getCollectionIndexes(collectionName, indexName): Array<Object>`
+
+Returns list of indexes for given collection
+
+```js
+const collectionIndexes = await client.getCollectionIndexes("some-collection");
+```

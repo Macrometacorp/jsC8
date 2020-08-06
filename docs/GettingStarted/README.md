@@ -120,6 +120,12 @@ const client = new jsc8(`https://${regionURL}`);
 // login with root user
 await client.login(email, rootPassword);
 
+// login with token
+const client = new jsc8({url: `https://${regionURL}`, token:"XXXX"});
+
+// login with apikey
+const client = new jsc8({url: `https://${regionURL}`, apikey:"XXXX"});
+
 //--------------------------------------------------------------------------------------
 // create a tenant
 const guestTenant = client.tenant(tenantEmail);
@@ -155,6 +161,21 @@ listener.on('open',async () => {
   });
 listener.on('close',() => console.log("connection closed");
 
+// OR The Simple Way
+await client.createCollection(collectionName);
+const listener = await client.onCollectionChange(collectionName);
+
+listener.on('message',(msg) => console.log("message=>", msg));
+listener.on('open',async () => {
+    console.log("connection open");
+    //manipulate the collection here
+
+    // add new documents to the collection
+    await client.insertDocument({ firstname: "Jean", lastname: "Picard" });
+    await client.insertDocument({ firstname: "Bruce", lastname: "Wayne" });
+  });
+listener.on('close',() => console.log("connection closed");
+
 //--------------------------------------------------------------------------------------
 // Querying is done by C8QL
 // you can directly pass the query
@@ -179,6 +200,11 @@ await persistent_globalStream.createStream();
 const persistent_localStream = client.stream(streamName, true);
 await persistent_localStream.createStream();
 
+// OR The Simple Way
+const persistent_globalStream = await client.createStream(streamName, false);
+
+const persistent_localStream = await client.createStream(streamName, true);
+
 //--------------------------------------------------------------------------------------
 // Subscribe to a stream
 const stream = client.stream(streamName, false);
@@ -186,6 +212,13 @@ await stream.createStream();
 
 const consumer = stream.consumer("my-sub", regionURL);
 const publisher = stream.producer(regionURL);
+
+// OR Simple way
+await client.createStream(streamName, false);
+
+const consumer = await client.createStreamReader("my-sub", regionURL);
+const publisher = await client.createStreamProducer(regionURL);
+
 
 // Publish to a stream
 function publish(payload) {
@@ -216,6 +249,9 @@ client.createFabric("spotFabric", [{ username: "root" }], {
 const collection = client.collection(collectionName);
 await collection.create({ isSpot: true });
 
+// OR The Simple Way of Collection Creation
+await client.createCollection(collectionName, { isSpot: true });
+
 //--------------------------------------------------------------------------------------
 // Local Collections
 await client.login(rootEmail, rootPassword);
@@ -231,6 +267,9 @@ client.createFabric("spotFabric", [{ username: "root" }], {
 // Then create a collection that is designated as a local collection.
 const collection = client.collection(collectionName);
 await collection.create({ isLocal: true });
+
+// OR The Simple Way of Collection Creation
+await client.createCollection(collectionName, { isLocal: true });
 ```
 
 For C8QL please check out the [c8ql template tag](https://macrometa.gitbook.io/c8/c8ql/fundamentals/bindparameters) for writing parametrized C8QL queries without making your code vulnerable to injection attacks.

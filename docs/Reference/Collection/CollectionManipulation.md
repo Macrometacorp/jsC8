@@ -132,8 +132,100 @@ Deletes the collection from the client.
 ```js
 const client = new jsc8();
 await client.login(email, password);
-client.useTenant(tenant-name)
+client.useTenant(tenant-name);
 const collection = client.collection('some-collection');
 await collection.drop();
 // the collection "some-collection" no longer exists
+```
+
+The Simple Way
+
+**Examples**
+
+```js
+//Instance with login
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+```
+
+## client.createCollection
+
+`async collection.createCollection(collectionName, [properties]): Object`
+
+Creates collection
+
+```js
+await client.createCollection('some-collection');
+```
+
+## client.deleteCollection
+
+`async collection.deleteCollection(collectionName, [properties]): Object`
+
+Deletes collection
+
+```js
+await client.deleteCollection('some-collection');
+```
+
+## client.hasCollection
+
+`async collection.hasCollection(collectionName): Boolean`
+
+Returns true if collection exists else false
+
+```js
+await client.hasCollection('some-collection');
+```
+
+## client.getCollection
+
+`async collection.getCollection(collectionName): Object`
+
+Returns collection
+
+```js
+const collection = await client.getCollection('some-collection');
+```
+
+## client.getCollections
+
+`async collection.getCollections(collectionName): Array<Object>`
+
+Returns collections
+
+```js
+const collections = await client.getCollections('some-collection');
+```
+
+## client.getCollectionIds
+
+`async collection.getCollectionIds(collectionName): Array<Object>`
+
+Returns collection Ids
+
+```js
+const collectionIds = await client.getCollectionIds('some-collection');
+```
+
+## client.getCollectionKeys
+
+`async collection.getCollectionKeys(collectionName): Array<Object>`
+
+Returns collections keys
+
+```js
+const collectionKeys = await client.getCollectionKeys('some-collection');
+```
+
+## client.onCollectionChange
+
+`async client.onCollectionChange(collectionName, [subscriptionName], [dcName]): void`
+
+```js
+const listener = client.onCollectionChange("some-collection");
+
+listener.on('message',(msg) => console.log("message=>", msg));
+listener.on('open',() => console.log("connection open"));
+listener.on('close',() => console.log("connection closed");
 ```

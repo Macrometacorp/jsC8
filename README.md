@@ -108,6 +108,8 @@ The outcome of any of the three calls should be identical.
 
 ## Login
 
+### With email and password
+
 To start working, you first have to login. This gets the auth token and is added in each API call. Continuing from the previous snippet, the following statement will log you into the c8 using the provided credentials.
 
 ```js
@@ -125,8 +127,40 @@ login().then(console.log);
 To use the demotenant, we need to use client.useTenant as below
 
 ```js
-client.useTenant(tenant - name);
+client.useTenant(tenant_name);
 ```
+
+### With token
+
+If you want to login with token then you just need to pass the token in the jsc8 connection itself wrapping in Object with your region URL.
+
+```js
+const jsc8 = require("jsc8");
+client = new jsc8({ url: "MY-C8-URL", token: "XXXX" });
+```
+
+or to have failover support
+
+```js
+const jsc8 = require("jsc8");
+client = new jsc8({ url: ["MY-C8-URL1", "MY-C8-URL2"], token: "XXXX" });
+```
+
+### With apikey
+
+If you want to login with apikey then you just need to pass the apikey in the jsc8 connection itself wrapping in Object with your region URL.
+
+```js
+const jsc8 = require("jsc8");
+client = new jsc8({ url: "MY-C8-URL", apikey: "XXXX" });
+```
+
+or to have failover support
+
+```js
+const jsc8 = require("jsc8");
+client = new jsc8({ url: ["MY-C8-URL1", "MY-C8-URL2"], apikey: "XXXX" });
+``` 
 
 ## Create Geo-Fabric
 
@@ -237,6 +271,30 @@ async function createCollection() {
 createCollection().then(console.log);
 ```
 
+The Simple Way
+
+```js
+const jsc8 = require("jsc8");
+
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+
+async function createCollection() {
+  let collectionDetails;
+  try {
+    collectionDetails = await clinet.createCollection("employees");
+    await console.log("The collection details are: ", collectionDetails);
+  } catch (e) {
+    return "Collection creation did not succeed due to " + e;
+  }
+
+  return "Collection " + collectionDetails.name + " created successfully";
+}
+
+createCollection().then(console.log);
+```
+
 ## Create Index
 
 Let's add a hash_index called `emails` to our collection `employees`. Please refer to user guide for details on other available index types.
@@ -283,8 +341,6 @@ createIndex().then(console.log);
 Let's insert documents to the `employees` collection as shown below.
 
 ```js
-const jsc8 = require("jsc8");
-const client = new jsc8("https://gdn1.macrometa.io");
 
 const docJean = {
   _key: "Jean",
@@ -315,6 +371,10 @@ const docBruce = {
 };
 
 const docs = [docJean, docJames, docHan, docBruce];
+```
+```js
+const jsc8 = require("jsc8");
+const client = new jsc8("https://gdn1.macrometa.io");
 
 async function populate() {
   await console.log("Logging in...");
@@ -332,6 +392,23 @@ async function populate() {
   for (let doc of docs) {
     await collection.save(doc);
   }
+  await console.log("collection populated with documents");
+}
+
+populate();
+```
+
+The Simple Way
+
+```js
+const jsc8 = require("jsc8");
+
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+async function populate() {
+  await console.log("Creating the collection object to be used...");
+  await client.insertDocumentMany("employees", docs);
   await console.log("collection populated with documents");
 }
 
@@ -366,6 +443,22 @@ async function c8Queries() {
     c8ql`FOR employee IN employees RETURN employee`
   );
   const result = await cursor.all();
+  await console.log(result);
+}
+
+c8Queries();
+```
+
+The Simple Way
+
+```js
+const jsc8 = require("jsc8");
+
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+async function c8Queries() {
+  const result = await client.executeQuery("FOR employee IN employees RETURN employee");
   await console.log(result);
 }
 
@@ -409,6 +502,31 @@ async function realTimeListener() {
 realTimeListener();
 ```
 
+The Simple Way
+
+```js
+const jsc8 = require("jsc8");
+
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+async function callback_fn(collection) {
+  await console.log("Connection open on ", collection.name);
+}
+
+async function realTimeListener() {
+  const listener = client.onCollectionChange("employees");
+
+  listener.on('message',(msg) => console.log("message=>", msg));
+  listener.on('open',() => {
+      this.callback_fn(collection);
+    });
+  listener.on('close',() => console.log("connection closed");
+}
+
+realTimeListener();
+```
+
 ## Create Streams, Publish and Subscribe
 
 Creating streams in C8 is a 1 step operation. The stream can be either a `local` stream or could be a `geo-replicated` stream.
@@ -435,6 +553,38 @@ async function streamDemo() {
 
   const consumer = stream.consumer("my-sub", "gdn1.macrometa.io");
   const publisher = stream.producer("gdn1.macrometa.io");
+
+  consumer.on("message", (msg) => {
+    console.log(msg);
+  });
+
+  publisher.on("open", () => {
+    publish(publisher, "Hello World");
+  });
+}
+
+streamDemo();
+```
+
+The Simple Way
+
+```js
+const jsc8 = require("jsc8");
+
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+function publish(publisher, payload) {
+  return publisher.send({ payload });
+}
+
+async function streamDemo() {
+
+  await client.createStream("newStreamFromJSC8", false);
+  //Here the last boolean value tells if the stream is global or local. false means that it is local.
+
+  const consumer = client.createStreamReader("newStreamFromJSC8", "my-sub");
+  const publisher = client.createStreamProducer("newStreamFromJSC8");
 
   consumer.on("message", (msg) => {
     console.log(msg);
@@ -532,6 +682,86 @@ async function restqldemo() {
   console.log("Count:");
   console.log(count.result);
   await client.executeSavedQuery("deleteData");
+}
+
+restqldemo().then(console.log("Starting Execution"));
+```
+
+The Simple Way
+
+```js
+const jsc8 = require("jsc8");
+
+//Variables
+const fed_url = "https://gdn1.macrometa.io";
+const collection_name =
+  "addresses" + Math.floor(1000 + Math.random() * 9000).toString();
+
+//Queries
+const insert_data =
+  "INSERT {'firstname':@firstname, 'lastname':@lastname, 'email':@email, 'zipcode':@zipcode, '_key': 'abc'} IN " +
+  collection_name;
+
+const get_data = "FOR doc IN " + collection_name + " RETURN doc";
+
+const update_data =
+  "UPDATE 'abc' WITH {'lastname': @lastname } IN " + collection_name;
+
+const delete_data = "REMOVE 'abc' IN " + collection_name;
+
+const get_count = "RETURN COUNT(FOR doc IN " + collection_name + " RETURN 1)";
+
+const client = new jsc8({url: fed_url, token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: fed_url, apikey: "XXXX"});
+
+
+async function restqldemo() {
+  console.log("------- CREATE GEO-REPLICATED COLLECTION  ------");
+  await collection.createCollection(collection_name);
+  console.log("Collection " + collection_name + " created.\n");
+
+  console.log("------- CREATE THE QUERIES  ------");
+
+  await client.createRestql("insertData", {}, insert_data);
+
+  await client.createRestql("getData", {}, get_data);
+  await client.createRestql("updateData", {}, update_data);
+
+  await client.createRestql("deleteData", {}, delete_data);
+
+  await client.createRestql("getCount", {}, get_count);
+
+  console.log("Queries CREATED Successfully\n");
+
+  console.log("------- EXECUTING THE QUERIES  ------");
+
+  bindVars = {
+    firstname: "john",
+    lastname: "doe",
+    email: "john.doe@macrometa.io",
+    zipcode: "511037",
+  };
+
+  await client.executeRestql("insertData", bindVars);
+  console.log("Data Inserted \n");
+
+  const res = await client.executeRestql("getData");
+  console.log("Output of get data query:");
+  console.log(res.result);
+  console.log("\n");
+
+  await client.executeRestql("updateData", { lastname: "mathews" });
+  console.log("Data updated \n");
+
+  const data = await client.executeRestql("getData");
+  console.log("Output of get data query after update:");
+  console.log(data.result);
+  console.log("\n");
+
+  const count = await client.executeRestql("getCount");
+  console.log("Count:");
+  console.log(count.result);
+  await client.executeRestql("deleteData");
 }
 
 restqldemo().then(console.log("Starting Execution"));

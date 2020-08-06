@@ -213,3 +213,76 @@ await collection.remove('some-doc');
 await collection.remove('some-collection/some-doc');
 // document 'some-collection/some-doc' no longer exists
 ```
+
+The Simple Way
+
+**Examples**
+
+```js
+//Instance with login
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+```
+
+## client.updateDocument
+
+`async client.updateDocument(collectionName, documentHandle, newValue, [opts]): Object`
+
+Updates document with given value in collection
+
+```js
+const updatedDoc  = await client.updateDocument("some-collection", "some_key", { some: "data" });
+```
+
+## client.updateDocuments
+
+`async client.updateDocuments(collectionName, Array<documentHandle>, [opts]): Array<Object>`
+
+Updates documents with given value in collection
+
+```js
+const updatedDocs = await client.updateDocuments("some-collection", [{ _key: "some_key", some: "data" }]);
+```
+Note: If you want to update many documents you must include `_key` in each docs.
+
+## client.replaceDocument
+
+`async client.replaceDocument(collectionName, documentHandle, newValue, [opts]): Object`
+
+Replaces document with given value in collection
+
+```js
+const replacedDoc  = await client.replaceDocument("some-collection", "some_key", { some: "data" });
+```
+
+## client.replaceDocumentMany
+
+`async client.replaceDocumentMany(collectionName, Array<documentHandle>, [opts]): Array<Object>`
+
+Replaces documents with given value in collection
+
+```js
+const replacedDocs = await client.replaceDocumentMany("some-collection", [{ _key: "some_key", some: "data" }]);
+```
+Note: Documents which need to be replaced must include `_key`.
+
+## client.deleteDocument
+
+`async client.deleteDocument(collectionName, documentHandle, [opts]): Object`
+
+Deletes document in collection
+
+```js
+const deletedDoc  = await client.deleteDocument("some-collection", "some_key", { some: "data" });
+```
+
+## client.deleteDocumentMany
+
+`async client.deleteDocumentMany(collectionName, Array<string> | Array<documentHandle>, [opts]): Array<Object>`
+
+Deletes documents in collection
+
+```js
+const deletedDocs = await client.deleteDocumentMany("some-collection", [{ _key: "some_key", some: "data" }]);
+```
+Note: Documents which need to be deleted must include `_key` if using `Array<documentHandle>`.

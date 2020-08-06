@@ -242,3 +242,44 @@ const query = c8ql`
 `;
 // FILTER user.email == @value0
 ```
+
+The Simple Way
+
+**Examples**
+
+```js
+//Instance with login
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+```
+
+## client.executeQuery
+
+`async client.executeQuery(query, [bindVars,] [opts])`
+
+Executes given query and returns the data
+
+```js
+const data = await client.executeQuery("FOR doc IN some-collection RETURN doc._id");
+```
+
+## client.getRunningQueries
+
+`async client.getRunningQueries()`
+
+returns all running queries
+
+```js
+const runningQueries = await client.getRunningQueries();
+```
+
+## client.killQuery
+
+`async client.killQuery(queryId)`
+
+terminates query
+
+```js
+await client.killQuery("query-id");
+```
+

@@ -356,3 +356,23 @@ await client.login(email, password);
 client.useTenant(tenant-name);
 await client.changeEdgeLocationSpotStatus('myfederation-us-east-1', true);
 ```
+
+The Simple Way
+
+**Examples**
+
+```js
+//Instance with login
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+```
+
+## client.getLocalDc
+
+`async client.getLocalDc(): Array<object>`
+
+Returns local edge locations
+
+```js
+const data = await client.getLocalDc();
+```

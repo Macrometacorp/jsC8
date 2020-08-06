@@ -169,3 +169,23 @@ const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword" "region-name");
 await tenant.modifyTenant("myPassword", { info: "string"});
 ```
+
+The Simple Way
+
+**Examples**
+
+```js
+//Instance with login
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+```
+
+## client.getDcList
+
+`async client.getDcList(): Array<object>`
+
+Returns tenant edge locations
+
+```js
+const data = await client.getDcList();
+```
