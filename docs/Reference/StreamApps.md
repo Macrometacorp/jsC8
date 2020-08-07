@@ -250,6 +250,8 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 let samples = await client.getSampleStreamApps()
 ```
 
+# Advanced User
+
 ## streamapps.retriveApplication
 
 `streamapps.retriveApplication(): Object`

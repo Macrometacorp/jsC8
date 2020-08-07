@@ -62,6 +62,8 @@ const event = client.event("testEvent"); // To create a event
 const eventDetails = client.event(null, 258849024);
 ```
 
+# Advanced User
+
 ## event.create
 
 `async event.create(requestObject): Object`

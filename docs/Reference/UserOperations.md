@@ -343,6 +343,8 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 await client.getAllUsers();
 ```
 
+# Advanced User
+
 ## user.getUserDetails
 
 `async client.getUserDetails()`

@@ -204,6 +204,8 @@ listener.on('open',() => console.log("connection open"));
 listener.on('close',() => console.log("connection closed");
 ```
 
+# Advanced User
+
 ## collection.create
 
 `async collection.create([properties]): Object`

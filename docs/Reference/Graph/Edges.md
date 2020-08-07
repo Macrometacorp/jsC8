@@ -46,6 +46,8 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 await client.getEdges('some-graph');
 ```
 
+# Advanced User
+
 ## graph.edgeCollection
 
 `graph.edgeCollection(collectionName): GraphEdgeCollection`

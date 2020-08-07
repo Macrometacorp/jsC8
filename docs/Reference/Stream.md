@@ -412,6 +412,8 @@ const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 const stream = client.stream("testStream", true, false);
 ```
 
+# Advanced User
+
 ## stream.createStream
 
 `async stream.createStream()`

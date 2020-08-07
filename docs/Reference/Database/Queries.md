@@ -196,24 +196,6 @@ const cursor = await client.explainQuery({query});
 });
 ```
 
-
-## client.getCurrentQueries
-
-`async client.getCurrentQueries()`
-
-Returns an array containing the C8QL queries currently running in the selected database.
-
-**Examples**
-
-```js
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-
-const cursor = await client.getCurrentQueries();
-});
-```
-
 ## client.clearSlowQueries
 
 `async client.clearSlowQueries()`
@@ -247,28 +229,6 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 const cursor = await client.getSlowQueries();
-});
-```
-
-## client.terminateRunningQuery
-
-`async client.terminateRunningQuery(queryId)`
-
-**Arguments**
-* **queryId**: `string`
-
-  The id of the query.
-
-Kills a running query. The query will be terminated at the next cancelation point.
-
-**Examples**
-
-```js
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-
-const cursor = await client.terminateRunningQuery();
 });
 ```
 
