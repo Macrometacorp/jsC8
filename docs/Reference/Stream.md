@@ -2,7 +2,7 @@
 
 ## client.createStream
 
-`async stream.createStream(streamName, [local], [isCollectionStream])`
+`async client.createStream(streamName, [local], [isCollectionStream])`
 
 Create asynchronously a stream for a given database.
 
@@ -32,7 +32,7 @@ await client.createStream("my-stream", true);
 
 ## client.hasStream
 
-`async stream.hasStream(streamName, [local])`
+`async client.hasStream(streamName, [local])`
 
 Returns true if stream is available
 
@@ -58,7 +58,7 @@ const hasStream = await client.hasStream("my-stream", true);
 
 ## client.getStream
 
-`async stream.getStream(streamName, [local], [isCollectionStream])`
+`async client.getStream(streamName, [local], [isCollectionStream])`
 
 Returns stream instance for given stream
 
@@ -88,7 +88,7 @@ const stream = await client.getStream("my-stream", true);
 
 ## client.getStreamStats
 
-`async stream.getStreamStats(streamName, [local], [isCollectionStream])`
+`async client.getStreamStats(streamName, [local], [isCollectionStream])`
 
 Returns statistics for given stream
 
@@ -118,7 +118,7 @@ const streamStats = await client.getStreamStats("my-stream", true);
 
 ## client.getStreamSubscriptions
 
-`async stream.getStreamSubscriptions(streamName, [local], [isCollectionStream])`
+`async client.getStreamSubscriptions(streamName, [local], [isCollectionStream])`
 
 Get the list of persistent subscriptions for a given stream
 
@@ -148,7 +148,7 @@ const streamSubscriptions = await client.getStreamSubscriptions("my-stream", tru
 
 ## client.getStreamBacklog
 
-`async stream.getStreamBacklog(streamName, [local], [isCollectionStream])`
+`async client.getStreamBacklog(streamName, [local], [isCollectionStream])`
 
 Get estimated backlog for offline stream
 
@@ -178,7 +178,7 @@ const streamBacklog = await client.getStreamBacklog("my-stream", true);
 
 ## client.deleteStreamSubscription
 
-`async stream.deleteStreamSubscription(streamName, subscription, [local], [isCollectionStream])`
+`async client.deleteStreamSubscription(streamName, subscription, [local], [isCollectionStream])`
 
 Delete a subscription.
 
@@ -212,7 +212,7 @@ await client.deleteStreamSubscription("my-stream", "my-subscription");
 
 ## client.clearStreamBacklog
 
-`async stream.clearStreamBacklog(subscription)`
+`async client.clearStreamBacklog(subscription)`
 
 Clear backlog for all streams for given subscription
 
@@ -234,7 +234,7 @@ await client.clearStreamBacklog("my-subscription");
 
 ## client.clearStreamsBacklog
 
-`async stream.clearStreamsBacklog()`
+`async client.clearStreamsBacklog()`
 
 Clear backlog for all streams
 
@@ -250,7 +250,7 @@ await client.clearStreamsBacklog();
 
 ## client.createStreamProducer
 
-`async stream.createStreamProducer(streamName, [[local]], [isCollectionStream], [dcName], [params])`
+`async client.createStreamProducer(streamName, [local], [isCollectionStream], [dcName], [params])`
 
 Returns producer access for given stream
 
@@ -308,7 +308,7 @@ const producer = await client.createStreamProducer("my-stream", true);
 
 ## client.createStreamReader
 
-`async stream.createStreamReader(streamName, [subscriptionName], [local], [isCollectionStream], [dcName], [params])`
+`async client.createStreamReader(streamName, [subscriptionName], [local], [isCollectionStream], [dcName], [params])`
 
 Returns consumer access for given stream
 
