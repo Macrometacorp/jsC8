@@ -66,11 +66,11 @@ export abstract class BaseCollection implements C8Collection {
   protected _idPrefix: string;
   protected _connection: Connection;
 
-  constructor(connection: Connection, name: string, otp?: string) {
+  constructor(connection: Connection, name: string) {
     this.name = name;
     this._idPrefix = `${this.name}/`;
     this._connection = connection;
-    this.stream = new Stream(connection, name, true, true, otp);
+    this.stream = new Stream(connection, name, true, true);
     if (this._connection.c8Major >= 3) {
       this.createCapConstraint = undefined!;
     }
@@ -161,8 +161,9 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
-  onChange(dcName: string, subscriptionName: string = "subs") {
-    return this.stream.consumer(subscriptionName, dcName);
+  async onChange(dcName: string, subscriptionName: string = "subs") {
+    const otp = await this.stream.getOtp();
+    return this.stream.consumer(subscriptionName, dcName, { otp });
   }
 
   properties() {
@@ -554,8 +555,8 @@ export interface DocumentSaveOptions {
 
 export class DocumentCollection extends BaseCollection {
   type = CollectionType.DOCUMENT_COLLECTION;
-  constructor(connection: Connection, name: string, otp?: string) {
-    super(connection, name, otp);
+  constructor(connection: Connection, name: string) {
+    super(connection, name);
   }
 
   save(data: any, opts?: DocumentSaveOptions | boolean) {

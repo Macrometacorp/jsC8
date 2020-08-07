@@ -239,7 +239,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 const insertedDocsFromFile  = await client.insertDocumentFromFile("some-collection", '~/data.csv');
 ```
 
-## Advanced User
+### Advanced User
 
 ## documentCollection.document
 

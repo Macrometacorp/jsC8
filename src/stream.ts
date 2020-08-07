@@ -25,14 +25,12 @@ export class Stream {
   global: boolean;
   isCollectionStream: boolean;
   topic: string;
-  otp: string;
 
   constructor(
     connection: Connection,
     name: string,
     local: boolean = false,
-    isCollectionStream: boolean = false,
-    otp: string = ""
+    isCollectionStream: boolean = false
   ) {
     this._connection = connection;
     this.isCollectionStream = isCollectionStream;
@@ -44,7 +42,6 @@ export class Stream {
 
     this.global = !local;
     this.name = name;
-    this.otp = otp;
 
     let topic = this.name;
     if (!this.isCollectionStream) {
@@ -57,6 +54,17 @@ export class Stream {
   _getPath(useName: boolean, urlSuffix?: string): string {
     let topic = useName ? this.name : this.topic;
     return getFullStreamPath(topic, urlSuffix);
+  }
+
+  getOtp() {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/apid/otp",
+        absolutePath: true,
+      },
+      (res) => res.body.otp
+    );
   }
 
   createStream() {
@@ -226,10 +234,7 @@ export class Stream {
     const persist = StreamConstants.PERSISTENT;
     const region = this.global ? "c8global" : "c8local";
     const tenant = this._connection.getTenantName();
-    const queryParams = stringify({
-      otp: this.otp,
-      ...params,
-    });
+    const queryParams = stringify(params);
     let dbName = this._connection.getFabricName();
 
     if (!dbName || !tenant)
@@ -237,7 +242,7 @@ export class Stream {
 
     let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-    }/${subscriptionName}`;
+      }/${subscriptionName}`;
 
     // Appending query params to the url
     consumerUrl = `${consumerUrl}?${queryParams}`;
@@ -255,17 +260,15 @@ export class Stream {
     const persist = StreamConstants.PERSISTENT;
     const region = this.global ? "c8global" : "c8local";
     const tenant = this._connection.getTenantName();
-    const queryParams = stringify({
-      otp: this.otp,
-      ...params,
-    });
+    const queryParams = stringify(params);
     let dbName = this._connection.getFabricName();
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
     let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-    }`;
+      }`;
+
     // Appending query params to the url
     producerUrl = `${producerUrl}?${queryParams}`;
 

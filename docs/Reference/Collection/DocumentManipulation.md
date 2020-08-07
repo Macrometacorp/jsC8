@@ -380,7 +380,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 const deletedDocs = await client.deleteDocumentMany("some-collection", [{ _key: "some_key", some: "data" }]);
 ```
 
-## Advanced User
+### Advanced User
 
 ## collection.replace
 

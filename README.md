@@ -132,7 +132,7 @@ client.useTenant(tenant_name);
 
 ### With token
 
-If you want to login with token then you just need to pass the token in the jsc8 connection itself wrapping in Object with your region URL with specific fabric.
+If you want to login with token then you just need to pass the token wrapping in Object with your region URL with specific fabric.
 
 Note: by default value for fabric is `_system`
 
@@ -145,12 +145,16 @@ or to have failover support
 
 ```js
 const jsc8 = require("jsc8");
-client = new jsc8({ url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"], token: "XXXX", fabricName: "_system"});
+client = new jsc8({
+  url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"],
+  token: "XXXX",
+  fabricName: "_system"
+});
 ```
 
 ### With apikey
 
-If you want to login with apikey then you just need to pass the apikey in the jsc8 connection itself wrapping in Object with your region URL with specific fabric.
+If you want to login with apikey then you just need to pass the apikey wrapping in Object with your region URL with specific fabric.
 
 Note: by default value for fabric is `_system`
 
@@ -163,7 +167,11 @@ or to have failover support
 
 ```js
 const jsc8 = require("jsc8");
-client = new jsc8({ url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"], apikey: "XXXX", fabricName: "_system"});
+client = new jsc8({
+  url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"],
+  apikey: "XXXX",
+  fabricName: "_system"
+});
 ``` 
 
 ## Create Collection
@@ -195,7 +203,7 @@ async function createCollection() {
 createCollection().then(console.log);
 ```
 
-## Advanced User
+### Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -255,10 +263,10 @@ async function createIndex() {
 
 createIndex();
 ```
-Note:- Just like above example user can create addTtlIndex, addFullTextIndex, addPersistentIndex, addSkiplistIndex addGeoIndex. Checkout more for - [Indexes](docs/Reference/Collection/Indexes.md)
+Note:- Just like above example user can create `addTtlIndex, addFullTextIndex, addPersistentIndex, addSkiplistIndex addGeoIndex`. Checkout more for - [Indexes](docs/Reference/Collection/Indexes.md)
 
 
-## Advanced User
+### Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -350,7 +358,7 @@ async function populate() {
 populate();
 ```
 
-## Advanced User
+### Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -399,7 +407,7 @@ async function c8Queries() {
 c8Queries();
 ```
 
-## Advanced User
+### Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -457,7 +465,7 @@ async function realTimeListener() {
 realTimeListener();
 ```
 
-## Advanced User
+### Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -510,10 +518,10 @@ function publish(publisher, payload) {
 async function streamDemo() {
 
   await client.createStream("newStreamFromJSC8", false);
-  //Here the last boolean value tells if the stream is global or local. false means that it is local.
+  //Here the last boolean value tells if the stream is global or local. false means that it is global.
 
-  const consumer = client.createStreamReader("newStreamFromJSC8", "my-sub");
-  const publisher = client.createStreamProducer("newStreamFromJSC8");
+  const consumer = await client.createStreamReader("newStreamFromJSC8", "my-sub");
+  const publisher = await client.createStreamProducer("newStreamFromJSC8");
 
   consumer.on("message", (msg) => {
     console.log(msg);
@@ -527,7 +535,7 @@ async function streamDemo() {
 streamDemo();
 ```
 
-## Advanced User
+### Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -590,6 +598,7 @@ const delete_data = "REMOVE 'abc' IN " + collection_name;
 
 const get_count = "RETURN COUNT(FOR doc IN " + collection_name + " RETURN 1)";
 
+
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
@@ -647,7 +656,7 @@ async function restqldemo() {
 restqldemo().then(console.log("Starting Execution"));
 ```
 
-## Advanced User
+### Advanced User
 
 ```js
 const jsc8 = require("jsc8");

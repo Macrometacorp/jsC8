@@ -228,9 +228,9 @@ describe("Manipulating collections", async function () {
     });
   });
   describe("collection.onChange", () => {
-    it("should get the message on collection change", done => {
+    it("should get the message on collection change", async (done) => {
 
-      const handler = collection.onChange(testUrl.substring(8));
+      const handler = await collection.onChange(testUrl.substring(8));
 
       handler.on('open', () => {
         collection.save({ name: "Anthony", lastname: "Gonsalvis" });

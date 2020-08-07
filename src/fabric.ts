@@ -253,8 +253,8 @@ export class Fabric {
 
   // Collection manipulation
 
-  collection(collectionName: string, otp?: string): DocumentCollection {
-    return new DocumentCollection(this._connection, collectionName, otp);
+  collection(collectionName: string): DocumentCollection {
+    return new DocumentCollection(this._connection, collectionName);
   }
 
   edgeCollection(collectionName: string): EdgeCollection {
@@ -549,15 +549,13 @@ export class Fabric {
   stream(
     streamName: string,
     local: boolean,
-    isCollectionStream: boolean = false,
-    otp: string = ""
+    isCollectionStream: boolean = false
   ): Stream {
     return new Stream(
       this._connection,
       streamName,
       local,
       isCollectionStream,
-      otp
     );
   }
 
@@ -833,17 +831,6 @@ export class Fabric {
         path: "/_api/streamapps/samples",
       },
       (res) => res.body
-    );
-  }
-
-  getOtp() {
-    return this._connection.request(
-      {
-        method: "POST",
-        path: "/apid/otp",
-        absolutePath: true,
-      },
-      (res) => res.body.otp
     );
   }
 }

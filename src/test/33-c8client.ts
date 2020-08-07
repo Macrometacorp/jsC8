@@ -25,7 +25,7 @@ describe("validating new apis", function () {
         c8Client.close();
     });
     it("Validate createCollection, hasCollection, getCollection, deleteCollection", done => {
-        const collectionName = 'ping_test';
+        const collectionName = 'c8client_test';
         c8Client.createCollection(collectionName)
             .then(async (data) => {
                 expect(data).to.have.property("name", collectionName);
@@ -46,7 +46,7 @@ describe("validating new apis", function () {
     });
 
     it("Validate insertDocumentMany, getDocumentMany", done => {
-        const collectionName = 'ping_test';
+        const collectionName = 'c8client_test';
         c8Client.createCollection(collectionName)
             .then(async () => {
                 await c8Client.insertDocumentMany(collectionName, [{ "value": "123" }, { "value": "1234" }]).then((data) => {
@@ -66,7 +66,7 @@ describe("validating new apis", function () {
     });
 
     it("Validate insertDocumentFromFile", done => {
-        const collectionName = 'ping_test';
+        const collectionName = 'c8client_test';
         c8Client.createCollection(collectionName)
             .then(async () => {
                 await c8Client.insertDocumentFromFile(collectionName, csvPath).then((data) => {
@@ -83,7 +83,7 @@ describe("validating new apis", function () {
     });
 
     it("get Collection Ids, keys", done => {
-        const collectionName = 'ping_test';
+        const collectionName = 'c8client_test';
 
         c8Client.createCollection(collectionName)
             .then(async () => {
@@ -109,7 +109,7 @@ describe("validating new apis", function () {
             .catch(done);
     });
     it("validate executeQuery", done => {
-        const collectionName = 'ping_test';
+        const collectionName = 'c8client_test';
         const query = `FOR doc IN ${collectionName} RETURN doc._id`
         c8Client.createCollection(collectionName)
             .then(async () => {

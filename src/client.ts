@@ -90,8 +90,7 @@ export class C8Client extends Fabric {
     if (dcName) {
       dcUrl = dcName;
     }
-    const otp = await this.getOtp();
-    const collection = this.collection(collectionName, otp);
+    const collection = this.collection(collectionName);
     return collection.onChange(dcUrl, subscriptionName);
   }
 
@@ -359,9 +358,9 @@ export class C8Client extends Fabric {
     if (dcName) {
       dcUrl = dcName;
     }
-    const otp = await this.getOtp();
-    const stream = this.stream(streamName, local, isCollectionStream, otp);
-    return stream.producer(dcUrl, params);
+    const stream = this.stream(streamName, local, isCollectionStream);
+    const otp = await stream.getOtp();
+    return stream.producer(dcUrl, { ...params, otp });
   }
 
   async createStreamReader(
@@ -377,9 +376,9 @@ export class C8Client extends Fabric {
     if (dcName) {
       dcUrl = dcName;
     }
-    const otp = await this.getOtp();
-    const stream = this.stream(streamName, local, isCollectionStream, otp);
-    return stream.consumer(subscriptionName, dcUrl, params);
+    const stream = this.stream(streamName, local, isCollectionStream);
+    const otp = await stream.getOtp();
+    return stream.consumer(subscriptionName, dcUrl, { ...params, otp });
   }
 
   async subscribe(
@@ -395,9 +394,9 @@ export class C8Client extends Fabric {
     if (dcName) {
       dcUrl = dcName;
     }
-    const otp = await this.getOtp();
-    const stream = this.stream(streamName, local, isCollectionStream, otp);
-    return stream.consumer(subscriptionName, dcUrl, params);
+    const stream = this.stream(streamName, local, isCollectionStream);
+    const otp = await stream.getOtp();
+    return stream.consumer(subscriptionName, dcUrl, { ...params, otp });
   } // how is it same as create  web socket handler
 
   // unsubscribe(){} already available
