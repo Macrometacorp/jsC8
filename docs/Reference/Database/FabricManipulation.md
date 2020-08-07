@@ -2,6 +2,21 @@
 
 These functions implement the [HTTP API for manipulating fabrics](https://developer.document360.io/docs/geo-fabrics)
 
+## client.getLocalDc
+
+`async client.getLocalDc(): Array<object>`
+
+Returns local edge locations
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const data = await client.getLocalDc();
+```
+
+Advanced User
 
 ## client.useFabric
 
@@ -154,11 +169,11 @@ Creates a new Fabric with the given `fabricName`.
 
 - **options**: `Object`
 
-  - **dcList**: `String`
+  - **dcList**: `string`
     A comma separated list of data centers. It is a mandatory field, but if not specified (due to user error), it defaults
 to the local Edge Location.
 
-  - **spotDc**: `String` (optional)
+  - **spotDc**: `string` (optional)
     The data center to be made as spot data center for this client. It has three different behaviour depending upon the value.
 
       `AUTOMATIC` -  The spot DC is chosen automatically if this key is not present in the `options` object.
@@ -355,24 +370,4 @@ const client = new jsc8();
 await client.login(email, password);
 client.useTenant(tenant-name);
 await client.changeEdgeLocationSpotStatus('myfederation-us-east-1', true);
-```
-
-The Simple Way
-
-**Examples**
-
-```js
-//Instance with login
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-```
-
-## client.getLocalDc
-
-`async client.getLocalDc(): Array<object>`
-
-Returns local edge locations
-
-```js
-const data = await client.getLocalDc();
 ```

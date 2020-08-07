@@ -2,6 +2,250 @@
 
 These functions implement the [HTTP API for manipulating indexes](https://developer.document360.io/docs/indexing).
 
+## client.listCollectionIndexes
+
+`async client.listCollectionIndexes(collectionName): Array<Object>`
+
+Returns list of indexes for given collection
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const collectionIndexes = await client.listCollectionIndexes("some-collection");
+```
+
+## client.addHashIndex
+
+`async client.addHashIndex(collectionName, fields, [opts]): Object`
+
+Creates a Hash index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **opts**: `Object` (optional)
+
+  Additional options for this index. If the value is a boolean, it will be
+  interpreted as `opts.unique`.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const hashIndex = await client.addHashIndex("some-collection", 'favorite-color');
+```
+
+## client.addGeoIndex
+
+`async client.addGeoIndex(collectionName, fields, [opts]): Object`
+
+Creates a Geo index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **opts**: `Object` (optional)
+
+  Additional options for this index. If the value is a boolean, it will be
+  interpreted as `opts.unique`.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const geoIndex = await client.addGeoIndex("some-collection", 'favorite-color');
+```
+
+## client.addSkiplistIndex
+
+`async client.addSkiplistIndex(collectionName, fields, [opts]): Object`
+
+Creates a skiplist index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **opts**: `Object` (optional)
+
+  Additional options for this index. If the value is a boolean, it will be
+  interpreted as `opts.unique`.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const skiplistIndex = await client.addSkiplistIndex("some-collection", 'favorite-color');
+```
+
+## client.addPersistentIndex
+
+`async client.addPersistentIndex(collectionName, fields, [opts]): Object`
+
+Creates a Persistent index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **opts**: `Object` (optional)
+
+  Additional options for this index. If the value is a boolean, it will be
+  interpreted as `opts.unique`.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const persistentIndex = await client.addPersistentIndex("some-collection", 'favorite-color');
+```
+
+## client.addFullTextIndex
+
+`async client.addFullTextIndex(collectionName, fields, [minLength]): Object`
+
+Creates a FullText index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **minLength**: `Number` (optional)
+
+  Minimum character length of words to index. Will default to a server-defined value if unspecified. It is thus recommended to set this value explicitly when creating the index.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const fullTextIndex = await client.addFullTextIndex("some-collection", 'description');
+```
+
+## client.addTtlIndex
+
+`async client.addTtlIndex(collectionName, fields, expireAfter): Object`
+
+Creates a Ttl index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **expireAfter**: `Number`
+
+  The time (in seconds) after a document's creation after which the documents count as "expired".
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const ttlIndex = await client.addTtlIndex("some-collection", 'description', 0);
+```
+
+## client.deleteIndex
+
+`async client.deleteIndex(collectionName, indexName): Object`
+
+Deletes index with given index name from given collection
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **indexName**: `string`
+
+  The handle of the index to delete. This can either be a fully-qualified identifier or the collection-specific key of the index. If the value is an object, its `name` property will be used instead.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const deletedIndex = await client.deleteIndex("some-collection", 'some-index');
+```
+
+## client.getCollectionIndexes
+
+`async client.getCollectionIndexes(collectionName, indexName): Array<Object>`
+
+Returns list of indexes for given collection
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const collectionIndexes = await client.getCollectionIndexes("some-collection");
+```
+
+Advanced User
+
 ## collection.createIndex
 
 `async collection.createIndex(details): Object`
@@ -319,104 +563,4 @@ assert.equal(index.size, 20);
 const index = await collection.createCapConstraint({size: 20})
 // the index has been created with the handle `index.id`
 assert.equal(index.size, 20);
-```
-
-The Simple Way
-
-**Examples**
-
-```js
-//Instance with login
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-```
-
-## client.listCollectionIndexes
-
-`async client.listCollectionIndexes(collectionName): Array<Object>`
-
-Returns list of indexes for given collection
-
-```js
-const collectionIndexes = await client.listCollectionIndexes("some-collection");
-```
-
-## client.addHashIndex
-
-`async client.addHashIndex(collectionName, fields, [opts]): Object`
-
-Creates a Hash index on the collection.
-
-```js
-const hashIndex = await client.addHashIndex("some-collection", 'favorite-color');
-```
-
-## client.addGeoIndex
-
-`async client.addGeoIndex(collectionName, fields, [opts]): Object`
-
-Creates a Geo index on the collection.
-
-```js
-const geoIndex = await client.addGeoIndex("some-collection", 'favorite-color');
-```
-
-## client.addSkiplistIndex
-
-`async client.addSkiplistIndex(collectionName, fields, [opts]): Object`
-
-Creates a skiplist index on the collection.
-
-```js
-const skiplistIndex = await client.addSkiplistIndex("some-collection", 'favorite-color');
-```
-
-## client.addPersistentIndex
-
-`async client.addPersistentIndex(collectionName, fields, [opts]): Object`
-
-Creates a Persistent index on the collection.
-
-```js
-const persistentIndex = await client.addPersistentIndex("some-collection", 'favorite-color');
-```
-
-## client.addFullTextIndex
-
-`async client.addFullTextIndex(collectionName, fields, [minLength]): Object`
-
-Creates a FullText index on the collection.
-
-```js
-const fullTextIndex = await client.addFullTextIndex("some-collection", 'description');
-```
-
-## client.addTtlIndex
-
-`async client.addTtlIndex(collectionName, fields, expireAfter): Object`
-
-Creates a Ttl index on the collection.
-
-```js
-const ttlIndex = await client.addTtlIndex("some-collection", 'description', 0);
-```
-
-## client.deleteIndex
-
-`async client.deleteIndex(collectionName, indexName): Object`
-
-Deletes index with given index name from given collection
-
-```js
-const deletedIndex = await client.deleteIndex("some-collection", 'some-index');
-```
-
-## client.getCollectionIndexes
-
-`async client.getCollectionIndexes(collectionName, indexName): Array<Object>`
-
-Returns list of indexes for given collection
-
-```js
-const collectionIndexes = await client.getCollectionIndexes("some-collection");
 ```

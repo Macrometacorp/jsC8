@@ -1,5 +1,139 @@
 ## stream Apps
 
+## client.validateStreamApp
+
+`async client.validateStreamApp(appDefinition): Object`
+
+Validates the given application definition and returns an object containing a message if the definition is valid or not.
+
+**Arguments**
+
+- **appDefinition**: `string`
+
+  Application Definition in string format
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const appDefinition = 
+            `@App:name('Sample-Cargo-App')
+                -- Stream
+                define stream srcCargoStream (weight int);
+                -- Table
+                define table destCargoTable (weight int, totalWeight long);
+                -- Data Processing
+                @info(name='Query')
+                select weight, sum(weight) as totalWeight
+                from srcCargoStream
+                insert into destCargoTable;`
+
+const validity = await client.validateStreamApp(appDefinition);
+```
+
+## client.retrieveStreamApp
+
+`async client.retrieveStreamApp(): Object`
+
+Get list of all stream applictions under given database.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const streamapps = await client.retrieveStreamApp();
+```
+
+## client.deleteStreamApp
+
+`async client.deleteStreamApp(appName): Object`
+
+Deletes Stream App
+
+**Arguments**
+
+- **appName**: `string`
+
+  Application name
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.deleteStreamApp("Sample-Cargo-App");
+```
+
+## client.getStreamApp
+
+`streamapps.getStreamApp(appName): Object`
+
+Returns details of a Stream Application.
+
+**Arguments**
+
+- **appName**: `string`
+
+  Application name
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const streamApp = await client.getStreamApp("Sample-Cargo-App");
+```
+
+## client.getStreamAppSamples
+
+`client.getStreamAppSamples(appName): Object`
+
+Returns samples for Application Definition.
+
+**Arguments**
+
+- **appName**: `string`
+
+  Application name
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const streamAppSamples = await client.getStreamAppSamples("Sample-Cargo-App");
+```
+
+## client.activateStreamApp
+
+`client.activateStreamApp(appName, active): Object`
+
+Activates or deactivates a Stream Application.
+
+**Arguments**
+
+- **appName**: `string`
+
+  Application name
+
+- **active**: `boolean`
+
+    True: Activate
+    
+    False: Deactivate
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const streamAppSamples = await client.activateStreamApp("Sample-Cargo-App", true);
+```
+
+Advanced User
+
 ## client.createStreamApp
 
 `client.createStreamApp(dcList, appDefinition): Object`
@@ -224,76 +358,4 @@ await client.login(email, password);
 client.useTenant(tenant-name);
 const app = client.streamApp("Sample-Cargo-App");
 const streamApp = await app.deleteApplication();
-```
-
-The Simple Way
-
-**Examples**
-
-```js
-//Instance with login
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-```
-
-## client.validateStreamApp
-
-`async client.validateStreamApp(appDefinition): Object`
-
-Validates the given application definition and returns an object containing a message if the definition is valid or not.
-
-```js
-const appDefinition = 
-            `@App:name('Sample-Cargo-App')
-                -- Stream
-                define stream srcCargoStream (weight int);
-                -- Table
-                define table destCargoTable (weight int, totalWeight long);
-                -- Data Processing
-                @info(name='Query')
-                select weight, sum(weight) as totalWeight
-                from srcCargoStream
-                insert into destCargoTable;`
-
-const validity = await client.validateStreamApp(appDefinition);
-```
-
-## client.retrieveStreamApp
-
-`async client.retrieveStreamApp(): Object`
-
-Get list of all stream applictions under given database.
-
-```js
-const streamapps = await client.retrieveStreamApp();
-```
-
-## client.deleteStreamApp
-
-`async client.deleteStreamApp(appName): Object`
-
-Deletes Stream App
-
-```js
-await client.deleteStreamApp("Sample-Cargo-App");
-```
-
-## streamapps.getStreamApp
-
-`streamapps.getStreamApp(appName): Object`
-
-Returns details of a Stream Application.
-
-```js
-const streamApp = await client.getStreamApp("Sample-Cargo-App");
-```
-
-## client.getStreamAppSamples
-
-`client.getStreamAppSamples(appName): Object`
-
-Returns samples for Application Definition.
-
-```js
-const streamAppSamples = await client.getStreamAppSamples("Sample-Cargo-App");
 ```

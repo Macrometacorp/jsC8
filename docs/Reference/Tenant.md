@@ -1,5 +1,21 @@
 ## Manipulating tenants
 
+## client.getDcList
+
+`async client.getDcList(): Array<object>`
+
+Returns tenant edge locations
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const data = await client.getDcList();
+```
+
+Advanced User
+
 ## client.useTenant
 
 `client.useTenant(tenantName): this`
@@ -78,7 +94,7 @@ Creates a tenant.
 
   The name of the tenant to use.
 
-- **extra**: `object`
+- **extra**: `Object`
 
   An optional JSON object with arbitrary extra data about the user.
 
@@ -155,7 +171,7 @@ Modifies the given tenant.
 
   The name of the tenant to use.
 
-- **extra**: `object`
+- **extra**: `Object`
 
   An optional JSON object with arbitrary extra data about the user.
 
@@ -168,24 +184,4 @@ client.useTenant(tenant-name);
 const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword" "region-name");
 await tenant.modifyTenant("myPassword", { info: "string"});
-```
-
-The Simple Way
-
-**Examples**
-
-```js
-//Instance with login
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-```
-
-## client.getDcList
-
-`async client.getDcList(): Array<object>`
-
-Returns tenant edge locations
-
-```js
-const data = await client.getDcList();
 ```

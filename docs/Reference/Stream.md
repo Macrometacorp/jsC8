@@ -1,5 +1,346 @@
 ## Manipulating streams
 
+## client.createStream
+
+`async stream.createStream(streamName, [local], [isCollectionStream])`
+
+Create asynchronously a stream for a given database.
+
+**Arguments**
+
+- **streamName**: `string`
+
+  The name of the stream to use.
+
+- **local**: `boolean`
+
+  Is the stream local or global
+
+- **isCollectionStream**: `boolean`
+
+  If the stream is a collection stream or not. The default is `false`.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.createStream("my-stream", true);
+```
+
+## client.hasStream
+
+`async stream.hasStream(streamName, [local])`
+
+Returns true if stream is available
+
+**Arguments**
+
+- **streamName**: `string`
+
+  The name of the stream to use.
+
+- **local**: `boolean`
+
+  Is the stream local or global
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const hasStream = await client.hasStream("my-stream", true);
+```
+
+## client.getStream
+
+`async stream.getStream(streamName, [local], [isCollectionStream])`
+
+Returns stream instance for given stream
+
+**Arguments**
+
+- **streamName**: `string`
+
+  The name of the stream to use.
+
+- **local**: `boolean`
+
+  Is the stream local or global
+
+- **isCollectionStream**: `boolean`
+
+  If the stream is a collection stream or not. The default is `false`.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const stream = await client.getStream("my-stream", true);
+```
+
+## client.getStreamStats
+
+`async stream.getStreamStats(streamName, [local], [isCollectionStream])`
+
+Returns statistics for given stream
+
+**Arguments**
+
+- **streamName**: `string`
+
+  The name of the stream to use.
+
+- **local**: `boolean`
+
+  Is the stream local or global
+
+- **isCollectionStream**: `boolean`
+
+  If the stream is a collection stream or not. The default is `false`.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const streamStats = await client.getStreamStats("my-stream", true);
+```
+
+## client.getStreamSubscriptions
+
+`async stream.getStreamSubscriptions(streamName, [local], [isCollectionStream])`
+
+Get the list of persistent subscriptions for a given stream
+
+**Arguments**
+
+- **streamName**: `string`
+
+  The name of the stream to use.
+
+- **local**: `boolean`
+
+  Is the stream local or global
+
+- **isCollectionStream**: `boolean`
+
+  If the stream is a collection stream or not. The default is `false`.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const streamSubscriptions = await client.getStreamSubscriptions("my-stream", true);
+```
+
+## client.getStreamBacklog
+
+`async stream.getStreamBacklog(streamName, [local], [isCollectionStream])`
+
+Get estimated backlog for offline stream
+
+**Arguments**
+
+- **streamName**: `string`
+
+  The name of the stream to use.
+
+- **local**: `boolean`
+
+  Is the stream local or global
+
+- **isCollectionStream**: `boolean`
+
+  If the stream is a collection stream or not. The default is `false`.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const streamBacklog = await client.getStreamBacklog("my-stream", true);
+```
+
+## client.deleteStreamSubscription
+
+`async stream.deleteStreamSubscription(streamName, subscription, [local], [isCollectionStream])`
+
+Delete a subscription.
+
+**Arguments**
+
+- **streamName**: `string`
+
+  The name of the stream to use.
+
+- **subscription**: `string`
+
+  The name of the subscription.
+
+- **local**: `boolean`
+
+  Is the stream local or global
+
+- **isCollectionStream**: `boolean`
+
+  If the stream is a collection stream or not. The default is `false`.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.deleteStreamSubscription("my-stream", "my-subscription");
+```
+
+## client.clearStreamBacklog
+
+`async stream.clearStreamBacklog(subscription)`
+
+Clear backlog for all streams for given subscription
+
+**Arguments**
+
+- **subscription**: `string`
+
+  The name of the subscription.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.clearStreamBacklog("my-subscription");
+```
+
+## client.clearStreamsBacklog
+
+`async stream.clearStreamsBacklog()`
+
+Clear backlog for all streams
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.clearStreamsBacklog();
+```
+
+## client.createStreamProducer
+
+`async stream.createStreamProducer(streamName, [[local]], [isCollectionStream], [dcName], [params])`
+
+Returns producer access for given stream
+
+**Arguments**
+
+- **streamName**: `string`
+
+  The name of the stream to use.
+
+- **local**: `boolean`
+
+  Is the stream local or global
+
+- **isCollectionStream**: `boolean`
+
+  If the stream is a collection stream or not. The default is `false`.
+
+- **dcName**: `string`
+
+  The dcName for the producer.
+
+- **params**: `Object`
+
+|          Option         	|                         Description                         	| Default 	|
+|:-----------------------:	|:-----------------------------------------------------------:	|:-------:	|
+| sendTimeoutMillis       	| Send timeout                                                	| 30 secs 	|
+| batchingEnabled         	| Enable batching of messages                                 	| false   	|
+| batchingMaxMessages     	| Maximum number of messages permitted in a batch             	| 1000    	|
+| maxPendingMessages      	| Set the max size of the internal-queue holding the messages 	| 1000    	|
+| batchingMaxPublishDelay 	| Time period within which the messages will be batched       	| 10ms    	|
+
+**Methods**
+
+`producer.on('open', callback )`
+
+`producer.on('message', callback )`
+
+`producer.on('close', callback )`
+
+`producer.on('error', callback )`
+
+`producer.send(message)`
+
+`producer.close()`
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const producer = await client.createStreamProducer("my-stream", true);
+```
+
+## client.createStreamReader
+
+`async stream.createStreamReader(streamName, [subscriptionName], [local], [isCollectionStream], [dcName], [params])`
+
+Returns consumer access for given stream
+
+**Arguments**
+
+- **streamName**: `string`
+
+  The name of the stream to use.
+
+- **local**: `boolean`
+
+  Is the stream local or global
+
+- **subscriptionName**: `string`
+
+  The name of the subscription.
+
+- **dcName**: `string`
+
+  The dcName for the consumer.
+
+- **params**: `Object`
+
+|       Option      	|                   Description                  	|  Default  	|
+|:-----------------:	|:----------------------------------------------:	|:---------:	|
+| ackTimeoutMillis  	| Send timeout                                   	| 0         	|
+| subscriptionType  	| Subscription type: Exclusive, Failover, Shared 	| Exclusive 	|
+| receiverQueueSize 	| Size of the consumer receive queue             	| 1000      	|
+| priorityLevel     	| Define a priority for the consumer             	| -         	|
+
+**Methods**
+
+`consumer.on('open', callback )`
+
+`consumer.on('message', callback )`
+
+`consumer.on('close', callback )`
+
+`consumer.on('error', callback )`
+
+`consumer.close()`
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const consumer = await client.createStreamReader("my-stream", "my-sub");
+```
+
+Advanced User
+
 ## client.stream
 
 `client.stream(streamName, local, isCollectionStream): Stream`
@@ -448,7 +789,7 @@ Creates a consumer for a stream.
 
   The dcName for the consumer.
 
-- **params**: `object`
+- **params**: `Object`
 
 |       Option      	|                   Description                  	|  Default  	|
 |:-----------------:	|:----------------------------------------------:	|:---------:	|
@@ -497,7 +838,7 @@ Creates a producer for a stream and returns producer object.
 - **dcName**: `string`
 
   The dcName for the producer.
-- **params**: `object`
+- **params**: `Object`
 
 |          Option         	|                         Description                         	| Default 	|
 |:-----------------------:	|:-----------------------------------------------------------:	|:-------:	|
@@ -544,124 +885,4 @@ publisher.on("open", () => {
 publisher.on("message", (msg) => {
   console.log(msg, "Sent Successfully");
 });
-```
-
-The Simple Way
-
-**Examples**
-
-```js
-//Instance with login
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"}); //OR with apikey
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-```
-
-## client.createStream
-
-`async stream.createStream(streamName, [local], [isCollectionStream])`
-
-Create asynchronously a stream for a given database.
-
-```js
-await client.createStream("my-stream", true);
-```
-
-## client.hasStream
-
-`async stream.hasStream(streamName, [local])`
-
-Returns true if stream is available
-
-```js
-const hasStream = await client.hasStream("my-stream", true);
-```
-
-## client.getStream
-
-`async stream.getStream(streamName, [local], [isCollectionStream])`
-
-Returns stream instance for given stream
-
-```js
-const stream = await client.getStream("my-stream", true);
-```
-
-## client.getStreamStats
-
-`async stream.getStreamStats(streamName, [local], [isCollectionStream])`
-
-Returns statistics for given stream
-
-```js
-const streamStats = await client.getStreamStats("my-stream", true);
-```
-
-## client.getStreamSubscriptions
-
-`async stream.getStreamSubscriptions(streamName, [local], [isCollectionStream])`
-
-Get the list of persistent subscriptions for a given stream
-
-```js
-const streamSubscriptions = await client.getStreamSubscriptions("my-stream", true);
-```
-
-## client.getStreamBacklog
-
-`async stream.getStreamBacklog(streamName, [local], [isCollectionStream])`
-
-Get estimated backlog for offline stream
-
-```js
-const streamBacklog = await client.getStreamBacklog("my-stream", true);
-```
-
-## client.deleteStreamSubscription
-
-`async stream.deleteStreamSubscription(streamName, subscription, [local], [isCollectionStream])`
-
-Delete a subscription.
-
-```js
-await client.deleteStreamSubscription("my-stream", "my-subscription");
-```
-
-## client.clearStreamBacklog
-
-`async stream.clearStreamBacklog(subscription)`
-
-Clear backlog for all streams for given subscription
-
-```js
-await client.clearStreamBacklog("my-subscription");
-```
-
-## client.clearStreamsBacklog
-
-`async stream.clearStreamsBacklog()`
-
-Clear backlog for all streams
-
-```js
-await client.clearStreamsBacklog();
-```
-
-## client.createStreamProducer
-
-`async stream.createStreamProducer(streamName, [[local]], [isCollectionStream], [dcName], [params])`
-
-Returns producer access for given stream
-
-```js
-const producer = await client.createStreamProducer("my-stream", true);
-```
-
-## client.createStreamReader
-
-`async stream.createStreamReader(streamName, [subscriptionName], [local], [isCollectionStream], [dcName], [params])`
-
-Returns consumer access for given stream
-
-```js
-const consumer = await client.createStreamReader("my-stream", "my-sub");
 ```

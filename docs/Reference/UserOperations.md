@@ -1,5 +1,209 @@
 ## Setting User Permissions and related Operations
 
+## client.createUser
+
+`async client.createUser(userName, email, passwd, [active], [extra]): Object`
+
+Creates user with given data
+
+**Arguments**
+
+- **user**: `string`
+
+  The name of the User for the instance.
+
+- **email**: `string`
+
+  The email of the User.
+
+- **passwd**: `string`
+
+  The password of the User.
+
+- **active**: `boolean` [optional]
+
+  An optional flag that specifies whether the user is active. If not specified, this will default to `true`
+
+- **extra**: `Object` [optional]
+
+  An optional JSON object with arbitrary extra data about the user.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.createUser("sample_user", "sample_user@macrometa.io");
+```
+
+## client.updateUser
+
+`async client.updateUser(userName, email, data): Object`
+
+Partially updates user with given data
+
+**Arguments**
+
+- **user**: `string`
+
+  The name of the User for the instance.
+
+- **email**: `string`
+
+  The email of the User.
+
+- **data**: `Object`
+
+  a JSON object consisting of following properties. Any of the following properties can be omitted if they are not to be updated
+
+  - **passwd**: `string` [optional]
+
+    The password of the User.
+
+  - **active**: `boolean` [optional]
+
+    An optional flag that specifies whether the user is active. If not specified, this will default to `true`
+
+  - **extra**: `Object` [optional]
+
+    An optional JSON object with arbitrary extra data about the user.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.updateUser("sample_user", "sample_user@macrometa.io", { active: true });
+```
+
+## client.replaceUser
+
+`async client.replaceUser(userName, email, data): Object`
+
+Partially updates user with given data
+
+**Arguments**
+
+- **user**: `string`
+
+  The name of the User for the instance.
+
+- **email**: `string`
+
+  The email of the User.
+
+- **data**: `Object`
+
+  a JSON object consisting of following properties. Any of the following properties can be omitted if they are not to be updated
+
+  - **passwd**: `string`
+
+    The password of the User.
+
+  - **active**: `boolean` [optional]
+
+    An optional flag that specifies whether the user is active. If not specified, this will default to `true`
+
+  - **extra**: `Object` [optional]
+
+    An optional JSON object with arbitrary extra data about the user.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.replaceUser("sample_user", "sample_user@macrometa.io", { active: true });
+```
+
+## client.deleteUser
+
+`async client.deleteUser(userName, [email]): Object`
+
+Deletes user with given data
+
+**Arguments**
+
+- **user**: `string`
+
+  The name of the User for the instance.
+
+- **email**: `string` (optional)
+
+  The email of the User.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.deleteUser("sample_user", "sample_user@macrometa.io");
+```
+
+## client.getUser
+
+`async client.getUser(userName, [email]): Object`
+
+gets user details for given user
+
+**Arguments**
+
+- **user**: `string`
+
+  The name of the User for the instance.
+
+- **email**: `string` (optional)
+
+  The email of the User.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const userDetails = await client.getUser("sample_user", "sample_user@macrometa.io");
+```
+
+## client.getUsers
+
+`async client.getUsers(): Array`
+
+Returns the list of all the users
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const users = await client.getUsers();
+```
+
+## client.hasUser
+
+`async client.hasUser(userName, [email]): boolean`
+
+Return true if user is available otherwise false.
+
+**Arguments**
+
+- **user**: `string`
+
+  The name of the User for the instance.
+
+- **email**: `string` (optional)
+
+  The email of the User.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const hasUser = await client.hasUser("sample_user", "sample_user@macrometa.io");
+```
+
+Advanced User
+
 ## client.user
 
 `user(user: string, email: string): User`
@@ -72,7 +276,7 @@ Asynchronously creates a user
 
   An optional flag that specifies whether the user is active. If not specified, this will default to `true`
 
-- **extra**: `object` [optional]
+- **extra**: `Object` [optional]
 
   An optional JSON object with arbitrary extra data about the user.
 
@@ -110,7 +314,7 @@ Partially updates the data of an existing user.
 
 **Arguments**
 
-- **data**: `object`
+- **data**: `Object`
 
   a JSON object consisting of following properties. Any of the following properties can be omitted if they are not to be updated
 
@@ -141,7 +345,7 @@ Partially updates the data of an existing user.
 
 **Arguments**
 
-- **data**: `object`
+- **data**: `Object`
 
   an JSON object consisting with following properties. Any of the following properties can be omitted if they are not to be updated, expect `passwd`
 

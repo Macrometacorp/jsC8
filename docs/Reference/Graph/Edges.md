@@ -1,5 +1,47 @@
 ## Manipulating edges
 
+## client.insertEdge
+
+`async graph.insertEdge(graphName, definition): Object`
+
+Adds the given edge definition `definition` to the given graph.
+
+**Arguments**
+
+- **graphName**: `string`
+
+  Graph name
+
+* **definition**: `Object`
+
+  For more information on edge definitions see [the HTTP API for managing graphs](https://developer.document360.io/docs/graphs).
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.insertEdge('some-graph', {
+  collection: 'edges',
+  from: ['vertices'],
+  to: ['vertices']
+});
+```
+
+## client.getEdges
+
+`async graph.getEdges(graphName): Array`
+
+Returns the edge definitions for given graph.
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.getEdges('some-graph');
+```
+
 ## graph.edgeCollection
 
 `graph.edgeCollection(collectionName): GraphEdgeCollection`

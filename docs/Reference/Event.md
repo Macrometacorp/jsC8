@@ -88,7 +88,7 @@ Creates an event. The request object contains the below properties.
 
   The activity of the event can be one of the following: "CREATE", "UPDATE", "DELETE", "EXECUTE" or "LOGIN"
 
-- **attributes**: `object`
+- **attributes**: `Object`
 
   An optional JSON object with arbitrary data about the attributes.
 

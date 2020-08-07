@@ -529,22 +529,26 @@ export class C8Client extends Fabric {
     return graphEdgeCollection.remove(documentHandle, opts);
   }
 
-  getEdges(graphName: string) {
+  async getEdges(graphName: string) {
     const graph = this.graph(graphName);
-    return graph.edgeCollections();
+    const graphDetails = await graph.get();
+    return graphDetails.edgeDefinitions;
   }
 
   linkEdge(
     graphName: string,
     collectionName: string,
-    data: any,
-    fromId: DocumentHandle,
-    toId: DocumentHandle,
-    opts?: { waitForSync?: boolean }
+    fromId: string | string[],
+    toId: string | string[],
   ) {
     const graph = this.graph(graphName);
-    const graphEdgeCollection = graph.edgeCollection(collectionName);
-    return graphEdgeCollection.save(data, fromId, toId, opts);
+    return graph.create({
+      edgeDefinitions: [{
+        collection: collectionName,
+        from: fromId,
+        to: toId
+      }]
+    })
   }
 
   hasUser(userName: string, email: string = "") {
@@ -580,23 +584,19 @@ export class C8Client extends Fabric {
   updateUser(
     userName: string,
     email: string = "",
-    passwd?: string,
-    active?: boolean,
-    extra?: object
+    data: object
   ) {
     const user = this.user(userName, email);
-    return user.modifyUser({ passwd, active, extra });
+    return user.modifyUser(data);
   }
 
   replaceUser(
     userName: string,
     email: string = "",
-    passwd: string,
-    active?: boolean,
-    extra?: object
+    data: { active?: boolean; passwd: string; extra?: object }
   ) {
     const user = this.user(userName, email);
-    return user.replaceUser({ passwd, active, extra });
+    return user.replaceUser(data);
   }
 
   getPermissions(
