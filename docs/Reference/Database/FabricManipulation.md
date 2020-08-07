@@ -8,6 +8,8 @@ These functions implement the [HTTP API for manipulating fabrics](https://develo
 
 Returns local edge locations
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----

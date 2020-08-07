@@ -78,6 +78,8 @@ Updates the edge in collection to the given graph.
 
 Note:- If a string is passed instead of an options object, it will be interpreted as the `rev` option.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -135,6 +137,8 @@ Replace the edge in collection to the given graph.
       
 Note:-If a string is passed instead of an options object, it will be interpreted as the `rev` option.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -188,6 +192,8 @@ Deletes the edge in collection to the given graph.
 
 Note:-If a string is passed instead of an options object, it will be interpreted as the `rev` option.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -219,6 +225,8 @@ await client.deleteEdge('some-graph', 'edge-collection' , "some_key");
   The handle of the end vertex of this edge. This can be either the `_id` of a  document in the fabric, the `_key` of an edge in the collection, or a document (i.e. an object with an `_id` or `_key` property).
 
 - **opts**: `Object` (optional)
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});

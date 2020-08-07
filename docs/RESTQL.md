@@ -2,7 +2,7 @@
 
 ## client.createRestql
 
-`client.createRestql(restqlName, parameter, value): this`
+`client.createRestql(restqlName, value, parameter): this`
 
 Creates the restql with restqlName and value.
 
@@ -12,19 +12,19 @@ Creates the restql with restqlName and value.
 
   The name of the restql to create.
 
-- **parameter**: `any`
-   
-   Parameters to the created restql.
-
 - **value**: `string`
 
    The restql you want to create.
+
+- **parameter**: `any`
+   
+   Parameters to the created restql. Default is `{}`.
 
 **Examples**
 
 ```js
 const client = new jsc8();
-await client.createRestql("testRestql", {}, "FOR x IN TestCollection RETURN x");
+await client.createRestql("testRestql", "FOR x IN TestCollection RETURN x");
 ```
 
 ## client.getRestqls
@@ -75,13 +75,17 @@ Updates a restql that is already created.
 
 - **parameter**: `Object`
 
-  An optional JSON object which can provide parameters to the restql.
+  Parameters to the created restql. Default is `{}`.
+
+- **value**: `string`
+
+  The restql you want to create.
 
 **Examples**
 
 ```js
 const client = new jsc8();
-await client.updateRestql("testRestql", {}, "FOR x IN _routing RETURN x" );
+await client.updateRestql("testRestql", "FOR x IN _routing RETURN x" );
 ```
 
 ## client.deleteRestql

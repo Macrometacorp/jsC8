@@ -6,6 +6,8 @@
 
 Returns tenant edge locations
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----

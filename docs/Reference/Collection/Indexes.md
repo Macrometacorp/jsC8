@@ -14,6 +14,8 @@ Returns list of indexes for given collection
 
   Name of the collection
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -43,6 +45,8 @@ Creates a Hash index on the collection.
 
   Additional options for this index. If the value is a boolean, it will be
   interpreted as `opts.unique`.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -74,6 +78,8 @@ Creates a Geo index on the collection.
   Additional options for this index. If the value is a boolean, it will be
   interpreted as `opts.unique`.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -103,6 +109,8 @@ Creates a skiplist index on the collection.
 
   Additional options for this index. If the value is a boolean, it will be
   interpreted as `opts.unique`.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -134,6 +142,8 @@ Creates a Persistent index on the collection.
   Additional options for this index. If the value is a boolean, it will be
   interpreted as `opts.unique`.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -162,6 +172,8 @@ Creates a FullText index on the collection.
 * **minLength**: `Number` (optional)
 
   Minimum character length of words to index. Will default to a server-defined value if unspecified. It is thus recommended to set this value explicitly when creating the index.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -192,6 +204,8 @@ Creates a Ttl index on the collection.
 
   The time (in seconds) after a document's creation after which the documents count as "expired".
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -216,6 +230,8 @@ Deletes index with given index name from given collection
 
   The handle of the index to delete. This can either be a fully-qualified identifier or the collection-specific key of the index. If the value is an object, its `name` property will be used instead.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -235,6 +251,8 @@ Returns list of indexes for given collection
 - **collectionName**: `string`
 
   Name of the collection
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});

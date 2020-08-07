@@ -18,6 +18,8 @@ Creates a graph with the given `properties` for this `graphName`, then returns t
 
   For more information on the `properties` object, see  [the HTTP API documentation for creating graphs](https://developer.document360.io/docs/graphs).
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -42,6 +44,8 @@ Deletes the graph from the client.
 
   If set to `true`, the collections associated with the graph will also be deleted.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -61,6 +65,8 @@ Deletes the graph from the client.
 - **graphName**: `string`
 
   Graph name
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -82,6 +88,8 @@ Retrieves general information about the graph.
 
   Graph name
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -95,6 +103,8 @@ const graph = await client.getGraph('some-graph');
 `async graph.getGraphs(): Boolean`
 
 Retrieves all graphs information.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});

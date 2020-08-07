@@ -25,6 +25,8 @@ Returns document for given collection
   If set to `true`, the method will return `null` instead of throwing an error
   if the document does not exist.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -52,6 +54,8 @@ Returns documents for given collection
 - **skip**: `number`
 
   skips the recent most documents from given limit
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -109,6 +113,8 @@ Inserts document in collection
 
 @(Info)(Note:-)(If a boolean is passed instead of an options object, it will be interpreted as the `returnNew` option.)
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -165,6 +171,8 @@ Inserts documents in collection
 
 @(Info)(Note:-)(If a boolean is passed instead of an options object, it will be interpreted as the `returnNew` option.)
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -220,6 +228,8 @@ Inserts documents from file. Only accepts CSV file.
     constraint violated but will replace the old document.
 
 @(Info)(Note:-)(If a boolean is passed instead of an options object, it will be interpreted as the `returnNew` option.)
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});

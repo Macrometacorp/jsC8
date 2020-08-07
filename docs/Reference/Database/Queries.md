@@ -29,6 +29,8 @@ For a complete list of query settings please reference the [macrometa.io/jsC8 do
 
 If `query` is an object with `query` and `bindVars` properties, those will be used as the values of the respective arguments instead.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -42,6 +44,8 @@ const data = await client.executeQuery("FOR doc IN some-collection RETURN doc._i
 `async client.getRunningQueries()`
 
 returns all running queries
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -62,6 +66,8 @@ terminates query
 - **queryId**: `string`
 
   The id of the query.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});

@@ -20,6 +20,8 @@ Create asynchronously a stream for a given database.
 
   If the stream is a collection stream or not. The default is `false`.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -43,6 +45,8 @@ Returns true if stream is available
 - **local**: `boolean`
 
   Is the stream local or global
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -72,6 +76,8 @@ Returns stream instance for given stream
 
   If the stream is a collection stream or not. The default is `false`.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -99,6 +105,8 @@ Returns statistics for given stream
 - **isCollectionStream**: `boolean`
 
   If the stream is a collection stream or not. The default is `false`.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -128,6 +136,8 @@ Get the list of persistent subscriptions for a given stream
 
   If the stream is a collection stream or not. The default is `false`.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -155,6 +165,8 @@ Get estimated backlog for offline stream
 - **isCollectionStream**: `boolean`
 
   If the stream is a collection stream or not. The default is `false`.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -188,6 +200,8 @@ Delete a subscription.
 
   If the stream is a collection stream or not. The default is `false`.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -208,6 +222,8 @@ Clear backlog for all streams for given subscription
 
   The name of the subscription.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -221,6 +237,8 @@ await client.clearStreamBacklog("my-subscription");
 `async stream.clearStreamsBacklog()`
 
 Clear backlog for all streams
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -278,6 +296,8 @@ Returns producer access for given stream
 
 `producer.close()`
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -330,6 +350,8 @@ Returns consumer access for given stream
 `consumer.on('error', callback )`
 
 `consumer.close()`
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});

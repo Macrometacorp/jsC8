@@ -12,6 +12,8 @@ Validates the given application definition and returns an object containing a me
 
   Application Definition in string format
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -38,6 +40,8 @@ const validity = await client.validateStreamApp(appDefinition);
 
 Get list of all stream applictions under given database.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -57,6 +61,8 @@ Deletes Stream App
 - **appName**: `string`
 
   Application name
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -78,6 +84,8 @@ Returns details of a Stream Application.
 
   Application name
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -97,6 +105,8 @@ Returns samples for Application Definition.
 - **appName**: `string`
 
   Application name
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -123,6 +133,8 @@ Activates or deactivates a Stream Application.
     True: Activate
     
     False: Deactivate
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});

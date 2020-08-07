@@ -28,6 +28,8 @@ Creates user with given data
 
   An optional JSON object with arbitrary extra data about the user.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -67,6 +69,8 @@ Partially updates user with given data
   - **extra**: `Object` [optional]
 
     An optional JSON object with arbitrary extra data about the user.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -108,6 +112,8 @@ Partially updates user with given data
 
     An optional JSON object with arbitrary extra data about the user.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -131,6 +137,8 @@ Deletes user with given data
 - **email**: `string` (optional)
 
   The email of the User.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -156,6 +164,8 @@ gets user details for given user
 
   The email of the User.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -169,6 +179,8 @@ const userDetails = await client.getUser("sample_user", "sample_user@macrometa.i
 `async client.getUsers(): Array`
 
 Returns the list of all the users
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -194,6 +206,8 @@ Return true if user is available otherwise false.
 
   The email of the User.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -201,6 +215,116 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 const hasUser = await client.hasUser("sample_user", "sample_user@macrometa.io");
 ```
+
+## client.getPermission
+
+`async client.getPermission(userName, email, databaseName, [collectionName])`
+
+Get the access level of a specific database/collection in a given database
+
+**Arguments**
+
+- **user**: `string`
+
+  The name of the User for the instance.
+
+- **email**: `string`
+
+  The email of the User.
+
+- **databaseName**: `string`
+
+  Name of the database
+
+- **collectionName**: `string` (optional)
+
+  Name of the Collection for which access level is to be fetched. if Collection is given then it gives acces to collection level access otherwise gives database level access.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const databaseAccess = await client.getPermission("sample_user", "sample_user@macrometa.io", 'sample_database');
+const collectionAccess = await client.getPermission("sample_user", "sample_user@macrometa.io", 'sample_database', 'sample_collection');
+```
+
+## client.updatePermission
+
+`async client.updatePermission(userName, email, fabricName, permission, [collectionName])`
+
+Updates the access level of a specific database/collection in a given database
+
+**Arguments**
+
+- **user**: `string`
+
+  The name of the User for the instance.
+
+- **email**: `string`
+
+  The email of the User.
+
+- **fabricName**: `string`
+
+  The name of the fabric.
+
+- **permission**: `string`
+
+  The permission code, only possible values are `rw`, `ro` or `none`
+
+- **collectionName**: `string` (optional)
+
+  Name of the Collection for which access level is to be fetched. if Collection is given then it gives acces to collection level access otherwise gives database level access.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.updatePermission("sample_user", "sample_user@macrometa.io", 'sample_fabric', 'ro');
+await client.updatePermission("sample_user", "sample_user@macrometa.io", 'sample_fabric', 'ro', 'sample_collection');
+```
+
+## client.resetPermission
+
+`async client.resetPermission(userName, email, fabricName, [collectionName])`
+
+Reset the access level of a specific database/collection in a given database
+
+**Arguments**
+
+- **user**: `string`
+
+  The name of the User for the instance.
+
+- **email**: `string`
+
+  The email of the User.
+
+- **fabricName**: `string`
+
+  The name of the fabric.
+
+- **collectionName**: `string` (optional)
+
+  Name of the Collection for which access level is to be fetched. if Collection is given then it gives acces to collection level access otherwise gives database level access.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.resetPermission("sample_user", "sample_user@macrometa.io", 'sample_fabric');
+await client.resetPermission("sample_user", "sample_user@macrometa.io", 'sample_fabric', 'sample_collection');
+```
+
 
 Advanced User
 

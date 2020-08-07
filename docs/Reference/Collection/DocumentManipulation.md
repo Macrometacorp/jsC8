@@ -74,6 +74,8 @@ Updates document with given value in collection
 
 Note:- If a string is passed instead of an options object, it will be interpreted as the `rev` option.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -152,6 +154,8 @@ Updates documents with given value in collection
 
 Note:- If a string is passed instead of an options object, it will be interpreted as the `rev` option.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -207,6 +211,8 @@ Note:-The `policy` option is not available when using the driver with C8 3.0 as 
       
 Note:-If a string is passed instead of an options object, it will be interpreted as the `rev` option.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -257,6 +263,8 @@ Replaces documents with given value in collection
       an error.
       
 Note:-If a string is passed instead of an options object, it will be interpreted as the `rev` option.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -309,6 +317,8 @@ Note:- The `policy` option is not available when using the driver with C8 3.0 as
 
 Note:-If a string is passed instead of an options object, it will be interpreted as the `rev` option.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -359,6 +369,8 @@ Deletes documents in collection
       an error.
 
 Note:-If a string is passed instead of an options object, it will be interpreted as the `rev` option.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});

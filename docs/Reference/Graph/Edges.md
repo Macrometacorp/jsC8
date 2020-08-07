@@ -16,6 +16,8 @@ Adds the given edge definition `definition` to the given graph.
 
   For more information on edge definitions see [the HTTP API for managing graphs](https://developer.document360.io/docs/graphs).
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -33,6 +35,8 @@ await client.insertEdge('some-graph', {
 `async graph.getEdges(graphName): Array`
 
 Returns the edge definitions for given graph.
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});

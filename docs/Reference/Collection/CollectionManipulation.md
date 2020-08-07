@@ -16,6 +16,8 @@ Creates collection
 - **properties**: `Object` (optional)
   For more information on the 'properties` object, see  [the HTTP API documentation for creating collections](https://developer.document360.io/docs/using-c8-rest-api).
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -44,6 +46,8 @@ Deletes collection
 
     This parameter must be set to `true` when dropping a system collection.
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -62,6 +66,8 @@ Returns true if collection exists otherwise false
 
 - **collectionName**: `string`
   Name of the collection
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -82,6 +88,8 @@ Returns collection info
 - **collectionName**: `string`
   Name of the collection
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -100,6 +108,8 @@ Returns collections info
 
 - **collectionName**: `string`
   Name of the collection
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -120,6 +130,8 @@ Returns collection Ids
 - **collectionName**: `string`
   Name of the collection
 
+**Examples**
+
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
@@ -138,6 +150,8 @@ Returns collections keys
 
 - **collectionName**: `string`
   Name of the collection
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
@@ -175,6 +189,8 @@ const collectionKeys = await client.getCollectionKeys('some-collection');
 `listener.on('error', callback )`
 
 `listener.close()`
+
+**Examples**
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
