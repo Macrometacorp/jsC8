@@ -78,11 +78,11 @@ export class Stream {
     );
   }
 
-  expireMessagesOnAllSubscriptions(expireTimeInSeconds: number) {
-    const urlSuffix = `/all_subscription/expireMessages/${expireTimeInSeconds}`;
+  backlog() {
+    const urlSuffix = "/backlog";
     return this._connection.request(
       {
-        method: "POST",
+        method: "GET",
         path: this._getPath(false, urlSuffix),
         qs: `global=${this.global}`,
       },
@@ -90,11 +90,11 @@ export class Stream {
     );
   }
 
-  backlog() {
-    const urlSuffix = "/backlog";
+  clearBacklog() {
+    const urlSuffix = `/clearbacklog`;
     return this._connection.request(
       {
-        method: "GET",
+        method: "POST",
         path: this._getPath(false, urlSuffix),
         qs: `global=${this.global}`,
       },
@@ -126,20 +126,8 @@ export class Stream {
     );
   }
 
-  resetSubscriptionToPosition(subscription: string) {
-    const urlSuffix = `/subscription/${subscription}`;
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: this._getPath(false, urlSuffix),
-        qs: `global=${this.global}`,
-      },
-      (res) => res.body
-    );
-  }
-
-  expireMessages(subscription: string, expireTimeInSeconds: number) {
-    const urlSuffix = `/subscription/${subscription}/expireMessages/${expireTimeInSeconds}`;
+  expireMessages(expireTimeInSeconds: number) {
+    const urlSuffix = `/expiry/${expireTimeInSeconds}`;
     return this._connection.request(
       {
         method: "POST",
@@ -150,44 +138,8 @@ export class Stream {
     );
   }
 
-  resetCursor(subscription: string) {
-    const urlSuffix = `/subscription/${subscription}/resetcursor`;
-    return this._connection.request(
-      {
-        method: "POST",
-        path: this._getPath(false, urlSuffix),
-        qs: `global=${this.global}`,
-      },
-      (res) => res.body
-    );
-  }
-
-  resetSubscriptionToTimestamp(subscription: string, timestamp: number) {
-    const urlSuffix = `/subscription/${subscription}/resetcursor/${timestamp}`;
-    return this._connection.request(
-      {
-        method: "POST",
-        path: this._getPath(false, urlSuffix),
-        qs: `global=${this.global}`,
-      },
-      (res) => res.body
-    );
-  }
-
-  skipNumberOfMessages(subscription: string, numMessages: number) {
-    const urlSuffix = `/subscription/${subscription}/skip/${numMessages}`;
-    return this._connection.request(
-      {
-        method: "POST",
-        path: this._getPath(false, urlSuffix),
-        qs: `global=${this.global}`,
-      },
-      (res) => res.body
-    );
-  }
-
-  skipAllMessages(subscription: string) {
-    const urlSuffix = `/subscription/${subscription}/skip_all`;
+  clearSubscriptionBacklog(subscription: string) {
+    const urlSuffix = `/clearbacklog/${subscription}`;
     return this._connection.request(
       {
         method: "POST",
@@ -210,13 +162,12 @@ export class Stream {
     );
   }
 
-  terminateStream() {
-    const urlSuffix = "/terminate";
+  deleteStream(force: boolean = false) {
     return this._connection.request(
       {
-        method: "POST",
-        path: this._getPath(false, urlSuffix),
-        qs: `global=${this.global}`,
+        method: "DELETE",
+        path: this._getPath(false),
+        qs: `global=${this.global}&force=${force}`,
       },
       (res) => res.body
     );
@@ -242,7 +193,7 @@ export class Stream {
 
     let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-      }/${subscriptionName}`;
+    }/${subscriptionName}`;
 
     // Appending query params to the url
     consumerUrl = `${consumerUrl}?${queryParams}`;
@@ -267,11 +218,24 @@ export class Stream {
 
     let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
       this.topic
-      }`;
+    }`;
 
     // Appending query params to the url
     producerUrl = `${producerUrl}?${queryParams}`;
 
     return ws(producerUrl);
+  }
+
+  publishMessage(message: any) {
+    const urlSuffix = "/publish";
+    return this._connection.request(
+      {
+        method: "POST",
+        path: this._getPath(false, urlSuffix),
+        qs: `global=${this.global}`,
+        body: message,
+      },
+      (res) => res.body
+    );
   }
 }

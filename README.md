@@ -88,7 +88,10 @@ or to have failover support
 
 ```js
 const jsc8 = require("jsc8");
-const client = new jsc8(["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"]);
+const client = new jsc8([
+  "https://gdn1.macrometa.io",
+  "https://gdn2.macrometa.io",
+]);
 ```
 
 This connection string actually represents the default value( `"https://gdn1.macrometa.io"` ), so if this is the value you want, you can omit url while invocation:
@@ -138,7 +141,11 @@ Note: by default value for fabric is `_system`
 
 ```js
 const jsc8 = require("jsc8");
-client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX", fabricName: "_system"});
+client = new jsc8({
+  url: "https://gdn1.macrometa.io",
+  token: "XXXX",
+  fabricName: "_system",
+});
 ```
 
 or to have failover support
@@ -148,7 +155,7 @@ const jsc8 = require("jsc8");
 client = new jsc8({
   url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"],
   token: "XXXX",
-  fabricName: "_system"
+  fabricName: "_system",
 });
 ```
 
@@ -160,7 +167,11 @@ Note: by default value for fabric is `_system`
 
 ```js
 const jsc8 = require("jsc8");
-client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX", fabricName: "_system"});
+client = new jsc8({
+  url: "https://gdn1.macrometa.io",
+  apikey: "XXXX",
+  fabricName: "_system",
+});
 ```
 
 or to have failover support
@@ -170,9 +181,9 @@ const jsc8 = require("jsc8");
 client = new jsc8({
   url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"],
   apikey: "XXXX",
-  fabricName: "_system"
+  fabricName: "_system",
 });
-``` 
+```
 
 ## Create Collection
 
@@ -183,10 +194,9 @@ The below example shows the steps.
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 
 async function createCollection() {
   let collectionDetails;
@@ -214,7 +224,7 @@ async function createCollection() {
   await client.login(email, password);
 
   await console.log("Using the demotenant");
-  client.useTenant(tenant - name);
+  client.useTenant(tenant_name);
 
   await console.log("Using the demoFabric...");
   client.useFabric("demoFabric");
@@ -244,10 +254,9 @@ Let's add a hash_index called `emails` to our collection `employees`. Please ref
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 
 async function createIndex() {
   let index;
@@ -263,8 +272,8 @@ async function createIndex() {
 
 createIndex();
 ```
-Note:- Just like above example user can create `addTtlIndex, addFullTextIndex, addPersistentIndex, addSkiplistIndex addGeoIndex`. Checkout more for - [Indexes](docs/Reference/Collection/Indexes.md)
 
+Note:- Just like above example user can create `addTtlIndex, addFullTextIndex, addPersistentIndex, addSkiplistIndex addGeoIndex`. Checkout more for - [Indexes](docs/Reference/Collection/Indexes.md)
 
 ### Advanced User
 
@@ -277,7 +286,7 @@ async function createIndex() {
   await client.login(email, password);
 
   await console.log("Using the demotenant");
-  client.useTenant(tenant - name);
+  client.useTenant(tenant_name);
 
   await console.log("Using the demoFabric...");
   client.useFabric("demoFabric");
@@ -310,7 +319,6 @@ createIndex().then(console.log);
 Let's insert documents to the `employees` collection as shown below.
 
 ```js
-
 const docJean = {
   _key: "Jean",
   firstname: "Jean",
@@ -345,9 +353,9 @@ const docs = [docJean, docJames, docHan, docBruce];
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 
 async function populate() {
   await console.log("Creating the collection object to be used...");
@@ -369,7 +377,7 @@ async function populate() {
   await client.login(email, password);
 
   await console.log("Using the demotenant");
-  client.useTenant(tenant - name);
+  client.useTenant(tenant_name);
 
   await console.log("Using the demoFabric...");
   client.useFabric("demoFabric");
@@ -395,12 +403,14 @@ C8QL is C8's query language. You can execute C8QL query on our newly created col
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 
 async function c8Queries() {
-  const result = await client.executeQuery("FOR employee IN employees RETURN employee");
+  const result = await client.executeQuery(
+    "FOR employee IN employees RETURN employee"
+  );
   await console.log(result);
 }
 
@@ -419,7 +429,7 @@ async function c8Queries() {
   await client.login(email, password);
 
   await console.log("Using the demotenant");
-  client.useTenant(tenant - name);
+  client.useTenant(tenant_name);
 
   await console.log("Using the demoFabric...");
   client.useFabric("demoFabric");
@@ -480,7 +490,7 @@ async function realTimeListener() {
   await client.login(email, password);
 
   await console.log("Using the demotenant");
-  client.useTenant(tenant - name);
+  client.useTenant(tenant-name);
 
   await console.log("Using the demoFabric...");
   client.useFabric("demoFabric");
@@ -507,28 +517,34 @@ Creating streams in C8 is a 1 step operation. The stream can be either a `local`
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-
-function publish(publisher, payload) {
-  return publisher.send({ payload });
-}
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 
 async function streamDemo() {
-
   await client.createStream("newStreamFromJSC8", false);
   //Here the last boolean value tells if the stream is global or local. false means that it is global.
 
-  const consumer = await client.createStreamReader("newStreamFromJSC8", "my-sub");
-  const publisher = await client.createStreamProducer("newStreamFromJSC8");
+  const consumer = await client.createStreamReader(
+    "newStreamFromJSC8",
+    "my-sub"
+  );
+  const producer = await client.createStreamProducer("newStreamFromJSC8");
 
   consumer.on("message", (msg) => {
-    console.log(msg);
+    const { payload, messageId } = JSON.parse(msg);
+    // logging received message payload(ASCII encoded) to decode use atob()
+    console.log(payload);
+    // Send message acknowledgement
+    consumer.send(JSON.stringify({ messageId }));
   });
 
-  publisher.on("open", () => {
-    publish(publisher, "Hello World");
+  producer.on("open", () => {
+    // If you message is an object, convert the obj to string.
+    // e.g. const message = JSON.stringify({message:'Hello World'});
+    const message = "Hello World";
+    const payloadObj = { payload: Buffer.from(str).toString("base64") };
+    producer.send(JSON.stringify(payloadObj));
   });
 }
 
@@ -541,31 +557,40 @@ streamDemo();
 const jsc8 = require("jsc8");
 const client = new jsc8("https://gdn1.macrometa.io");
 
-function publish(publisher, payload) {
-  return publisher.send({ payload });
-}
-
 async function streamDemo() {
   await console.log("Logging in...");
   await client.login(email, password);
 
   await console.log("Using the demotenant");
-  client.useTenant(tenant - name);
+  client.useTenant("tenant-name");
 
   stream = client.stream("newStreamFromJSC8", false);
-  //Here the last boolean value tells if the stream is local or global. false means that it is global.
+  //Here the last boolean value tells if the stream is local or global. false means that it is global.(DEFAULT: false)
 
   await stream.createStream();
 
-  const consumer = stream.consumer("my-sub", "gdn1.macrometa.io");
-  const publisher = stream.producer("gdn1.macrometa.io");
-
-  consumer.on("message", (msg) => {
-    console.log(msg);
+  const consumerOTP = await stream.getOtp(); // OTP expiry 10s
+  const consumer = stream.consumer("my-sub", "gdn1.macrometa.io", {
+    otp: consumerOTP,
   });
 
-  publisher.on("open", () => {
-    publish(publisher, "Hello World");
+  const producerOTP = await stream.getOtp(); // OTP expiry 10s
+  const producer = stream.producer("gdn1.macrometa.io", { otp: producerOTP });
+
+  consumer.on("message", (msg) => {
+    const { payload, messageId } = JSON.parse(msg);
+    // logging received message payload(ASCII encoded) to decode use atob()
+    console.log(payload);
+    // Send message acknowledgement
+    consumer.send(JSON.stringify({ messageId }));
+  });
+
+  producer.on("open", () => {
+    // If you message is an object, convert the obj to string.
+    // e.g. const message = JSON.stringify({message:'Hello World'});
+    const message = "Hello World";
+    const payloadObj = { payload: Buffer.from(str).toString("base64") };
+    producer.send(JSON.stringify(payloadObj));
   });
 }
 
@@ -598,11 +623,9 @@ const delete_data = "REMOVE 'abc' IN " + collection_name;
 
 const get_count = "RETURN COUNT(FOR doc IN " + collection_name + " RETURN 1)";
 
-
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
-
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 
 async function restqldemo() {
   console.log("------- CREATE GEO-REPLICATED COLLECTION  ------");
@@ -757,7 +780,7 @@ async function createFabric() {
   await client.login(email, password);
 
   await console.log("Using the demotenant...");
-  client.useTenant(tenant - name);
+  client.useTenant(tenant_name);
 
   try {
     await console.log("Creating the client...");
@@ -796,7 +819,7 @@ async function getFabric() {
   await console.log("Logging in...");
   await client.login(email, password);
   await console.log("Using the demotenant...");
-  client.useTenant(tenant - name);
+  client.useTenant(tenant_name);
 
   try {
     await console.log("Using the demoFabric...");

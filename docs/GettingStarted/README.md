@@ -178,29 +178,58 @@ const res = await client.executeRestql(queryName);
 
 //--------------------------------------------------------------------------------------
 // Create persistent, global and local streams in demofabric
-const persistent_globalStream = await client.createStream(streamName, false);
 
+// Here the second param value tells if the stream is local or global. false means that it is global.(DEFAULT: false)
+const persistent_globalStream = await client.createStream(streamName, false);
 const persistent_localStream = await client.createStream(streamName, true);
 
+
+// ADVANCED
+
+// Here the last boolean value tells if the stream is local or global. false means that it is global.(DEFAULT: false)
+
+const persistent_globalStream = client.stream(streamName, false);
+await persistent_globalStream.createStream();
+
+const persistent_localStream = client.stream(streamName, true);
+await persistent_localStream.createStream();
+
+
 //--------------------------------------------------------------------------------------
+
 // Subscribe to a stream
+
 await client.createStream(streamName, false);
 
 const consumer = await client.createStreamReader("my-sub", regionURL);
-const publisher = await client.createStreamProducer(regionURL);
+const producer = await client.createStreamProducer(regionURL);
 
+// OR ADVANCED
 
-// Publish to a stream
-function publish(payload) {
-  return publisher.send({ payload });
-}
+const stream = client.stream(streamName, false);
+await stream.createStream();
+
+const consumerOTP = await stream.getOtp();
+const consumer = stream.consumer("my-sub", regionURL, { otp : consumerOTP });
+
+const producerOTP = await stream.getOtp();
+const producer = stream.producer(regionURL,  { otp : producerOTP });
+
 
 consumer.on("message", (msg) => {
-  console.log(msg);
+  const { payload, messageId } = JSON.parse(msg);
+  // logging received message payload(ASCII encoded) to decode use atob()
+  console.log(payload);
+  // Send message acknowledgement
+  consumer.send(JSON.stringify({ messageId }));
 });
 
-publisher.on("open", () => {
-  publish("Hello World");
+producer.on("open", () => {
+  // If you message is an object, convert the obj to string.
+  // e.g. const message = JSON.stringify({message:'Hello World'});
+  const message = "Hello World";
+  const payloadObj = { payload: Buffer.from(str).toString("base64") };
+  producer.send(JSON.stringify(payloadObj));
 });
 
 //--------------------------------------------------------------------------------------
