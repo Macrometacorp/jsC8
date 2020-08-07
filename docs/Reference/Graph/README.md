@@ -114,7 +114,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 const graphs = await client.getGraphs();
 ```
 
-Advanced User
+## Advanced User
 
 ## graph.exists
 

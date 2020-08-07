@@ -236,7 +236,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 await client.linkEdge('some-graph', 'edge-collection' , 'vertices/start-vertex', 'vertices/end-vertex');
 ```
 
-Advanced User
+## Advanced User
 
 ## graphEdgeCollection.remove
 

@@ -195,7 +195,7 @@ async function createCollection() {
 createCollection().then(console.log);
 ```
 
-Advanced User
+## Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -258,7 +258,7 @@ createIndex();
 Note:- Just like above example user can create addTtlIndex, addFullTextIndex, addPersistentIndex, addSkiplistIndex addGeoIndex. Checkout more for - [Indexes](docs/Reference/Collection/Indexes.md)
 
 
-Advanced User
+## Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -350,7 +350,7 @@ async function populate() {
 populate();
 ```
 
-Advanced User
+## Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -399,7 +399,7 @@ async function c8Queries() {
 c8Queries();
 ```
 
-Advanced User
+## Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -457,7 +457,7 @@ async function realTimeListener() {
 realTimeListener();
 ```
 
-Advanced User
+## Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -527,7 +527,7 @@ async function streamDemo() {
 streamDemo();
 ```
 
-Advanced User
+## Advanced User
 
 ```js
 const jsc8 = require("jsc8");
@@ -647,7 +647,7 @@ async function restqldemo() {
 restqldemo().then(console.log("Starting Execution"));
 ```
 
-Advanced User
+## Advanced User
 
 ```js
 const jsc8 = require("jsc8");

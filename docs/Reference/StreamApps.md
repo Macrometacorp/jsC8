@@ -144,7 +144,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 const streamAppSamples = await client.activateStreamApp("Sample-Cargo-App", true);
 ```
 
-Advanced User
+## Advanced User
 
 ## client.createStreamApp
 

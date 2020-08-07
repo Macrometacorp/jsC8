@@ -262,7 +262,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 const collectionIndexes = await client.getCollectionIndexes("some-collection");
 ```
 
-Advanced User
+## Advanced User
 
 ## collection.createIndex
 

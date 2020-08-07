@@ -326,7 +326,7 @@ await client.resetPermission("sample_user", "sample_user@macrometa.io", 'sample_
 ```
 
 
-Advanced User
+## Advanced User
 
 ## client.user
 
