@@ -382,8 +382,6 @@ const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 const streams = await client.getStreams();
 ```
 
-# Advanced User
-
 ## client.stream
 
 `client.stream(streamName, local, isCollectionStream): Stream`
