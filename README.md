@@ -81,14 +81,14 @@ The first step in using C8 is to establish a connection to a local region. When 
 
 ```js
 const jsc8 = require("jsc8");
-const client = new jsc8("MY-C8-URL");
+const client = new jsc8("https://gdn1.macrometa.io");
 ```
 
 or to have failover support
 
 ```js
 const jsc8 = require("jsc8");
-const client = new jsc8(["MY-C8-URL1", "MY-C8-URL2"]);
+const client = new jsc8(["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"]);
 ```
 
 This connection string actually represents the default value( `"https://gdn1.macrometa.io"` ), so if this is the value you want, you can omit url while invocation:
@@ -132,34 +132,38 @@ client.useTenant(tenant_name);
 
 ### With token
 
-If you want to login with token then you just need to pass the token in the jsc8 connection itself wrapping in Object with your region URL.
+If you want to login with token then you just need to pass the token in the jsc8 connection itself wrapping in Object with your region URL with specific fabric.
+
+Note: by default value for fabric is `_system`
 
 ```js
 const jsc8 = require("jsc8");
-client = new jsc8({ url: "MY-C8-URL", token: "XXXX" });
+client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX", fabricName: "_system"});
 ```
 
 or to have failover support
 
 ```js
 const jsc8 = require("jsc8");
-client = new jsc8({ url: ["MY-C8-URL1", "MY-C8-URL2"], token: "XXXX" });
+client = new jsc8({ url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"], token: "XXXX", fabricName: "_system"});
 ```
 
 ### With apikey
 
-If you want to login with apikey then you just need to pass the apikey in the jsc8 connection itself wrapping in Object with your region URL.
+If you want to login with apikey then you just need to pass the apikey in the jsc8 connection itself wrapping in Object with your region URL with specific fabric.
+
+Note: by default value for fabric is `_system`
 
 ```js
 const jsc8 = require("jsc8");
-client = new jsc8({ url: "MY-C8-URL", apikey: "XXXX" });
+client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX", fabricName: "_system"});
 ```
 
 or to have failover support
 
 ```js
 const jsc8 = require("jsc8");
-client = new jsc8({ url: ["MY-C8-URL1", "MY-C8-URL2"], apikey: "XXXX" });
+client = new jsc8({ url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"], apikey: "XXXX", fabricName: "_system"});
 ``` 
 
 ## Create Collection
