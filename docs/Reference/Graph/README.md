@@ -4,7 +4,7 @@ These functions implement the [HTTP API for manipulating graphs](https://develop
 
 ## client.createGraph
 
-`async graph.createGraph(graphName, properties): Object`
+`async client.createGraph(graphName, properties): Object`
 
 Creates a graph with the given `properties` for this `graphName`, then returns the server response.
 
@@ -30,7 +30,7 @@ await client.createGraph('some-graph');
 
 ## client.deleteGraph
 
-`async graph.deleteGraph(graphName, dropCollections): Object`
+`async client.deleteGraph(graphName, dropCollections): Object`
 
 Deletes the graph from the client.
 
@@ -56,7 +56,7 @@ await client.deleteGraph('some-graph');
 
 ## client.hasGraph
 
-`async graph.hasGraph(graphName): Boolean`
+`async client.hasGraph(graphName): Boolean`
 
 Deletes the graph from the client.
 
@@ -78,7 +78,7 @@ const hasGraph = await client.hasGraph('some-graph');
 
 ## client.getGraph
 
-`async graph.getGraph(graphName): Boolean`
+`async client.getGraph(graphName): Boolean`
 
 Retrieves general information about the graph.
 
@@ -100,7 +100,7 @@ const graph = await client.getGraph('some-graph');
 
 ## client.getGraphs
 
-`async graph.getGraphs(): Boolean`
+`async client.getGraphs(): Boolean`
 
 Retrieves all graphs information.
 

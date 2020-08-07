@@ -4,7 +4,7 @@ These functions implement [the HTTP API for modifying collections](https://devel
 
 ## client.createCollection
 
-`async collection.createCollection(collectionName, [properties]): Object`
+`async client.createCollection(collectionName, [properties]): Object`
 
 Creates collection
 
@@ -28,7 +28,7 @@ await client.createCollection('some-collection');
 
 ## client.deleteCollection
 
-`async collection.deleteCollection(collectionName, [opts]): Object`
+`async client.deleteCollection(collectionName, [opts]): Object`
 
 Deletes collection
 
@@ -58,7 +58,7 @@ await client.deleteCollection('some-collection');
 
 ## client.hasCollection
 
-`async collection.hasCollection(collectionName): Boolean`
+`async client.hasCollection(collectionName): Boolean`
 
 Returns true if collection exists otherwise false
 
@@ -79,7 +79,7 @@ await client.hasCollection('some-collection');
 
 ## client.getCollection
 
-`async collection.getCollection(collectionName): Object`
+`async client.getCollection(collectionName): Object`
 
 Returns collection info
 
@@ -100,7 +100,7 @@ const collection = await client.getCollection('some-collection');
 
 ## client.getCollections
 
-`async collection.getCollections(collectionName): Array<Object>`
+`async client.getCollections(collectionName): Array<Object>`
 
 Returns collections info
 
@@ -121,7 +121,7 @@ const collections = await client.getCollections('some-collection');
 
 ## client.getCollectionIds
 
-`async collection.getCollectionIds(collectionName): Array<Object>`
+`async client.getCollectionIds(collectionName): Array<Object>`
 
 Returns collection Ids
 
@@ -142,7 +142,7 @@ const collectionIds = await client.getCollectionIds('some-collection');
 
 ## client.getCollectionKeys
 
-`async collection.getCollectionKeys(collectionName): Array<Object>`
+`async client.getCollectionKeys(collectionName): Array<Object>`
 
 Returns collections keys
 

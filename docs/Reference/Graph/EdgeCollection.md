@@ -4,7 +4,7 @@ The GraphEdgeCollection API extends the [Collection API](https://developer.docum
 
 ## client.updateEdge
 
-`async graph.updateEdge(graphName, collectionName, documentHandle, newValue, [opts]): Object`
+`async client.updateEdge(graphName, collectionName, documentHandle, newValue, [opts]): Object`
 
 Updates the edge in collection to the given graph.
 
@@ -90,7 +90,7 @@ await client.updateEdge('some-graph', 'edge-collection' , "some_key" , {some: "d
 
 ## client.replaceEdge
 
-`async graph.replaceEdge(graphName, collectionName, documentHandle, newValue, [opts]): Object`
+`async client.replaceEdge(graphName, collectionName, documentHandle, newValue, [opts]): Object`
 
 Replace the edge in collection to the given graph.
 
@@ -149,7 +149,7 @@ await client.replaceEdge('some-graph', 'edge-collection' , "some_key" , {some: "
 
 ## client.deleteEdge
 
-`async graph.deleteEdge(graphName, collectionName, documentHandle, [opts]): Object`
+`async client.deleteEdge(graphName, collectionName, documentHandle, [opts]): Object`
 
 Deletes the edge in collection to the given graph.
 
@@ -204,7 +204,7 @@ await client.deleteEdge('some-graph', 'edge-collection' , "some_key");
 
 ## client.linkEdge
 
-`async graph.linkEdge(graphName, collectionName, fromId, toId): Object`
+`async client.linkEdge(graphName, collectionName, fromId, toId): Object`
 
 **Arguments**
 

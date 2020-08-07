@@ -5,7 +5,7 @@
   - [Collection Access](Database/CollectionAccess.md)
   - [View Access](Database/ViewAccess.md)
   - [Queries](Database/Queries.md)
-  - [C8QL User Functions](Database/C8QLUserFunctions.md)
+  - [C8QL User Functions](Database/C8qlUserFunctions.md)
   - [Transactions](Database/Transactions.md)
   - [Graph Access](Database/GraphAccess.md)
   - [HTTP Routes](Database/HttpRoutes.md)

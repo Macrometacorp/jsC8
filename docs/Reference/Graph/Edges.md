@@ -2,7 +2,7 @@
 
 ## client.insertEdge
 
-`async graph.insertEdge(graphName, definition): Object`
+`async client.insertEdge(graphName, definition): Object`
 
 Adds the given edge definition `definition` to the given graph.
 
@@ -32,7 +32,7 @@ await client.insertEdge('some-graph', {
 
 ## client.getEdges
 
-`async graph.getEdges(graphName): Array`
+`async client.getEdges(graphName): Array`
 
 Returns the edge definitions for given graph.
 
