@@ -380,8 +380,6 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 const deletedDocs = await client.deleteDocumentMany("some-collection", [{ _key: "some_key", some: "data" }]);
 ```
 
-### Advanced User
-
 ## collection.replace
 
 `async collection.replace(documentHandle, newValue, [opts]): Object`
@@ -430,9 +428,10 @@ Note:-If a string is passed instead of an options object, it will be interpreted
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const data = {number: 1, hello: 'world'};
 const info1 = await collection.save(data);
@@ -521,9 +520,10 @@ Note:- If a string is passed instead of an options object, it will be interprete
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const doc = {number: 1, hello: 'world'};
 const doc1 = await collection.save(doc);

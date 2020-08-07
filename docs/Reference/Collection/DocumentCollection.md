@@ -239,8 +239,6 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 const insertedDocsFromFile  = await client.insertDocumentFromFile("some-collection", '~/data.csv');
 ```
 
-### Advanced User
-
 ## documentCollection.document
 
 `async documentCollection.document(documentHandle, [graceful]): Object`
@@ -263,9 +261,10 @@ Retrieves the document with the given `documentHandle` from the collection.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('my-docs');
 
 try {
@@ -315,9 +314,10 @@ Checks whether the document with the given `documentHandle` exists.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('my-docs');
 
 const exists = await collection.documentExists('some-key');
@@ -377,9 +377,10 @@ For more information on the _opts_ object, see
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('my-docs');
 const data = {some: 'data'};
 const info = await collection.save(data);
@@ -391,9 +392,10 @@ assert.equal(doc2.some, data.some);
 
 // -- or --
 
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('my-docs');
 const data = {some: 'data'};
 const opts = {returnNew: true};

@@ -23,9 +23,10 @@ If `path` is missing, the route will refer to the base URL of the client.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const route = client.route("my-foxx-service");
 const users = route.route("users");
 // equivalent to client.route('my-foxx-service/users')
@@ -50,9 +51,10 @@ Performs a GET request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const route = client.route('my-foxx-service');
 const response = await route.get();
 // response.body is the response body of calling
@@ -94,9 +96,10 @@ Performs a POST request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const route = client.route('my-foxx-service');
 const response = await route.post()
 // response.body is the response body of calling
@@ -152,9 +155,10 @@ Performs a PUT request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const route = client.route('my-foxx-service');
 const response = await route.put();
 // response.body is the response body of calling
@@ -210,9 +214,10 @@ Performs a PATCH request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const route = client.route('my-foxx-service');
 const response = await route.patch();
 // response.body is the response body of calling
@@ -263,9 +268,10 @@ Performs a DELETE request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const route = client.route('my-foxx-service');
 const response = await route.delete()
 // response.body is the response body of calling
@@ -352,9 +358,10 @@ Performs an arbitrary request to the given URL and returns the server response.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const route = client.route('my-foxx-service');
 const response = await route.request({
   path: 'hello-world',

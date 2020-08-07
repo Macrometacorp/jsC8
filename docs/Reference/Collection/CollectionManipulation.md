@@ -204,8 +204,6 @@ listener.on('open',() => console.log("connection open"));
 listener.on('close',() => console.log("connection closed");
 ```
 
-### Advanced User
-
 ## collection.create
 
 `async collection.create([properties]): Object`
@@ -220,9 +218,9 @@ Creates a collection with the given `properties` for this collection's name, the
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 const collection = client.collection('potatoes');
 await collection.create()
@@ -285,9 +283,10 @@ Renames the collection. The  `Collection` instance will automatically update its
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const result = await collection.rename('new-collection-name')
 assert.equal(result.name, 'new-collection-name');
@@ -305,9 +304,10 @@ Deletes **all documents** in the collection in the client.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 await collection.truncate();
 // the collection "some-collection" is now empty
@@ -334,9 +334,10 @@ Deletes the collection from the client.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 await collection.drop();
 // the collection "some-collection" no longer exists

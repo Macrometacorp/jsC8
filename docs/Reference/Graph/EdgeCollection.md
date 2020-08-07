@@ -236,8 +236,6 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 await client.linkEdge('some-graph', 'edge-collection' , 'vertices/start-vertex', 'vertices/end-vertex');
 ```
 
-### Advanced User
-
 ## graphEdgeCollection.remove
 
 `async graphEdgeCollection.remove(documentHandle): Object`
@@ -253,9 +251,11 @@ Deletes the edge with the given `documentHandle` from the collection.
 **Examples**
 
 ```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
-await client.login(email, password);
-client.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
 await collection.remove('some-key')
@@ -284,9 +284,11 @@ Checks whether the edge with the given `documentHandle` exists.
 **Examples**
 
 ```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
-await client.login(email, password);
-client.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
 const exists = await collection.documentExists('some-key');
@@ -316,9 +318,11 @@ Retrieves the edge with the given `documentHandle` from the collection.
 **Examples**
 
 ```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
-await client.login(email, password);
-client.useTenant(tenant-name);
 const collection = graph.edgeCollection('edges');
 
 const edge = await collection.document('some-key');
@@ -364,9 +368,10 @@ Creates a new edge between the vertices `fromId` and `toId` with the given `data
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 const edge = await collection.save(
@@ -395,9 +400,10 @@ Retrieves a list of all edges of the document with the given `documentHandle`.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
@@ -426,7 +432,10 @@ Retrieves a list of all incoming edges of the document with the given `documentH
 **Examples**
 
 ```js
-const client = new jsc8();
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
@@ -455,9 +464,10 @@ Retrieves a list of all outgoing edges of the document with the given `documentH
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
@@ -490,9 +500,10 @@ Note:-Please note that while `opts.filter`, `opts.visitor`, `opts.init`, `opts.e
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([

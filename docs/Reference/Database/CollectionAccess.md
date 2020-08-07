@@ -17,9 +17,10 @@ Returns a `DocumentCollection` instance for the given collection name.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection("potatoes");
 ```
 
@@ -38,9 +39,10 @@ Returns an `EdgeCollection` instance for the given collection name.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.edgeCollection("potatoes");
 ```
 
@@ -59,9 +61,10 @@ Fetches all collections from the fabric and returns an array of collection descr
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collections = await client.listCollections();
 // collections is an array of collection descriptions
 // not including system collections
@@ -89,9 +92,10 @@ Fetches all collections from the fabric and returns an array of
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collections = await client.collections()
 // collections is an array of DocumentCollection
 // and EdgeCollection instances

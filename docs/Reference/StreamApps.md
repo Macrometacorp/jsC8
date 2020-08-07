@@ -144,8 +144,6 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 const streamAppSamples = await client.activateStreamApp("Sample-Cargo-App", true);
 ```
 
-### Advanced User
-
 ## client.createStreamApp
 
 `client.createStreamApp(dcList, appDefinition): Object`
@@ -165,9 +163,9 @@ Returns an `Object` with the information of the created Stream Application.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 let appDefinition = 
             `@App:name('Sample-Cargo-App')
@@ -193,9 +191,10 @@ Get list of all stream applictions under given database.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const streamapps = await client.getAllStreamApps();
 // To change the fabric and tenant, client.useFabric and client.useTenant respectively
 ```
@@ -215,9 +214,10 @@ Validates the given application definition and returns an object containing a me
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 let appDefinition = 
             `@App:name('Sample-Cargo-App')
                 -- Stream
@@ -243,9 +243,10 @@ Returns samples for Application Definition.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 let samples = await client.getSampleStreamApps()
 ```
 
@@ -258,9 +259,10 @@ Returns details of a Stream Application.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const app = client.streamApp("Sample-Cargo-App");
 let response = await app.retriveApplication();
 ```
@@ -285,9 +287,10 @@ Returns an `Object` with the information of the created Stream Application.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const app = client.streamApp("Sample-Cargo-App");
 
 let appDefinition = 
@@ -323,9 +326,10 @@ Activates or deactivates a Stream Application.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const app = client.streamApp("Sample-Cargo-App");
 const streamApp = await app.activateStreamApplication(true);
 ```
@@ -348,9 +352,10 @@ Runs a query on a Stream Application.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const app = client.streamApp("Sample-Cargo-App");
 const streamApp = await app.query("select * from destCargoTable limit 3");
 ```
@@ -365,9 +370,10 @@ Deletes a Stream Application.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const app = client.streamApp("Sample-Cargo-App");
 const streamApp = await app.deleteApplication();
 ```

@@ -17,9 +17,10 @@ Checks whether the collection exists.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const result = await collection.exists();
 // result indicates whether the collection exists
@@ -34,9 +35,10 @@ Retrieves general information about the collection.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const data = await collection.get();
 // data contains general information about the collection
@@ -66,9 +68,10 @@ Retrieves information about the number of documents in a collection.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const data = await collection.count();
 // data contains the collection's count
@@ -83,9 +86,10 @@ Retrieves statistics for a collection.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const data = await collection.figures();
 // data contains the collection's figures
@@ -100,9 +104,10 @@ Retrieves the collection revision ID.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const data = await collection.revision();
 // data contains the collection's revision
@@ -124,9 +129,10 @@ Retrieves the collection checksum.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const data = await collection.checksum();
 // data contains the collection's checksum

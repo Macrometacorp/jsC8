@@ -107,9 +107,10 @@ If `query` is an object with `query` and `bindVars` properties, those will be us
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const active = true;
 
 // Using the c8ql template tag
@@ -184,11 +185,12 @@ Explain a C8QL query
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
-const collection = client.collection("myColl");
-await collection.create();
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const collection = await client.createCollection("myColl");
+
 const query = "FOR doc in myColl return doc";
 const cursor = await client.explainQuery({query});
 });
@@ -204,9 +206,10 @@ Returns an array containing the C8QL queries currently running in the selected d
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const cursor = await client.getCurrentQueries();
 });
 ```
@@ -220,9 +223,10 @@ Clears the list of slow C8QL queries
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const cursor = await client.clearSlowQueries();
 });
 ```
@@ -238,9 +242,10 @@ Returns an array containing the last C8QL queries that are finished and have exc
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const cursor = await client.getSlowQueries();
 });
 ```
@@ -259,9 +264,10 @@ Kills a running query. The query will be terminated at the next cancelation poin
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const cursor = await client.terminateRunningQuery();
 });
 ```

@@ -32,8 +32,6 @@ Creates user with given data
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 await client.createUser("sample_user", "sample_user@macrometa.io");
 ```
@@ -74,8 +72,6 @@ Partially updates user with given data
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 await client.updateUser("sample_user", "sample_user@macrometa.io", { active: true });
 ```
@@ -116,8 +112,6 @@ Partially updates user with given data
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 await client.replaceUser("sample_user", "sample_user@macrometa.io", { active: true });
 ```
@@ -142,8 +136,6 @@ Deletes user with given data
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 await client.deleteUser("sample_user", "sample_user@macrometa.io");
 ```
@@ -168,8 +160,6 @@ gets user details for given user
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 const userDetails = await client.getUser("sample_user", "sample_user@macrometa.io");
 ```
@@ -184,8 +174,6 @@ Returns the list of all the users
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 const users = await client.getUsers();
 ```
@@ -210,8 +198,6 @@ Return true if user is available otherwise false.
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 const hasUser = await client.hasUser("sample_user", "sample_user@macrometa.io");
 ```
@@ -244,8 +230,6 @@ Get the access level of a specific database/collection in a given database
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 const databaseAccess = await client.getPermission("sample_user", "sample_user@macrometa.io", 'sample_database');
 const collectionAccess = await client.getPermission("sample_user", "sample_user@macrometa.io", 'sample_database', 'sample_collection');
@@ -283,8 +267,6 @@ Updates the access level of a specific database/collection in a given database
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 await client.updatePermission("sample_user", "sample_user@macrometa.io", 'sample_fabric', 'ro');
 await client.updatePermission("sample_user", "sample_user@macrometa.io", 'sample_fabric', 'ro', 'sample_collection');
@@ -318,15 +300,10 @@ Reset the access level of a specific database/collection in a given database
 
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-//---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
 await client.resetPermission("sample_user", "sample_user@macrometa.io", 'sample_fabric');
 await client.resetPermission("sample_user", "sample_user@macrometa.io", 'sample_fabric', 'sample_collection');
 ```
-
-
-### Advanced User
 
 ## client.user
 
@@ -347,9 +324,8 @@ Returns a User instance representing the user with the given username.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 ```
 
@@ -362,9 +338,8 @@ Returns the list of all the users for this fabric
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 await client.getAllUsers();
 ```
 
@@ -377,9 +352,8 @@ Returns the details of a user
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.getUserDetails();
 ```
@@ -407,9 +381,8 @@ Asynchronously creates a user
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.createUser("sample_password", active, extra);
 ```
@@ -423,9 +396,8 @@ deletes a user
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.deleteUser();
 ```
@@ -451,9 +423,8 @@ Partially updates the data of an existing user.
     "queries": [ {"name":"query_name", "value":"query_command"},…]
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 const config = {
   active: false // only updating active status
@@ -482,9 +453,8 @@ Partially updates the data of an existing user.
     "queries": [ {"name":"query_name", "value":"query_command"},…]
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 const config = {
   passwd: "sample_password",
@@ -508,9 +478,8 @@ Lists all the databases' access levels associated with the user
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.getAllDatabases();
 ```
@@ -530,9 +499,8 @@ gets access level of the given database associated with the user
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.getDatabaseAccessLevel("sample_database");
 ```
@@ -556,9 +524,8 @@ Get the access level of a specific collection in a given database
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.getCollectionAccessLevel(
   "sample_databaseName",
@@ -581,9 +548,8 @@ clear access level for the database
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.clearDatabaseAccessLevel("sample_database");
 ```
@@ -607,9 +573,8 @@ clears the access level of a specific collection in a given database
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.clearCollectionAccessLevel(
   "sample_databaseName",
@@ -636,9 +601,8 @@ Sets the database access level
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.setDatabaseAccessLevel(databaseName, permission);
 ```
@@ -666,9 +630,8 @@ Sets Access level of a collection in a database
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.setCollectionAccessLevel(databaseName, collectionName, permission);
 ```

@@ -143,12 +143,11 @@ client.useFabric(fabricName);
 
 //--------------------------------------------------------------------------------------
 // create and populate employees collection in the above tenant and geo fabric
-const collection = client.collection(collectionName);
-await collection.create();
+const collection = await client.createCollection(collectionName);
 
 //--------------------------------------------------------------------------------------
 // See what is happening to your collections in realtime
- const listener = collection.onChange(regionURL);
+const listener = await client.onCollectionChange(collectionName);
 
 listener.on('message',(msg) => console.log("message=>", msg));
 listener.on('open',async () => {
@@ -158,21 +157,6 @@ listener.on('open',async () => {
     // add new documents to the collection
     await collection.save({ firstname: "Jean", lastname: "Picard" });
     await collection.save({ firstname: "Bruce", lastname: "Wayne" });
-  });
-listener.on('close',() => console.log("connection closed");
-
-// OR The Simple Way
-await client.createCollection(collectionName);
-const listener = await client.onCollectionChange(collectionName);
-
-listener.on('message',(msg) => console.log("message=>", msg));
-listener.on('open',async () => {
-    console.log("connection open");
-    //manipulate the collection here
-
-    // add new documents to the collection
-    await client.insertDocument({ firstname: "Jean", lastname: "Picard" });
-    await client.insertDocument({ firstname: "Bruce", lastname: "Wayne" });
   });
 listener.on('close',() => console.log("connection closed");
 
@@ -189,31 +173,17 @@ const result = await cursor.next();
 // now we save the same query and will call it later directly by its name
 const query = "FOR employee IN employees RETURN employee";
 const queryName = "listEmployees";
-await client.saveQuery(queryName, {}, query);
-const res = await client.executeSavedQuery(queryName);
+await client.createRestql(queryName, query, {});
+const res = await client.executeRestql(queryName);
 
 //--------------------------------------------------------------------------------------
 // Create persistent, global and local streams in demofabric
-const persistent_globalStream = client.stream(streamName, false);
-await persistent_globalStream.createStream();
-
-const persistent_localStream = client.stream(streamName, true);
-await persistent_localStream.createStream();
-
-// OR The Simple Way
 const persistent_globalStream = await client.createStream(streamName, false);
 
 const persistent_localStream = await client.createStream(streamName, true);
 
 //--------------------------------------------------------------------------------------
 // Subscribe to a stream
-const stream = client.stream(streamName, false);
-await stream.createStream();
-
-const consumer = stream.consumer("my-sub", regionURL);
-const publisher = stream.producer(regionURL);
-
-// OR Simple way
 await client.createStream(streamName, false);
 
 const consumer = await client.createStreamReader("my-sub", regionURL);
@@ -246,10 +216,6 @@ client.createFabric("spotFabric", [{ username: "root" }], {
   spotDc: true,
 });
 // Then create a collection that is designated as a spot collection.
-const collection = client.collection(collectionName);
-await collection.create({ isSpot: true });
-
-// OR The Simple Way of Collection Creation
 await client.createCollection(collectionName, { isSpot: true });
 
 //--------------------------------------------------------------------------------------
@@ -265,10 +231,6 @@ client.createFabric("spotFabric", [{ username: "root" }], {
   spotDc: true,
 });
 // Then create a collection that is designated as a local collection.
-const collection = client.collection(collectionName);
-await collection.create({ isLocal: true });
-
-// OR The Simple Way of Collection Creation
 await client.createCollection(collectionName, { isLocal: true });
 ```
 

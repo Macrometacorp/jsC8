@@ -3,9 +3,10 @@
 `Cursor` instances provide an abstraction over the HTTP API's limitations.Unless a method explicitly exhausts the cursor, the driver will only fetch as many batches from the server as necessary. Like the server-side cursors,`Cursor` instances are incrementally depleted as they are read from.
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const cursor = await client.query('FOR x IN 1..5 RETURN x');
 // query result list: [1, 2, 3, 4, 5]
 const value = await cursor.next();

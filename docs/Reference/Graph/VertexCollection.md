@@ -11,9 +11,10 @@ Checks whether the graph exists.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const result = await graph.exists();
 // result indicates whether the graph exists
@@ -28,9 +29,10 @@ Retrieves general information about the graph.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const data = await graph.get();
 // data contains general information about the graph
@@ -52,9 +54,10 @@ Creates a graph with the given `properties` for this graph's name, then returns 
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const info = await graph.create({
   edgeDefinitions: [{
@@ -81,9 +84,10 @@ Deletes the graph from the client.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 await graph.drop();
 // the graph "some-graph" no longer exists
