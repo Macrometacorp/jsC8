@@ -40,7 +40,7 @@ const listOfCreatedRestql = await client.getRestqls();
 
 ## client.executeRestql
 
-`client.executeRestql(restqlName: string, bindVars: any)`
+`client.executeRestql(restqlName, bindVars)`
 
 Executes a created restql
 
@@ -63,7 +63,7 @@ await client.executeRestql("testRestql", {});
 
 ## client.updateRestql
 
-`updateRestql(restqlName: string, parameter: Object, value: string) `
+`updateRestql(restqlName, value, parameter) `
 
 Updates a restql that is already created.
 
@@ -90,7 +90,7 @@ await client.updateRestql("testRestql", "FOR x IN _routing RETURN x" );
 
 ## client.deleteRestql
 
-`client.deleteRestql(restqlName: string) `
+`client.deleteRestql(restqlName) `
 
 Deletes the created restql.
 

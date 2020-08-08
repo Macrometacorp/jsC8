@@ -463,13 +463,13 @@ async function callback_fn(collection) {
 }
 
 async function realTimeListener() {
-  const listener = client.onCollectionChange("employees");
+  const listener = await client.onCollectionChange("employees");
 
   listener.on('message',(msg) => console.log("message=>", msg));
   listener.on('open',() => {
       this.callback_fn(collection);
     });
-  listener.on('close',() => console.log("connection closed");
+  listener.on('close',() => console.log("connection closed"));
 }
 
 realTimeListener();
@@ -498,13 +498,13 @@ async function realTimeListener() {
   await console.log("Creating the collection object to be used...");
   let collection = client.collection("employees");
 
-  const listener = collection.onChange("gdn1.macrometa.io");
+  const listener = await collection.onChange("gdn1.macrometa.io");
 
   listener.on('message',(msg) => console.log("message=>", msg));
   listener.on('open',() => {
       this.callback_fn(collection);
     });
-  listener.on('close',() => console.log("connection closed");
+  listener.on('close',() => console.log("connection closed"));
 }
 
 realTimeListener();
@@ -629,19 +629,19 @@ const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 
 async function restqldemo() {
   console.log("------- CREATE GEO-REPLICATED COLLECTION  ------");
-  await collection.createCollection(collection_name);
+  await client.createCollection(collection_name);
   console.log("Collection " + collection_name + " created.\n");
 
   console.log("------- CREATE THE QUERIES  ------");
 
-  await client.createRestql("insertData", {}, insert_data);
+  await client.createRestql("insertData", insert_data, {});
 
-  await client.createRestql("getData", {}, get_data);
-  await client.createRestql("updateData", {}, update_data);
+  await client.createRestql("getData", get_data, {});
+  await client.createRestql("updateData", update_data, {});
 
-  await client.createRestql("deleteData", {}, delete_data);
+  await client.createRestql("deleteData", delete_data, {});
 
-  await client.createRestql("getCount", {}, get_count);
+  await client.createRestql("getCount", get_count, {});
 
   console.log("Queries CREATED Successfully\n");
 

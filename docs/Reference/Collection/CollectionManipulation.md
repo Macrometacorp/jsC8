@@ -4,7 +4,7 @@ These functions implement [the HTTP API for modifying collections](https://devel
 
 ## client.createCollection
 
-`async client.createCollection(collectionName, [properties]): Object`
+`async client.createCollection(collectionName, [properties], [isEdge]): Object`
 
 Creates collection
 
@@ -15,6 +15,10 @@ Creates collection
 
 - **properties**: `Object` (optional)
   For more information on the 'properties` object, see  [the HTTP API documentation for creating collections](https://developer.document360.io/docs/using-c8-rest-api).
+
+- **isEdge**: `boolean` (optional)
+  If yes then it will create an Edge Collection. Default is false.
+  Note:- If this prop is provided then no need to pass type in properties object.
 
 **Examples**
 
@@ -74,7 +78,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
-await client.hasCollection('some-collection');
+const hasCollection = await client.hasCollection('some-collection');
 ```
 
 ## client.getCollection
@@ -197,11 +201,11 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
-const listener = client.onCollectionChange("some-collection");
+const listener = await client.onCollectionChange("some-collection");
 
 listener.on('message',(msg) => console.log("message=>", msg));
 listener.on('open',() => console.log("connection open"));
-listener.on('close',() => console.log("connection closed");
+listener.on('close',() => console.log("connection closed"));
 ```
 
 # Advanced User
@@ -267,11 +271,11 @@ Note:-(To make the collection as `spot`, pass the `isSpot: true` in the `propert
 **Examples**
 
 ```js
-const listener = collection.onChange("fed.macrometa.io", "mySub");
+const listener = await collection.onChange("fed.macrometa.io", "mySub");
 
 listener.on('message',(msg) => console.log("message=>", msg));
 listener.on('open',() => console.log("connection open"));
-listener.on('close',() => console.log("connection closed");
+listener.on('close',() => console.log("connection closed"));
 
 ```
 

@@ -158,7 +158,7 @@ listener.on('open',async () => {
     await collection.save({ firstname: "Jean", lastname: "Picard" });
     await collection.save({ firstname: "Bruce", lastname: "Wayne" });
   });
-listener.on('close',() => console.log("connection closed");
+listener.on('close',() => console.log("connection closed"));
 
 //--------------------------------------------------------------------------------------
 // Querying is done by C8QL

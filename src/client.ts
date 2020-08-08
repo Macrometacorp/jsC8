@@ -56,8 +56,13 @@ export class C8Client extends Fabric {
     }
   }
 
-  createCollection(collectionName: string, properties?: any) {
-    const collection = this.collection(collectionName);
+  createCollection(collectionName: string, properties?: any, isEdge: boolean = false) {
+    let collection;
+    if (isEdge) {
+      collection = this.edgeCollection(collectionName);
+    } else {
+      collection = this.collection(collectionName);
+    }
     return collection.create(properties);
   }
 
