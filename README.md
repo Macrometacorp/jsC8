@@ -811,16 +811,13 @@ To get details of `fabric` geo-fabric
 const jsc8 = require("jsc8");
 
 
-const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX", fabricName: "_system"});
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX", fabricName: "_system"});
 
 async function getFabric() {
 
   try {
-    await console.log("Using the demoFabric...");
-    client.useFabric("demoFabric");
-
     await console.log("Getting the fabric details...");
     let result = await client.get();
 
