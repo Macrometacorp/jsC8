@@ -96,14 +96,14 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
-const collections = await client.collections()
+const collections = await client.collections();
 // collections is an array of DocumentCollection
 // and EdgeCollection instances
 // not including system collections
 
 // -- or --
 
-const collections = await client.collections(false)
+const collections = await client.collections(false);
 // collections is an array of DocumentCollection
 // and EdgeCollection instances
 // including system collections

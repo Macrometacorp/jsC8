@@ -51,6 +51,6 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
-const views = await client.views()
+const views = await client.views();
 // views is an array of c8SearchView instances
 ```
