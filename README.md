@@ -137,7 +137,7 @@ client.useTenant(tenant_name);
 
 If you want to login with token then you just need to pass the token wrapping in Object with your region URL with specific fabric.
 
-Note: by default value for fabric is `_system`
+Note: Default value for fabric is `_system`
 
 ```js
 const jsc8 = require("jsc8");
@@ -773,14 +773,11 @@ Let's create geo-fabric called `demofabric` by passing a parameter called `dclis
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8("https://gdn1.macrometa.io");
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+//---- OR ----
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 
 async function createFabric() {
-  await console.log("Logging in...");
-  await client.login(email, password);
-
-  await console.log("Using the demotenant...");
-  client.useTenant(tenant_name);
 
   try {
     await console.log("Creating the client...");
@@ -813,13 +810,12 @@ To get details of `fabric` geo-fabric
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8("https://gdn1.macrometa.io");
+
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+//---- OR ----
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
 
 async function getFabric() {
-  await console.log("Logging in...");
-  await client.login(email, password);
-  await console.log("Using the demotenant...");
-  client.useTenant(tenant_name);
 
   try {
     await console.log("Using the demoFabric...");
