@@ -84,9 +84,9 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 const updatedDoc  = await client.updateDocument("some-collection", "some_key", { some: "data" });
 ```
 
-## client.updateDocuments
+## client.updateDocumentMany
 
-`async client.updateDocuments(collectionName, Array<documentHandle>, [opts]): Array<Object>`
+`async client.updateDocumentMany(collectionName, Array<documentHandle>, [opts]): Array<Object>`
 
 Updates documents with given value in collection
 
@@ -161,7 +161,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
-const updatedDocs = await client.updateDocuments("some-collection", [{ _key: "some_key", some: "data" }]);
+const updatedDocs = await client.updateDocumentMany("some-collection", [{ _key: "some_key", some: "data" }]);
 ```
 
 ## client.replaceDocument
