@@ -120,6 +120,12 @@ const client = new jsc8(`https://${regionURL}`);
 // login with root user
 await client.login(email, rootPassword);
 
+// login with token
+const client = new jsc8({url: `https://${regionURL}`, token:"XXXX"});
+
+// login with apikey
+const client = new jsc8({url: `https://${regionURL}`, apikey:"XXXX"});
+
 //--------------------------------------------------------------------------------------
 // create a tenant
 const guestTenant = client.tenant(tenantEmail);
@@ -137,12 +143,11 @@ client.useFabric(fabricName);
 
 //--------------------------------------------------------------------------------------
 // create and populate employees collection in the above tenant and geo fabric
-const collection = client.collection(collectionName);
-await collection.create();
+const collection = await client.createCollection(collectionName);
 
 //--------------------------------------------------------------------------------------
 // See what is happening to your collections in realtime
- const listener = collection.onChange(regionURL);
+const listener = await client.onCollectionChange(collectionName);
 
 listener.on('message',(msg) => console.log("message=>", msg));
 listener.on('open',async () => {
@@ -153,7 +158,7 @@ listener.on('open',async () => {
     await collection.save({ firstname: "Jean", lastname: "Picard" });
     await collection.save({ firstname: "Bruce", lastname: "Wayne" });
   });
-listener.on('close',() => console.log("connection closed");
+listener.on('close',() => console.log("connection closed"));
 
 //--------------------------------------------------------------------------------------
 // Querying is done by C8QL
@@ -168,36 +173,63 @@ const result = await cursor.next();
 // now we save the same query and will call it later directly by its name
 const query = "FOR employee IN employees RETURN employee";
 const queryName = "listEmployees";
-await client.saveQuery(queryName, {}, query);
-const res = await client.executeSavedQuery(queryName);
+await client.createRestql(queryName, query, {});
+const res = await client.executeRestql(queryName);
 
 //--------------------------------------------------------------------------------------
 // Create persistent, global and local streams in demofabric
+
+// Here the second param value tells if the stream is local or global. false means that it is global.(DEFAULT: false)
+const persistent_globalStream = await client.createStream(streamName, false);
+const persistent_localStream = await client.createStream(streamName, true);
+
+
+// ADVANCED
+
+// Here the last boolean value tells if the stream is local or global. false means that it is global.(DEFAULT: false)
+
 const persistent_globalStream = client.stream(streamName, false);
 await persistent_globalStream.createStream();
 
 const persistent_localStream = client.stream(streamName, true);
 await persistent_localStream.createStream();
 
+
 //--------------------------------------------------------------------------------------
+
 // Subscribe to a stream
+
+await client.createStream(streamName, false);
+
+const consumer = await client.createStreamReader("my-sub", regionURL);
+const producer = await client.createStreamProducer(regionURL);
+
+// OR ADVANCED
+
 const stream = client.stream(streamName, false);
 await stream.createStream();
 
-const consumer = stream.consumer("my-sub", regionURL);
-const publisher = stream.producer(regionURL);
+const consumerOTP = await stream.getOtp();
+const consumer = stream.consumer("my-sub", regionURL, { otp : consumerOTP });
 
-// Publish to a stream
-function publish(payload) {
-  return publisher.send({ payload });
-}
+const producerOTP = await stream.getOtp();
+const producer = stream.producer(regionURL,  { otp : producerOTP });
+
 
 consumer.on("message", (msg) => {
-  console.log(msg);
+  const { payload, messageId } = JSON.parse(msg);
+  // logging received message payload(ASCII encoded) to decode use atob()
+  console.log(payload);
+  // Send message acknowledgement
+  consumer.send(JSON.stringify({ messageId }));
 });
 
-publisher.on("open", () => {
-  publish("Hello World");
+producer.on("open", () => {
+  // If you message is an object, convert the obj to string.
+  // e.g. const message = JSON.stringify({message:'Hello World'});
+  const message = "Hello World";
+  const payloadObj = { payload: Buffer.from(str).toString("base64") };
+  producer.send(JSON.stringify(payloadObj));
 });
 
 //--------------------------------------------------------------------------------------
@@ -213,8 +245,7 @@ client.createFabric("spotFabric", [{ username: "root" }], {
   spotDc: true,
 });
 // Then create a collection that is designated as a spot collection.
-const collection = client.collection(collectionName);
-await collection.create({ isSpot: true });
+await client.createCollection(collectionName, { isSpot: true });
 
 //--------------------------------------------------------------------------------------
 // Local Collections
@@ -229,8 +260,7 @@ client.createFabric("spotFabric", [{ username: "root" }], {
   spotDc: true,
 });
 // Then create a collection that is designated as a local collection.
-const collection = client.collection(collectionName);
-await collection.create({ isLocal: true });
+await client.createCollection(collectionName, { isLocal: true });
 ```
 
 For C8QL please check out the [c8ql template tag](https://macrometa.gitbook.io/c8/c8ql/fundamentals/bindparameters) for writing parametrized C8QL queries without making your code vulnerable to injection attacks.

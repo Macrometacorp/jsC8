@@ -25,9 +25,10 @@ Note:- If set to `true`, the method will return `null` instead of throwing an er
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.edgeCollection('edges');
 
 const edge = await collection.document('some-key');
@@ -67,9 +68,10 @@ Checks whether the edge with the given `documentHandle` exists.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.edgeCollection('my-docs');
 
 const exists = await collection.documentExists('some-key');
@@ -138,9 +140,10 @@ Note:-If a boolean is passed instead of an options object, it will be interprete
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.edgeCollection('edges');
 const data = {some: 'data'};
 
@@ -184,9 +187,10 @@ Retrieves a list of all edges of the document with the given `documentHandle`.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
@@ -216,9 +220,10 @@ Retrieves a list of all incoming edges of the document with the given `documentH
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
@@ -248,9 +253,10 @@ Retrieves a list of all outgoing edges of the document with the given `documentH
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],
@@ -286,9 +292,10 @@ Note:-Please note that while `opts.filter`, `opts.visitor`, `opts.init`, `opts.e
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.edgeCollection('edges');
 await collection.import([
   ['_key', '_from', '_to'],

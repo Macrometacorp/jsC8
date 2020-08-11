@@ -7,7 +7,7 @@ const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const itPre34 = C8_VERSION < 30400 ? it : it.skip;
 const it34 = C8_VERSION >= 30400 ? it : it.skip;
 
-describe("Managing indexes", function() {
+describe("Managing indexes", function () {
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
 
@@ -182,7 +182,7 @@ describe("Managing indexes", function() {
       collection
         .createHashIndex(["test"])
         .then(info => {
-          return collection.index(info.id).then(index => {
+          return collection.index(info.name).then(index => {
             expect(index).to.have.property("id", info.id);
             expect(index).to.have.property("type", info.type);
           });
@@ -213,7 +213,7 @@ describe("Managing indexes", function() {
       collection
         .createHashIndex(["test"])
         .then(info => {
-          return collection.dropIndex(info.id).then(index => {
+          return collection.dropIndex(info.name).then(index => {
             expect(index).to.have.property("id", info.id);
             return collection.indexes().then(indexes => {
               expect(indexes).to.be.instanceof(Array);
@@ -223,6 +223,21 @@ describe("Managing indexes", function() {
               ).to.equal(0);
             });
           });
+        })
+        .then(() => done())
+        .catch(done);
+    });
+  });
+  describe("collection.createTtlIndex", () => {
+    it("should create a Ttl index", done => {
+      collection
+        .createTtlIndex(["value"], 0)
+        .then(info => {
+          expect(info).to.have.property("id");
+          expect(info).to.have.property("type", "ttl");
+          expect(info).to.have.property("fields");
+          expect(info.fields).to.eql(["value"]);
+          expect(info).to.have.property("isNewlyCreated", true);
         })
         .then(() => done())
         .catch(done);

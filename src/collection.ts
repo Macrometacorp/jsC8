@@ -10,15 +10,21 @@ export enum CollectionType {
 export type DocumentHandle =
   | string
   | {
-      _key?: string;
-      _id?: string;
-    };
+    _key?: string;
+    _id?: string;
+  };
+
+export type DocumentsHandle = {
+  _key: string;
+  _id?: string | undefined;
+  [key: string]: any;
+}
 
 export type IndexHandle =
   | string
   | {
-      id?: string;
-    };
+    id?: string;
+  };
 
 export interface ImportOptions {
   type?: null | "auto" | "documents" | "array";
@@ -155,8 +161,9 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
-  onChange(dcName: string, subscriptionName: string = "subs") {
-    return this.stream.consumer(subscriptionName, dcName);
+  async onChange(dcName: string, subscriptionName: string = "subs") {
+    const otp = await this.stream.getOtp();
+    return this.stream.consumer(subscriptionName, dcName, { otp });
   }
 
   properties() {
@@ -252,6 +259,28 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
+  replaceDocuments(documents: DocumentsHandle[], opts: any = {}) {
+    const headers: { [key: string]: string } = {};
+    if (typeof opts === "string") {
+      opts = { rev: opts };
+    }
+    if (opts.rev && this._connection.c8Major >= 3) {
+      let rev: string;
+      ({ rev, ...opts } = opts);
+      headers["if-match"] = rev;
+    }
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `/${this._documentPath('')}`,
+        body: documents,
+        qs: opts,
+        headers,
+      },
+      (res) => res.body
+    );
+  }
+
   update(documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
@@ -274,6 +303,28 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
+  updateDocuments(documents: DocumentsHandle[], opts: any = {}) {
+    const headers: { [key: string]: string } = {};
+    if (typeof opts === "string") {
+      opts = { rev: opts };
+    }
+    if (opts.rev && this._connection.c8Major >= 3) {
+      let rev: string;
+      ({ rev, ...opts } = opts);
+      headers["if-match"] = rev;
+    }
+    return this._connection.request(
+      {
+        method: "PATCH",
+        path: `/${this._documentPath('')}`,
+        body: documents,
+        qs: opts,
+        headers,
+      },
+      (res) => res.body
+    );
+  }
+
   remove(documentHandle: DocumentHandle, opts: any = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
@@ -288,6 +339,28 @@ export abstract class BaseCollection implements C8Collection {
       {
         method: "DELETE",
         path: `/${this._documentPath(documentHandle)}`,
+        qs: opts,
+        headers,
+      },
+      (res) => res.body
+    );
+  }
+
+  removeDocuments(documents: string[] | DocumentsHandle[], opts: any = {}) {
+    const headers: { [key: string]: string } = {};
+    if (typeof opts === "string") {
+      opts = { rev: opts };
+    }
+    if (opts.rev && this._connection.c8Major >= 3) {
+      let rev: string;
+      ({ rev, ...opts } = opts);
+      headers["if-match"] = rev;
+    }
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `/${this._documentPath('')}`,
+        body: documents,
         qs: opts,
         headers,
       },
@@ -450,6 +523,21 @@ export abstract class BaseCollection implements C8Collection {
         method: "POST",
         path: "/index",
         body: { fields, minLength, type: "fulltext" },
+        qs: { collection: this.name },
+      },
+      (res) => res.body
+    );
+  }
+
+  createTtlIndex(fields: string[] | string, expireAfter: number) {
+    if (typeof fields === "string") {
+      fields = [fields];
+    }
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/index",
+        body: { fields, expireAfter, type: "ttl" },
         qs: { collection: this.name },
       },
       (res) => res.body

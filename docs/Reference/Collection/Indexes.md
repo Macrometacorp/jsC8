@@ -2,6 +2,268 @@
 
 These functions implement the [HTTP API for manipulating indexes](https://developer.document360.io/docs/indexing).
 
+## client.listCollectionIndexes
+
+`async client.listCollectionIndexes(collectionName): Array<Object>`
+
+Returns list of indexes for given collection
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const collectionIndexes = await client.listCollectionIndexes("some-collection");
+```
+
+## client.addHashIndex
+
+`async client.addHashIndex(collectionName, fields, [opts]): Object`
+
+Creates a Hash index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **opts**: `Object` (optional)
+
+  Additional options for this index. If the value is a boolean, it will be
+  interpreted as `opts.unique`.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const hashIndex = await client.addHashIndex("some-collection", 'favorite-color');
+```
+
+## client.addGeoIndex
+
+`async client.addGeoIndex(collectionName, fields, [opts]): Object`
+
+Creates a Geo index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **opts**: `Object` (optional)
+
+  Additional options for this index. If the value is a boolean, it will be
+  interpreted as `opts.unique`.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const geoIndex = await client.addGeoIndex("some-collection", 'favorite-color');
+```
+
+## client.addSkiplistIndex
+
+`async client.addSkiplistIndex(collectionName, fields, [opts]): Object`
+
+Creates a skiplist index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **opts**: `Object` (optional)
+
+  Additional options for this index. If the value is a boolean, it will be
+  interpreted as `opts.unique`.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const skiplistIndex = await client.addSkiplistIndex("some-collection", 'favorite-color');
+```
+
+## client.addPersistentIndex
+
+`async client.addPersistentIndex(collectionName, fields, [opts]): Object`
+
+Creates a Persistent index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **opts**: `Object` (optional)
+
+  Additional options for this index. If the value is a boolean, it will be
+  interpreted as `opts.unique`.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const persistentIndex = await client.addPersistentIndex("some-collection", 'favorite-color');
+```
+
+## client.addFullTextIndex
+
+`async client.addFullTextIndex(collectionName, fields, [minLength]): Object`
+
+Creates a FullText index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **minLength**: `Number` (optional)
+
+  Minimum character length of words to index. Will default to a server-defined value if unspecified. It is thus recommended to set this value explicitly when creating the index.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const fullTextIndex = await client.addFullTextIndex("some-collection", 'description');
+```
+
+## client.addTtlIndex
+
+`async client.addTtlIndex(collectionName, fields, expireAfter): Object`
+
+Creates a Ttl index on the collection.
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **fields**: `Array<string>`
+
+  An array of names of document fields on which to create the index. If the
+  value is a string, it will be wrapped in an array automatically.
+
+* **expireAfter**: `Number`
+
+  The time (in seconds) after a document's creation after which the documents count as "expired".
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const ttlIndex = await client.addTtlIndex("some-collection", 'description', 0);
+```
+
+## client.deleteIndex
+
+`async client.deleteIndex(collectionName, indexName): Object`
+
+Deletes index with given index name from given collection
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+* **indexName**: `string`
+
+  The handle of the index to delete. This can either be a fully-qualified identifier or the collection-specific key of the index. If the value is an object, its `name` property will be used instead.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const deletedIndex = await client.deleteIndex("some-collection", 'some-index');
+```
+
+## client.getCollectionIndexes
+
+`async client.getCollectionIndexes(collectionName, indexName): Array<Object>`
+
+Returns list of indexes for given collection
+
+**Arguments**
+
+- **collectionName**: `string`
+
+  Name of the collection
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const collectionIndexes = await client.getCollectionIndexes("some-collection");
+```
+
+# Advanced User
+
 ## collection.createIndex
 
 `async collection.createIndex(details): Object`
@@ -16,9 +278,10 @@ Creates an arbitrary index on the collection.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const index = await collection.createIndex({type: 'hash', fields: ['a', 'a.b']});
 // the index has been created with the handle `index.id`
@@ -47,9 +310,10 @@ For more information on hash indexes, see [the HTTP API for hash indexes](https:
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 
 const index = await collection.createHashIndex('favorite-color');
@@ -82,9 +346,10 @@ Creates a skiplist index on the collection.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 
 const index = await collection.createSkipList('favorite-color')
@@ -117,9 +382,10 @@ Creates a geo-spatial index on the collection.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 
 const index = await collection.createGeoIndex(['latitude', 'longitude']);
@@ -152,9 +418,10 @@ Creates a fulltext index on the collection.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 
 const index = await collection.createFulltextIndex('description');
@@ -189,9 +456,10 @@ For more information on the properties of the `opts` object see [the HTTP API fo
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 
 const index = await collection.createPersistentIndex(['name', 'email']);
@@ -214,9 +482,10 @@ Fetches information about the index with the given `indexHandle` and returns it.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
 const result = await collection.index(index.id);
@@ -239,9 +508,10 @@ Fetches a list of all indexes on this collection.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 await collection.createFulltextIndex('description')
 const indexes = await collection.indexes();
@@ -264,9 +534,10 @@ Deletes the index with the given `indexHandle` from the collection.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
 await collection.dropIndex(index.id);
@@ -305,9 +576,10 @@ If `size` is a number, it will be interpreted as `size.size`.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name)
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const collection = client.collection('some-collection');
 
 const index = await collection.createCapConstraint(20)

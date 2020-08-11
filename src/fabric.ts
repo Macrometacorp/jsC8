@@ -100,7 +100,7 @@ export interface CreateFabricOptions {
 const FABRIC_NOT_FOUND = 1228;
 
 export class Fabric {
-  private _connection: Connection;
+  protected _connection: Connection;
 
   constructor(config?: Config) {
     this._connection = new Connection(config);
@@ -551,15 +551,23 @@ export class Fabric {
     local: boolean,
     isCollectionStream: boolean = false
   ): Stream {
-    return new Stream(this._connection, streamName, local, isCollectionStream);
+    return new Stream(
+      this._connection,
+      streamName,
+      local,
+      isCollectionStream,
+    );
   }
 
-  getStreams(global: boolean = false) {
+  /* -------------------------------- DUPLICATE ------------------------------- */
+  // TODO: @RACHIT choose which Fn to deprecate
+
+  getStreams(global: boolean | undefined = undefined) {
     return this._connection.request(
       {
         method: "GET",
         path: "/streams",
-        qs: `global=${global}`,
+        qs: global === undefined ? "" : `global=${global}`,
       },
       (res) => res.body
     );
@@ -575,6 +583,8 @@ export class Fabric {
     );
   }
 
+  /* ----------------------------------- --- ---------------------------------- */
+  // TODO: RACHIT/VIKAS DO WE STILL HAVE THIS API?
   listPersistentStreams(local: boolean = false) {
     return this._connection.request(
       {
@@ -623,6 +633,17 @@ export class Fabric {
       {
         method: "GET",
         path: "/datacenter/all",
+        absolutePath: true,
+      },
+      (res) => res.body
+    );
+  }
+
+  getTenantEdgeLocations() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/datacenter/_tenant/${this._connection.getTenantName()}`,
         absolutePath: true,
       },
       (res) => res.body
@@ -722,7 +743,6 @@ export class Fabric {
         path: `/restql/${queryName}`,
         body: {
           query: {
-            name: name,
             parameter: parameter,
             value: value,
           },

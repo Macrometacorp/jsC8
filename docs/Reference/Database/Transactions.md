@@ -71,9 +71,10 @@ For more information on transactions, see [the HTTP API documentation for transa
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const action = String(function (params) {
   // This code will be executed inside C8!
   const fabric = require('@c8').fabric;

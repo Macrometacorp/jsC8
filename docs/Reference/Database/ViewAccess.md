@@ -47,10 +47,10 @@ Fetches all views from the fabric and returns an array of
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
 
-const views = await client.views()
+const views = await client.views();
 // views is an array of c8SearchView instances
 ```

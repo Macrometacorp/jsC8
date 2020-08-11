@@ -22,7 +22,7 @@ export type wsCallbackObj = {
 export class Stream {
   private _connection: Connection;
   name: string;
-  local: boolean;
+  global: boolean;
   isCollectionStream: boolean;
   topic: string;
 
@@ -34,13 +34,19 @@ export class Stream {
   ) {
     this._connection = connection;
     this.isCollectionStream = isCollectionStream;
-    this.local = local;
+
+    /**
+     * CHANGED this.local implementation to this.global
+     * keeping the stream as local so !local
+     */
+
+    this.global = !local;
     this.name = name;
 
     let topic = this.name;
     if (!this.isCollectionStream) {
-      if (this.local) topic = `c8locals.${this.name}`;
-      else topic = `c8globals.${this.name}`;
+      if (this.global) topic = `c8globals.${this.name}`;
+      else topic = `c8locals.${this.name}`;
     }
     this.topic = topic;
   }
@@ -50,24 +56,23 @@ export class Stream {
     return getFullStreamPath(topic, urlSuffix);
   }
 
+  getOtp() {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/apid/otp",
+        absolutePath: true,
+      },
+      (res) => res.body.otp
+    );
+  }
+
   createStream() {
     return this._connection.request(
       {
         method: "POST",
         path: this._getPath(true),
-        qs: `local=${this.local}`,
-      },
-      (res) => res.body
-    );
-  }
-
-  expireMessagesOnAllSubscriptions(expireTimeInSeconds: number) {
-    const urlSuffix = `/all_subscription/expireMessages/${expireTimeInSeconds}`;
-    return this._connection.request(
-      {
-        method: "POST",
-        path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -79,7 +84,19 @@ export class Stream {
       {
         method: "GET",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
+      },
+      (res) => res.body
+    );
+  }
+
+  clearBacklog() {
+    const urlSuffix = `/clearbacklog`;
+    return this._connection.request(
+      {
+        method: "POST",
+        path: this._getPath(false, urlSuffix),
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -91,7 +108,7 @@ export class Stream {
       {
         method: "GET",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -103,79 +120,31 @@ export class Stream {
       {
         method: "DELETE",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
   }
 
-  resetSubscriptionToPosition(subscription: string) {
-    const urlSuffix = `/subscription/${subscription}`;
-    return this._connection.request(
-      {
-        method: "PUT",
-        path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
-      },
-      (res) => res.body
-    );
-  }
-
-  expireMessages(subscription: string, expireTimeInSeconds: number) {
-    const urlSuffix = `/subscription/${subscription}/expireMessages/${expireTimeInSeconds}`;
+  expireMessages(expireTimeInSeconds: number) {
+    const urlSuffix = `/expiry/${expireTimeInSeconds}`;
     return this._connection.request(
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
   }
 
-  resetCursor(subscription: string) {
-    const urlSuffix = `/subscription/${subscription}/resetcursor`;
+  clearSubscriptionBacklog(subscription: string) {
+    const urlSuffix = `/clearbacklog/${subscription}`;
     return this._connection.request(
       {
         method: "POST",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
-      },
-      (res) => res.body
-    );
-  }
-
-  resetSubscriptionToTimestamp(subscription: string, timestamp: number) {
-    const urlSuffix = `/subscription/${subscription}/resetcursor/${timestamp}`;
-    return this._connection.request(
-      {
-        method: "POST",
-        path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
-      },
-      (res) => res.body
-    );
-  }
-
-  skipNumberOfMessages(subscription: string, numMessages: number) {
-    const urlSuffix = `/subscription/${subscription}/skip/${numMessages}`;
-    return this._connection.request(
-      {
-        method: "POST",
-        path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
-      },
-      (res) => res.body
-    );
-  }
-
-  skipAllMessages(subscription: string) {
-    const urlSuffix = `/subscription/${subscription}/skip_all`;
-    return this._connection.request(
-      {
-        method: "POST",
-        path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
@@ -187,19 +156,18 @@ export class Stream {
       {
         method: "GET",
         path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        qs: `global=${this.global}`,
       },
       (res) => res.body
     );
   }
 
-  terminateStream() {
-    const urlSuffix = "/terminate";
+  deleteStream(force: boolean = false) {
     return this._connection.request(
       {
-        method: "POST",
-        path: this._getPath(false, urlSuffix),
-        qs: `local=${this.local}`,
+        method: "DELETE",
+        path: this._getPath(false),
+        qs: `global=${this.global}&force=${force}`,
       },
       (res) => res.body
     );
@@ -215,8 +183,9 @@ export class Stream {
       throw "Invalid DC name";
 
     const persist = StreamConstants.PERSISTENT;
-    const region = this.local ? "c8local" : "c8global";
+    const region = this.global ? "c8global" : "c8local";
     const tenant = this._connection.getTenantName();
+    const queryParams = stringify(params);
     let dbName = this._connection.getFabricName();
 
     if (!dbName || !tenant)
@@ -226,10 +195,8 @@ export class Stream {
       this.topic
     }/${subscriptionName}`;
 
-    if (Object.keys(params).length > 0) {
-      const queryParams = stringify(params);
-      consumerUrl = `${consumerUrl}?${queryParams}`;
-    }
+    // Appending query params to the url
+    consumerUrl = `${consumerUrl}?${queryParams}`;
 
     return ws(consumerUrl);
   }
@@ -242,10 +209,10 @@ export class Stream {
       throw "Invalid DC name";
 
     const persist = StreamConstants.PERSISTENT;
-    const region = this.local ? "c8local" : "c8global";
+    const region = this.global ? "c8global" : "c8local";
     const tenant = this._connection.getTenantName();
+    const queryParams = stringify(params);
     let dbName = this._connection.getFabricName();
-
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
@@ -253,11 +220,22 @@ export class Stream {
       this.topic
     }`;
 
-    if (Object.keys(params).length > 0) {
-      const queryParams = stringify(params);
-      producerUrl = `${producerUrl}?${queryParams}`;
-    }
+    // Appending query params to the url
+    producerUrl = `${producerUrl}?${queryParams}`;
 
     return ws(producerUrl);
+  }
+
+  publishMessage(message: any) {
+    const urlSuffix = "/publish";
+    return this._connection.request(
+      {
+        method: "POST",
+        path: this._getPath(false, urlSuffix),
+        qs: `global=${this.global}`,
+        body: message,
+      },
+      (res) => res.body
+    );
   }
 }

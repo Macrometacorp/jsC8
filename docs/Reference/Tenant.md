@@ -1,5 +1,21 @@
 ## Manipulating tenants
 
+## client.getDcList
+
+`async client.getDcList(): Array<object>`
+
+Returns tenant edge locations
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const data = await client.getDcList();
+```
+
 ## client.useTenant
 
 `client.useTenant(tenantName): this`
@@ -17,9 +33,10 @@ Note:-This method can not be used when the jsC8 instance was created with `isAbs
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 client.useTenant("testTenant");
 // The fabric instance now uses the tenant "testTenant".
 ```
@@ -42,9 +59,10 @@ Returns a _Tenant_ instance representing the tenant with the given tenant name.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const tenant = client.tenant(tenant-email);
 ```
 
@@ -57,11 +75,14 @@ Fetches all tenants from the fabric and returns an array of tenant descriptions.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const allTenants = client.listTenants();
 ```
+
+# Advanced User
 
 ## tenant.createTenant
 
@@ -78,16 +99,17 @@ Creates a tenant.
 
   The name of the tenant to use.
 
-- **extra**: `object`
+- **extra**: `Object`
 
   An optional JSON object with arbitrary extra data about the user.
 
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const tenant = client.tenant(tenant-email);
 await tenant.createTenant("myPassword", "test-eu-west-1,test-us-west-2");
 // creates a new tenant with email as tenant-email with password as "myPassword".
@@ -102,9 +124,10 @@ Deletes the tenant.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword","region-name");
 await tenant.dropTenant();
@@ -118,9 +141,10 @@ Fetches data about the Edge Locations specific to this tenant.
 
 **Examples**
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const tenant = client.tenant(tenant-email, tenant-name);
 const locations = await tenant.getTenantEdgeLocations();
 ```
@@ -135,9 +159,10 @@ Gets the details of a tenant.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword", "region-name");
 await tenant.tenantDetails();
@@ -155,16 +180,17 @@ Modifies the given tenant.
 
   The name of the tenant to use.
 
-- **extra**: `object`
+- **extra**: `Object`
 
   An optional JSON object with arbitrary extra data about the user.
 
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword" "region-name");
 await tenant.modifyTenant("myPassword", { info: "string"});

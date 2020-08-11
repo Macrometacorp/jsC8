@@ -23,9 +23,10 @@ For more information on `Route` instances see the [Route API_ below](https://dev
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const myFoxxService = client.route('my-foxx-service');
 const response = await myFoxxService.post('users', {
   username: 'admin',

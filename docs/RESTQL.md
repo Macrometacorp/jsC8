@@ -1,119 +1,116 @@
-# RESTQL 
+# RESTQL
 
-## client.saveQuery
+## client.createRestql
 
-`client.saveQuery(queryName, parameter, value): this`
+`client.createRestql(restqlName, value, parameter): this`
 
-Saves the Query with queryName and value.
+Creates the restql with restqlName and value.
 
 **Arguments**
 
-- **queryName**: `string`
+- **restqlName**: `string`
 
-  The name of the query to save.
-
-- **parameter**: `any`
-   
-   Parameters to the saved query.
+  The name of the restql to create.
 
 - **value**: `string`
 
-    The query you want to save.
+   The restql you want to create.
 
-
+- **parameter**: `any`
+   
+   Parameters to the created restql. Default is `{}`.
 
 **Examples**
 
 ```js
 const client = new jsc8();
-client.saveQuery("testQuery", {}, "FOR x IN TestCollection RETURN x");
+await client.createRestql("testRestql", "FOR x IN TestCollection RETURN x");
 ```
 
-## client.listSavedQueries
+## client.getRestqls
 
-`client.listSavedQueries()`
+`client.getRestqls()`
 
-Returns a list of all saved queries for a particular tenant and client.
-
+Returns a list of all created restqls for a particular tenant and client.
 
 ```js
 const client = new jsc8();
-const tenant = client.listSavedQueries();
+const listOfCreatedRestql = await client.getRestqls();
 ```
 
-## client.executeSavedQuery
+## client.executeRestql
 
-`  client.executeSavedQuery(queryName: string, bindVars: any)`
+`client.executeRestql(restqlName, bindVars)`
 
-Executes a saves query
-
+Executes a created restql
 
 **Arguments**
 
-- **queryName**: `string`
+- **restqlName**: `string`
 
-  The name of the query to be executed.
+  The name of the restql to be executed.
 
 - **bindVars**: `any`
 
-    The variables you wish to pass to a query.
+  The variables you wish to pass to a restql.
 
 **Examples**
 
 ```js
 const client = new jsc8();
-client.executeSavedQuery("testQuery", {});
+await client.executeRestql("testRestql", {});
 ```
 
-## client.updateSavedQuery
+## client.updateRestql
 
-` updateSavedQuery(queryName: string, parameter: Object, value: string) `
+`updateRestql(restqlName, value, parameter) `
 
-Updates a query that is already saved.
+Updates a restql that is already created.
 
 **Arguments**
 
-- **queryName**: `string`
+- **restqlName**: `string`
 
-  The name of the query to be updated.
+  The name of the restql to be updated.
 
-- **parameter**: `object`
+- **parameter**: `Object`
 
-  An optional JSON object which can provide parameters to the query.
+  Parameters to the created restql. Default is `{}`.
+
+- **value**: `string`
+
+  The restql you want to create.
 
 **Examples**
 
 ```js
 const client = new jsc8();
-
-faric.updateSavedQuery("testQuery", {}, "FOR x IN _routing RETURN x" )
+await client.updateRestql("testRestql", "FOR x IN _routing RETURN x" );
 ```
 
-## client.deleteSavedQuery
+## client.deleteRestql
 
+`client.deleteRestql(restqlName) `
 
-`client.deleteSavedQuery(queryName: string) `
-
-Deletes the saved query.
+Deletes the created restql.
 
 
 **Arguments**
 
-- **queryName**: `string`
+- **restqlName**: `string`
 
-  The name of the query to be deleted.
+  The name of the restql to be deleted.
 
 **Examples**
 
 ```js
 const client = new jsc8();
-client.deleteSavedQuery("testQuery")
+await client.deleteRestql("testRestql");
 ```
 
 ## client.createRestqlCursor(query: string, bindVars: any)
 
-
-`  createRestqlCursor(query: string, bindVars: any)`
+`createRestqlCursor(query: string, bindVars: any)`
 
 Creates a restql cursor for running a query.
 
@@ -132,5 +129,4 @@ Creates a restql cursor for running a query.
 ```js
 const client = new jsc8();
 client.createRestqlCursor(query: "FOR x IN TestCollection RETURN x", bindVars: {})
-
 ```

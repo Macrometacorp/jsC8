@@ -17,9 +17,10 @@ Fetches all graphs from the fabric and returns an array of graph descriptions.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graphs = await client.listGraphs();
 // graphs is an array of graph descriptions
 ```
@@ -33,9 +34,10 @@ Fetches all graphs from the fabric and returns an array of `Graph` instances for
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graphs = await client.graphs();
 // graphs is an array of Graph instances
 ```

@@ -2,6 +2,81 @@
 
 This function implements the [HTTP API for single roundtrip C8QL queries](https://developer.document360.io/docs/queries).
 
+## client.executeQuery
+
+`async client.executeQuery(query, [bindVars,] [opts])`
+
+Executes given query and returns the data
+
+**Arguments**
+
+* **query**: `string`
+
+  An C8QL query string or a [query builder](https://npmjs.org/package/aqb)  instance.
+
+* **bindVars**: `Object` (optional)
+
+  An object defining the variables to bind the query to.
+
+* **opts**: `Object` (optional)
+
+  Additional parameter object that will be passed to the query API.
+  Possible keys are `count` and `options` (explained below)
+
+If  `opts.count` is set to `true`, the cursor will have a `count`  property set to the query result count.
+Possible key options in `opts.options` include: `failOnWarning`, `cache`, `profile` or `skipInaccessibleCollections`.
+For a complete list of query settings please reference the [macrometa.io/jsC8 documentation](https://developer.document360.io/docs/overview-3).
+
+If `query` is an object with `query` and `bindVars` properties, those will be used as the values of the respective arguments instead.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const data = await client.executeQuery("FOR doc IN some-collection RETURN doc._id");
+```
+
+## client.getRunningQueries
+
+`async client.getRunningQueries()`
+
+returns all running queries
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const runningQueries = await client.getRunningQueries();
+```
+
+## client.killQuery
+
+`async client.killQuery(queryId)`
+
+terminates query
+
+**Arguments**
+
+- **queryId**: `string`
+
+  The id of the query.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.killQuery("query-id");
+```
+
 ## client.query
 
 `async client.query(query, [bindVars,] [opts]): Cursor`
@@ -32,9 +107,10 @@ If `query` is an object with `query` and `bindVars` properties, those will be us
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const active = true;
 
 // Using the c8ql template tag
@@ -109,30 +185,14 @@ Explain a C8QL query
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
-const collection = client.collection("myColl");
-await collection.create();
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const collection = await client.createCollection("myColl");
+
 const query = "FOR doc in myColl return doc";
 const cursor = await client.explainQuery({query});
-});
-```
-
-
-## client.getCurrentQueries
-
-`async client.getCurrentQueries()`
-
-Returns an array containing the C8QL queries currently running in the selected database.
-
-**Examples**
-
-```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
-const cursor = await client.getCurrentQueries();
 });
 ```
 
@@ -145,9 +205,10 @@ Clears the list of slow C8QL queries
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const cursor = await client.clearSlowQueries();
 });
 ```
@@ -163,31 +224,11 @@ Returns an array containing the last C8QL queries that are finished and have exc
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const cursor = await client.getSlowQueries();
-});
-```
-
-## client.terminateRunningQuery
-
-`async client.terminateRunningQuery(queryId)`
-
-**Arguments**
-* **queryId**: `string`
-
-  The id of the query.
-
-Kills a running query. The query will be terminated at the next cancelation point.
-
-**Examples**
-
-```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
-const cursor = await client.terminateRunningQuery();
 });
 ```
 

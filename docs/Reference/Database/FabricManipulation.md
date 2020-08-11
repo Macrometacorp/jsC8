@@ -2,6 +2,37 @@
 
 These functions implement the [HTTP API for manipulating fabrics](https://developer.document360.io/docs/geo-fabrics)
 
+## client.getLocalDc
+
+`async client.getLocalDc(): Array<object>`
+
+Returns local edge locations
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const data = await client.getLocalDc();
+```
+
+## client.getLocalEdgeLocation
+
+`async client.getLocalEdgeLocation(): Object`
+
+Fetches data about the local Edge Location specific to this Datacenter/Location.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.getLocalEdgeLocation();
+```
 
 ## client.useFabric
 
@@ -20,9 +51,10 @@ Note:-This method can not be used when the jsC8 instance was created with `isAbs
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 client.useFabric("test");
 // The fabric instance now uses the fabric "test".
 ```
@@ -42,9 +74,10 @@ Returns the server name and version number.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const response = await client.version(true);
 ```
 
@@ -67,9 +100,10 @@ Updates the `Fabric` instance's `authorization` header to use Basic authenticati
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 client.useBasicAuth("admin", "hunter2");
 // with the username "admin" and password "hunter2".
 ```
@@ -89,9 +123,10 @@ Updates the `Fabric` instance's `authorization` header to use Bearer authenticat
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 client.useBearerAuth("keyboardcat");
 // The fabric instance now uses Bearer authentication.
 ```
@@ -133,9 +168,10 @@ Fetches the C8 version information for the active fabric from the server.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const version = await client.version();
 // the version object contains the C8 version information.
 ```
@@ -154,11 +190,11 @@ Creates a new Fabric with the given `fabricName`.
 
 - **options**: `Object`
 
-  - **dcList**: `String`
+  - **dcList**: `string`
     A comma separated list of data centers. It is a mandatory field, but if not specified (due to user error), it defaults
 to the local Edge Location.
 
-  - **spotDc**: `String` (optional)
+  - **spotDc**: `string` (optional)
     The data center to be made as spot data center for this client. It has three different behaviour depending upon the value.
 
       `AUTOMATIC` -  The spot DC is chosen automatically if this key is not present in the `options` object.
@@ -190,9 +226,10 @@ to the local Edge Location.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const info = await client.createFabric('mydb', [{username: 'root'}]);
 // the fabric has been created
 ```
@@ -206,6 +243,10 @@ Updates the spot primary region of a client.
 **Examples**
 
 ```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 await client.updateFabricSpotRegion("guestTenant", "guestDB", "myfederation-ap-south-1");
 ```
 
@@ -220,9 +261,10 @@ Checks whether the fabric exists.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const result = await client.exists();
 // result indicates whether the fabric exists
 ```
@@ -236,9 +278,10 @@ Fetches the fabric description for the active fabric from the server.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const info = await client.get();
 // the fabric exists
 ```
@@ -252,9 +295,10 @@ Fetches all fabrics from the server and returns an array of their names.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const names = await client.listFabrics();
 // fabrics is an array of fabric names
 ```
@@ -268,9 +312,10 @@ Fetches all fabrics accessible to the active user from the server and returns an
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const names = await client.listUserFabrics();
 // fabrics is an array of fabric names
 ```
@@ -282,9 +327,10 @@ const names = await client.listUserFabrics();
 Deletes the fabric with the given `fabricName` from the server.
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 await client.dropFabric('mydb');
 // fabric "mydb" no longer exists
 ```
@@ -304,9 +350,10 @@ Deletes **all documents in all collections** in the active client.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 await client.truncate();
 // all non-system collections in this fabric are now empty
 ```
@@ -320,9 +367,10 @@ Return a list of all Edge Locations (AKA Datacenters) deployed in the Macrometa 
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 await client.createFabric('mydb', [{username: 'root'}]);
 await client.getAllEdgeLocations();
 ```
@@ -336,9 +384,10 @@ Fetches data about the local Edge Location specific to this Datacenter/Location.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 await client.getLocalEdgeLocation();
 ```
 
@@ -351,8 +400,9 @@ Change the spot status of a datacenter.
 **Examles**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 await client.changeEdgeLocationSpotStatus('myfederation-us-east-1', true);
 ```

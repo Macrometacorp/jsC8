@@ -2,6 +2,120 @@
 
 These functions implement the [HTTP API for manipulating graphs](https://developer.document360.io/docs/graphs).
 
+## client.createGraph
+
+`async client.createGraph(graphName, properties): Object`
+
+Creates a graph with the given `properties` for this `graphName`, then returns the server response.
+
+**Arguments**
+
+- **graphName**: `string`
+
+  Graph name
+
+- **properties**: `Object`
+
+  For more information on the `properties` object, see  [the HTTP API documentation for creating graphs](https://developer.document360.io/docs/graphs).
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.createGraph('some-graph');
+```
+
+## client.deleteGraph
+
+`async client.deleteGraph(graphName, dropCollections): Object`
+
+Deletes the graph from the client.
+
+**Arguments**
+
+- **graphName**: `string`
+
+  Graph name
+
+- **dropCollections**: `boolean` (optional)
+
+  If set to `true`, the collections associated with the graph will also be deleted.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.deleteGraph('some-graph');
+```
+
+## client.hasGraph
+
+`async client.hasGraph(graphName): Boolean`
+
+Deletes the graph from the client.
+
+**Arguments**
+
+- **graphName**: `string`
+
+  Graph name
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const hasGraph = await client.hasGraph('some-graph');
+```
+
+## client.getGraph
+
+`async client.getGraph(graphName): Boolean`
+
+Retrieves general information about the graph.
+
+**Arguments**
+
+- **graphName**: `string`
+
+  Graph name
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const graph = await client.getGraph('some-graph');
+```
+
+## client.getGraphs
+
+`async client.getGraphs(): Boolean`
+
+Retrieves all graphs information.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+const graphs = await client.getGraphs();
+```
+
+# Advanced User
+
 ## graph.exists
 
 `async graph.exists(): boolean`
@@ -11,9 +125,10 @@ Checks whether the graph exists.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const result = await graph.exists();
 // result indicates whether the graph exists
@@ -28,9 +143,10 @@ Retrieves general information about the graph.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const data = await graph.get();
 // data contains general information about the graph
@@ -51,9 +167,10 @@ Creates a graph with the given `properties` for this graph's name, then returns 
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const info = await graph.create({
   edgeDefinitions: [{
@@ -80,9 +197,10 @@ Deletes the graph from the client.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 await graph.drop();
 // the graph "some-graph" no longer exists

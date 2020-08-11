@@ -15,9 +15,10 @@ Returns a new [GraphVertexCollection  instance ](https://developer.document360.i
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph("some-graph");
 const collection = graph.vertexCollection("vertices");
 assert.equal(collection.name, "vertices");
@@ -83,9 +84,10 @@ Adds the collection with the given `collectionName` to the graph's vertex collec
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 await graph.addVertexCollection('vertices');
 // the collection "vertices" has been added to the graph
@@ -110,9 +112,10 @@ Removes the vertex collection with the given `collectionName`  from the graph.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 await graph.removeVertexCollection('vertices')
 // collection "vertices" has been removed from the graph

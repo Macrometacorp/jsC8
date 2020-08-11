@@ -11,7 +11,8 @@ describe("User Management", function() {
   let dcList: string;
   const testUrl: string =
     process.env.TEST_C8_URL || "https://test.macrometa.io";
-
+  const tenant = "guest";
+  
   before(async () => {
     fabric = new Fabric({
       url: testUrl,
@@ -19,7 +20,7 @@ describe("User Management", function() {
     });
 
     await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
+    fabric.useTenant(tenant);
 
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
@@ -190,7 +191,7 @@ describe("User Management", function() {
         );
         expect(response.error).to.be.false;
         expect(response.code).eq(200);
-        expect(response[`${testFabricName}`]).eq("ro");
+        expect(response[`${tenant}.${testFabricName}`]).eq("ro");
       });
     });
   });

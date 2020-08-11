@@ -1,5 +1,53 @@
 ## Manipulating edges
 
+## client.insertEdge
+
+`async client.insertEdge(graphName, definition): Object`
+
+Adds the given edge definition `definition` to the given graph.
+
+**Arguments**
+
+- **graphName**: `string`
+
+  Graph name
+
+* **definition**: `Object`
+
+  For more information on edge definitions see [the HTTP API for managing graphs](https://developer.document360.io/docs/graphs).
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.insertEdge('some-graph', {
+  collection: 'edges',
+  from: ['vertices'],
+  to: ['vertices']
+});
+```
+
+## client.getEdges
+
+`async client.getEdges(graphName): Array`
+
+Returns the edge definitions for given graph.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
+await client.getEdges('some-graph');
+```
+
+# Advanced User
+
 ## graph.edgeCollection
 
 `graph.edgeCollection(collectionName): GraphEdgeCollection`
@@ -15,9 +63,10 @@ Returns a new [GraphEdgeCollection  instance](https://developer.document360.io/d
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 // assuming the collections "edges" and "vertices" exist
 const graph = client.graph("some-graph");
 const collection = graph.edgeCollection("edges");
@@ -40,9 +89,10 @@ Adds the given edge definition `definition` to the graph.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 // assuming the collections "edges" and "vertices" exist
 const graph = client.graph('some-graph');
 await graph.addEdgeDefinition({
@@ -73,9 +123,10 @@ the given `definition`.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 // assuming the collections "edges", "vertices" and "more-vertices" exist
 const graph = client.graph('some-graph');
 await graph.replaceEdgeDefinition('edges', {
@@ -105,9 +156,10 @@ Removes the edge definition with the given `definitionName` form the graph.
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 
 await graph.removeEdgeDefinition('edges')
@@ -142,9 +194,10 @@ Note:-Please note that while `opts.filte`, `opts.visitor`, `opts.init`, `opts.ex
 **Examples**
 
 ```js
-const client = new jsc8();
-await client.login(email, password);
-client.useTenant(tenant-name);
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
 await collection.import([
