@@ -84,6 +84,8 @@ const allTenants = client.listTenants();
 
 # Advanced User
 
+@(Info)(Note:-)(Below apis works with admin user only.)
+
 ## tenant.createTenant
 
 `async tenant.createTenant(password, dcList, extra): Object`
