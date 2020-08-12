@@ -84,7 +84,7 @@ const allTenants = client.listTenants();
 
 # Advanced User
 
-Note:- Below apis works with admin user only.
+Note:- Below apis work with admin user only.
 
 ## tenant.createTenant
 
