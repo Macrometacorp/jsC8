@@ -35,11 +35,12 @@ export class KeyValue {
         );
     }
 
-    getKVKeys() {
+    getKVKeys(opts: any = {}) {
         return this._connection.request(
             {
                 method: "GET",
                 path: `/_api/kv/${this.name}/keys`,
+                qs: { ...opts }
             },
             (res) => res.body
         );

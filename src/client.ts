@@ -672,9 +672,9 @@ export class C8Client extends Fabric {
     return keyValueColl.getKVCount();
   }
 
-  getKVKeys(collectionName: string) {
+  getKVKeys(collectionName: string, opts?: any) {
     const keyValueColl = this.keyValue(collectionName);
-    return keyValueColl.getKVKeys();
+    return keyValueColl.getKVKeys(opts);
   }
 
   getValueForKey(collectionName: string, key: string) {
@@ -697,9 +697,9 @@ export class C8Client extends Fabric {
     return keyValueColl.deleteEntryForKey(key);
   }
 
-  deleteEntryForKeys(collectionName: string, key: string[]) {
+  deleteEntryForKeys(collectionName: string, keys: string[]) {
     const keyValueColl = this.keyValue(collectionName);
-    return keyValueColl.deleteEntryForKeys(key);
+    return keyValueColl.deleteEntryForKeys(keys);
   }
   
   deleteKVCollection(collectionName: string) {
