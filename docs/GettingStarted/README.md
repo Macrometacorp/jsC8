@@ -124,7 +124,7 @@ await client.login(email, rootPassword);
 const client = new jsc8({url: `https://${regionURL}`, token:"XXXX"});
 
 // login with apikey
-const client = new jsc8({url: `https://${regionURL}`, apikey:"XXXX"});
+const client = new jsc8({url: `https://${regionURL}`, apiKey: "XXXX"});
 
 //--------------------------------------------------------------------------------------
 // create a tenant
