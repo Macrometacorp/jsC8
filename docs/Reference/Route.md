@@ -25,7 +25,7 @@ If `path` is missing, the route will refer to the base URL of the client.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const route = client.route("my-foxx-service");
 const users = route.route("users");
@@ -53,7 +53,7 @@ Performs a GET request to the given URL and returns the server response.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const route = client.route('my-foxx-service');
 const response = await route.get();
@@ -98,7 +98,7 @@ Performs a POST request to the given URL and returns the server response.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const route = client.route('my-foxx-service');
 const response = await route.post()
@@ -157,7 +157,7 @@ Performs a PUT request to the given URL and returns the server response.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const route = client.route('my-foxx-service');
 const response = await route.put();
@@ -216,7 +216,7 @@ Performs a PATCH request to the given URL and returns the server response.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const route = client.route('my-foxx-service');
 const response = await route.patch();
@@ -270,7 +270,7 @@ Performs a DELETE request to the given URL and returns the server response.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const route = client.route('my-foxx-service');
 const response = await route.delete()
@@ -360,7 +360,7 @@ Performs an arbitrary request to the given URL and returns the server response.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const route = client.route('my-foxx-service');
 const response = await route.request({

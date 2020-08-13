@@ -73,7 +73,7 @@ For more information on transactions, see [the HTTP API documentation for transa
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const action = String(function (params) {
   // This code will be executed inside C8!

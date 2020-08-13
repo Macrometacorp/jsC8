@@ -169,7 +169,7 @@ Note: by default value for fabric is `_system`
 const jsc8 = require("jsc8");
 client = new jsc8({
   url: "https://gdn1.macrometa.io",
-  apikey: "XXXX",
+  apiKey: "XXXX",
   fabricName: "_system",
 });
 ```
@@ -180,7 +180,7 @@ or to have failover support
 const jsc8 = require("jsc8");
 client = new jsc8({
   url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"],
-  apikey: "XXXX",
+  apiKey: "XXXX",
   fabricName: "_system",
 });
 ```
@@ -196,7 +196,7 @@ const jsc8 = require("jsc8");
 
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 async function createCollection() {
   let collectionDetails;
@@ -256,7 +256,7 @@ const jsc8 = require("jsc8");
 
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 async function createIndex() {
   let index;
@@ -355,7 +355,7 @@ const jsc8 = require("jsc8");
 
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 async function populate() {
   await console.log("Creating the collection object to be used...");
@@ -405,7 +405,7 @@ const jsc8 = require("jsc8");
 
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 async function c8Queries() {
   const result = await client.executeQuery(
@@ -456,7 +456,7 @@ const jsc8 = require("jsc8");
 
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 async function callback_fn(collection) {
   await console.log("Connection open on ", collection.name);
@@ -519,7 +519,7 @@ const jsc8 = require("jsc8");
 
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 async function streamDemo() {
   await client.createStream("newStreamFromJSC8", false);
@@ -625,7 +625,7 @@ const get_count = "RETURN COUNT(FOR doc IN " + collection_name + " RETURN 1)";
 
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 async function restqldemo() {
   console.log("------- CREATE GEO-REPLICATED COLLECTION  ------");
@@ -775,7 +775,7 @@ const jsc8 = require("jsc8");
 
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 async function createFabric() {
 
@@ -813,7 +813,7 @@ const jsc8 = require("jsc8");
 
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX", fabricName: "_system"});
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX", fabricName: "_system"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX", fabricName: "_system"});
 
 async function getFabric() {
 

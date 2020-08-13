@@ -21,7 +21,7 @@ Adds the given edge definition `definition` to the given graph.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 await client.insertEdge('some-graph', {
   collection: 'edges',
@@ -41,7 +41,7 @@ Returns the edge definitions for given graph.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 await client.getEdges('some-graph');
 ```
@@ -65,7 +65,7 @@ Returns a new [GraphEdgeCollection  instance](https://developer.document360.io/d
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 // assuming the collections "edges" and "vertices" exist
 const graph = client.graph("some-graph");
@@ -91,7 +91,7 @@ Adds the given edge definition `definition` to the graph.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 // assuming the collections "edges" and "vertices" exist
 const graph = client.graph('some-graph');
@@ -125,7 +125,7 @@ the given `definition`.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 // assuming the collections "edges", "vertices" and "more-vertices" exist
 const graph = client.graph('some-graph');
@@ -158,7 +158,7 @@ Removes the edge definition with the given `definitionName` form the graph.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const graph = client.graph('some-graph');
 
@@ -196,7 +196,7 @@ Note:-Please note that while `opts.filte`, `opts.visitor`, `opts.init`, `opts.ex
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
