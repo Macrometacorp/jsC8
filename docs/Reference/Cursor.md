@@ -5,7 +5,7 @@
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const cursor = await client.query('FOR x IN 1..5 RETURN x');
 // query result list: [1, 2, 3, 4, 5]

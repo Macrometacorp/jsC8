@@ -17,7 +17,7 @@ Validates the given application definition and returns an object containing a me
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const appDefinition = 
             `@App:name('Sample-Cargo-App')
@@ -45,7 +45,7 @@ Get list of all stream applictions under given database.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const streamapps = await client.retrieveStreamApp();
 ```
@@ -67,7 +67,7 @@ Deletes Stream App
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 await client.deleteStreamApp("Sample-Cargo-App");
 ```
@@ -89,7 +89,7 @@ Returns details of a Stream Application.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const streamApp = await client.getStreamApp("Sample-Cargo-App");
 ```
@@ -111,7 +111,7 @@ Returns samples for Application Definition.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const streamAppSamples = await client.getStreamAppSamples("Sample-Cargo-App");
 ```
@@ -139,7 +139,7 @@ Activates or deactivates a Stream Application.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const streamAppSamples = await client.activateStreamApp("Sample-Cargo-App", true);
 ```
@@ -165,7 +165,7 @@ Returns an `Object` with the information of the created Stream Application.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 let appDefinition = 
             `@App:name('Sample-Cargo-App')
@@ -193,7 +193,7 @@ Get list of all stream applictions under given database.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const streamapps = await client.getAllStreamApps();
 // To change the fabric and tenant, client.useFabric and client.useTenant respectively
@@ -216,7 +216,7 @@ Validates the given application definition and returns an object containing a me
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 let appDefinition = 
             `@App:name('Sample-Cargo-App')
@@ -245,7 +245,7 @@ Returns samples for Application Definition.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 let samples = await client.getSampleStreamApps()
 ```
@@ -263,7 +263,7 @@ Returns details of a Stream Application.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const app = client.streamApp("Sample-Cargo-App");
 let response = await app.retriveApplication();
@@ -291,7 +291,7 @@ Returns an `Object` with the information of the created Stream Application.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const app = client.streamApp("Sample-Cargo-App");
 
@@ -330,7 +330,7 @@ Activates or deactivates a Stream Application.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const app = client.streamApp("Sample-Cargo-App");
 const streamApp = await app.activateStreamApplication(true);
@@ -356,7 +356,7 @@ Runs a query on a Stream Application.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const app = client.streamApp("Sample-Cargo-App");
 const streamApp = await app.query("select * from destCargoTable limit 3");
@@ -374,7 +374,7 @@ Deletes a Stream Application.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const app = client.streamApp("Sample-Cargo-App");
 const streamApp = await app.deleteApplication();

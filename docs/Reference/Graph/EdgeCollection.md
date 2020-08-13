@@ -83,7 +83,7 @@ Note:- If a string is passed instead of an options object, it will be interprete
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 await client.updateEdge('some-graph', 'edge-collection' , "some_key" , {some: "data"});
 ```
@@ -142,7 +142,7 @@ Note:-If a string is passed instead of an options object, it will be interpreted
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 await client.replaceEdge('some-graph', 'edge-collection' , "some_key" , {some: "data"});
 ```
@@ -197,7 +197,7 @@ Note:-If a string is passed instead of an options object, it will be interpreted
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 await client.deleteEdge('some-graph', 'edge-collection' , "some_key");
 ```
@@ -231,7 +231,7 @@ await client.deleteEdge('some-graph', 'edge-collection' , "some_key");
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 await client.linkEdge('some-graph', 'edge-collection' , 'vertices/start-vertex', 'vertices/end-vertex');
 ```
@@ -255,7 +255,7 @@ Deletes the edge with the given `documentHandle` from the collection.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
@@ -288,7 +288,7 @@ Checks whether the edge with the given `documentHandle` exists.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
@@ -322,7 +322,7 @@ Retrieves the edge with the given `documentHandle` from the collection.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
@@ -372,7 +372,7 @@ Creates a new edge between the vertices `fromId` and `toId` with the given `data
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
@@ -404,7 +404,7 @@ Retrieves a list of all edges of the document with the given `documentHandle`.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
@@ -436,7 +436,7 @@ Retrieves a list of all incoming edges of the document with the given `documentH
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
@@ -468,7 +468,7 @@ Retrieves a list of all outgoing edges of the document with the given `documentH
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');
@@ -504,7 +504,7 @@ Note:-Please note that while `opts.filter`, `opts.visitor`, `opts.init`, `opts.e
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const graph = client.graph('some-graph');
 const collection = graph.edgeCollection('edges');

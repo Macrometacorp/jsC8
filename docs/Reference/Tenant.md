@@ -11,7 +11,7 @@ Returns tenant edge locations
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const data = await client.getDcList();
 ```
@@ -35,7 +35,7 @@ Note:-This method can not be used when the jsC8 instance was created with `isAbs
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 client.useTenant("testTenant");
 // The fabric instance now uses the tenant "testTenant".
@@ -61,7 +61,7 @@ Returns a _Tenant_ instance representing the tenant with the given tenant name.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const tenant = client.tenant(tenant-email);
 ```
@@ -77,7 +77,7 @@ Fetches all tenants from the fabric and returns an array of tenant descriptions.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const allTenants = client.listTenants();
 ```
@@ -110,7 +110,7 @@ Creates a tenant.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const tenant = client.tenant(tenant-email);
 await tenant.createTenant("myPassword", "test-eu-west-1,test-us-west-2");
@@ -128,7 +128,7 @@ Deletes the tenant.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword","region-name");
@@ -145,7 +145,7 @@ Fetches data about the Edge Locations specific to this tenant.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const tenant = client.tenant(tenant-email, tenant-name);
 const locations = await tenant.getTenantEdgeLocations();
@@ -163,7 +163,7 @@ Gets the details of a tenant.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword", "region-name");
@@ -191,7 +191,7 @@ Modifies the given tenant.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const tenant = client.tenant("testTenant@macrometa.io");
 await tenant.createTenant("myPassword" "region-name");

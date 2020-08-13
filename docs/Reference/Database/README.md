@@ -125,7 +125,7 @@ Can be used to clean up idling connections during longer periods of inactivity.
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const sessions = client.collection("sessions");
 // Clean up expired sessions once per hour

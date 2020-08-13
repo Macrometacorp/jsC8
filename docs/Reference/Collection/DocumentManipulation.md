@@ -79,7 +79,7 @@ Note:- If a string is passed instead of an options object, it will be interprete
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const updatedDoc  = await client.updateDocument("some-collection", "some_key", { some: "data" });
 ```
@@ -159,7 +159,7 @@ Note:- If a string is passed instead of an options object, it will be interprete
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const updatedDocs = await client.updateDocumentMany("some-collection", [{ _key: "some_key", some: "data" }]);
 ```
@@ -216,7 +216,7 @@ Note:-If a string is passed instead of an options object, it will be interpreted
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const replacedDoc  = await client.replaceDocument("some-collection", "some_key", { some: "data" });
 ```
@@ -269,7 +269,7 @@ Note:-If a string is passed instead of an options object, it will be interpreted
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const replacedDocs = await client.replaceDocumentMany("some-collection", [{ _key: "some_key", some: "data" }]);
 ```
@@ -322,7 +322,7 @@ Note:-If a string is passed instead of an options object, it will be interpreted
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const deletedDoc  = await client.deleteDocument("some-collection", "some_key", { some: "data" });
 ```
@@ -375,7 +375,7 @@ Note:-If a string is passed instead of an options object, it will be interpreted
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const deletedDocs = await client.deleteDocumentMany("some-collection", [{ _key: "some_key", some: "data" }]);
 ```
@@ -432,7 +432,7 @@ Note:-If a string is passed instead of an options object, it will be interpreted
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
 const data = {number: 1, hello: 'world'};
@@ -524,7 +524,7 @@ Note:- If a string is passed instead of an options object, it will be interprete
 ```js
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apikey: "XXXX"});
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
 const doc = {number: 1, hello: 'world'};

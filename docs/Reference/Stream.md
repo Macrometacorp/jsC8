@@ -25,7 +25,7 @@ Create asynchronously a stream for a given database.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 await client.createStream("my-stream", true);
 ```
@@ -51,7 +51,7 @@ Returns true if stream is available
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const hasStream = await client.hasStream("my-stream", true);
 ```
@@ -81,7 +81,7 @@ Returns stream instance for given stream
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = await client.getStream("my-stream", true);
 ```
@@ -111,7 +111,7 @@ Returns statistics for given stream
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const streamStats = await client.getStreamStats("my-stream", true);
 ```
@@ -141,7 +141,7 @@ Get the list of persistent subscriptions for a given stream
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const streamSubscriptions = await client.getStreamSubscriptions(
   "my-stream",
@@ -174,7 +174,7 @@ Get estimated backlog for offline stream
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const streamBacklog = await client.getStreamBacklog("my-stream", true);
 ```
@@ -208,7 +208,7 @@ Delete a subscription.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 await client.deleteStreamSubscription("my-stream", "my-subscription");
 ```
@@ -230,7 +230,7 @@ Clear backlog for all streams for given subscription
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 await client.clearStreamBacklog("my-subscription");
 ```
@@ -246,7 +246,7 @@ Clear backlog for all streams
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 await client.clearStreamsBacklog();
 ```
@@ -304,7 +304,7 @@ Returns producer access for given stream
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const producer = await client.createStreamProducer("my-stream", true);
 ```
@@ -359,7 +359,7 @@ Returns consumer access for given stream
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const consumer = await client.createStreamReader("my-stream", "my-sub");
 ```
@@ -377,7 +377,7 @@ To change the fabric and tenant, `client.useFabric` and `client.useTenant` respe
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const streams = await client.getStreams();
 ```
@@ -407,7 +407,7 @@ Returns a `Stream` instance representing the stream with the given stream name.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("testStream", true, false);
 ```
@@ -425,7 +425,7 @@ Create asynchronously a stream for a given database.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -442,7 +442,7 @@ To publish a message on a stream.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -459,7 +459,7 @@ await stream.publishMessage(msg);
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -475,7 +475,7 @@ Get estimated backlog for offline stream.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -499,7 +499,7 @@ Clear backlog for a stream for given subscription.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -517,7 +517,7 @@ Clear backlog for all streams.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -535,7 +535,7 @@ Get the statistics for the given stream.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -559,7 +559,7 @@ Delete a subscription.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -583,7 +583,7 @@ Expire messages on a stream
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -601,7 +601,7 @@ Get the list of persistent subscriptions for a given stream.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -651,7 +651,7 @@ Creates a consumer for a stream.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
@@ -712,7 +712,7 @@ Creates a producer for a stream and returns producer object.
 ```js
 const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apikey: "XXXX" });
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const stream = client.stream("my-stream", true);
 await stream.createStream();
