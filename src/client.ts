@@ -6,6 +6,7 @@ import {
   DocumentSaveOptions,
 } from "./collection";
 import { C8QLLiteral } from "./c8ql-query";
+import { KeyValue, KVPairHandle } from "./keyValue";
 
 const csv = require("csvtojson");
 const jwtDecode = require("jwt-decode");
@@ -13,6 +14,10 @@ const jwtDecode = require("jwt-decode");
 export class C8Client extends Fabric {
   constructor(config: Config) {
     super(config);
+  }
+
+  keyValue(collectionName: string): KeyValue {
+    return new KeyValue(this._connection, collectionName);
   }
 
   useApiKeyAuth(apikey: string): this {
@@ -654,5 +659,51 @@ export class C8Client extends Fabric {
       return user.clearCollectionAccessLevel(fabricName, collectionName);
     }
     return user.clearDatabaseAccessLevel(fabricName);
+  }
+
+  // Key value Collections
+  getKVCollections() {
+    const keyValueColl = this.keyValue('');
+    return keyValueColl.getCollections();
+  }
+
+  getKVCount(collectionName: string) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.getKVCount();
+  }
+
+  getKVKeys(collectionName: string) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.getKVKeys();
+  }
+
+  getValueForKey(collectionName: string, key: string) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.getValueForKey(key);
+  }
+
+  createKVCollection(collectionName: string, expiration?: boolean) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.createCollection(expiration);
+  }
+
+  insertKVPairs(collectionName: string, keyValuePairs: KVPairHandle[]) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.insertKVPairs(keyValuePairs);
+  }
+
+  deleteEntryForKey(collectionName: string, key: string) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.deleteEntryForKey(key);
+  }
+
+  deleteEntryForKeys(collectionName: string, key: string[]) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.deleteEntryForKeys(key);
+  }
+  
+  deleteKVCollection(collectionName: string) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.deleteCollection();
   }
 }
