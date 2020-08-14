@@ -306,11 +306,6 @@ export class C8Client extends Fabric {
     return stream.createStream();
   }
 
-  getttlmsg() {
-    const stream = this.stream('', false);
-    return stream.getMessageTtl();
-  }
-
   hasStream(streamName: string, local: boolean): Promise<boolean> {
     const topic = local ? `c8locals.${streamName}` : `c8globals.${streamName}`;
 
