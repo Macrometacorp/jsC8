@@ -53,7 +53,7 @@
     "dist": "rimraf lib && npm-run-all --parallel dist:* && cpy src/index.all.js --rename index.js lib/",
     "prepare": "npm run dist && node -e 'require(\".\");'",
     "predevTest": "npm run dist",
-    "devTest": "env TEST_C8_URL=https://test.eng1.macrometa.io mocha --reporter spec --timeout 60000 lib/async/test/28-manipulating-streams.js"
+    "devTest": "env TEST_C8_URL=https://patel-blr1.eng3.macrometa.io mocha --reporter spec --timeout 60000 lib/async/test"
   },
   "dependencies": {
     "csvtojson": "^2.0.10",

@@ -134,11 +134,11 @@ describe("validating new apis", function () {
         const userEmail = "guesttest@macrometa.io";
         c8Client.createUser(userName, userEmail)
             .then(async () => {
-                const hasUser = await c8Client.hasUser(userName, userEmail);
+                const hasUser = await c8Client.hasUser(userName);
                 expect(hasUser).to.be.true;
             })
             .then(async () => {
-                await c8Client.deleteUser(userName, userEmail);
+                await c8Client.deleteUser(userName);
             })
             .then(() => void done())
             .catch(done);

@@ -1,5 +1,4 @@
-KV (Key value)
----------------
+## KV (Key value)
 
 The **KV**  feature allows us to insert data in the key value format, 
 where "_key" is a unique field which allows you to track the entries and "value" is a string
@@ -18,7 +17,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const docs = await client.getKVCollections();
+const result = await client.getKVCollections();
 ```
 
 ## client.getKVCount
@@ -40,7 +39,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const docs = await client.getKVCount();
+const result = await client.getKVCount();
 ```
 
 ## client.getKVKeys
@@ -76,7 +75,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const docs = await client.getKVKeys('some-collection');
+const result = await client.getKVKeys('some-collection');
 ```
 
 ## client.getValueForKey
@@ -102,7 +101,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const docs = await client.getValueForKey('some-collection', 'some-key');
+const result = await client.getValueForKey('some-collection', 'some-key');
 ```
 
 ## client.createKVCollection
@@ -128,7 +127,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const docs = await client.createKVCollection('some-collection');
+const result = await client.createKVCollection('some-collection');
 ```
 
 ## client.insertKVPairs
@@ -178,7 +177,7 @@ const keyValuePairs = [
     }
 ];
 
-const docs = await client.insertKVPairs('some-collection', keyValuePairs);
+const result = await client.insertKVPairs('some-collection', keyValuePairs);
 ```
 
 ## client.deleteEntryForKey
@@ -204,7 +203,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const docs = await client.deleteEntryForKey('some-collection', 'some-key');
+const result = await client.deleteEntryForKey('some-collection', 'some-key');
 ```
 
 ## client.deleteEntryForKeys
@@ -230,7 +229,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const docs = await client.deleteEntryForKeys('some-collection', ['some-key1', 'some-key2']);
+const result = await client.deleteEntryForKeys('some-collection', ['some-key1', 'some-key2']);
 ```
 
 ## client.deleteKVCollection
@@ -252,5 +251,5 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const docs = await client.deleteKVCollection('some-collection');
+const result = await client.deleteKVCollection('some-collection');
 ```

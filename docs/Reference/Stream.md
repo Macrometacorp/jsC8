@@ -450,6 +450,48 @@ const msg = "Hello World!";
 await stream.publishMessage(msg);
 ```
 
+## stream.getMessageTtl
+
+`async stream.getMessageTtl()`
+
+Get message TTL in seconds for the streams.
+
+**Examples**
+
+```js
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+//---- OR ----
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+
+const stream = client.stream("my-stream", true);
+await stream.getMessageTtl();
+```
+
+## stream.setMessageTtl
+
+`async stream.setMessageTtl(ttl)`
+
+Set message TTL in seconds for all streams.
+
+**Arguments**
+
+- **ttl**: `string`
+  	
+  TTL in seconds.
+
+  Default value : 3600
+
+**Examples**
+
+```js
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+//---- OR ----
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+
+const stream = client.stream("my-stream", true);
+await stream.setMessageTtl(3700);
+```
+
 ## stream.deleteStream
 
 `async stream.deleteStream()`
@@ -564,6 +606,30 @@ const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 const stream = client.stream("my-stream", true);
 await stream.createStream();
 await stream.deleteSubscription("my-subscription");
+```
+
+## stream.deleteSubscriptions
+
+`async stream.deleteSubscriptions(subscription)`
+
+Delete a subscription.
+
+**Arguments**
+
+- **subscription**: `string`
+
+  The name of the subscription.
+
+**Examples**
+
+```js
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+//---- OR ----
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+
+const stream = client.stream("my-stream", true);
+await stream.createStream();
+await stream.deleteSubscriptions("my-subscription");
 ```
 
 ## stream.expireMessages

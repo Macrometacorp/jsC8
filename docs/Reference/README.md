@@ -27,4 +27,5 @@
   - [VertexCollection](Graph/VertexCollection.md)
   - [EdgeCollection](Graph/EdgeCollection.md)
 - [Route](Route.md)
+- [API Keys](ApiKeys.md)
 - [User Management](UserOperations.md)

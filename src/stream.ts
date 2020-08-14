@@ -238,4 +238,36 @@ export class Stream {
       (res) => res.body
     );
   }
+
+  getMessageTtl(){
+    return this._connection.request(
+      {
+        method: "GET",
+        path: "/_api/streams/ttl",
+      },
+      (res) => res.body
+    );
+  }
+
+  setMessageTtl(ttl: number = 3600){
+    return this._connection.request(
+      {
+        method: "POST",
+        path: `/_api/streams/ttl/${ttl}`,
+      },
+      (res) => res.body
+    );
+  }
+
+  deleteSubscriptions(subscription: string) {
+    const urlSuffix = `/subscriptions/${subscription}`;
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: this._getPath(false, urlSuffix),
+        qs: `global=${this.global}`,
+      },
+      (res) => res.body
+    );
+  }
 }

@@ -56,7 +56,7 @@ Partially updates user with given data
 
   a JSON object consisting of following properties. Any of the following properties can be omitted if they are not to be updated
 
-  - **passwd**: `string` [optional]
+  - **passwd**: `string`
 
     The password of the User.
 
@@ -486,6 +486,56 @@ const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.getAllDatabases();
 ```
 
+## user.listAccessibleCollections
+
+`async listAccessibleCollections(databaseName, full)`
+
+Lists all the collections' access levels associated with the user
+
+**Arguments**
+
+- **databaseName**: `string`
+
+  Name of the database.
+
+- **full**: `boolean`[optional]
+
+  if true is supplied, it returns the full set of access levels for all databases and all collections. default is false.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.getAllDatabases("sample-databaseName");
+```
+
+## user.listAccessibleStreams
+
+`async listAccessibleStreams(databaseName, full)`
+
+Lists all the streams' access levels associated with the user
+
+**Arguments**
+
+- **databaseName**: `string`
+
+  Name of the database.
+
+- **full**: `boolean`[optional]
+
+  if true is supplied, it returns the full set of access levels for all databases and all collections. default is false.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.listAccessibleStreams("sample-databaseName");
+```
+
 ## user.getDatabaseAccessLevel
 
 `async user.getDatabaseAccessLevel(databaseName)`
@@ -535,6 +585,49 @@ await user.getCollectionAccessLevel(
 );
 ```
 
+## user.getStreamAccessLevel
+
+`async user.getStreamAccessLevel(databaseName, streamName)`
+
+Get the access level of a specific stream in a given database
+
+**Arguments**
+
+- **databaseName**: `string`
+
+  Name of the database
+
+- **streamName**: `string`
+
+  Name of the stream for which access level is to be fetched
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.getStreamAccessLevel(
+  "sample_databaseName",
+  "sample_streamName"
+);
+```
+
+## user.getBillingAccessLevel
+
+`async user.getBillingAccessLevel()`
+
+Get the access level of a billing
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.getBillingAccessLevel();
+```
+
 ## user.clearDatabaseAccessLevel
 
 `async clearDatabaseAccessLevel(databaseName)`
@@ -582,6 +675,49 @@ await user.clearCollectionAccessLevel(
   "sample_databaseName",
   "sample_collectionName"
 );
+```
+
+## user.clearStreamAccessLevel
+
+`async user.clearStreamAccessLevel(databaseName, streamName)`
+
+clears the access level of a specific stream in a given database
+
+**Arguments**
+
+- **databaseName**: `string`
+
+  Name of the database
+
+- **streamName**: `string`
+
+  Name of the Stream for which access level is to be cleared
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.clearStreamAccessLevel(
+  "sample_databaseName",
+  "sample_streamName"
+);
+```
+
+## user.clearBillingAccessLevel
+
+`async user.clearBillingAccessLevel()`
+
+Clears the access level of a billing
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.clearBillingAccessLevel();
 ```
 
 ## user.setDatabaseAccessLevel
@@ -636,4 +772,54 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.setCollectionAccessLevel(databaseName, collectionName, permission);
+```
+
+## user.setStreamAccessLevel
+
+`async setStreamAccessLevel(databaseName, streamName, permission)`
+
+Sets Access level of a stream in a database
+
+**Arguments**
+
+- **databaseName**: `string`
+
+  The name of the database.
+
+- **streamName**: `string`
+
+  The name of the stream.
+
+- **permission**: `string`
+
+  The permission code, only possible values are `rw`, `ro` or `none`
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.setStreamAccessLevel("sample-databaseName", "sample-streamName", "rw");
+```
+
+## user.setBillingAccessLevel
+
+`async setBillingAccessLevel(permission)`
+
+Sets Access level of a billing
+
+**Arguments**
+
+- **permission**: `string`
+
+  The permission code, only possible values are `rw`, `ro` or `none`
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.setBillingAccessLevel("rw");
 ```
