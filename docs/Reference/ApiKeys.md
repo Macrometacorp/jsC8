@@ -10,10 +10,10 @@ Validate apikey or jwt.
 
 - **data**: `Object`
 
-    -**apikey**: The api key as a string.
+    - **apikey**: The api key as a string.
     You can validate api keys only if you have admin permissions.
 
-    -**jwt**: The JWT token as a string.
+    - **jwt**: The JWT token as a string.
     You can validate jwt token only if you have admin permissions.
 
 **Examples**
@@ -38,6 +38,7 @@ Note:- You can create api keys only for yourself.
 **Arguments**
 
 - **keyid**: `string`
+
     The id of the api key.
 
 **Examples**
@@ -75,6 +76,7 @@ Fetches an existing api key, identified by keyid. You can get only yours api key
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
 
 **Examples**
@@ -96,6 +98,7 @@ Removes an existing api key, identified by keyid. You can remove only yours api 
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
 
 **Examples**
@@ -117,9 +120,11 @@ Fetch the list of databases available to the specified keyid. You need Administr
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
     
 - **full**: `boolean`
+    
     Return the full set of access levels for all databases and all collections if set to true. Default is false.
 
 **Examples**
@@ -141,10 +146,12 @@ Fetch the list of databases available to the specified keyid. You need Administr
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
     
 - **dbname**: `string`
-   The name of the database.
+    
+    The name of the database.
 
 **Examples**
 
@@ -165,10 +172,12 @@ Clears the database access level for the database dbname of api key with keyid. 
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
     
 - **dbname**: `string`
-   The name of the database.
+   
+    The name of the database.
 
 **Examples**
 
@@ -189,12 +198,15 @@ Sets the database access levels for the database dbname of api key with keyid. Y
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
     
 - **dbname**: `string`
+    
     The name of the database.
 
 - **permission**: `string`
+   
     - Use "rw" to set the database access level to Administrate .
     - Use "ro" to set the database access level to Access.
     - Use "none" to set the database access level to No access.
@@ -220,12 +232,15 @@ If access level for collection is not set then default("*") access level will be
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
 
 - **dbname**: `string`
+    
     The name of the database.
     
 - **full**: `boolean`
+    
     Return the full set of access levels for all collections if set to true. Default is false.
 
 **Examples**
@@ -249,13 +264,16 @@ If access level for collection is not set then default("*") access level will be
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
     
 - **dbname**: `string`
-   The name of the database.
+   
+    The name of the database.
 
 - **collectionName**: `string`
-   The name of the collection.
+   
+    The name of the collection.
 
 **Examples**
 
@@ -276,12 +294,15 @@ Clears the collection access level for the collection collection in the database
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
     
 - **dbname**: `string`
+    
     The name of the database.
 
 - **collectionName**: `string`
+    
     The name of the collection.
 
 **Examples**
@@ -303,15 +324,19 @@ Sets the database access levels for the database dbname of api key with keyid. Y
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
     
 - **dbname**: `string`
+    
     The name of the database.
 
 - **collectionName**: `string`
+    
     The name of the collection.
 
 - **permission**: `string`
+    
     - Use "rw" to set the database access level to Administrate .
     - Use "ro" to set the database access level to Access.
     - Use "none" to set the database access level to No access.
@@ -337,12 +362,15 @@ If access level for stream is not set then default("*") access level will be use
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
 
 - **dbname**: `string`
+    
     The name of the database.
     
 - **full**: `boolean`
+    
     Return the full set of access levels for all streamsgetStreamAccessLevel if set to true. Default is false.
 
 **Examples**
@@ -364,13 +392,16 @@ Fetch the stream access level for a specific stream
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
     
 - **dbname**: `string`
-   The name of the database.
+   
+    The name of the database.
 
 - **streamName**: `string`
-   The name of the stream.
+   
+    The name of the stream.
 
 **Examples**
 
@@ -391,12 +422,15 @@ Clears the stream access level for the stream of api key with keyid. As conseque
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
     
 - **dbname**: `string`
+    
     The name of the database.
 
 - **streamName**: `string`
+    
     The name of the stream.
 
 **Examples**
@@ -420,15 +454,19 @@ If access level for stream is not set then default("*") access level will be use
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
     
 - **dbname**: `string`
+    
     The name of the database.
 
 - **streamName**: `string`
+    
     The name of the stream.
 
 - **permission**: `string`
+    
     - Use "rw" to set the database access level to Administrate .
     - Use "ro" to set the database access level to Access.
     - Use "none" to set the database access level to No access.
@@ -452,6 +490,7 @@ Fetch the billing access level
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
 
 **Examples**
@@ -473,6 +512,7 @@ Clears the billing access level of keyid.
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
 
 **Examples**
@@ -494,9 +534,11 @@ Sets the billing access levels for api key with keyid. You need the Administrate
 **Arguments**
 
 - **keyid**: `string`
+    
     The id of the api key.
 
 - **permission**: `string`
+    
     - Use "rw" to set the database access level to Administrate .
     - Use "ro" to set the database access level to Access.
     - Use "none" to set the database access level to No access.
