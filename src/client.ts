@@ -6,9 +6,10 @@ import {
   DocumentSaveOptions,
 } from "./collection";
 import { C8QLLiteral } from "./c8ql-query";
+import { KeyValue, KVPairHandle } from "./keyValue";
+import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
 
 const csv = require("csvtojson");
-const jwtDecode = require("jwt-decode");
 
 export class C8Client extends Fabric {
   constructor(config: Config) {
@@ -20,34 +21,20 @@ export class C8Client extends Fabric {
     return this;
   }
 
-  validateApiKey(apikey: string) {
-    return this._connection.request(
-      {
-        method: "POST",
-        path: "/_api/key/validate",
-        absolutePath: true,
-        body: {
-          apikey,
-        },
-      },
-      (res) => res.body
-    );
-  }
-
-  async loginWithToken(token: string) {
-    this.useBearerAuth(token);
-    const { error, errorMessage } = await this.version();
+  async loginWithToken(jwt: string) {
+    this.useBearerAuth(jwt);
+    const { error, errorMessage, result } = await this.validateApiKey({ jwt });
     if (error) {
       throw new Error(errorMessage);
     } else {
-      const { tenant } = jwtDecode(token);
+      const { tenant } = result;
       this.useTenant(tenant);
     }
   }
 
   async loginWithApiKey(apikey: string) {
     this.useApiKeyAuth(apikey);
-    const { error, errorMessage, result } = await this.validateApiKey(apikey);
+    const { error, errorMessage, result } = await this.validateApiKey({ apikey });
     if (error) {
       throw new Error(errorMessage);
     } else {
@@ -328,7 +315,7 @@ export class C8Client extends Fabric {
     return this.getStreams(!local).then(
       (res) => !!res.result.find((stream: any) => stream.topic === topic),
       (err) => {
-        throw err.errorMessage;
+        throw err;
       }
     );
   }
@@ -555,8 +542,8 @@ export class C8Client extends Fabric {
     })
   }
 
-  hasUser(userName: string, email: string = "") {
-    const user = this.user(userName, email);
+  hasUser(userName: string) {
+    const user = this.user(userName);
     return user.hasUser();
   }
 
@@ -571,8 +558,8 @@ export class C8Client extends Fabric {
     return user.createUser(passwd, active, extra);
   }
 
-  deleteUser(userName: string, email: string = "") {
-    const user = this.user(userName, email);
+  deleteUser(userName: string) {
+    const user = this.user(userName);
     return user.deleteUser();
   }
 
@@ -580,45 +567,41 @@ export class C8Client extends Fabric {
     return this.getAllUsers();
   }
 
-  getUser(userName: string, email: string = "") {
-    const user = this.user(userName, email);
+  getUser(userName: string) {
+    const user = this.user(userName);
     return user.getUserDeatils();
   }
 
   updateUser(
     userName: string,
-    email: string = "",
-    data: object
+    data: { active?: boolean; passwd: string; extra?: object }
   ) {
-    const user = this.user(userName, email);
+    const user = this.user(userName);
     return user.modifyUser(data);
   }
 
   replaceUser(
     userName: string,
-    email: string = "",
     data: { active?: boolean; passwd: string; extra?: object }
   ) {
-    const user = this.user(userName, email);
+    const user = this.user(userName);
     return user.replaceUser(data);
   }
 
   getPermissions(
     userName: string,
-    email: string = "",
     isFullRequested?: boolean
   ) {
-    const user = this.user(userName, email);
+    const user = this.user(userName);
     return user.getAllDatabases(isFullRequested);
   }
 
   getPermission(
     userName: string,
-    email: string = "",
     databaseName: string,
     collectionName?: string
   ) {
-    const user = this.user(userName, email);
+    const user = this.user(userName);
     if (!!collectionName) {
       return user.getCollectionAccessLevel(databaseName, collectionName);
     }
@@ -627,12 +610,11 @@ export class C8Client extends Fabric {
 
   updatePermission(
     userName: string,
-    email: string = "",
     fabricName: string,
     permission: "rw" | "ro" | "none",
     collectionName?: string
   ) {
-    const user = this.user(userName, email);
+    const user = this.user(userName);
     if (!!collectionName) {
       return user.setCollectionAccessLevel(
         fabricName,
@@ -645,14 +627,171 @@ export class C8Client extends Fabric {
 
   resetPermission(
     userName: string,
-    email: string = "",
     fabricName: string,
     collectionName?: string
   ) {
-    const user = this.user(userName, email);
+    const user = this.user(userName);
     if (!!collectionName) {
       return user.clearCollectionAccessLevel(fabricName, collectionName);
     }
     return user.clearDatabaseAccessLevel(fabricName);
   }
+
+  //--------------- Key Value ---------------
+
+  keyValue(collectionName: string): KeyValue {
+    return new KeyValue(this._connection, collectionName);
+  }
+
+  getKVCollections() {
+    const keyValueColl = this.keyValue('');
+    return keyValueColl.getCollections();
+  }
+
+  getKVCount(collectionName: string) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.getKVCount();
+  }
+
+  getKVKeys(collectionName: string, opts?: any) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.getKVKeys(opts);
+  }
+
+  getValueForKey(collectionName: string, key: string) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.getValueForKey(key);
+  }
+
+  createKVCollection(collectionName: string, expiration?: boolean) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.createCollection(expiration);
+  }
+
+  insertKVPairs(collectionName: string, keyValuePairs: KVPairHandle[]) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.insertKVPairs(keyValuePairs);
+  }
+
+  deleteEntryForKey(collectionName: string, key: string) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.deleteEntryForKey(key);
+  }
+
+  deleteEntryForKeys(collectionName: string, keys: string[]) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.deleteEntryForKeys(keys);
+  }
+
+  deleteKVCollection(collectionName: string) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.deleteCollection();
+  }
+
+  //--------------- Api keys ---------------
+
+  apiKeys(keyid: string = '', dbName: string = ''): ApiKeys {
+    return new ApiKeys(this._connection, keyid, dbName);
+  }
+
+  validateApiKey(data: validateApiKeyHandle) {
+    const apiKeys = this.apiKeys();
+    return apiKeys.validateApiKey(data);
+  }
+
+  createApiKey(keyid: string) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.createApiKey();
+  }
+
+  getAvailableApiKeys() {
+    const apiKeys = this.apiKeys();
+    return apiKeys.getAvailableApiKeys();
+  }
+
+  getAvailableApiKey(keyid: string) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.getAvailableApiKey();
+  }
+
+  removeApiKey(keyid: string) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.removeApiKey();
+  }
+  // ----------------------------------
+  listAccessibleDatabases(keyid: string, full?: boolean) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.listAccessibleDatabases(full);
+  }
+
+  getDatabaseAccessLevel(keyid: string, dbName: string) {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.getDatabaseAccessLevel();
+  }
+
+  clearDatabaseAccessLevel(keyid: string, dbName: string) {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.clearDatabaseAccessLevel();
+  }
+
+  setDatabaseAccessLevel(keyid: string, dbName: string, permission: "rw" | "ro" | "none") {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.setDatabaseAccessLevel(permission);
+  }
+  // ----------------------------------
+  listAccessibleCollections(keyid: string, dbName: string, full?: boolean) {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.listAccessibleCollections(full);
+  }
+
+  getCollectionAccessLevel(keyid: string, dbName: string, collectionName: string) {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.getCollectionAccessLevel(collectionName);
+  }
+
+  clearCollectionAccessLevel(keyid: string, dbName: string, collectionName: string) {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.clearCollectionAccessLevel(collectionName);
+  }
+
+  setCollectionAccessLevel(keyid: string, dbName: string, collectionName: string, permission: "rw" | "ro" | "none") {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.setCollectionAccessLevel(collectionName, permission);
+  }
+  // ----------------------------------
+  listAccessibleStreams(keyid: string, dbName: string, full?: boolean) {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.listAccessibleStreams(full);
+  }
+
+  getStreamAccessLevel(keyid: string, dbName: string, streamName: string) {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.getStreamAccessLevel(streamName);
+  }
+
+  clearStreamAccessLevel(keyid: string, dbName: string, streamName: string) {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.clearStreamAccessLevel(streamName);
+  }
+
+  setStreamAccessLevel(keyid: string, dbName: string, streamName: string, permission: "rw" | "ro" | "none") {
+    const apiKeys = this.apiKeys(keyid, dbName);
+    return apiKeys.setStreamAccessLevel(streamName, permission);
+  }
+  // ----------------------------------
+  getBillingAccessLevel(keyid: string) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.getBillingAccessLevel();
+  }
+
+  clearBillingAccessLevel(keyid: string) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.clearBillingAccessLevel();
+  }
+
+  setBillingAccessLevel(keyid: string, permission: "rw" | "ro" | "none") {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.setBillingAccessLevel(permission);
+  }
+
 }

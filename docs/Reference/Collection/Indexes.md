@@ -488,14 +488,8 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
-const result = await collection.index(index.id);
-assert.equal(result.id, index.id);
-// result contains the properties of the index
-
-// -- or --
-
-const result = await collection.index(index.id.split('/')[1]);
-assert.equal(result.id, index.id);
+const result = await collection.index(index.name);
+assert.equal(result.name, index.name);
 // result contains the properties of the index
 ```
 
@@ -540,12 +534,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
 const index = await collection.createFulltextIndex('description');
-await collection.dropIndex(index.id);
-// the index has been removed from the collection
-
-// -- or --
-
-await collection.dropIndex(index.id.split('/')[1]);
+await collection.dropIndex(index.name);
 // the index has been removed from the collection
 ```
 

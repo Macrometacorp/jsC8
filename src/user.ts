@@ -1,4 +1,7 @@
 import { Connection } from "./connection";
+import { isC8Error } from "./error";
+
+export const USER_NOT_FOUND = 1703;
 
 class User {
   _connection: Connection;
@@ -43,7 +46,12 @@ class User {
   hasUser(): Promise<boolean> {
     return this.getUserDeatils().then(
       () => true,
-      () => false,
+      (err) => {
+        if (isC8Error(err) && err.errorNum === USER_NOT_FOUND) {
+          return false;
+        }
+        throw err;
+      },
     );
   }
 
@@ -104,18 +112,6 @@ class User {
     );
   }
 
-  getCollectionAccessLevel(databaseName: string, collectionName: string) {
-    return this._connection.request(
-      {
-        method: "GET",
-        path: `${this.urlPrefix}/${
-          this.user
-          }/database/${databaseName}/${collectionName}`
-      },
-      res => res.body
-    );
-  }
-
   clearDatabaseAccessLevel(fabricName: string) {
     return this._connection.request(
       {
@@ -139,13 +135,25 @@ class User {
     );
   }
 
+  getCollectionAccessLevel(databaseName: string, collectionName: string) {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `${this.urlPrefix}/${
+          this.user
+          }/database/${databaseName}/collection/${collectionName}`
+      },
+      res => res.body
+    );
+  }
+
   clearCollectionAccessLevel(fabricName: string, collectionName: string) {
     return this._connection.request(
       {
         method: "DELETE",
         path: `${this.urlPrefix}/${
           this.user
-          }/database/${fabricName}/${collectionName}`
+          }/database/${fabricName}/collection/${collectionName}`
       },
       res => res.body
     );
@@ -161,7 +169,119 @@ class User {
         method: "PUT",
         path: `${this.urlPrefix}/${
           this.user
-          }/database/${fabricName}/${collectionName}`,
+          }/database/${fabricName}/collection/${collectionName}`,
+        body: {
+          grant: permission
+        }
+      },
+      res => res.body
+    );
+  }
+
+  listAvailableUsers() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `${this.urlPrefix}`
+      },
+      res => res.body
+    );
+  }
+
+  getStreamAccessLevel(databaseName: string, streamName: string) {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `${this.urlPrefix}/${
+          this.user
+          }/database/${databaseName}/stream/${streamName}`
+      },
+      res => res.body
+    );
+  }
+
+  clearStreamAccessLevel(databaseName: string, streamName: string) {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `${this.urlPrefix}/${
+          this.user
+          }/database/${databaseName}/stream/${streamName}`
+      },
+      res => res.body
+    );
+  }
+
+  setStreamAccessLevel(
+    databaseName: string,
+    streamName: string,
+    permission: "rw" | "ro" | "none"
+  ) {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `${this.urlPrefix}/${
+          this.user
+          }/database/${databaseName}/stream/${streamName}`,
+        body: {
+          grant: permission
+        }
+      },
+      res => res.body
+    );
+  }
+
+  listAccessibleCollections(databaseName: string, isFullRequested: boolean = false) {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `${this.urlPrefix}/${this.user}/database/${databaseName}/collection`,
+        qs: {
+          full: isFullRequested
+        }
+      },
+      res => res.body
+    );
+  }
+
+  listAccessibleStreams(databaseName: string, isFullRequested: boolean = false) {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `${this.urlPrefix}/${this.user}/database/${databaseName}/stream`,
+        qs: {
+          full: isFullRequested
+        }
+      },
+      res => res.body
+    );
+  }
+
+  getBillingAccessLevel() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `${this.urlPrefix}/${this.user}/billing`
+      },
+      res => res.body
+    );
+  }
+
+  clearBillingAccessLevel() {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `${this.urlPrefix}/${this.user}/billing`
+      },
+      res => res.body
+    );
+  }
+
+  setBillingAccessLevel(permission: "rw" | "ro" | "none") {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `${this.urlPrefix}/${this.user}/billing`,
         body: {
           grant: permission
         }

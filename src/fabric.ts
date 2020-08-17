@@ -67,9 +67,9 @@ export type TransactionCollections =
   | C8Collection
   | (string | C8Collection)[]
   | {
-      write?: string | C8Collection | (string | C8Collection)[];
-      read?: string | C8Collection | (string | C8Collection)[];
-    };
+    write?: string | C8Collection | (string | C8Collection)[];
+    read?: string | C8Collection | (string | C8Collection)[];
+  };
 
 export type TransactionOptions = {
   lockTimeout?: number;
@@ -674,7 +674,7 @@ export class Fabric {
 
   //user
 
-  user(user: string, email: string): User {
+  user(user: string, email: string = ''): User {
     return new User(this._connection, user, email);
   }
 

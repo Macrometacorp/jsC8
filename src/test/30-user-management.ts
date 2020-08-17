@@ -1,20 +1,20 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 import User from "../user";
 import { getDCListString } from "../util/helper";
 
-describe("User Management", function() {
+describe("User Management", function () {
   // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
-  let fabric: Fabric;
+  let fabric: C8Client;
   let dcList: string;
   const testUrl: string =
     process.env.TEST_C8_URL || "https://test.macrometa.io";
   const tenant = "guest";
-  
+
   before(async () => {
-    fabric = new Fabric({
+    fabric = new C8Client({
       url: testUrl,
       c8Version: Number(process.env.C8_VERSION || 30400)
     });
@@ -73,7 +73,7 @@ describe("User Management", function() {
     afterEach(async () => {
       try {
         await user.deleteUser();
-      } catch (error) {}
+      } catch (error) { }
     });
 
     describe("user.deleteUser", () => {
@@ -93,7 +93,8 @@ describe("User Management", function() {
     describe("user.modifyUser", () => {
       it("Modifies a user", async () => {
         const response = await user.modifyUser({
-          active: false
+          active: false,
+          passwd: "test_passwordddd"
         });
         expect(response.error).to.be.false;
         expect(response.active).to.be.false;
@@ -192,6 +193,38 @@ describe("User Management", function() {
         expect(response.error).to.be.false;
         expect(response.code).eq(200);
         expect(response[`${tenant}.${testFabricName}`]).eq("ro");
+      });
+    });
+    describe("user collection access level", () => {
+      const testFabricName = `testFabric${Date.now()}`;
+      const collectionName = `testColle${Date.now()}`;
+
+      beforeEach(async () => {
+        await fabric.createFabric(testFabricName, [{ username: user.user }], {
+          dcList: dcList
+        });
+        // fabric.useFabric(testFabricName);
+        await fabric.createCollection(collectionName);
+      });
+
+      afterEach(async () => {
+        fabric.useFabric("_system");
+        await fabric.deleteCollection(collectionName);
+        await fabric.dropFabric(testFabricName);
+      });
+
+      describe("user.listAccessibleCollections", () => {
+        it("list accessible collections", async () => {
+          const response = await user.listAccessibleCollections(testFabricName);
+          expect(response.error).to.be.false;
+        });
+      });
+
+      describe("user.getCollectionAccessLevel", () => {
+        it("get collection access level", async () => {
+          const response = await user.getCollectionAccessLevel(testFabricName, collectionName);
+          expect(response.error).to.be.false;
+        });
       });
     });
   });

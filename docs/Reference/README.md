@@ -16,6 +16,7 @@
   - [Document Manipulation](Collection/DocumentManipulation.md)
   - [DocumentCollection](Collection/DocumentCollection.md)
   - [EdgeCollection](Collection/EdgeCollection.md)
+  - [KV (Key Value)](Collection/KeyValueCollectionManipulation.md)
   - [Indexes](Collection/Indexes.md)
   - [Bulk Import](Collection/BulkImport.md)
 - [View Manipulation](ViewManipulation.md)
@@ -26,4 +27,5 @@
   - [VertexCollection](Graph/VertexCollection.md)
   - [EdgeCollection](Graph/EdgeCollection.md)
 - [Route](Route.md)
+- [API Keys](ApiKeys.md)
 - [User Management](UserOperations.md)
