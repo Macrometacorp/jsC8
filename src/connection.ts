@@ -4,10 +4,10 @@ import {
   C8jsResponse,
   createRequest,
   isBrowser,
-  RequestFunction
+  RequestFunction,
 } from "./util/request";
 
-const jwtDecode = require('jwt-decode');
+const jwtDecode = require("jwt-decode");
 
 const LinkedList = require("linkedlist/lib/linkedlist") as typeof Array;
 
@@ -69,18 +69,18 @@ export type Config =
   | string
   | string[]
   | Partial<{
-    url: string | string[];
-    fabricName: string;
-    apiKey: string;
-    token: string;
-    isAbsolute: boolean;
-    c8Version: number;
-    loadBalancingStrategy: LoadBalancingStrategy;
-    maxRetries: false | number;
-    agent: any;
-    agentOptions: { [key: string]: any };
-    headers: { [key: string]: string };
-  }>;
+      url: string | string[];
+      fabricName: string;
+      apiKey: string;
+      token: string;
+      isAbsolute: boolean;
+      c8Version: number;
+      loadBalancingStrategy: LoadBalancingStrategy;
+      maxRetries: false | number;
+      agent: any;
+      agentOptions: { [key: string]: any };
+      headers: { [key: string]: string };
+    }>;
 
 export class Connection {
   private _activeTasks: number = 0;
@@ -107,41 +107,44 @@ export class Connection {
     if (config.c8Version !== undefined) {
       this._c8Version = config.c8Version;
     }
-    if(config.fabricName) {
+
+    if (config.fabricName) {
       this._fabricName = config.fabricName;
     }
+
     if (config.isAbsolute) {
       this._fabricName = false;
       this._tenantName = false;
     }
+
     this._agent = config.agent;
     this._agentOptions = isBrowser
       ? { ...config.agentOptions! }
       : {
-        maxSockets: 3,
-        keepAlive: true,
-        keepAliveMsecs: 1000,
-        ...config.agentOptions
-      };
+          maxSockets: 3,
+          keepAlive: true,
+          keepAliveMsecs: 1000,
+          ...config.agentOptions,
+        };
     this._maxTasks = this._agentOptions.maxSockets || 3;
     if (this._agentOptions.keepAlive) this._maxTasks *= 2;
 
     this._headers = { ...config.headers };
-    
-    if(config.token) {
+
+    if (config.token) {
       this._headers = {
         ...this._headers,
-        authorization:`Bearer ${config.token}` 
-      }
+        authorization: `Bearer ${config.token}`,
+      };
       const { tenant } = jwtDecode(config.token);
       this._tenantName = tenant;
     }
 
-    if(config.apiKey) {
+    if (config.apiKey) {
       this._headers = {
         ...this._headers,
-        authorization:`apikey ${config.apiKey}` 
-      }
+        authorization: `apikey ${config.apiKey}`,
+      };
       this._tenantName = this.extractTenantName(config.apiKey);
     }
 
@@ -160,7 +163,7 @@ export class Connection {
         ? config.url
         : [config.url]
       : ["https://test.macrometa.io"];
-    const apiUrls = urls.map(url => {
+    const apiUrls = urls.map((url) => {
       return `https://api-${url.split("https://")[1]}`;
     });
     this.addToHostList(apiUrls);
@@ -173,7 +176,9 @@ export class Connection {
   }
 
   private get _fabricPath() {
-    return this._fabricName === false ? "" : `/_tenant/${this._tenantName}/_fabric/${this._fabricName}`;
+    return this._fabricName === false
+      ? ""
+      : `/_tenant/${this._tenantName}/_fabric/${this._fabricName}`;
   }
 
   private _runQueue() {
@@ -210,21 +215,26 @@ export class Connection {
           task.reject(err);
         }
       } else {
-        const response = res!;
-        if (
-          response.statusCode === 503 &&
-          response.headers[LEADER_ENDPOINT_HEADER]
-        ) {
-          const url = response.headers[LEADER_ENDPOINT_HEADER]!;
-          const [index] = this.addToHostList(url);
-          task.host = index;
-          if (this._activeHost === host) {
-            this._activeHost = index;
-          }
-          this._queue.push(task);
+        if (isBrowser && this._agent) {
+          task.resolve(res);
         } else {
-          response.host = host;
-          task.resolve(response);
+          const response = res!;
+
+          if (
+            response.statusCode === 503 &&
+            response.headers[LEADER_ENDPOINT_HEADER]
+          ) {
+            const url = response.headers[LEADER_ENDPOINT_HEADER]!;
+            const [index] = this.addToHostList(url);
+            task.host = index;
+            if (this._activeHost === host) {
+              this._activeHost = index;
+            }
+            this._queue.push(task);
+          } else {
+            response.host = host;
+            task.resolve(response);
+          }
         }
       }
       this._runQueue();
@@ -253,17 +263,17 @@ export class Connection {
   }
 
   addToHostList(urls: string | string[]): number[] {
-    const cleanUrls = (Array.isArray(urls) ? urls : [urls]).map(url =>
+    const cleanUrls = (Array.isArray(urls) ? urls : [urls]).map((url) =>
       this._sanitizeEndpointUrl(url)
     );
-    const newUrls = cleanUrls.filter(url => this._urls.indexOf(url) === -1);
+    const newUrls = cleanUrls.filter((url) => this._urls.indexOf(url) === -1);
     this._urls.push(...newUrls);
     this._hosts.push(
       ...newUrls.map((url: string) =>
         createRequest(url, this._agentOptions, this._agent)
       )
     );
-    return cleanUrls.map(url => this._urls.indexOf(url));
+    return cleanUrls.map((url) => this._urls.indexOf(url));
   }
 
   get c8Major() {
@@ -311,8 +321,8 @@ export class Connection {
   }
 
   extractTenantName(apiKey: string) {
-    let apiKeyArr = apiKey.split('.')
-    apiKeyArr.splice(-2,2)
+    let apiKeyArr = apiKey.split(".");
+    apiKeyArr.splice(-2, 2);
     return apiKeyArr.join(".");
   }
 
@@ -344,7 +354,7 @@ export class Connection {
       const extraHeaders: { [key: string]: string } = {
         ...this._headers,
         "content-type": contentType,
-        "x-c8-version": String(this._c8Version)
+        "x-c8-version": String(this._c8Version),
       };
       this._queue.push({
         retries: 0,
@@ -354,48 +364,60 @@ export class Connection {
           headers: { ...extraHeaders, ...headers },
           method,
           expectBinary,
-          body
+          body,
         },
         reject,
         resolve: (res: C8jsResponse) => {
-          const contentType = res.headers["content-type"];
-          let parsedBody: any = undefined;
-          if (res.body.length && contentType && contentType.match(MIME_JSON)) {
-            try {
-              parsedBody = res.body;
-              parsedBody = JSON.parse(parsedBody);
-            } catch (e) {
-              if (!expectBinary) {
-                if (typeof parsedBody !== "string") {
-                  parsedBody = res.body.toString("utf-8");
+          if (isBrowser && this._agent) {
+            resolve(
+              getter ? getter({ body: res } as any) : ({ body: res } as any)
+            );
+          } else {
+            const contentType = res.headers["content-type"];
+            let parsedBody: any = undefined;
+
+            if (
+              res.body.length &&
+              contentType &&
+              contentType.match(MIME_JSON)
+            ) {
+              try {
+                parsedBody = res.body;
+                parsedBody = JSON.parse(parsedBody);
+              } catch (e) {
+                if (!expectBinary) {
+                  if (typeof parsedBody !== "string") {
+                    parsedBody = res.body.toString("utf-8");
+                  }
+                  e.response = res;
+                  reject(e);
+                  return;
                 }
-                e.response = res;
-                reject(e);
-                return;
               }
+            } else if (res.body && !expectBinary) {
+              parsedBody = res.body.toString("utf-8");
+            } else {
+              parsedBody = res.body;
             }
-          } else if (res.body && !expectBinary) {
-            parsedBody = res.body.toString("utf-8");
-          } else {
-            parsedBody = res.body;
+
+            if (
+              parsedBody &&
+              parsedBody.hasOwnProperty("error") &&
+              parsedBody.hasOwnProperty("code") &&
+              parsedBody.hasOwnProperty("errorMessage") &&
+              parsedBody.hasOwnProperty("errorNum")
+            ) {
+              res.body = parsedBody;
+              reject(new C8Error(res));
+            } else if (res.statusCode && res.statusCode >= 400) {
+              res.body = parsedBody;
+              reject(new HttpError(res));
+            } else {
+              if (!expectBinary) res.body = parsedBody;
+              resolve(getter ? getter(res) : (res as any));
+            }
           }
-          if (
-            parsedBody &&
-            parsedBody.hasOwnProperty("error") &&
-            parsedBody.hasOwnProperty("code") &&
-            parsedBody.hasOwnProperty("errorMessage") &&
-            parsedBody.hasOwnProperty("errorNum")
-          ) {
-            res.body = parsedBody;
-            reject(new C8Error(res));
-          } else if (res.statusCode && res.statusCode >= 400) {
-            res.body = parsedBody;
-            reject(new HttpError(res));
-          } else {
-            if (!expectBinary) res.body = parsedBody;
-            resolve(getter ? getter(res) : (res as any));
-          }
-        }
+        },
       });
       this._runQueue();
     });
