@@ -1,4 +1,7 @@
 import { Connection } from "./connection";
+import { isC8Error } from "./error";
+
+export const USER_NOT_FOUND = 1703;
 
 class User {
   _connection: Connection;
@@ -43,7 +46,12 @@ class User {
   hasUser(): Promise<boolean> {
     return this.getUserDeatils().then(
       () => true,
-      () => false,
+      (err) => {
+        if (isC8Error(err) && err.errorNum === USER_NOT_FOUND) {
+          return false;
+        }
+        throw err;
+      },
     );
   }
 

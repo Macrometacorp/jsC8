@@ -315,7 +315,7 @@ export class C8Client extends Fabric {
     return this.getStreams(!local).then(
       (res) => !!res.result.find((stream: any) => stream.topic === topic),
       (err) => {
-        throw err.errorMessage;
+        throw err;
       }
     );
   }
