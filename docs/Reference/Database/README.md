@@ -20,14 +20,14 @@ If `config` is a string, it will be interpreted as `config.url`.
 
     If you want to use C8 with authentication, see
     `useBasicAuth` or`seBearerAuth` methods.
-    
+
     If you need to support self-signed HTTPS certificates, you may have to add your certificates to the `agentOptions`, e.g.:
 
     ```js
     agentOptions: {
       ca: [
         fs.readFileSync(".ssl/sub.class1.server.ca.pem"),
-        fs.readFileSync(".ssl/ca.pem")
+        fs.readFileSync(".ssl/ca.pem"),
       ];
     }
     ```
@@ -45,71 +45,74 @@ If `config` is a string, it will be interpreted as `config.url`.
 
     **Example**: `30102` corresponds to version 3.1.2 of C8.
 
-    
-@(Info)(Note:-)( The driver will behave differently when using different major versions of C8 to compensate for API changes. Some functions are not available on every major version of C8 as indicated in their  descriptions below (e.g. `collection.first`, `collection.bulkUpdate`.)
+@(Info)(Note:-)( The driver will behave differently when using different major versions of C8 to compensate for API changes. Some functions are not available on every major version of C8 as indicated in their descriptions below (e.g. `collection.first`, `collection.bulkUpdate`.)
 
-  - **headers**: `Object` (optional)
+- **headers**: `Object` (optional)
 
-    An object with additional headers to send with every request.
+  An object with additional headers to send with every request.
 
-    Header names should always be lowercase. If an `"authorization"` header is  provided, it will be overridden when using `useBasicAuth` or `useBearerAuth`.
+  Header names should always be lowercase. If an `"authorization"` header is provided, it will be overridden when using `useBasicAuth` or `useBearerAuth`.
 
-  - **agent**: `Agent` (optional)
+- **agent**: `Agent` (optional)
 
-    An http Agent instance to use for connections.
+  An Agent instance to use for connections.
 
-   
-  - **agentOptions**: `Object` (Default: see below)
+  ```javascript
+  // BROWSERS : where XHR is not supported pass fetch as agent value
+  agent: fetch.bind(this);
+  ```
 
-    An object with options for the agent. This will be ignored if `agent` is  also provided.
-    
-    Default: `{maxSockets: 3, keepAlive: true, keepAliveMsecs: 1000}`. Browser default: `{maxSockets: 3, keepAlive: false}`;
+* **agentOptions**: `Object` (Default: see below)
 
-    The option `maxSockets` can also be used to limit how many requests
-    jsC8 will perform concurrently. The maximum number of requests is
-    equal to `maxSockets * 2` with `keepAlive: true` or
-    equal to `maxSockets` with `keepAlive: false`.
+  An object with options for the agent. This will be ignored if `agent` is also provided.
 
-    In the browser version of jsC8 this option can be used to pass
-    additional options to the underlying calls of the
-    [`xhr`](https://www.npmjs.com/package/xhr) module.
+  Default: `{maxSockets: 3, keepAlive: true, keepAliveMsecs: 1000}`. Browser default: `{maxSockets: 3, keepAlive: false}`;
 
-  - **loadBalancingStrategy**: `string` (Default: `"NONE"`)
+  The option `maxSockets` can also be used to limit how many requests
+  jsC8 will perform concurrently. The maximum number of requests is
+  equal to `maxSockets * 2` with `keepAlive: true` or
+  equal to `maxSockets` with `keepAlive: false`.
 
-    Determines the behavior when multiple URLs are provided:
+  In the browser version of jsC8 this option can be used to pass
+  additional options to the underlying calls of the
+  [`xhr`](https://www.npmjs.com/package/xhr) module.
 
-    - `NONE`: No load balancing. All requests will be handled by the first
-      URL in the list until a network error is encountered. On network error,
-      jsC8 will advance to using the next URL in the list.
+* **loadBalancingStrategy**: `string` (Default: `"NONE"`)
 
-    - `ONE_RANDOM`: Randomly picks one URL from the list initially, then
-      behaves like `NONE`.
+  Determines the behavior when multiple URLs are provided:
 
-    - `ROUND_ROBIN`: Every sequential request uses the next URL in the list.
+  - `NONE`: No load balancing. All requests will be handled by the first
+    URL in the list until a network error is encountered. On network error,
+    jsC8 will advance to using the next URL in the list.
 
-  - **maxRetries**: `number` or `false` (Default: `0`)
+  - `ONE_RANDOM`: Randomly picks one URL from the list initially, then
+    behaves like `NONE`.
 
-    Determines the behavior when a request fails because the underlying
-    connection to the server could not be opened
-    (i.e. [`ECONNREFUSED` in Node.js](https://nodejs.org/api/errors.html#errors_common_system_errors)):
+  - `ROUND_ROBIN`: Every sequential request uses the next URL in the list.
 
-    - `false`: the request fails immediately.
+* **maxRetries**: `number` or `false` (Default: `0`)
 
-    - `0`: the request is retried until a server can be reached but only a
-      total number of times matching the number of known servers (including
-      the initial failed request).
+  Determines the behavior when a request fails because the underlying
+  connection to the server could not be opened
+  (i.e. [`ECONNREFUSED` in Node.js](https://nodejs.org/api/errors.html#errors_common_system_errors)):
 
-    - any other number: the request is retried until a server can be reached
-      the request has been retried a total of `maxRetries` number of times
-      (not including the initial failed request).
+  - `false`: the request fails immediately.
 
-    When working with a single server without leader/follower failover, the
-    retries (if any) will be made to the same server.
+  - `0`: the request is retried until a server can be reached but only a
+    total number of times matching the number of known servers (including
+    the initial failed request).
 
-    This setting currently has no effect when using jsC8 in a browser.
+  - any other number: the request is retried until a server can be reached
+    the request has been retried a total of `maxRetries` number of times
+    (not including the initial failed request).
 
-    **Note**: Requests bound to a specific server (e.g. fetching query results)
-    will never be retried automatically and ignore this setting.
+  When working with a single server without leader/follower failover, the
+  retries (if any) will be made to the same server.
+
+  This setting currently has no effect when using jsC8 in a browser.
+
+  **Note**: Requests bound to a specific server (e.g. fetching query results)
+  will never be retried automatically and ignore this setting.
 
 ## client.close
 
@@ -123,9 +126,9 @@ Can be used to clean up idling connections during longer periods of inactivity.
 **Examples**
 
 ```js
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
 const sessions = client.collection("sessions");
 // Clean up expired sessions once per hour

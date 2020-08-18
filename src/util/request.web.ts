@@ -1,8 +1,4 @@
-import {
-  C8jsError,
-  C8jsResponse,
-  RequestOptions
-} from "./request.node";
+import { C8jsError, C8jsResponse, RequestOptions } from "./request.node";
 import { format as formatUrl, parse as parseUrl } from "url";
 
 import { Errback } from "./types";
@@ -20,13 +16,14 @@ function omit<T>(obj: T, keys: (keyof T)[]): T {
   return result;
 }
 
-export function createRequest(baseUrl: string, agentOptions: any) {
+export function createRequest(baseUrl: string, agentOptions: any, fetch: any) {
   const baseUrlParts = parseUrl(baseUrl);
   const options = omit(agentOptions, [
     "keepAlive",
     "keepAliveMsecs",
-    "maxSockets"
+    "maxSockets",
   ]);
+
   return function request(
     { method, url, headers, body, expectBinary }: RequestOptions,
     cb: Errback<C8jsResponse>
@@ -42,33 +39,53 @@ export function createRequest(baseUrl: string, agentOptions: any) {
         ? baseUrlParts.search
           ? `${baseUrlParts.search}&${url.search.slice(1)}`
           : url.search
-        : baseUrlParts.search
+        : baseUrlParts.search,
     };
 
     let callback: Errback<C8jsResponse> = (err, res) => {
       callback = () => undefined;
       cb(err, res);
     };
-    const req = xhr(
-      {
-        responseType: expectBinary ? "blob" : "text",
+
+    if (fetch) {
+      fetch(formatUrl(urlParts), {
         ...options,
-        url: formatUrl(urlParts),
-        useXDR: true,
         body,
         method,
-        headers
-      },
-      (err: Error | null, res?: any) => {
-        if (!err) {
-          if (!res.body) res.body = "";
-          callback(null, res as C8jsResponse);
-        } else {
-          const error = err as C8jsError;
-          error.request = req;
-          callback(error);
+        headers,
+      })
+        .then(function(response: any) {
+          return response.json();
+        })
+        .then((res: any) => {
+          if (res.error) {
+            callback(res as any);
+          } else {
+            callback(null, res as any);
+          }
+        });
+    } else {
+      const req = xhr(
+        {
+          responseType: expectBinary ? "blob" : "text",
+          ...options,
+          url: formatUrl(urlParts),
+          useXDR: true,
+          body,
+          method,
+          headers,
+        },
+        (err: Error | null, res?: any) => {
+          if (!err) {
+            if (!res.body) res.body = "";
+            callback(null, res as C8jsResponse);
+          } else {
+            const error = err as C8jsError;
+            error.request = req;
+            callback(error);
+          }
         }
-      }
-    );
+      );
+    }
   };
 }
