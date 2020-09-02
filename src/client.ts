@@ -77,8 +77,8 @@ export class C8Client extends Fabric {
     dcName: string,
     subscriptionName: string
   ) {
-    const dcList = await this.getDcList();
-    let dcUrl = dcList[0].dcInfo[0].tags.url;
+    const localDcDetails = await this.getLocalDc();
+    let dcUrl = localDcDetails.tags.url;
     if (dcName) {
       dcUrl = dcName;
     }
@@ -345,8 +345,8 @@ export class C8Client extends Fabric {
     dcName: string,
     params: { [key: string]: any } = {}
   ) {
-    const dcList = await this.getDcList();
-    let dcUrl = dcList[0].dcInfo[0].tags.url;
+    const localDcDetails = await this.getLocalDc();
+    let dcUrl = localDcDetails.tags.url;
     if (dcName) {
       dcUrl = dcName;
     }
@@ -363,8 +363,8 @@ export class C8Client extends Fabric {
     dcName: string,
     params: { [key: string]: any } = {}
   ) {
-    const dcList = await this.getDcList();
-    let dcUrl = dcList[0].dcInfo[0].tags.url;
+    const localDcDetails = await this.getLocalDc();
+    let dcUrl = localDcDetails.tags.url;
     if (dcName) {
       dcUrl = dcName;
     }
@@ -381,8 +381,8 @@ export class C8Client extends Fabric {
     dcName: string,
     params: { [key: string]: any } = {}
   ) {
-    const dcList = await this.getDcList();
-    let dcUrl = dcList[0].dcInfo[0].tags.url;
+    const localDcDetails = await this.getLocalDc();
+    let dcUrl = localDcDetails.tags.url;
     if (dcName) {
       dcUrl = dcName;
     }
