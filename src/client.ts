@@ -8,6 +8,7 @@ import {
 import { C8QLLiteral } from "./c8ql-query";
 import { KeyValue, KVPairHandle } from "./keyValue";
 import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
+import { Search, SearchOptions, Properties } from "./search";
 
 const csv = require("csvtojson");
 
@@ -792,6 +793,82 @@ export class C8Client extends Fabric {
   setBillingAccessLevel(keyid: string, permission: "rw" | "ro" | "none") {
     const apiKeys = this.apiKeys(keyid);
     return apiKeys.setBillingAccessLevel(permission);
+  }
+
+  //--------------- Search ---------------
+
+  search(searchOptions?: SearchOptions) {
+    return new Search(this._connection, searchOptions);
+  }
+
+  setSearch(collectionName: string, enable: boolean, field: string) {
+    const search = this.search();
+    return search.setSearch(collectionName, enable, field);
+  }
+
+  searchInCollection(collectionName: string, searchString: string, bindVars?: object, ttl?: number) {
+    const search = this.search();
+    return search.searchInCollection(collectionName, searchString, bindVars, ttl);
+  }
+
+  getListOfViews() {
+    const search = this.search();
+    return search.getListOfViews();
+  }
+
+  createView(viewName: string, properties: Properties) {
+    const search = this.search({ viewName });
+    return search.createView(properties);
+  }
+
+  getViewInfo(viewName: string) {
+    const search = this.search({ viewName });
+    return search.getViewInfo();
+  }
+
+  renameView(oldName: string, newName: string) {
+    const search = this.search({ viewName: oldName });
+    return search.renameView(newName);
+  }
+
+  deleteView(viewName: string) {
+    const search = this.search({ viewName });
+    return search.deleteView();
+  }
+
+  getViewProperties(viewName: string) {
+    const search = this.search({ viewName });
+    return search.getViewProperties();
+  }
+
+  updateViewProperties(viewName: string, properties: Properties) {
+    const search = this.search({ viewName });
+    return search.updateViewProperties(properties);
+  }
+
+  changeViewProperties(viewName: string, properties: Properties) {
+    const search = this.search({ viewName });
+    return search.changeViewProperties(properties);
+  }
+
+  getListOfAnalyzers() {
+    const search = this.search();
+    return search.getListOfAnalyzers();
+  }
+
+  createAnalyzer(analyzerName: string, type: string, properties?: object, features?: Array<string>) {
+    const search = this.search({ analyzerName });
+    return search.createAnalyzer(type, properties, features);
+  }
+
+  deleteAnalyzer(analyzerName: string) {
+    const search = this.search({ analyzerName });
+    return search.deleteAnalyzer();
+  }
+
+  getAnalyzerDefinition(analyzerName: string) {
+    const search = this.search({ analyzerName });
+    return search.getAnalyzerDefinition();
   }
 
 }
