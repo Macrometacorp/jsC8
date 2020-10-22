@@ -11,7 +11,7 @@ const jwtDecode = require("jwt-decode");
 
 const LinkedList = require("linkedlist/lib/linkedlist") as typeof Array;
 
-const MIME_JSON = /\/(json|javascript)(\W|$)/;
+export const MIME_JSON = /\/(json|javascript)(\W|$)/;
 const LEADER_ENDPOINT_HEADER = "x-c8-endpoint";
 
 export type LoadBalancingStrategy = "NONE" | "ROUND_ROBIN" | "ONE_RANDOM";
@@ -216,7 +216,24 @@ export class Connection {
         }
       } else {
         if (isBrowser && this._agent) {
-          task.resolve(res);
+          if (isBrowser && this._agent) {
+            const response = res!;
+            if (
+              response.status === 503 &&
+              response.headers.get(LEADER_ENDPOINT_HEADER)
+            ) {
+              const url = response.headers.get(LEADER_ENDPOINT_HEADER)!;
+              const [index] = this.addToHostList(url);
+              task.host = index;
+              if (this._activeHost === host) {
+                this._activeHost = index;
+              }
+              this._queue.push(task);
+            } else {
+              response.host = host;
+              task.resolve(response);
+            }
+          }
         } else {
           const response = res!;
 
@@ -367,11 +384,31 @@ export class Connection {
           body,
         },
         reject,
-        resolve: (res: C8jsResponse) => {
+        resolve: (res: any) => {
           if (isBrowser && this._agent) {
-            resolve(
-              getter ? getter({ body: res } as any) : ({ body: res } as any)
-            );
+            res
+              .json()
+              .then((data: any) => {
+                if (
+                  data.hasOwnProperty("error") &&
+                  data.hasOwnProperty("code") &&
+                  data.hasOwnProperty("errorMessage") &&
+                  data.hasOwnProperty("errorNum")
+                ) {
+                  reject(new C8Error({ body: data }));
+                } else if (res.status && res.status >= 400) {
+                  reject(new HttpError({ body: data }));
+                } else {
+                  resolve(
+                    getter
+                      ? getter({ body: data } as any)
+                      : ({ body: data } as any)
+                  );
+                }
+              })
+              .catch((err: any) => {
+                reject(err);
+              });
           } else {
             const contentType = res.headers["content-type"];
             let parsedBody: any = undefined;
