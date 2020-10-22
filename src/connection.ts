@@ -216,23 +216,21 @@ export class Connection {
         }
       } else {
         if (isBrowser && this._agent) {
-          if (isBrowser && this._agent) {
-            const response = res!;
-            if (
-              response.status === 503 &&
-              response.headers.get(LEADER_ENDPOINT_HEADER)
-            ) {
-              const url = response.headers.get(LEADER_ENDPOINT_HEADER)!;
-              const [index] = this.addToHostList(url);
-              task.host = index;
-              if (this._activeHost === host) {
-                this._activeHost = index;
-              }
-              this._queue.push(task);
-            } else {
-              response.host = host;
-              task.resolve(response);
+          const response = res!;
+          if (
+            response.status === 503 &&
+            response.headers.get(LEADER_ENDPOINT_HEADER)
+          ) {
+            const url = response.headers.get(LEADER_ENDPOINT_HEADER)!;
+            const [index] = this.addToHostList(url);
+            task.host = index;
+            if (this._activeHost === host) {
+              this._activeHost = index;
             }
+            this._queue.push(task);
+          } else {
+            response.host = host;
+            task.resolve(response);
           }
         } else {
           const response = res!;
