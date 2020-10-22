@@ -861,9 +861,9 @@ export class C8Client extends Fabric {
     return search.createAnalyzer(type, properties, features);
   }
 
-  deleteAnalyzer(analyzerName: string) {
+  deleteAnalyzer(analyzerName: string, force?: boolean) {
     const search = this.search({ analyzerName });
-    return search.deleteAnalyzer();
+    return search.deleteAnalyzer(force);
   }
 
   getAnalyzerDefinition(analyzerName: string) {
