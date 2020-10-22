@@ -846,11 +846,6 @@ export class C8Client extends Fabric {
     return search.updateViewProperties(properties);
   }
 
-  changeViewProperties(viewName: string, properties: Properties) {
-    const search = this.search({ viewName });
-    return search.changeViewProperties(properties);
-  }
-
   getListOfAnalyzers() {
     const search = this.search();
     return search.getListOfAnalyzers();
