@@ -11,12 +11,10 @@ export type Properties = {
             analyzers?: [
                 string
             ],
-            fields: {
-                [fieldName: string]: Object
-            },
-            includeAllFields: boolean,
-            storeValues: string,
-            trackListPositions: boolean
+            fields?: object,
+            includeAllFields?: boolean,
+            storeValues?: string,
+            trackListPositions?: boolean
         }
     }
 }
@@ -194,18 +192,7 @@ export class Search {
             res => res.body
         );
     }
-
-    deleteAnalyzer() {
-        return this._connection.request(
-            {
-                method: "DELETE",
-                path: `${this.analyzerUrlPrefix}/${this._analyzerName}`,
-                absolutePath: true
-            },
-            res => res.body
-        );
-    }
-
+    
     getAnalyzerDefinition() {
         return this._connection.request(
             {
@@ -217,4 +204,17 @@ export class Search {
         );
     }
 
+    deleteAnalyzer(force: boolean = false) {
+        return this._connection.request(
+            {
+                method: "DELETE",
+                path: `${this.analyzerUrlPrefix}/${this._analyzerName}`,
+                qs: {
+                    force
+                },
+                absolutePath: true
+            },
+            res => res.body
+        );
+    }
 }

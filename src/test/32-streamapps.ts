@@ -39,7 +39,6 @@ describe(" StreamApps ", function() {
                 from srcCargoStream
                 insert into destCargoTable;`;
       let resp = await fabric.createStreamApp(dcList, appDefinition);
-      console.log(resp);
       expect(resp.error).to.be.false;
     });
   });
@@ -124,7 +123,6 @@ describe(" StreamApps ", function() {
      it("Delete a stream App", async () => {
        const app = fabric.streamApp("Sample-Cargo-App");
        let response = await app.deleteApplication();
-       console.log(response);
        expect(response.error).to.be.false;
      });
    });
