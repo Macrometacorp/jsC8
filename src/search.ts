@@ -144,18 +144,6 @@ export class Search {
     updateViewProperties(properties: Properties) {
         return this._connection.request(
             {
-                method: "PATCH",
-                path: `${this.viewUrlPrefix}/${this._viewName}/properties`,
-                absolutePath: true,
-                body: properties
-            },
-            res => res.body
-        );
-    }
-
-    changeViewProperties(properties: Properties) {
-        return this._connection.request(
-            {
                 method: "PUT",
                 path: `${this.viewUrlPrefix}/${this._viewName}/properties`,
                 absolutePath: true,

@@ -67,11 +67,6 @@ describe("validating search apis", function () {
                 expect(response.links).to.deep.equal({ test: { analyzers: ['identity'], fields: { 'v': {} }, includeAllFields: false, storeValues: "none", trackListPositions: false } });
             });
 
-            it("change view properties", async () => {
-                const response = await search.changeViewProperties({ links: { test: { analyzers: ['identity'], fields: { 'name': {} } } } });
-                expect(response.links).to.deep.equal({ test: { analyzers: ['identity'], fields: { 'name': {} }, includeAllFields: false, storeValues: "none", trackListPositions: false } });
-            });
-
             it("rename view", async () => {
                 const newName = "viewNewName";
                 const response = await search.renameView(newName);
