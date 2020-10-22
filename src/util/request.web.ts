@@ -57,16 +57,24 @@ export function createRequest(baseUrl: string, agentOptions: any, fetch: any) {
       })
         .then((res: any) => {
           const contentType = res.headers.get("content-type");
-          if(contentType.match(MIME_JSON)){
+          if (contentType.match(MIME_JSON)) {
             return res;
-          }else{
+          } else {
             throw res;
           }
-        }).then((data: any)=>{
+        })
+        .then((data: any) => {
           callback(null, data as any);
-        }).catch((err: Error)=>{
-          const error = err as C8jsError;
+        })
+        .catch((err: any) => {
+          const error = {} as any;
           error.request = req;
+          if (err.status) {
+            error.status = err.status;
+          }
+          if (err.statusText) {
+            error.statusText = err.statusText;
+          }
           callback(error);
         });
     } else {
