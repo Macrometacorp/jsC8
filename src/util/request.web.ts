@@ -57,6 +57,8 @@ export function createRequest(baseUrl: string, agentOptions: any, fetch: any) {
       })
         .then((res: any) => {
           const contentType = res.headers.get("content-type");
+          // TODO: make it work for other content-types too
+          // to make "fetch" a truly native agent in jsc8
           if (contentType.match(MIME_JSON)) {
             return res;
           } else {
