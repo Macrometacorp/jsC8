@@ -36,14 +36,13 @@ describe("validating search apis", function () {
                 await c8Client.createCollection(coll);
                 const response = await search.setSearch(coll, true, "name");
                 expect(response).to.be.true;
-                await c8Client.deleteCollection(coll);
                 await c8Client.deleteView(`c8search_view_${coll}`);
             });
         });
 
         describe("search view operations", () => {
             it("create view", async () => {
-                const response = await search.createView({});
+                const response = await search.createView();
                 expect(response.name).to.equal(viewName);
             });
 
@@ -63,8 +62,9 @@ describe("validating search apis", function () {
             });
 
             it("update view properties", async () => {
-                const response = await search.updateViewProperties({ links: { test: { analyzers: ['identity'], fields: { 'v': {} } } } });
-                expect(response.links).to.deep.equal({ test: { analyzers: ['identity'], fields: { 'v': {} }, includeAllFields: false, storeValues: "none", trackListPositions: false } });
+                const response = await search.updateViewProperties({ links: { [coll]: { analyzers: ['identity'], fields: { 'v': {} } } } });
+                expect(response.links).to.deep.equal({ [coll]: { analyzers: ['identity'], fields: { 'v': {} }, includeAllFields: false, storeValues: "none", trackListPositions: false } });
+                await c8Client.deleteCollection(coll);
             });
 
             it("rename view", async () => {

@@ -816,7 +816,7 @@ export class C8Client extends Fabric {
     return search.getListOfViews();
   }
 
-  createView(viewName: string, properties: Properties) {
+  createView(viewName: string, properties?: Properties) {
     const search = this.search({ viewName });
     return search.createView(properties);
   }
@@ -826,8 +826,8 @@ export class C8Client extends Fabric {
     return search.getViewInfo();
   }
 
-  renameView(oldName: string, newName: string) {
-    const search = this.search({ viewName: oldName });
+  renameView(viewName: string, newName: string) {
+    const search = this.search({ viewName });
     return search.renameView(newName);
   }
 
