@@ -4,6 +4,7 @@ import { format as formatUrl, parse as parseUrl } from "url";
 import { Errback } from "./types";
 import { joinPath } from "./joinPath";
 import xhr from "./xhr";
+import { MIME_JSON } from "../connection";
 
 export const isBrowser = true;
 
@@ -48,21 +49,35 @@ export function createRequest(baseUrl: string, agentOptions: any, fetch: any) {
     };
 
     if (fetch) {
-      fetch(formatUrl(urlParts), {
+      const req = fetch(formatUrl(urlParts), {
         ...options,
         body,
         method,
         headers,
       })
-        .then(function(response: any) {
-          return response.json();
-        })
         .then((res: any) => {
-          if (res.error) {
-            callback(res as any);
+          const contentType = res.headers.get("content-type");
+          // TODO: make it work for other content-types too
+          // to make "fetch" a truly native agent in jsc8
+          if (contentType.match(MIME_JSON)) {
+            return res;
           } else {
-            callback(null, res as any);
+            throw res;
           }
+        })
+        .then((data: any) => {
+          callback(null, data as any);
+        })
+        .catch((err: any) => {
+          const error = {} as any;
+          error.request = req;
+          if (err.status) {
+            error.status = err.status;
+          }
+          if (err.statusText) {
+            error.statusText = err.statusText;
+          }
+          callback(error);
         });
     } else {
       const req = xhr(
