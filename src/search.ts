@@ -78,7 +78,7 @@ export class Search {
         );
     }
 
-    createView(properties: Properties) {
+    createView(properties: Properties = {}) {
         return this._connection.request(
             {
                 method: "POST",

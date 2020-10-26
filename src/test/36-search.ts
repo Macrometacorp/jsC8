@@ -36,15 +36,27 @@ describe("validating search apis", function () {
                 await c8Client.createCollection(coll);
                 const response = await search.setSearch(coll, true, "name");
                 expect(response).to.be.true;
-                await c8Client.deleteCollection(coll);
                 await c8Client.deleteView(`c8search_view_${coll}`);
+                await c8Client.deleteCollection(coll);
             });
         });
 
-        describe("search view operations", () => {
-            it("create view", async () => {
-                const response = await search.createView({});
+        describe("create delete view operations", () => {
+            it("create delete view", async () => {
+                const response = await search.createView();
                 expect(response.name).to.equal(viewName);
+                const deleteRes = await search.deleteView();
+                expect(deleteRes.result).to.be.true;
+            });
+        });
+
+        describe("view other operations", () => {
+            beforeEach(async () => {
+                await search.createView();
+            });
+
+            afterEach(async () => {
+                await search.deleteView();
             });
 
             it("get list view", async () => {
@@ -63,29 +75,37 @@ describe("validating search apis", function () {
             });
 
             it("update view properties", async () => {
-                const response = await search.updateViewProperties({ links: { test: { analyzers: ['identity'], fields: { 'v': {} } } } });
-                expect(response.links).to.deep.equal({ test: { analyzers: ['identity'], fields: { 'v': {} }, includeAllFields: false, storeValues: "none", trackListPositions: false } });
+                await c8Client.createCollection(coll);
+                const response = await search.updateViewProperties({ links: { [coll]: { analyzers: ['identity'], fields: { 'v': {} } } } });
+                expect(response.links).to.deep.equal({ [coll]: { analyzers: ['identity'], fields: { 'v': {} }, includeAllFields: false, storeValues: "none", trackListPositions: false } });
+                await c8Client.deleteCollection(coll);
             });
 
             it("rename view", async () => {
                 const newName = "viewNewName";
                 const response = await search.renameView(newName);
                 expect(response.result.name).to.equal(newName);
+                search = c8Client.search({ viewName: newName });
             });
+        });
 
-            it("delete view", async () => {
-                const viewName = "viewNewName";
-                const response = await c8Client.deleteView(viewName);
-                expect(response.result).to.be.true;
+        describe("create delete view operations", () => {
+            it("create delete view", async () => {
+                const response = await search.createAnalyzer('identity');
+                expect(response.name).to.equal(`guest._system::${analyzerName}`);
+                const deleteRes = await search.deleteAnalyzer();
+                expect(deleteRes.name).to.equal(`guest._system::${analyzerName}`);
             });
         });
 
         describe("search analyzer operations", () => {
 
-            it("create analyzer", async () => {
-                search = c8Client.search({ analyzerName });
-                const response = await search.createAnalyzer('identity');
-                expect(response.name).to.equal(`guest._system::${analyzerName}`);
+            beforeEach(async () => {
+                await search.createAnalyzer('identity');
+            });
+
+            afterEach(async () => {
+                await search.deleteAnalyzer();
             });
 
             it("get list of analyzers definition", async () => {
@@ -94,14 +114,7 @@ describe("validating search apis", function () {
             });
 
             it("get analyzers definition", async () => {
-                search = c8Client.search({ analyzerName: `guest._system::${analyzerName}` });
                 const response = await search.getAnalyzerDefinition();
-                expect(response.name).to.equal(`guest._system::${analyzerName}`);
-            });
-
-            it("delete analyzer", async () => {
-                search = c8Client.search({ analyzerName: `guest._system::${analyzerName}` });
-                const response = await search.deleteAnalyzer(true);
                 expect(response.name).to.equal(`guest._system::${analyzerName}`);
             });
 
