@@ -65,7 +65,7 @@ export class Tenant {
         );
     }
 
-    modifyTenant(passwd: string, fabricName: string, extra={}) {
+    modifyTenant(passwd: string, fabricName='_system', extra={}) {
         return this._connection.request(
             {
                 method: "PATCH",
