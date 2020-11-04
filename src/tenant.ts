@@ -3,7 +3,7 @@ import { Connection } from "./connection";
 type ModifyTenant = {
     active?: boolean;
     status?: string;
-    metaData?: object
+    metaData?: object;
 }
 export class Tenant {
 
