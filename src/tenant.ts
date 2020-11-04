@@ -65,15 +65,16 @@ export class Tenant {
         );
     }
 
-    modifyTenant(passwd: string, extra?: object) {
+    modifyTenant(passwd: string, fabricName: string, extra={}) {
         return this._connection.request(
             {
                 method: "PATCH",
-                path: `/tenant/${this.name}`,
+                path: `/_fabric/${fabricName}/_api/user/${this.name}`,
                 absolutePath: true,
                 body: {
                     extra,
-                    passwd
+                    passwd,
+                    active: true
                 }
             },
             res => res.body
