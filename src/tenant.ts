@@ -1,5 +1,10 @@
 import { Connection } from "./connection";
 
+type ModifyTenant = {
+    active?: boolean;
+    status?: string;
+    metaData?: object
+}
 export class Tenant {
 
     _connection: Connection;
@@ -65,16 +70,14 @@ export class Tenant {
         );
     }
 
-    modifyTenant(active: boolean, status: string, metadata = {}) {
+    modifyTenant(modifyTenant: ModifyTenant) {
         return this._connection.request(
             {
                 method: "PATCH",
                 path: `/tenant/${this.name}`,
                 absolutePath: true,
                 body: {
-                    active,
-                    status,
-                    metadata
+                    ...modifyTenant
                 }
             },
             res => res.body
