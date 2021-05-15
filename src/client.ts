@@ -307,9 +307,14 @@ export class C8Client extends Fabric {
     return stream.createStream();
   }
 
-  hasStream(streamName: string, local: boolean): Promise<boolean> {
-    const topic = local ? `c8locals.${streamName}` : `c8globals.${streamName}`;
+  hasStream(streamName: string, local: boolean, isCollectionStream: boolean=false): Promise<boolean> {
+    let topic = "";
 
+    if (!isCollectionStream) {
+      topic = local ? `c8locals.${streamName}` : `c8globals.${streamName}`;
+    }
+    
+    topic = streamName;
     // @VIKAS Cant we use any other api eg: /_api/streams/c8locals.test/stats
     // If 200 api exits else api does not exist
 

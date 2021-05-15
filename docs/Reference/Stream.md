@@ -46,6 +46,11 @@ Returns true if stream is available
 
   Is the stream local or global (DEFAULT: false)
 
+
+- **isCollectionStream**: `boolean`
+
+  Is the stream is a collection stream or not (DEFAULT: false)
+
 **Examples**
 
 ```js
