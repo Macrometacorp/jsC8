@@ -51,7 +51,10 @@ export class Streamapps {
         return this._connection.request(
             {
                 method: "PATCH",
-                path: `/_api/streamapps/${this.name}/active?active=${active}`,
+                path: `/_api/streamapps/${this.name}/active`,
+                qs: {
+                    active
+                }
             },
             res => res.body
         );
