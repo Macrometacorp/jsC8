@@ -76,5 +76,20 @@ describe("validating new apis", function () {
                 expect(response[0]._key).to.equal(key);
             });
         });
+
+        describe("keyValue.getKVCollectionValues", () => {
+            it("get collection values", async () => {
+                const key = "kv";
+                const response = await keyValue.getKVCollectionValues([key]);
+                expect(response.result[0].value).to.deep.equal({ val: 123 });
+            });
+        });
+
+        describe("keyValue.truncateKVCollectionByName", () => {
+            it("truncate collection", async () => {
+                const response = await keyValue.truncateKVCollectionByName();
+                expect(response).to.deep.equal({ error: false, code: 200, name: 'kv_collection' });
+            });
+        });
     });
 });

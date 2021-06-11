@@ -694,6 +694,16 @@ export class C8Client extends Fabric {
     return keyValueColl.deleteCollection();
   }
 
+  getKVCollectionValues(collectionName: string, keys: string[]) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.getKVCollectionValues(keys);
+  }
+
+  truncateKVCollectionByName(collectionName: string) {
+    const keyValueColl = this.keyValue(collectionName);
+    return keyValueColl.truncateKVCollectionByName();
+  }
+
   //--------------- Api keys ---------------
 
   apiKeys(keyid: string = '', dbName: string = ''): ApiKeys {

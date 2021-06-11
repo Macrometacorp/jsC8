@@ -254,3 +254,51 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const result = await client.deleteKVCollection('some-collection');
 ```
+
+## client.getKVCollectionValues
+
+`async client.getKVCollectionValues(collectionName, keys)`
+
+Get collection values
+
+**Arguments**
+
+- **collectionName**: `string`
+
+    Name of the collection
+
+- **keys**: `Array<string>`
+
+    List of keys
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
+
+const result = await client.getKVCollectionValues('some-collection', ['some-key1', 'some-key2']);
+```
+
+## client.truncateKVCollectionByName
+
+`async client.truncateKVCollectionByName(collectionName)`
+
+Get collection values
+
+**Arguments**
+
+- **collectionName**: `string`
+
+    Name of the collection
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
+
+const result = await client.truncateKVCollectionByName('some-collection');
+```
