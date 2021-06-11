@@ -110,4 +110,25 @@ export class KeyValue {
             (res) => res.body
         );
     }
+
+    getKVCollectionValues(keys: string[]) {
+        return this._connection.request(
+            {
+                method: "POST",
+                path: `/_api/kv/${this.name}/values`,
+                body: keys
+            },
+            (res) => res.body
+        );
+    }
+    
+    truncateKVCollectionByName() {
+        return this._connection.request(
+            {
+                method: "PUT",
+                path: `/_api/kv/${this.name}/truncate`,
+            },
+            (res) => res.body
+        );
+    }
 }
