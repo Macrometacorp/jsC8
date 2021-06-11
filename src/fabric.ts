@@ -195,6 +195,38 @@ export class Fabric {
     );
   }
 
+  getGeoFabricMetaData() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/database/metadata`,
+      },
+      (res) => res.body
+    );
+  }
+
+  setMetaDataForGeoFabric(metadata: any) {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `/database/metadata`,
+        body: { metadata }
+      },
+      (res) => res.body
+    );
+  }
+
+  updateMetaDataForGeoFabric(metadata: any) {
+    return this._connection.request(
+      {
+        method: "PATCH",
+        path: `/database/metadata`,
+        body: { metadata }
+      },
+      (res) => res.body
+    );
+  }
+
   login(email: string, password: string): Promise<object> {
     return this._connection.request(
       {
