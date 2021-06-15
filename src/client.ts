@@ -9,6 +9,7 @@ import { C8QLLiteral } from "./c8ql-query";
 import { KeyValue, KVPairHandle } from "./keyValue";
 import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, Properties } from "./search";
+import { AccountDetails, Billing, PlanDetails, UpdateTenantPlan } from './billing'
 
 const csv = require("csvtojson");
 
@@ -97,8 +98,7 @@ export class C8Client extends Fabric {
   }
 
   getDocumentMany(collectionName: string, limit?: number, skip?: number) {
-    const getDocumentsQuery = `FOR doc IN ${collectionName} ${
-      limit ? `limit ${skip ? `${skip},` : ""}${limit}` : ""
+    const getDocumentsQuery = `FOR doc IN ${collectionName} ${limit ? `limit ${skip ? `${skip},` : ""}${limit}` : ""
       } return doc`;
     return this.executeQuery(getDocumentsQuery);
   }
@@ -307,13 +307,13 @@ export class C8Client extends Fabric {
     return stream.createStream();
   }
 
-  hasStream(streamName: string, local: boolean, isCollectionStream: boolean=false): Promise<boolean> {
+  hasStream(streamName: string, local: boolean, isCollectionStream: boolean = false): Promise<boolean> {
     let topic = "";
 
     if (!isCollectionStream) {
       topic = local ? `c8locals.${streamName}` : `c8globals.${streamName}`;
     }
-    
+
     topic = streamName;
     // @VIKAS Cant we use any other api eg: /_api/streams/c8locals.test/stats
     // If 200 api exits else api does not exist
@@ -880,5 +880,89 @@ export class C8Client extends Fabric {
     const search = this.search({ analyzerName });
     return search.getAnalyzerDefinition();
   }
+
+  /** billing apis starts from here */
+
+  billing() {
+    return new Billing(this._connection);
+  }
+
+  getListOfPlans() {
+    const billing = this.billing();
+    return billing.getListOfPlans();
+  }
+
+  createPlan(planDetails: PlanDetails) {
+    const billing = this.billing();
+    return billing.createPlan(planDetails);
+  }
+
+  deletePlan(planName: string) {
+    const billing = this.billing();
+    return billing.deletePlan(planName);
+  }
+
+  getPlanDetails(planName: string) {
+    const billing = this.billing();
+    return billing.getPlanDetails(planName);
+  }
+
+  updatePlan(planName: string, planDetails: PlanDetails) {
+    const billing = this.billing();
+    return billing.updatePlan(planName, planDetails);
+  }
+
+  updateTenantPlan(updateTenantPlan: UpdateTenantPlan) {
+    const billing = this.billing();
+    return billing.updateTenantPlan(updateTenantPlan);
+  }
+
+  getAccountDetails(tenantName: string) {
+    const billing = this.billing();
+    return billing.getAccountDetails(tenantName);
+  }
+
+  updateAccountDetails(tenantName: string, accountDetails: AccountDetails) {
+    const billing = this.billing();
+    return billing.updateAccountDetails(tenantName, accountDetails);
+  }
+
+  updatePaymentSettings(tenantName: string, paymentMethodId: string) {
+    const billing = this.billing();
+    return billing.updatePaymentSettings(tenantName, paymentMethodId);
+  }
+
+  getPaymentDetailsOfPreviousMonths(tenantName: string, limit: number) {
+    const billing = this.billing();
+    return billing.getPaymentDetailsOfPreviousMonths(tenantName, limit);
+  }
+
+  getInvoices(tenantName: string, limit: number) {
+    const billing = this.billing();
+    return billing.getInvoices(tenantName, limit);
+  }
+
+  getCurrentInvoices(tenantName: string) {
+    const billing = this.billing();
+    return billing.getCurrentInvoices(tenantName);
+  }
+
+  getInvoiceOfSpecificMonthYear(tenantName: string, year: number, month: number) {
+    const billing = this.billing();
+    return billing.getInvoiceOfSpecificMonthYear(tenantName, year, month);
+  }
+
+  getUsageOfTenant(tenantName: string, startDate?: string, endDate?: string) {
+    const billing = this.billing();
+    return billing.getUsageOfTenant(tenantName, startDate, endDate);
+  }
+
+  getUsageOfTenantForSpecificRegion(tenantName: string, region: string, startDate: string, endDate: string) {
+    const billing = this.billing();
+    return billing.getUsageOfTenantForSpecificRegion(tenantName, region, startDate, endDate);
+  }
+
+
+  /** billing apis ends here */
 
 }
