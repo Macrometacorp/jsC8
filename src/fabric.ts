@@ -529,19 +529,8 @@ export class Fabric {
     return this;
   }
 
-  tenant(email: string, tenantName?: string): Tenant {
+  tenant(email?: string, tenantName?: string): Tenant {
     return new Tenant(this._connection, email, tenantName);
-  }
-
-  listTenants() {
-    return this._connection.request(
-      {
-        method: "GET",
-        path: "/tenants",
-        absolutePath: true,
-      },
-      (res) => res.body
-    );
   }
 
   //Stream

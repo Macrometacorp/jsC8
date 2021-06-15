@@ -9,6 +9,7 @@ import { C8QLLiteral } from "./c8ql-query";
 import { KeyValue, KVPairHandle } from "./keyValue";
 import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, Properties } from "./search";
+import { CreateTenant } from "./tenant";
 
 const csv = require("csvtojson");
 
@@ -307,13 +308,13 @@ export class C8Client extends Fabric {
     return stream.createStream();
   }
 
-  hasStream(streamName: string, local: boolean, isCollectionStream: boolean=false): Promise<boolean> {
+  hasStream(streamName: string, local: boolean, isCollectionStream: boolean = false): Promise<boolean> {
     let topic = "";
 
     if (!isCollectionStream) {
       topic = local ? `c8locals.${streamName}` : `c8globals.${streamName}`;
     }
-    
+
     topic = streamName;
     // @VIKAS Cant we use any other api eg: /_api/streams/c8locals.test/stats
     // If 200 api exits else api does not exist
@@ -869,6 +870,32 @@ export class C8Client extends Fabric {
   getAnalyzerDefinition(analyzerName: string) {
     const search = this.search({ analyzerName });
     return search.getAnalyzerDefinition();
+  }
+
+  //--------------- Tenant ---------------
+
+  listTenants() {
+    const tenant = this.tenant();
+    return tenant.listTenants();
+  }
+
+  createTenant(name: string, passwd: string, plan: string, attribution: string, otherParams: CreateTenant = {}) {
+
+    if (!name) {
+      throw new Error("Please proivde valid name.");
+    }
+
+    if (!plan) {
+      throw new Error("Please proivde valid plan.");
+    }
+
+    if (!attribution) {
+      throw new Error("Please proivde valid attribution.");
+    }
+
+    const tenant = this.tenant();
+
+    return tenant.createTenant(name, passwd, plan, attribution, otherParams);
   }
 
 }
