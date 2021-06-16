@@ -9,8 +9,9 @@ import { C8QLLiteral } from "./c8ql-query";
 import { KeyValue, KVPairHandle } from "./keyValue";
 import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, Properties } from "./search";
-import { AccountDetails, Billing, PlanDetails, UpdateTenantPlan } from './billing'
+import { AccountDetails, Billing } from './billing'
 import { ImportAndExport } from "./importandexport";
+import { Plan, PlanDetails, UpdateTenantPlan } from "./plan";
 
 const csv = require("csvtojson");
 
@@ -882,87 +883,94 @@ export class C8Client extends Fabric {
     return search.getAnalyzerDefinition();
   }
 
-  /** billing apis starts from here */
+  /**plan apis starts from here */
 
-  billing() {
-    return new Billing(this._connection);
+  plan(planName: string = "") {
+    return new Plan(this._connection, planName);
   }
 
   getListOfPlans() {
-    const billing = this.billing();
-    return billing.getListOfPlans();
+    const plan = this.plan();
+    return plan.getListOfPlans();
   }
 
   createPlan(planDetails: PlanDetails) {
-    const billing = this.billing();
-    return billing.createPlan(planDetails);
+    const plan = this.plan();
+    return plan.createPlan(planDetails);
   }
 
   deletePlan(planName: string) {
-    const billing = this.billing();
-    return billing.deletePlan(planName);
+    const plan = this.plan(planName);
+    return plan.deletePlan();
   }
 
   getPlanDetails(planName: string) {
-    const billing = this.billing();
-    return billing.getPlanDetails(planName);
+    const plan = this.plan(planName);
+    return plan.getPlanDetails();
   }
 
   updatePlan(planName: string, planDetails: PlanDetails) {
-    const billing = this.billing();
-    return billing.updatePlan(planName, planDetails);
+    const plan = this.plan(planName);
+    return plan.updatePlan(planDetails);
   }
 
   updateTenantPlan(updateTenantPlan: UpdateTenantPlan) {
-    const billing = this.billing();
-    return billing.updateTenantPlan(updateTenantPlan);
+    const plan = this.plan();
+    return plan.updateTenantPlan(updateTenantPlan);
+  }
+
+  /**plans apis ends here */
+
+  /** billing apis starts from here */
+
+  billing(tenantName: string) {
+    return new Billing(this._connection, tenantName);
   }
 
   getAccountDetails(tenantName: string) {
-    const billing = this.billing();
-    return billing.getAccountDetails(tenantName);
+    const billing = this.billing(tenantName);
+    return billing.getAccountDetails();
   }
 
   updateAccountDetails(tenantName: string, accountDetails: AccountDetails) {
-    const billing = this.billing();
-    return billing.updateAccountDetails(tenantName, accountDetails);
+    const billing = this.billing(tenantName);
+    return billing.updateAccountDetails(accountDetails);
   }
 
   updatePaymentSettings(tenantName: string, paymentMethodId: string) {
-    const billing = this.billing();
-    return billing.updatePaymentSettings(tenantName, paymentMethodId);
+    const billing = this.billing(tenantName);
+    return billing.updatePaymentSettings(paymentMethodId);
   }
 
   getPaymentDetailsOfPreviousMonths(tenantName: string, limit: number) {
-    const billing = this.billing();
-    return billing.getPaymentDetailsOfPreviousMonths(tenantName, limit);
+    const billing = this.billing(tenantName);
+    return billing.getPaymentDetailsOfPreviousMonths(limit);
   }
 
   getInvoices(tenantName: string, limit: number) {
-    const billing = this.billing();
-    return billing.getInvoices(tenantName, limit);
+    const billing = this.billing(tenantName);
+    return billing.getInvoices(limit);
   }
 
   getCurrentInvoices(tenantName: string) {
-    const billing = this.billing();
-    return billing.getCurrentInvoices(tenantName);
+    const billing = this.billing(tenantName);
+    return billing.getCurrentInvoices();
   }
 
   getInvoiceOfSpecificMonthYear(tenantName: string, year: number, month: number) {
-    const billing = this.billing();
-    return billing.getInvoiceOfSpecificMonthYear(tenantName, year, month);
+    const billing = this.billing(tenantName);
+    return billing.getInvoiceOfSpecificMonthYear(year, month);
   }
 
   getUsageOfTenant(tenantName: string, startDate?: string, endDate?: string) {
-    const billing = this.billing();
-    return billing.getUsageOfTenant(tenantName, startDate, endDate);
+    const billing = this.billing(tenantName);
+    return billing.getUsageOfTenant(startDate, endDate);
   }
 
-  getUsageOfTenantForSpecificRegion(tenantName: string, region: string, startDate: string, endDate: string) {
-    const billing = this.billing();
-    return billing.getUsageOfTenantForSpecificRegion(tenantName, region, startDate, endDate);
+  getUsageOfTenantForSpecificRegion(tenantName: string, region: string, startDate?: string, endDate?: string) {
+    const billing = this.billing(tenantName);
+    return billing.getUsageOfTenantForSpecificRegion(region, startDate, endDate);
   }
-
 
   /** billing apis ends here */
 
