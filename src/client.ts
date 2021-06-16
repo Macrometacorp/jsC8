@@ -10,6 +10,7 @@ import { KeyValue, KVPairHandle } from "./keyValue";
 import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, Properties } from "./search";
 import { AccountDetails, Billing, PlanDetails, UpdateTenantPlan } from './billing'
+import { ImportAndExport } from "./importandexport";
 
 const csv = require("csvtojson");
 
@@ -965,4 +966,24 @@ export class C8Client extends Fabric {
 
   /** billing apis ends here */
 
+
+  /**export and import apis starts from here */
+
+  importAndExport() {
+    return new ImportAndExport(this._connection)
+  }
+
+  getDataByQuery(query: string) {
+    return this.importAndExport().getDataByQuery(query)
+  }
+
+  getDataByCollectionName(collectionName: string, offset?: number, limit?: number, order?: string) {
+    return this.importAndExport().getDataByCollectionName(collectionName, offset, limit, order)
+  }
+
+  createDocuments(collectionName: string, data: string[], showErrors: boolean) {
+    return this.importAndExport().createDocuments(collectionName, data, showErrors)
+  }
+
+  /**export and import apis ends */
 }
