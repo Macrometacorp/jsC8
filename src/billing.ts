@@ -1,35 +1,5 @@
 import { Connection } from "./connection";
 
-interface Metrics {
-    name: string,
-    value: string,
-    metricType: string
-}
-
-export interface PlanDetails {
-    name: string,
-    planId: string,
-    description: string,
-    featureGates: string[],
-    attribution: string,
-    label: string,
-    pricing: string,
-    isBundle: boolean,
-    metadata: {
-        key: string
-    },
-    metrics: Metrics[],
-    active: boolean,
-    demo: boolean
-}
-
-export interface UpdateTenantPlan {
-    attribution: string,
-    plan: string,
-    tenant: string,
-    payment_method_id?: string
-}
-
 export interface AccountDetails {
     firstname: string,
     lastname: string,
@@ -46,92 +16,31 @@ export interface AccountDetails {
 
 export class Billing {
     protected _connection: Connection;
+    protected tenantName: string;
 
-    constructor(connection: Connection) {
+    constructor(connection: Connection, tenantName: string) {
         this._connection = connection;
+        this.tenantName = tenantName;
     }
 
-    getListOfPlans() {
-        return this._connection.request(
-            {
-                method: "GET",
-                path: "/_api/plan",
-            },
-            (res) => res.body
-        );
-    }
-
-    createPlan(planDetails: PlanDetails) {
-        return this._connection.request(
-            {
-                method: "POST",
-                path: "/_api/plan",
-                body: planDetails
-            },
-            (res) => res.body
-        );
-    }
-
-    deletePlan(planName: string) {
-        return this._connection.request(
-            {
-                method: "DELETE",
-                path: `/_api/plan/${planName}`,
-            },
-            (res) => res.body
-        );
-    }
-
-    getPlanDetails(planName: string) {
-        return this._connection.request(
-            {
-                method: "GET",
-                path: `/_api/plan/${planName}`,
-            },
-            (res) => res.body
-        );
-    }
-
-    updatePlan(planName: string, planDetails: PlanDetails) {
-        return this._connection.request(
-            {
-                method: "PATCH",
-                path: `/_api/plan/${planName}`,
-                body: planDetails
-            },
-            (res) => res.body
-        );
-    }
-
-    updateTenantPlan(updateTenantPlan: UpdateTenantPlan) {
-        return this._connection.request(
-            {
-                method: "POST",
-                path: "/_api/plan/update",
-                body: updateTenantPlan
-            },
-            (res) => res.body
-        );
-    }
-
-    getAccountDetails(tenant: string) {
+    getAccountDetails() {
         return this._connection.request(
             {
                 method: "GET",
                 path: "/_api/billing/account",
-                headers: { tenant },
+                headers: { tenant: this.tenantName },
                 absolutePath: true
             },
             (res) => res.body
         );
     }
 
-    updateAccountDetails(tenant: string, accountDetails: AccountDetails) {
+    updateAccountDetails(accountDetails: AccountDetails) {
         return this._connection.request(
             {
                 method: "PUT",
                 path: "/_api/billing/contact",
-                headers: { tenant },
+                headers: { tenant: this.tenantName },
                 body: accountDetails,
                 absolutePath: true
             },
@@ -139,12 +48,12 @@ export class Billing {
         );
     }
 
-    updatePaymentSettings(tenant: string, paymentMethodId: string) {
+    updatePaymentSettings(paymentMethodId: string) {
         return this._connection.request(
             {
                 method: "PUT",
                 path: "/_api/billing/paymentsettings",
-                headers: { tenant },
+                headers: { tenant: this.tenantName },
                 body: { payment_method_id: paymentMethodId },
                 absolutePath: true
             },
@@ -152,7 +61,7 @@ export class Billing {
         );
     }
 
-    getPaymentDetailsOfPreviousMonths(tenant: string, limit: number) {
+    getPaymentDetailsOfPreviousMonths(limit: number) {
         const qs: { [key: string]: any } = {};
 
         if (limit) {
@@ -163,7 +72,7 @@ export class Billing {
             {
                 method: "GET",
                 path: `/_api/billing/payments`,
-                headers: { tenant },
+                headers: { tenant: this.tenantName },
                 qs,
                 absolutePath: true
             },
@@ -171,7 +80,7 @@ export class Billing {
         );
     }
 
-    getInvoices(tenant: string, limit: number) {
+    getInvoices(limit: number) {
         const qs: { [key: string]: any } = {};
 
         if (limit) {
@@ -183,38 +92,38 @@ export class Billing {
                 method: "GET",
                 path: `/_api/billing/invoices`,
                 qs,
-                headers: { tenant },
+                headers: { tenant: this.tenantName },
                 absolutePath: true
             },
             (res) => res.body
         );
     }
 
-    getCurrentInvoices(tenant: string) {
+    getCurrentInvoices() {
         return this._connection.request(
             {
                 method: "GET",
                 path: "/_api/billing/invoice/current",
-                headers: { tenant },
+                headers: { tenant: this.tenantName },
                 absolutePath: true
             },
             (res) => res.body
         );
     }
 
-    getInvoiceOfSpecificMonthYear(tenant: string, year: number, month: number) {
+    getInvoiceOfSpecificMonthYear(year: number, month: number) {
         return this._connection.request(
             {
                 method: "GET",
                 path: `/_api/billing/invoices/${year}/${month}`,
-                headers: { tenant },
+                headers: { tenant: this.tenantName },
                 absolutePath: true
             },
             (res) => res.body
         );
     }
 
-    getUsageOfTenant(tenant: string, startDate?: string, endDate?: string) {
+    getUsageOfTenant(startDate?: string, endDate?: string) {
         const qs: { [key: string]: any } = {};
 
         if (startDate && endDate) {
@@ -227,14 +136,14 @@ export class Billing {
                 method: "GET",
                 path: "/_api/billing/usage",
                 qs,
-                headers: { tenant },
+                headers: { tenant: this.tenantName },
                 absolutePath: true
             },
             (res) => res.body
         );
     }
 
-    getUsageOfTenantForSpecificRegion(tenant: string, region: string, startDate: string, endDate: string) {
+    getUsageOfTenantForSpecificRegion(region: string, startDate?: string, endDate?: string) {
         const qs: { [key: string]: any } = {};
 
         if (startDate && endDate) {
@@ -247,7 +156,7 @@ export class Billing {
                 method: "GET",
                 path: `/_api/billing/region/${region}/usage`,
                 qs,
-                headers: { tenant },
+                headers: { tenant: this.tenantName },
                 absolutePath: true
             },
             (res) => res.body
