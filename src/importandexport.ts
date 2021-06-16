@@ -1,10 +1,18 @@
 import { Connection } from "./connection";
 
+export interface CollectionParams {
+    offset?: number;
+    limit?: number;
+    order?: string;
+}
+
 export class ImportAndExport {
     protected _connection: Connection;
+    protected collectionName: string;
 
-    constructor(connection: Connection) {
+    constructor(connection: Connection, collectionName: string) {
         this._connection = connection;
+        this.collectionName = collectionName;
     }
 
     getDataByQuery(query: string) {
@@ -18,36 +26,22 @@ export class ImportAndExport {
         );
     }
 
-    getDataByCollectionName(collectionName: string, offset?: number, limit?: number, order?: string) {
-        const qs: { [key: string]: any } = {};
-
-        if (offset) {
-            qs.offset = offset;
-        }
-
-        if (limit) {
-            qs.limit = limit;
-        }
-
-        if (order) {
-            qs.order = order;
-        }
-
+    getDataByCollectionName(params: CollectionParams) {
         return this._connection.request(
             {
                 method: "GET",
-                path: `/_api/export/${collectionName}`,
-                qs
+                path: `/_api/export/${this.collectionName}`,
+                qs: params
             },
             (res) => res.body
         );
     }
 
-    createDocuments(collectionName: string, data: string[], showErrors: boolean = false) {
+    createDocuments(data: string[], showErrors: boolean = false) {
         return this._connection.request(
             {
                 method: "POST",
-                path: `/_api/import/${collectionName}`,
+                path: `/_api/import/${this.collectionName}`,
                 body: { data, details: showErrors }
             },
             (res) => res.body
