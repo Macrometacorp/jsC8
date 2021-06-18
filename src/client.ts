@@ -10,6 +10,7 @@ import { KeyValue, KVPairHandle } from "./keyValue";
 import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, Properties } from "./search";
 import { CreateTenant } from "./tenant";
+import { Limits } from './limits'
 
 const csv = require("csvtojson");
 
@@ -98,8 +99,7 @@ export class C8Client extends Fabric {
   }
 
   getDocumentMany(collectionName: string, limit?: number, skip?: number) {
-    const getDocumentsQuery = `FOR doc IN ${collectionName} ${
-      limit ? `limit ${skip ? `${skip},` : ""}${limit}` : ""
+    const getDocumentsQuery = `FOR doc IN ${collectionName} ${limit ? `limit ${skip ? `${skip},` : ""}${limit}` : ""
       } return doc`;
     return this.executeQuery(getDocumentsQuery);
   }
@@ -907,5 +907,41 @@ export class C8Client extends Fabric {
     const tenant = this.tenant("", tenantName);
     return tenant.getTenantDetails();
   }
+
+  /**limit apis starts from here */
+
+  Limits() {
+    return new Limits(this._connection);
+  }
+
+  getDefaultLimits() {
+    return this.Limits().getDefaultLimits();
+  }
+
+  setDefaultLimits(limitsData: LimitsData) {
+    return this.Limits().setDefaultLimits(limitsData);
+  }
+
+  updateDefaultLimits(limitsData: LimitsData) {
+    return this.Limits().updateDefaultLimits(limitsData);
+  }
+
+  deleteDefaultLimits() {
+    return this.Limits().deleteDefaultLimits();
+  }
+
+  getDefaultLimitsByServiceName(serviceName: ServiceName) {
+    return this.Limits().getDefaultLimitsByServiceName(serviceName);
+  }
+
+  getLimitsFlag() {
+    return this.Limits().getLimitsFlag();
+  }
+
+  enableLimitsFlag(value: boolean) {
+    return this.Limits().enableLimitsFlag(value);
+  }
+
+  /**limits apis ends here */
 
 }
