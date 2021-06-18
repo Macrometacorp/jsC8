@@ -92,7 +92,7 @@ export class Tenant {
         );
     }
 
-    dropTenant() {
+    deleteTenant() {
         return this._connection.request(
             {
                 method: "DELETE",
@@ -103,18 +103,7 @@ export class Tenant {
         );
     }
 
-    getTenantEdgeLocations() {
-        return this._connection.request(
-            {
-                method: "GET",
-                path: `/datacenter/_tenant/${this.name}`,
-                absolutePath: true
-            },
-            res => res.body
-        )
-    }
-
-    tenantDetails() {
+    getTenantDetails() {
         return this._connection.request(
             {
                 method: "GET",
@@ -123,6 +112,17 @@ export class Tenant {
             },
             res => res.body
         );
+    }
+    
+    getTenantDatacenters() {
+        return this._connection.request(
+            {
+                method: "GET",
+                path: `_tenant/${this.name}/datacenter`,
+                absolutePath: true
+            },
+            res => res.body
+        )
     }
 
     modifyTenant(modifyTenant: ModifyTenant) {

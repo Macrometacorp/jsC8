@@ -898,4 +898,14 @@ export class C8Client extends Fabric {
     return tenant.createTenant(name, passwd, plan, attribution, otherParams);
   }
 
+  deleteTenant(tenantName: string) {
+    const tenant = this.tenant("", tenantName);
+    return tenant.deleteTenant();
+  }
+
+  getTenantDetails(tenantName: string) {
+    const tenant = this.tenant("", tenantName);
+    return tenant.getTenantDetails();
+  }
+
 }
