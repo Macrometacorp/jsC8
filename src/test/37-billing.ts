@@ -8,9 +8,8 @@ describe("validating billing apis", function () {
     this.timeout(60000);
 
     let c8Client: C8Client;
-    const testUrl: string =
-        process.env.TEST_C8_URL || "https://test.macrometa.io";
-    const tenantName = "ajay.krishna_macrometa.com";
+    const testUrl: string = process.env.TEST_C8_URL || "https://test.macrometa.io";
+    const tenantName = "test_macrometa.com";
 
     beforeEach(async () => {
         c8Client = new C8Client({
@@ -41,7 +40,7 @@ describe("validating billing apis", function () {
                 state: "state",
                 country: "country",
                 zipcode: "zipcode"
-            }
+            };
             const response = await c8Client.billing(tenantName).updateAccountDetails(contactDetails);
             expect(response).to.deep.equal({ code: 200, error: false, data: null });
         });
@@ -82,5 +81,4 @@ describe("validating billing apis", function () {
         });
 
     })
-
 })

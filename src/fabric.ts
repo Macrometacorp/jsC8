@@ -199,7 +199,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: `/database/metadata`,
+        path: "/database/metadata",
       },
       (res) => res.body
     );
@@ -209,7 +209,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/database/metadata`,
+        path: "/database/metadata",
         body: { metadata }
       },
       (res) => res.body
@@ -220,7 +220,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "PATCH",
-        path: `/database/metadata`,
+        path: "/database/metadata",
         body: { metadata }
       },
       (res) => res.body

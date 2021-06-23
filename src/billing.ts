@@ -61,7 +61,7 @@ export class Billing {
         );
     }
 
-    getPaymentDetailsOfPreviousMonths(limit: number) {
+    getPaymentDetailsOfPreviousMonths(limit?: number) {
         const qs: { [key: string]: any } = {};
 
         if (limit) {
@@ -80,7 +80,7 @@ export class Billing {
         );
     }
 
-    getInvoices(limit: number) {
+    getInvoices(limit?: number) {
         const qs: { [key: string]: any } = {};
 
         if (limit) {
@@ -126,8 +126,11 @@ export class Billing {
     getUsageOfTenant(startDate?: string, endDate?: string) {
         const qs: { [key: string]: any } = {};
 
-        if (startDate && endDate) {
+        if (startDate) {
             qs.startDate = startDate;
+        }
+
+        if (endDate) {
             qs.endDate = endDate;
         }
 
@@ -148,6 +151,10 @@ export class Billing {
 
         if (startDate && endDate) {
             qs.startDate = startDate;
+            qs.endDate = endDate;
+        }
+
+        if (endDate) {
             qs.endDate = endDate;
         }
 

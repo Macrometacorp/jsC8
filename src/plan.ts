@@ -20,7 +20,7 @@ export interface PlanDetails {
     },
     metrics: Metrics[],
     active: boolean,
-    demo: boolean
+    demo?: boolean
 }
 
 export interface UpdateTenantPlan {

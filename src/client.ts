@@ -9,7 +9,7 @@ import { C8QLLiteral } from "./c8ql-query";
 import { KeyValue, KVPairHandle } from "./keyValue";
 import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, Properties } from "./search";
-import { AccountDetails, Billing } from './billing'
+import { AccountDetails, Billing } from './billing';
 import { CollectionParams, ImportAndExport } from "./importandexport";
 import { Plan, PlanDetails, UpdateTenantPlan } from "./plan";
 
@@ -100,8 +100,7 @@ export class C8Client extends Fabric {
   }
 
   getDocumentMany(collectionName: string, limit?: number, skip?: number) {
-    const getDocumentsQuery = `FOR doc IN ${collectionName} ${limit ? `limit ${skip ? `${skip},` : ""}${limit}` : ""
-      } return doc`;
+    const getDocumentsQuery = `FOR doc IN ${collectionName} ${limit ? `limit ${skip ? `${skip},` : ""}${limit}` : ""} return doc`;
     return this.executeQuery(getDocumentsQuery);
   }
 
@@ -981,16 +980,19 @@ export class C8Client extends Fabric {
     return new ImportAndExport(this._connection, collectionName)
   }
 
-  getDataByQuery(query: string) {
-    return this.importAndExport().getDataByQuery(query)
+  exportDataByQuery(query: string) {
+    const importAndExport = this.importAndExport();
+    return importAndExport.exportDataByQuery(query)
   }
 
-  getDataByCollectionName(collectionName: string, params: CollectionParams = {}) {
-    return this.importAndExport(collectionName).getDataByCollectionName(params)
+  exportDataByCollectionName(collectionName: string, params: CollectionParams = {}) {
+    const importAndExport = this.importAndExport(collectionName);
+    return importAndExport.exportDataByCollectionName(params)
   }
 
-  createDocuments(collectionName: string, data: string[], showErrors: boolean) {
-    return this.importAndExport(collectionName).createDocuments(data, showErrors)
+  importDocuments(collectionName: string, data: string[], showErrors: boolean) {
+    const importAndExport = this.importAndExport(collectionName);
+    return importAndExport.importDocuments(data, showErrors)
   }
 
   /**export and import apis ends */
