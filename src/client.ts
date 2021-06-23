@@ -670,9 +670,9 @@ export class C8Client extends Fabric {
     return keyValueColl.getValueForKey(key);
   }
 
-  createKVCollection(collectionName: string, expiration?: boolean) {
+  createKVCollection(collectionName: string, stream: boolean, expiration?: boolean) {
     const keyValueColl = this.keyValue(collectionName);
-    return keyValueColl.createCollection(expiration);
+    return keyValueColl.createCollection(expiration, stream);
   }
 
   insertKVPairs(collectionName: string, keyValuePairs: KVPairHandle[]) {

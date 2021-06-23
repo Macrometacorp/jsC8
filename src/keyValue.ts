@@ -56,7 +56,7 @@ export class KeyValue {
         );
     }
 
-    createCollection(expiration: boolean = false) {
+    createCollection(expiration: boolean = false, stream: boolean = false) {
         return this._connection.request(
             {
                 method: "POST",
@@ -64,6 +64,7 @@ export class KeyValue {
                 qs: {
                     expiration
                 },
+                body: { stream }
             },
             (res) => res.body
         );
