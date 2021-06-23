@@ -8,13 +8,12 @@ describe("validating plan apis", function () {
     this.timeout(60000);
 
     let c8Client: C8Client;
-    const testUrl: string =
-        process.env.TEST_C8_URL || "https://test.macrometa.io";
+    const testUrl: string = process.env.TEST_C8_URL || "https://test.macrometa.io";
 
     beforeEach(async () => {
         c8Client = new C8Client({
             url: testUrl,
-            c8Version: C8_VERSION
+            c8Version: C8_VERSION,
         });
         await c8Client.login("guest@macrometa.io", "guest");
         c8Client.useTenant("guest");
@@ -44,8 +43,8 @@ describe("validating plan apis", function () {
                 }
             ],
             active: true,
-            demo: true
-        }
+            demo: true,
+        };
 
         it('plan.createPlan', async () => {
             const response = await c8Client.plan("").createPlan(planDetails);
@@ -54,7 +53,7 @@ describe("validating plan apis", function () {
 
         it('plan.getListOfPlans', async () => {
             const response = await c8Client.plan("").getListOfPlans();
-            const planDetail = response.find((res: any) => res.name = planDetails.name)
+            const planDetail = response.find((res: any) => res.name = planDetails.name);
             expect(planDetail.name).to.equals(planDetails.name);
         });
 
@@ -64,7 +63,7 @@ describe("validating plan apis", function () {
         });
 
         it('plan.updatePlan', async () => {
-            const newPlanDetails = { ...planDetails, description: "test-description" }
+            const newPlanDetails = { ...planDetails, description: "test-description" };
             const response = await c8Client.plan(planDetails.name).updatePlan(newPlanDetails);
             expect(response.description).to.equals(newPlanDetails.description);
         });
@@ -75,5 +74,4 @@ describe("validating plan apis", function () {
         });
 
     })
-
 })

@@ -1,11 +1,11 @@
-## ImportAndExport (ImportAndExport)
+## ImportAndExport
 
 
 ## client.getDataByQuery
 
 `async client.getDataByQuery(query)`
 
- Execute the query and return list of result documents. query cannot contains the following keywords: INSERT, UPDATE, REPLACE and REMOVE. Offset, limit and order are not applied. You must specify them in the query.
+Execute the query and return list of result documents. query cannot contains the following keywords: INSERT, UPDATE, REPLACE and REMOVE. Offset, limit and order are not applied. You must specify them in the query.
 
  **Arguments**
 
@@ -18,12 +18,12 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const result = await client.getDataByQuery();
+const result = await client.getDataByQuery('FOR x in some-collection LIMIT 0, 1000 RETURN x');
 ```
 
 ## client.getDataByCollectionName
 
-`async client.getDataByCollectionName(collectionName,param)`
+`async client.getDataByCollectionName(collectionName, [params])`
 
  Return a list of documents in the specified collection. If offset, limit and order are not specified their default values will be applied.
 
@@ -32,7 +32,7 @@ const result = await client.getDataByQuery();
 
 - **collectionName**: `string`
 
-- **param**: `object` (optional)
+- **params**: `object` (optional)
    
     - **offset**: `string`
 
@@ -53,13 +53,12 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const result = await client.getDataByCollectionName('collectionName','param');
+const result = await client.getDataByCollectionName('collection-name', {});
 ```
-
 
 ## client.createDocuments
 
-`async client.createDocuments(collectionName,data,details)`
+`async client.createDocuments(collectionName, data, details)`
 
  Create documents in the collection identified by collection parameter.
 
@@ -82,5 +81,5 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const result = await client.createDocuments('collectionName','data','details');
+const result = await client.createDocuments('collection-name', [{key:value}], true);
 ```

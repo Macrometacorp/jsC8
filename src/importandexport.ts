@@ -15,7 +15,7 @@ export class ImportAndExport {
         this.collectionName = collectionName;
     }
 
-    getDataByQuery(query: string) {
+    exportDataByQuery(query: string) {
         return this._connection.request(
             {
                 method: "POST",
@@ -26,7 +26,7 @@ export class ImportAndExport {
         );
     }
 
-    getDataByCollectionName(params: CollectionParams) {
+    exportDataByCollectionName(params?: CollectionParams) {
         return this._connection.request(
             {
                 method: "GET",
@@ -37,7 +37,7 @@ export class ImportAndExport {
         );
     }
 
-    createDocuments(data: string[], showErrors: boolean = false) {
+    importDocuments(data: string[], showErrors: boolean = false) {
         return this._connection.request(
             {
                 method: "POST",
