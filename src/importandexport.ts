@@ -37,12 +37,12 @@ export class ImportAndExport {
         );
     }
 
-    importDocuments(data: string[], showErrors: boolean = false) {
+    importDocuments(data: string[], showErrors: boolean = false, primaryKey: string, replace: boolean = false) {
         return this._connection.request(
             {
                 method: "POST",
                 path: `/_api/import/${this.collectionName}`,
-                body: { data, details: showErrors }
+                body: { data, details: showErrors, primaryKey, replace }
             },
             (res) => res.body
         );
