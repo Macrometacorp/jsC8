@@ -990,9 +990,9 @@ export class C8Client extends Fabric {
     return importAndExport.exportDataByCollectionName(params)
   }
 
-  importDocuments(collectionName: string, data: string[], showErrors: boolean) {
+  importDocuments(collectionName: string, data: string[], showErrors: boolean, primaryKey: string, replace: boolean = false) {
     const importAndExport = this.importAndExport(collectionName);
-    return importAndExport.importDocuments(data, showErrors)
+    return importAndExport.importDocuments(data, showErrors, primaryKey, replace)
   }
 
   /**export and import apis ends */

@@ -58,7 +58,7 @@ const result = await client.getDataByCollectionName('collection-name', {});
 
 ## client.createDocuments
 
-`async client.createDocuments(collectionName, data, details)`
+`async client.createDocuments(collectionName, data, details, primaryKey, replace)`
 
  Create documents in the collection identified by collection parameter.
 
@@ -74,6 +74,14 @@ const result = await client.getDataByCollectionName('collection-name', {});
 
     details if true extra information for errors and unprocessed documents will be returned in the result.
 
+- **primaryKey**: `string`
+
+     if specified, this attribure will be used as _key of the new document. It must follow https://macrometa.dev/documents/naming-conventions/#document-keys . If document already contains _key then it will be renamed as old_key.
+
+- **replace**: `boolean`
+
+      if true existing document having same _key in the collection, shall be replaced
+
 **Examples**
 
 ```js
@@ -81,5 +89,5 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const result = await client.createDocuments('collection-name', [{key:value}], true);
+const result = await client.createDocuments('collection-name', [{key:value}], true, 'key', true);
 ```
