@@ -458,16 +458,17 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-async function callback_fn(collection) {
-  await console.log("Connection open on ", collection.name);
+async function callback_fn(collectionName) {
+  await console.log("Connection open on ", collectionName);
 }
 
 async function realTimeListener() {
-  const listener = await client.onCollectionChange("employees");
+  const collectionName = "employees";
+  const listener = await client.onCollectionChange(collectionName);
 
   listener.on('message',(msg) => console.log("message=>", msg));
   listener.on('open',() => {
-      this.callback_fn(collection);
+      callback_fn(collectionName);
     });
   listener.on('close',() => console.log("connection closed"));
 }
@@ -502,7 +503,7 @@ async function realTimeListener() {
 
   listener.on('message',(msg) => console.log("message=>", msg));
   listener.on('open',() => {
-      this.callback_fn(collection);
+      callback_fn(collection);
     });
   listener.on('close',() => console.log("connection closed"));
 }
