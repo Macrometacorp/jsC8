@@ -211,7 +211,7 @@ export class Stream {
     return ws(consumerUrl);
   }
 
-  producer(dcName: string, params: { [key: string]: any } = {}) {
+  producer(dcName: string, params: { [key: string]: any } = {}, edgeWorkerName?: EdgeWorkerNames) {
     if (!dcName) throw "DC name not provided to establish producer connection";
 
     const lowerCaseUrl = dcName.toLocaleLowerCase();
@@ -232,6 +232,10 @@ export class Stream {
 
     // Appending query params to the url
     producerUrl = `${producerUrl}?${queryParams}`;
+
+    if (edgeWorkerName && edgeWorkerName === EdgeWorkerNames.CLOUDFLARE) {
+      return wsEdgeWorker(producerUrl);
+    }
 
     return ws(producerUrl);
   }
