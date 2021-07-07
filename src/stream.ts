@@ -7,10 +7,15 @@ import { stringify } from "query-string";
 // 4 persistent
 
 import { ws } from "./util/webSocket";
+import { wsEdgeWorker } from "./util/webSocket.edgeworker";
+
+export enum EdgeWorkerNames {
+  CLOUDFLARE = "cloudflare"
+};
 
 export enum StreamConstants {
-  PERSISTENT = "persistent",
-}
+  PERSISTENT = "persistent"
+};
 
 export type wsCallbackObj = {
   onopen?: () => void;
@@ -176,7 +181,8 @@ export class Stream {
   consumer(
     subscriptionName: string,
     dcName: string,
-    params: { [key: string]: any } = {}
+    params: { [key: string]: any } = {},
+    edgeWorkerName?: EdgeWorkerNames
   ) {
     const lowerCaseUrl = dcName.toLocaleLowerCase();
     if (lowerCaseUrl.includes("http") || lowerCaseUrl.includes("https"))
@@ -198,10 +204,14 @@ export class Stream {
     // Appending query params to the url
     consumerUrl = `${consumerUrl}?${queryParams}`;
 
+    if (edgeWorkerName && edgeWorkerName === EdgeWorkerNames.CLOUDFLARE) {
+      return wsEdgeWorker(consumerUrl);
+    }
+
     return ws(consumerUrl);
   }
 
-  producer(dcName: string, params: { [key: string]: any } = {}) {
+  producer(dcName: string, params: { [key: string]: any } = {}, edgeWorkerName?: EdgeWorkerNames) {
     if (!dcName) throw "DC name not provided to establish producer connection";
 
     const lowerCaseUrl = dcName.toLocaleLowerCase();
@@ -222,6 +232,10 @@ export class Stream {
 
     // Appending query params to the url
     producerUrl = `${producerUrl}?${queryParams}`;
+
+    if (edgeWorkerName && edgeWorkerName === EdgeWorkerNames.CLOUDFLARE) {
+      return wsEdgeWorker(producerUrl);
+    }
 
     return ws(producerUrl);
   }
