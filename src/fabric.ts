@@ -85,12 +85,6 @@ export type ServiceOptions = {
   dependencies?: { [key: string]: any };
 };
 
-export interface CreateFabricUser {
-  username: string;
-  passwd?: string;
-  active?: boolean;
-  extra?: { [key: string]: any };
-}
 
 export interface CreateFabricOptions {
   dcList: string; //comma separated string, can also be ""
@@ -158,13 +152,13 @@ export class Fabric {
   }
   createFabric(
     fabricName: string,
-    users: CreateFabricUser[] | undefined,
+    users: string[] | undefined,
     options: CreateFabricOptions
   ): Promise<any> {
     return this._connection.request(
       {
         method: "POST",
-        path: "/database",
+        path: "/_api/database",
         body: { users: users || [], name: fabricName, options },
       },
       (res) => res.body

@@ -203,25 +203,9 @@ to the local Edge Location.
 
       `DC name` - If passed a valid DC name as the value, then that DC will be made the spot DC for this client.
 
-- **users**: `Array<Object>` (optional)
+- **users**: `Array<string>` (optional)
 
-  If specified, the array must contain objects with the following properties:
-
-  - **username**: `string`
-
-    The username of the user to create for the client.
-
-  - **passwd**: `string` (Default: empty)
-
-    The password of the user.
-
-  - **active**: `boolean` (Default: `true`)
-
-    Whether the user is active.
-
-  - **extra**: `Object` (optional)
-
-    An object containing additional user data.
+  An array of usernames
 
 **Examples**
 
@@ -230,7 +214,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const info = await client.createFabric('mydb', [{username: 'root'}]);
+const info = await client.createFabric('mydb', ['root'], {dcList: "dc-list"});
 // the fabric has been created
 ```
 
