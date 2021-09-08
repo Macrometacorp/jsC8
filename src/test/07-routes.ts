@@ -52,7 +52,7 @@ describe("Route API", function() {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
+    await fabric.createFabric(name, ["root"], { dcList: dcList });
     fabric.useFabric(name);
     collection = fabric.collection(`c${Date.now()}`);
     await collection.create();

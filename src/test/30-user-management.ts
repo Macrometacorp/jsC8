@@ -113,7 +113,7 @@ describe("User Management", function () {
       const testFabricName = `testFabric${Date.now()}`;
 
       beforeEach(async () => {
-        await fabric.createFabric(testFabricName, [{ username: user.user }], {
+        await fabric.createFabric(testFabricName, [user.user], {
           dcList: dcList
         });
         // fabric.useFabric(testFabricName);
@@ -200,7 +200,7 @@ describe("User Management", function () {
       const collectionName = `testColle${Date.now()}`;
 
       beforeEach(async () => {
-        await fabric.createFabric(testFabricName, [{ username: user.user }], {
+        await fabric.createFabric(testFabricName, [user.user], {
           dcList: dcList
         });
         // fabric.useFabric(testFabricName);

@@ -98,7 +98,7 @@ describe("Manipulating fabrics", function () {
       await fabric.dropFabric(name);
     });
     it("creates a fabric with the given name", async () => {
-      await fabric.createFabric(name, [{ username: "root" }], {
+      await fabric.createFabric(name, ["root"], {
         dcList: dcList
       });
       fabric.useFabric(name);
@@ -141,7 +141,7 @@ describe("Manipulating fabrics", function () {
   describe("fabric.dropFabric", () => {
     let name = `testfabric${Date.now()}`;
     beforeEach(async () => {
-      await fabric.createFabric(name, [{ username: "root" }], {
+      await fabric.createFabric(name, ["root"], {
         dcList: dcList
       });
     });
@@ -163,7 +163,7 @@ describe("Manipulating fabrics", function () {
     let nonSystemCollections = range(4).map(i => `c${i}${Date.now()}`);
     let systemCollections = range(4).map(i => `c${i}${Date.now()}${i}`);
     beforeEach(async () => {
-      await fabric.createFabric(name, [{ username: "root" }], {
+      await fabric.createFabric(name, ["root"], {
         dcList: dcList
       });
       fabric.useFabric(name);
