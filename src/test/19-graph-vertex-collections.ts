@@ -25,7 +25,7 @@ describe("GraphVertexCollection API", function() {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(dbName, [{ username: "root" }], {
+    await fabric.createFabric(dbName, ["root"], {
       dcList: dcList
     });
     fabric.useFabric(dbName);

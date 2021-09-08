@@ -27,7 +27,7 @@ describe34("C8QL Stream queries", function() {
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
+    await fabric.createFabric(name, ["root"], { dcList: dcList });
     fabric.useFabric(name);
   });
   after(async () => {

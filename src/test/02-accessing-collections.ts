@@ -25,7 +25,7 @@ describe("Accessing collections", function() {
     fabric.useTenant("guest");
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
-    await fabric.createFabric(name, [{ username: "root" }], { dcList: dcList });
+    await fabric.createFabric(name, ["root"], { dcList: dcList });
     fabric.useFabric(name);
     const collections = await fabric.listCollections(false);
     builtinSystemCollections = collections.map((c: any) => c.name);
