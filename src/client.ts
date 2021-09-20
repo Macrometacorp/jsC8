@@ -12,6 +12,7 @@ import { Search, SearchOptions, Properties } from "./search";
 import { AccountDetails, Billing } from './billing';
 import { CollectionParams, ImportAndExport } from "./importandexport";
 import { Plan, PlanDetails, UpdateTenantPlan } from "./plan";
+import { Tenant, CreateTenant, ModifyTenant } from "./tenant";
 
 const csv = require("csvtojson");
 
@@ -996,4 +997,78 @@ export class C8Client extends Fabric {
   }
 
   /**export and import apis ends */
+
+   //--------------- Tenant ---------------
+
+   tenant(tenantName="", email = "") {
+     return new Tenant(this._connection, email, tenantName)
+   }
+
+   listTenants() {
+    const tenant = this.tenant();
+    return tenant.listTenants();
+  }
+
+  createTenant(email: string, passwd: string, plan: string, attribution: string, dcList: string, otherParams: CreateTenant = {}) {
+
+    if(!email) {
+      throw new Error("Please provide email.");
+    }
+
+    if (!plan) {
+      throw new Error("Please provide plan.");
+    }
+
+    if (!attribution) {
+      throw new Error("Please provide attribution.");
+    }
+
+    if(!dcList) {
+      throw new Error("Please provide dcList.");
+    }
+
+    const tenant = this.tenant("", email);
+
+    return tenant.createTenant(passwd, plan, attribution, dcList, otherParams);
+  }
+
+  dropTenant(tenantName: string) {
+    if (!tenantName) {
+      throw new Error("Please provide valid name.");
+    }
+
+    const tenant = this.tenant(tenantName);
+
+    return tenant.dropTenant();
+  }
+
+  tenantDetails(tenantName: string) {
+    if (!tenantName) {
+      throw new Error("Please provide valid name.");
+    }
+
+    const tenant = this.tenant(tenantName);
+
+    return tenant.tenantDetails();
+  }
+
+  updateTenant(tenantName: string, modifyTenant:ModifyTenant) {
+    if (!tenantName) {
+      throw new Error("Please provide valid name.");
+    }
+
+    const tenant = this.tenant(tenantName);
+
+    return tenant.modifyTenant(modifyTenant);
+  }
+
+  getDCListByTenantName(tenantName: string) {
+    if (!tenantName) {
+      throw new Error("Please provide valid name.");
+    }
+    
+    const tenant = this.tenant(tenantName);
+
+    return tenant.getTenantEdgeLocations();
+  }
 }

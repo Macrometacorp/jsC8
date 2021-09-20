@@ -88,22 +88,35 @@ Note:- Below apis work with admin user only.
 
 ## tenant.createTenant
 
-`async tenant.createTenant(password, dcList, extra): Object`
+`async tenant.createTenant(email, password, plan, attribution, dcList, [extra]): Object`
 
 Creates a tenant.
 
 **Arguments**
 
-- **dcList**: `string`
-    Comma seperated list of the regions that you want the tenant to  access
+- **email**: `string`
+    Email address of the tenant 
 
 - **password**: `string`
 
-  The name of the tenant to use.
+    Password of the tenant.
 
-- **extra**: `Object`
+- **attribution**: `string`
+    Attribution of the tenant 
 
-  An optional JSON object with arbitrary extra data about the user.
+- **plan**: `string`
+     Name of the tenant plans
+
+- **dcList**: `string`
+    Comma separated list of the regions that you want the tenant to  access
+
+- **extra**: `Object` (optional)
+
+    - **metadata**: `Object` (optional)
+    The metadata of the tenant as a JSON object
+
+    - **contact**: `Object` (optional)
+    Contact details of the user account. An optional JSON object with detailed contact information of the user.
 
 **Examples**
 
@@ -112,14 +125,12 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const tenant = client.tenant(tenant-email);
-await tenant.createTenant("myPassword", "test-eu-west-1,test-us-west-2");
-// creates a new tenant with email as tenant-email with password as "myPassword".
+await tenant.createTenant("tenant@test.com", "myPassword", "macrometa", "free" "test-eu-west-1,test-us-west-2");
 ```
 
 ## tenant.dropTenant
 
-`async tenant.dropTenant(): Object`
+`async tenant.dropTenant(tenantName): Object`
 
 Deletes the tenant.
 
@@ -130,14 +141,12 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const tenant = client.tenant("testTenant@macrometa.io");
-await tenant.createTenant("myPassword","region-name");
-await tenant.dropTenant();
+await tenant.dropTenant("tenant-name");
 ```
 
-## tenant.getTenantEdgeLocations
+## tenant.getDCListByTenantName
 
-`async tenant.getTenantEdgeLocations(): Object`
+`async tenant.getDCListByTenantName(tenantName): Object`
 
 Fetches data about the Edge Locations specific to this tenant.
 
@@ -147,14 +156,13 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const tenant = client.tenant(tenant-email, tenant-name);
-const locations = await tenant.getTenantEdgeLocations();
+const locations = await tenant.getDCListByTenantName("tenant-name");
 ```
 
 
 ## tenant.tenantDetails
 
-`async tenant.tenantDetails(): Object`
+`async tenant.tenantDetails(tenantName): Object`
 
 Gets the details of a tenant.
 
@@ -165,26 +173,28 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const tenant = client.tenant("testTenant@macrometa.io");
-await tenant.createTenant("myPassword", "region-name");
-await tenant.tenantDetails();
+await tenant.tenantDetails("tenant-name");
 ```
 
-## tenant.modifyTenant
+## tenant.updateTenant
 
-`async tenant.modifyTenant(passwd, extra): Object`
+`async tenant.updateTenant(data): Object`
 
 Modifies the given tenant.
 
 **Arguments**
 
-- **password**: `string`
+- **data**: `Object`
 
-  The name of the tenant to use.
+    - **active**: `boolean` (optional)
+      Boolean flag for active status of object. This is non mandatory
 
-- **extra**: `Object`
+    - **status**: `boolean` (optional)
+      Status of tenant. This value ias added for future reference. This is non mandatory. Valid values: `active`, `expired`, `delinquent`, `inactive`
 
-  An optional JSON object with arbitrary extra data about the user.
+    - **metadata**: `Object` (optional)
+
+      An optional JSON object with arbitrary extra data about the user.
 
 **Examples**
 
@@ -193,7 +203,5 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const tenant = client.tenant("testTenant@macrometa.io");
-await tenant.createTenant("myPassword" "region-name");
-await tenant.modifyTenant("myPassword", { info: "string"});
+await tenant.updateTenant({ active: true, status: 'active', metadata: {"key": "value"} });
 ```

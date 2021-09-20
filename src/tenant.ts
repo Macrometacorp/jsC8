@@ -1,33 +1,86 @@
 import { Connection } from "./connection";
 
-type ModifyTenant = {
+export type ModifyTenant = {
     active?: boolean;
     status?: string;
-    metaData?: object;
+    metadata?: object;
 }
+
+type ContactObj = {
+    firstname?: string,
+    lastname?: string,
+    email?: string,
+    phone?: string,
+    line1?: string,
+    line2?: string,
+    city?: string,
+    state?: string,
+    country?: string,
+    zipcode?: string
+}
+
+export type CreateTenant = {
+    contact?: ContactObj,
+    metadata?: object,
+}
+
+const defaultContactInfo = {
+    firstname: "",
+    lastname: "",
+    email: "",
+    phone: "",
+    line1: "",
+    line2: "",
+    city: "",
+    state: "",
+    country: "",
+    zipcode: ""
+}
+
 export class Tenant {
 
     _connection: Connection;
     name?: string;
-    email: string;
+    email?: string;
 
-    constructor(connection: Connection, email: string, tenantName?: string) {
+    constructor(connection: Connection, email?: string, tenantName?: string) {
         this._connection = connection;
         this.name = tenantName;
         this.email = email;
     }
 
-    createTenant(passwd: string, dcList: string | string[], extra: object = {}) {
+    listTenants() {
+        return this._connection.request(
+            {
+                method: "GET",
+                path: "/_api/tenants",
+                absolutePath: true,
+            },
+            (res) => res.body
+        );
+    }
+
+    createTenant(passwd: string, plan: string, attribution: string, dcList: string, otherParams: CreateTenant) {
+        let { contact } = otherParams;
+
+        dcList = Array.isArray(dcList) ? dcList.join(',') : dcList;
+        contact = contact || defaultContactInfo;
+        plan = plan.toUpperCase();
+        attribution = `${attribution.charAt(0).toUpperCase()}${attribution.slice(1)}`;
+   
         return this._connection.request(
             {
                 method: "POST",
-                path: "/tenant",
+                path: "/_api/tenant",
                 absolutePath: true,
                 body: {
-                    dcList: Array.isArray(dcList) ? dcList.join(',') : dcList,
-                    email: this.email,
-                    passwd,
-                    extra
+                   email: this.email,
+                   passwd,
+                   plan,
+                   attribution,
+                   dcList,
+                   contact,
+                   ...otherParams
                 }
             },
             res => {
@@ -38,10 +91,11 @@ export class Tenant {
     }
 
     dropTenant() {
+        console.log( `/_api/tenant/${this.name}`)
         return this._connection.request(
             {
                 method: "DELETE",
-                path: `/tenant/${this.name}`,
+                path: `/_api/tenant/${this.name}`,
                 absolutePath: true
             },
             res => res.body
@@ -63,7 +117,7 @@ export class Tenant {
         return this._connection.request(
             {
                 method: "GET",
-                path: `/tenant/${this.name}`,
+                path: `/_api/tenant/${this.name}`,
                 absolutePath: true
             },
             res => res.body
@@ -74,7 +128,7 @@ export class Tenant {
         return this._connection.request(
             {
                 method: "PATCH",
-                path: `/tenant/${this.name}`,
+                path: `/_api/tenant/${this.name}`,
                 absolutePath: true,
                 body: {
                     ...modifyTenant
