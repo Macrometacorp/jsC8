@@ -1,7 +1,5 @@
 ## Manipulating indexes
 
-These functions implement the [HTTP API for manipulating indexes](https://developer.document360.io/docs/indexing).
-
 ## client.listCollectionIndexes
 
 `async client.listCollectionIndexes(collectionName): Array<Object>`
@@ -43,8 +41,19 @@ Creates a Hash index on the collection.
 
 * **opts**: `Object` (optional)
 
-  Additional options for this index. If the value is a boolean, it will be
-  interpreted as `opts.unique`.
+  An object containing additional properties of the index.
+
+    * **unique**: `boolean` 
+
+      If true, then create a unique index.
+
+    * **sparse**: `boolean` 
+
+      If true, then create a sparse index.
+
+    * **deduplicate**: `boolean` 
+
+      If false, the deduplication of array values is turned off.
 
 **Examples**
 
@@ -53,7 +62,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const hashIndex = await client.addHashIndex("some-collection", 'favorite-color');
+const hashIndex = await client.addHashIndex("some-collection", ['some-field'], { unique: true, sparse: true, deduplicate: true });
 ```
 
 ## client.addGeoIndex
@@ -75,8 +84,11 @@ Creates a Geo index on the collection.
 
 * **opts**: `Object` (optional)
 
-  Additional options for this index. If the value is a boolean, it will be
-  interpreted as `opts.unique`.
+  An object containing additional properties of the index.
+
+    * **geoJson**: `string` 
+
+      If a geo-spatial index on a location is constructed and geoJson is true, then the order within the array is longitude followed by latitude. This corresponds to the format described in http://geojson.org/geojson-spec.html#positions.
 
 **Examples**
 
@@ -85,7 +97,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const geoIndex = await client.addGeoIndex("some-collection", 'favorite-color');
+const geoIndex = await client.addGeoIndex("some-collection", ['some-field'], { geoJson: 'some-text' });
 ```
 
 ## client.addSkiplistIndex
@@ -107,8 +119,19 @@ Creates a skiplist index on the collection.
 
 * **opts**: `Object` (optional)
 
-  Additional options for this index. If the value is a boolean, it will be
-  interpreted as `opts.unique`.
+  An object containing additional properties of the index.
+
+    * **unique**: `boolean` 
+
+      If true, then create a unique index.
+
+    * **sparse**: `boolean` 
+
+      If true, then create a sparse index.
+
+    * **deduplicate**: `boolean` 
+
+      If false, the deduplication of array values is turned off.
 
 **Examples**
 
@@ -117,7 +140,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const skiplistIndex = await client.addSkiplistIndex("some-collection", 'favorite-color');
+const skiplistIndex = await client.addSkiplistIndex("some-collection", ['some-field'], { unique: true, sparse: true, deduplicate: true });
 ```
 
 ## client.addPersistentIndex
@@ -139,8 +162,19 @@ Creates a Persistent index on the collection.
 
 * **opts**: `Object` (optional)
 
-  Additional options for this index. If the value is a boolean, it will be
-  interpreted as `opts.unique`.
+  An object containing additional properties of the index.
+
+    * **unique**: `boolean` 
+
+      If true, then create a unique index.
+
+    * **sparse**: `boolean` 
+
+      If true, then create a sparse index.
+
+    * **deduplicate**: `boolean` 
+
+      It controls whether inserting duplicate index values from the same document into a unique array index will lead to a unique constraint error or not.
 
 **Examples**
 
@@ -149,7 +183,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const persistentIndex = await client.addPersistentIndex("some-collection", 'favorite-color');
+const persistentIndex = await client.addPersistentIndex("some-collection", ['some-field'], { unique: true, sparse: true, deduplicate: true });
 ```
 
 ## client.addFullTextIndex
@@ -302,10 +336,19 @@ Creates a hash index on the collection.
 
 * **opts**: `Object` (optional)
 
-  Additional options for this index. If the value is a boolean, it will be
-  interpreted as `opts.unique`.
+  An object containing additional properties of the index.
 
-For more information on hash indexes, see [the HTTP API for hash indexes](https://developer.document360.io/docs/indexing).
+    * **unique**: `boolean` 
+
+      If true, then create a unique index.
+
+    * **sparse**: `boolean` 
+
+      If true, then create a sparse index.
+
+    * **deduplicate**: `boolean` 
+
+      If false, the deduplication of array values is turned off.
 
 **Examples**
 
@@ -316,15 +359,15 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
 
-const index = await collection.createHashIndex('favorite-color');
+const index = await collection.createHashIndex('some-field', { unique: true, sparse: true, deduplicate: true });
 // the index has been created with the handle `index.id`
-assert.deepEqual(index.fields, ['favorite-color']);
+assert.deepEqual(index.fields, ['some-field']);
 
 // -- or --
 
-const index = await collection.createHashIndex(['favorite-color']);
+const index = await collection.createHashIndex(['some-field'], { unique: true, sparse: true, deduplicate: true });
 // the index has been created with the handle `index.id`
-assert.deepEqual(index.fields, ['favorite-color']);
+assert.deepEqual(index.fields, ['some-field']);
 ```
 
 ## collection.createSkipList
@@ -341,7 +384,19 @@ Creates a skiplist index on the collection.
 
 * **opts**: `Object` (optional)
 
-  Additional options for this index. If the value is a boolean, it will be interpreted as `opts.unique`.
+  An object containing additional properties of the index.
+
+    * **unique**: `boolean` 
+
+      If true, then create a unique index.
+
+    * **sparse**: `boolean` 
+
+      If true, then create a sparse index.
+
+    * **deduplicate**: `boolean` 
+
+      If false, the deduplication of array values is turned off.
 
 **Examples**
 
@@ -352,15 +407,15 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
 
-const index = await collection.createSkipList('favorite-color')
+const index = await collection.createSkipList('some-field')
 // the index has been created with the handle `index.id`
-assert.deepEqual(index.fields, ['favorite-color']);
+assert.deepEqual(index.fields, ['some-field']);
 
 // -- or --
 
-const index = await collection.createSkipList(['favorite-color'])
+const index = await collection.createSkipList(['some-field'], { unique: true, sparse: true, deduplicate: true })
 // the index has been created with the handle `index.id`
-assert.deepEqual(index.fields, ['favorite-color']);
+assert.deepEqual(index.fields, ['some-field']);
 ```
 
 ## collection.createGeoIndex
@@ -378,6 +433,10 @@ Creates a geo-spatial index on the collection.
 * **opts**: `Object` (optional)
 
   An object containing additional properties of the index.
+
+    * **geoJson**: `string` 
+
+      If a geo-spatial index on a location is constructed and geoJson is true, then the order within the array is longitude followed by latitude. This corresponds to the format described in http://geojson.org/geojson-spec.html#positions
 
 **Examples**
 
@@ -451,7 +510,18 @@ Creates a Persistent index on the collection. Persistent indexes are similarly i
 
   An object containing additional properties of the index.
 
-For more information on the properties of the `opts` object see [the HTTP API for manipulating Persistent indexes](https://developer.document360.io/docs/indexing).
+    * **unique**: `boolean` 
+
+      If true, then create a unique index.
+
+    * **sparse**: `boolean` 
+
+      If true, then create a sparse index.
+
+    * **deduplicate**: `boolean` 
+
+      It controls whether inserting duplicate index values from the same document into a unique array index will lead to a unique constraint error or not.
+    
 
 **Examples**
 
@@ -462,7 +532,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
 
-const index = await collection.createPersistentIndex(['name', 'email']);
+const index = await collection.createPersistentIndex(['name', 'email'], { unique: true, sparse: true, deduplicate: true });
 // the index has been created with the handle `index.id`
 assert.deepEqual(index.fields, ['name', 'email']);
 ```
