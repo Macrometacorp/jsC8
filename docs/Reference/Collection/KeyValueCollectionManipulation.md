@@ -106,7 +106,7 @@ const result = await client.getValueForKey('some-collection', 'some-key');
 
 ## client.createKVCollection
 
-`async client.createKVCollection(collectionName, expiration)`
+`async client.createKVCollection(collectionName, [opts])`
 
 Returns value for given key
 
@@ -116,9 +116,15 @@ Returns value for given key
 
     Name of the collection
 
-- **expiration**: `boolean` (optional)
+- **opts**: `Object` (optional) 
 
-    If it is set then this namesapce supports TTL. Default is false.
+    - **expiration**: `boolean` (optional)
+
+        If it is set then this namespace supports TTL. Default is false.
+    
+    - **stream**: `boolean` (optional)
+
+        If it is set to true then creates a local stream for collection. Default is false.
 
 **Examples**
 
@@ -128,6 +134,9 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const result = await client.createKVCollection('some-collection');
+//---- OR ----
+const result = await client.createKVCollection('some-collection', { expiration: true, stream: true });
+
 ```
 
 ## client.insertKVPairs
