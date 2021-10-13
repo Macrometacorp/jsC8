@@ -266,7 +266,7 @@ const result = await client.deleteKVCollection('some-collection');
 
 ## client.getKVCollectionValues
 
-`async client.getKVCollectionValues(collectionName, keys)`
+`async client.getKVCollectionValues(collectionName, keys, [opts])`
 
 Get collection values
 
@@ -280,6 +280,16 @@ Get collection values
 
     List of keys
 
+- **opts**: `Object` (optional) 
+
+    - **offset**: `number` (optional)
+
+        This option can be used to simulate paging. Default: 0.
+    
+    - **limit**: `number` (optional)
+
+        This option can be used to simulate paging. Limit the result. Default: 20, Max: 100
+
 **Examples**
 
 ```js
@@ -288,6 +298,8 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const result = await client.getKVCollectionValues('some-collection', ['some-key1', 'some-key2']);
+//---- OR ----
+const result = await client.getKVCollectionValues('some-collection', ['some-key1', 'some-key2'], { offset:5, limit: 15 });
 ```
 
 ## client.truncateKVCollectionByName

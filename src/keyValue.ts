@@ -11,6 +11,11 @@ export type KVCreateOptsObj = {
     expiration?: boolean;
 }
 
+export type KVValueOptsObj = {
+    offset?: number;
+    limit?: number;
+}
+
 export class KeyValue {
     private _connection: Connection;
     name: string;
@@ -127,12 +132,23 @@ export class KeyValue {
         );
     }
 
-    getKVCollectionValues(keys: string[]) {
+    getKVCollectionValues(keys: string[], opts?: KVValueOptsObj) {
+        const qs: { [key: string]: any } = {};
+
+        if (opts && opts.limit) {
+            qs.limit = opts.limit;
+        }
+
+        if (opts && opts.offset) {
+            qs.offset = opts.offset;
+        }
+
         return this._connection.request(
             {
                 method: "POST",
                 path: `/_api/kv/${this.name}/values`,
-                body: keys
+                body: keys,
+                qs
             },
             (res) => res.body
         );
