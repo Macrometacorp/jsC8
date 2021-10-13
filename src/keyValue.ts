@@ -6,6 +6,11 @@ export type KVPairHandle = {
     expireAt: number;
 }
 
+export type KVCreateOptsObj = {
+    stream?: boolean;
+    expiration?: boolean;
+}
+
 export class KeyValue {
     private _connection: Connection;
     name: string;
@@ -56,7 +61,17 @@ export class KeyValue {
         );
     }
 
-    createCollection(expiration: boolean = false) {
+    createCollection(opts?: KVCreateOptsObj) {
+        let [expiration, stream] = [false, false];
+
+        if (opts && opts.expiration) {
+            expiration = opts.expiration;
+        }
+
+        if (opts && opts.stream) {
+            stream = opts.stream;
+        }
+
         return this._connection.request(
             {
                 method: "POST",
@@ -64,6 +79,7 @@ export class KeyValue {
                 qs: {
                     expiration
                 },
+                body: { stream }
             },
             (res) => res.body
         );
@@ -121,7 +137,7 @@ export class KeyValue {
             (res) => res.body
         );
     }
-    
+
     truncateKVCollectionByName() {
         return this._connection.request(
             {
