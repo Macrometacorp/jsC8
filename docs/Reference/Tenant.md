@@ -130,7 +130,7 @@ await tenant.createTenant("tenant@test.com", "myPassword", "macrometa", "free" "
 
 ## tenant.dropTenant
 
-`async tenant.dropTenant(tenantName): Object`
+`async tenant.dropTenant(tenantEmail): Object`
 
 Deletes the tenant.
 
@@ -141,12 +141,12 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-await tenant.dropTenant("tenant-name");
+await tenant.dropTenant("tenant@test.com");
 ```
 
 ## tenant.getDCListByTenantName
 
-`async tenant.getDCListByTenantName(tenantName): Object`
+`async tenant.getDCListByTenantName(tenantEmail): Object`
 
 Fetches data about the Edge Locations specific to this tenant.
 
@@ -156,13 +156,13 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const locations = await tenant.getDCListByTenantName("tenant-name");
+const locations = await tenant.getDCListByTenantName("tenant@test.com");
 ```
 
 
 ## tenant.tenantDetails
 
-`async tenant.tenantDetails(tenantName): Object`
+`async tenant.tenantDetails(tenantEmail): Object`
 
 Gets the details of a tenant.
 
@@ -173,16 +173,19 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-await tenant.tenantDetails("tenant-name");
+await tenant.tenantDetails("tenant@test.com");
 ```
 
 ## tenant.updateTenant
 
-`async tenant.updateTenant(data): Object`
+`async tenant.updateTenant(tenantEmail, data): Object`
 
 Modifies the given tenant.
 
 **Arguments**
+
+- **email**: `string`
+    Email address of the tenant 
 
 - **data**: `Object`
 
@@ -203,5 +206,5 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-await tenant.updateTenant({ active: true, status: 'active', metadata: {"key": "value"} });
+await tenant.updateTenant("tenant@test.com", { active: true, status: 'active', metadata: {"key": "value"} });
 ```
