@@ -41,23 +41,12 @@ export class Tenant {
 
     _connection: Connection;
     name?: string;
-    email?: string;
+    email: string;
 
-    constructor(connection: Connection, email?: string, tenantName?: string) {
+    constructor(connection: Connection, email: string, tenantName?: string) {
         this._connection = connection;
-        this.name = tenantName;
+        this.name = tenantName ? tenantName : email.replace('@', '_');
         this.email = email;
-    }
-
-    listTenants() {
-        return this._connection.request(
-            {
-                method: "GET",
-                path: "/_api/tenants",
-                absolutePath: true,
-            },
-            (res) => res.body
-        );
     }
 
     createTenant(passwd: string, plan: string, attribution: string, dcList: string, otherParams: CreateTenant) {
@@ -67,20 +56,20 @@ export class Tenant {
         contact = contact || defaultContactInfo;
         plan = plan.toUpperCase();
         attribution = `${attribution.charAt(0).toUpperCase()}${attribution.slice(1)}`;
-   
+
         return this._connection.request(
             {
                 method: "POST",
                 path: "/_api/tenant",
                 absolutePath: true,
                 body: {
-                   email: this.email,
-                   passwd,
-                   plan,
-                   attribution,
-                   dcList,
-                   contact,
-                   ...otherParams
+                    email: this.email,
+                    passwd,
+                    plan,
+                    attribution,
+                    dcList,
+                    contact,
+                    ...otherParams
                 }
             },
             res => {
@@ -91,7 +80,6 @@ export class Tenant {
     }
 
     dropTenant() {
-        console.log( `/_api/tenant/${this.name}`)
         return this._connection.request(
             {
                 method: "DELETE",

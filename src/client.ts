@@ -12,7 +12,7 @@ import { Search, SearchOptions, Properties } from "./search";
 import { AccountDetails, Billing } from './billing';
 import { CollectionParams, ImportAndExport } from "./importandexport";
 import { Plan, PlanDetails, UpdateTenantPlan } from "./plan";
-import { Tenant, CreateTenant, ModifyTenant } from "./tenant";
+import { CreateTenant, ModifyTenant } from "./tenant";
 
 const csv = require("csvtojson");
 
@@ -998,20 +998,12 @@ export class C8Client extends Fabric {
 
   /**export and import apis ends */
 
-   //--------------- Tenant ---------------
+  //--------------- Tenant ---------------
 
-   tenant(tenantName="", email = "") {
-     return new Tenant(this._connection, email, tenantName)
-   }
-
-   listTenants() {
-    const tenant = this.tenant();
-    return tenant.listTenants();
-  }
 
   createTenant(email: string, passwd: string, plan: string, attribution: string, dcList: string, otherParams: CreateTenant = {}) {
 
-    if(!email) {
+    if (!email) {
       throw new Error("Please provide email.");
     }
 
@@ -1023,51 +1015,51 @@ export class C8Client extends Fabric {
       throw new Error("Please provide attribution.");
     }
 
-    if(!dcList) {
+    if (!dcList) {
       throw new Error("Please provide dcList.");
     }
 
-    const tenant = this.tenant("", email);
+    const tenant = this.tenant(email);
 
     return tenant.createTenant(passwd, plan, attribution, dcList, otherParams);
   }
 
-  dropTenant(tenantName: string) {
-    if (!tenantName) {
-      throw new Error("Please provide valid name.");
+  dropTenant(tenantEmail: string) {
+    if (!tenantEmail) {
+      throw new Error("Please provide valid email.");
     }
 
-    const tenant = this.tenant(tenantName);
+    const tenant = this.tenant(tenantEmail);
 
     return tenant.dropTenant();
   }
 
-  tenantDetails(tenantName: string) {
-    if (!tenantName) {
-      throw new Error("Please provide valid name.");
+  tenantDetails(tenantEmail: string) {
+    if (!tenantEmail) {
+      throw new Error("Please provide valid email.");
     }
 
-    const tenant = this.tenant(tenantName);
+    const tenant = this.tenant(tenantEmail);
 
     return tenant.tenantDetails();
   }
 
-  updateTenant(tenantName: string, modifyTenant:ModifyTenant) {
-    if (!tenantName) {
-      throw new Error("Please provide valid name.");
+  updateTenant(tenantEmail: string, modifyTenant: ModifyTenant) {
+    if (!tenantEmail) {
+      throw new Error("Please provide valid email.");
     }
 
-    const tenant = this.tenant(tenantName);
+    const tenant = this.tenant(tenantEmail);
 
     return tenant.modifyTenant(modifyTenant);
   }
 
-  getDCListByTenantName(tenantName: string) {
-    if (!tenantName) {
-      throw new Error("Please provide valid name.");
+  getDCListByTenantName(tenantEmail: string) {
+    if (!tenantEmail) {
+      throw new Error("Please provide valid email.");
     }
-    
-    const tenant = this.tenant(tenantName);
+
+    const tenant = this.tenant(tenantEmail);
 
     return tenant.getTenantEdgeLocations();
   }
