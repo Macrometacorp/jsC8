@@ -6,7 +6,7 @@ import {
   DocumentSaveOptions,
 } from "./collection";
 import { C8QLLiteral } from "./c8ql-query";
-import { KeyValue, KVCreateOptsObj, KVPairHandle } from "./keyValue";
+import { KeyValue, KVCreateOptsObj, KVPairHandle, KVValueOptsObj } from "./keyValue";
 import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, Properties } from "./search";
 import { AccountDetails, Billing } from './billing';
@@ -696,9 +696,9 @@ export class C8Client extends Fabric {
     return keyValueColl.deleteCollection();
   }
 
-  getKVCollectionValues(collectionName: string, keys: string[]) {
+  getKVCollectionValues(collectionName: string, keys: string[], opts?: KVValueOptsObj) {
     const keyValueColl = this.keyValue(collectionName);
-    return keyValueColl.getKVCollectionValues(keys);
+    return keyValueColl.getKVCollectionValues(keys, opts);
   }
 
   truncateKVCollectionByName(collectionName: string) {
