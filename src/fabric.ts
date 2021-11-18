@@ -442,6 +442,16 @@ export class Fabric {
     );
   }
 
+  nextBatchFromCursor(cursorIdentifier: number) {
+    const cursorHandler = new ArrayCursor(this._connection, { id: cursorIdentifier });
+    return cursorHandler.nextBatch().then(res => res.body);
+  }
+
+  deleteCursor(cursorIdentifier: number) {
+    const cursorHandler = new ArrayCursor(this._connection, { id: cursorIdentifier });
+    return cursorHandler.delete();
+  }
+
   validateQuery(query: string) {
     return this._connection.request(
       {
