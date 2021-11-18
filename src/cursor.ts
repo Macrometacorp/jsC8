@@ -29,14 +29,18 @@ export class ArrayCursor {
   private async _more() {
     if (!this._hasMore) return;
     else {
-      const res = await this._connection.request({
-        method: "PUT",
-        path: `/cursor/${this._id}`,
-        host: this._host
-      });
+      const res = await this.nextBatch();
       this._result.push(...res.body.result);
       this._hasMore = res.body.hasMore;
     }
+  }
+
+  nextBatch(){
+    return this._connection.request({
+      method: "PUT",
+      path: `/cursor/${this._id}`,
+      host: this._host
+    })
   }
 
   delete() {
