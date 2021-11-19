@@ -91,7 +91,7 @@ export class Search {
                 body: {
                     type: "search",
                     name: this._viewName,
-                    links:links,
+                    links,
                     primarySort
                 },
                 absolutePath: true
