@@ -20,7 +20,6 @@ export type Properties = {
 }
 
 export type PrimarySortFields={
-
     field:string;
     asc:boolean
 }
@@ -84,9 +83,7 @@ export class Search {
         );
     }
 
-    createView(properties: Properties = {},primarySort:Array<PrimarySortFields>=[]
-      ) {
-        console.log("properites",properties)
+    createView(links: Properties = {},primarySort:Array<PrimarySortFields>=[]) {
         return this._connection.request(
             {
                 method: "POST",
@@ -94,7 +91,7 @@ export class Search {
                 body: {
                     type: "search",
                     name: this._viewName,
-                    links:properties,
+                    links:links,
                     primarySort
                 },
                 absolutePath: true

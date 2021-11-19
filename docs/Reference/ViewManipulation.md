@@ -87,9 +87,9 @@ const data = await client.getListOfViews();
 
 ## client.createView
 
-`async client.createView(viewName, [properties])`
+`async client.createView(viewName, [links], primarySort)`
 
-Creates a new view with a given name and properties if it does not already exist.
+Creates a new view with a given name and links if it does not already exist.Also set the default sort of the view.
 
 **Note:** view can't be created with the links. Please use PUT/PATCH for links management.
 
@@ -99,7 +99,7 @@ Creates a new view with a given name and properties if it does not already exist
 
   The name of the view.
 
-- **properties**: `object` (optional)
+- **links**: `object` (optional)
 
     - **links**:
       - **[collection-name]**:
@@ -118,6 +118,17 @@ Creates a new view with a given name and properties if it does not already exist
           - **none**: Do not store values by the view
           - **id**: 'string'
             Store only information about value presence, to allow use of the EXISTS() function (default "none").
+
+- **primarySort**: `object` (optional)
+ 
+
+      
+      - **field**:
+        This is a recursive structure for setting sorting according to the field in the document.
+
+      - **asc**:
+        This is a boolean value for setting the sorting in ascending order or not  
+         
                 
 **Examples**
 
@@ -126,7 +137,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const data = await client.createView("some-view", { links: { "some-collection": { } } });
+const data = await client.createView("some-view", { links: { "some-collection": { } } },[ {field: "some-field", asc: true  } ]);
 ```
 
 ## client.getViewInfo

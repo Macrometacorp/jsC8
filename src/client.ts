@@ -833,9 +833,9 @@ export class C8Client extends Fabric {
     return search.getListOfViews();
   }
 
-  createView(viewName: string, properties?: Properties,primarySort?:Array<PrimarySortFields>) {
+  createView(viewName: string, links?: Properties,primarySort?:Array<PrimarySortFields>) {
     const search = this.search({ viewName });
-    return search.createView(properties,primarySort);
+    return search.createView(links,primarySort);
   }
 
   getViewInfo(viewName: string) {
