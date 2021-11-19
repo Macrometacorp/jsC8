@@ -8,7 +8,7 @@ import {
 import { C8QLLiteral } from "./c8ql-query";
 import { KeyValue, KVCreateOptsObj, KVPairHandle } from "./keyValue";
 import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
-import { Search, SearchOptions, Properties } from "./search";
+import { Search, SearchOptions, Properties, PrimarySortFields } from "./search";
 import { AccountDetails, Billing } from './billing';
 import { CollectionParams, ImportAndExport } from "./importandexport";
 import { Plan, PlanDetails, UpdateTenantPlan } from "./plan";
@@ -833,9 +833,9 @@ export class C8Client extends Fabric {
     return search.getListOfViews();
   }
 
-  createView(viewName: string, properties?: Properties) {
+  createView(viewName: string, properties?: Properties,primarySort?:Array<PrimarySortFields>) {
     const search = this.search({ viewName });
-    return search.createView(properties);
+    return search.createView(properties,primarySort);
   }
 
   getViewInfo(viewName: string) {
