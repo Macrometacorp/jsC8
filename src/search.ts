@@ -5,7 +5,7 @@ export type SearchOptions = {
     analyzerName?: string;
 };
 
-export type Properties = {
+export type LinksType = {
     links?: {
         [collectionName: string]: {
             analyzers?: [
@@ -20,8 +20,8 @@ export type Properties = {
 }
 
 export type PrimarySortFields={
-    field:string;
-    asc:boolean
+    field: string;
+    asc: boolean
 }
 
 export class Search {
@@ -83,7 +83,7 @@ export class Search {
         );
     }
 
-    createView(links: Properties = {},primarySort:Array<PrimarySortFields>=[]) {
+    createView(links: LinksType = {}, primarySort: Array<PrimarySortFields> = []) {
         return this._connection.request(
             {
                 method: "POST",
@@ -147,7 +147,7 @@ export class Search {
         );
     }
 
-    updateViewProperties(properties: Properties) {
+    updateViewProperties(properties: LinksType) {
         return this._connection.request(
             {
                 method: "PUT",

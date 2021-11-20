@@ -120,14 +120,12 @@ Creates a new view with a given name and links if it does not already exist.Also
             Store only information about value presence, to allow use of the EXISTS() function (default "none").
 
 - **primarySort**: `object` (optional)
- 
-
-      
+       
       - **field**:
         This is a recursive structure for setting sorting according to the field in the document.
 
       - **asc**:
-        This is a boolean value for setting the sorting in ascending order or not  
+        This is a boolean value for setting the sorting in ascending order or not.  
          
                 
 **Examples**
