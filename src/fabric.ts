@@ -89,6 +89,7 @@ export type ServiceOptions = {
 export interface CreateFabricOptions {
   dcList: string; //comma separated string, can also be ""
   spotDc?: string;
+  metadata?: object;
 }
 
 const FABRIC_NOT_FOUND = 1228;
