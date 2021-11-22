@@ -204,6 +204,7 @@ to the local Edge Location.
       `DC name` - If passed a valid DC name as the value, then that DC will be made the spot DC for this client.
 
 - **metadata**: `Object` (optional)
+
   An optional JSON object with user defined key-value pairs.    
 
 - **users**: `Array<string>` (optional)
