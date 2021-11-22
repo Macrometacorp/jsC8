@@ -433,7 +433,7 @@ export class C8Client extends Fabric {
     isCollectionStream: boolean = false
   ) {
     const stream = this.stream(streamName, local, isCollectionStream);
-    return stream.deleteSubscription(subscription);
+    return stream.deleteSubscriptions(subscription);
   }
 
   // createStreamApp() { } already present
