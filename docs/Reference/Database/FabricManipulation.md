@@ -191,10 +191,12 @@ Creates a new Fabric with the given `fabricName`.
 - **options**: `Object`
 
   - **dcList**: `string`
+  
     A comma separated list of data centers. It is a mandatory field, but if not specified (due to user error), it defaults
 to the local Edge Location.
 
   - **spotDc**: `string` (optional)
+
     The data center to be made as spot data center for this client. It has three different behaviour depending upon the value.
 
       `AUTOMATIC` -  The spot DC is chosen automatically if this key is not present in the `options` object.
@@ -202,6 +204,10 @@ to the local Edge Location.
       `NONE` - No spot Dc is made for this fabric if empty string is passed. E.g. `spotDc:''`
 
       `DC name` - If passed a valid DC name as the value, then that DC will be made the spot DC for this client.
+
+- **metadata**: `Object` (optional)
+
+  An optional JSON object with user defined key-value pairs.    
 
 - **users**: `Array<string>` (optional)
 
