@@ -5,19 +5,24 @@ export type SearchOptions = {
     analyzerName?: string;
 };
 
-export type Properties = {
-    links?: {
-        [collectionName: string]: {
-            analyzers?: [
-                string
-            ],
-            fields?: object,
-            includeAllFields?: boolean,
-            storeValues?: string,
-            trackListPositions?: boolean
-        }
+export type PrimarySortFields = {
+    field?: string;
+    asc?: boolean;
+};
+
+export type LinksType = {
+    [collectionName: string]: {
+        analyzers?: [
+            string
+        ],
+        fields?: object,
+        includeAllFields?: boolean,
+        storeValues?: string,
+        trackListPositions?: boolean
     }
+  
 }
+
 
 export class Search {
 
@@ -78,7 +83,7 @@ export class Search {
         );
     }
 
-    createView(properties: Properties = {}) {
+    createView(links: LinksType = {}, primarySort: Array<PrimarySortFields> = []) {
         return this._connection.request(
             {
                 method: "POST",
@@ -86,7 +91,8 @@ export class Search {
                 body: {
                     type: "search",
                     name: this._viewName,
-                    properties
+                    links,
+                    primarySort
                 },
                 absolutePath: true
             },
@@ -141,7 +147,7 @@ export class Search {
         );
     }
 
-    updateViewProperties(properties: Properties) {
+    updateViewProperties(properties: LinksType) {
         return this._connection.request(
             {
                 method: "PUT",
