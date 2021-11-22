@@ -101,21 +101,27 @@ Creates a new view with a given name and links if it does not already exist. Als
 
 - **links**: `object` (optional)
 
-    - **[collection-name]**:
+    - **collection-name**:
       - **analyzers**: `Array<string>`
         The list of analyzers to be used for indexing of string values (default: ["identity"]).
+        
       - **fields**:
         - **field-name**: `object`
           This is a recursive structure for the specific attribute path, potentially containing any of the following attributes: analyzers, includeAllFields, trackListPositions, storeValues
           Any attributes not specified are inherited from the parent.
+
       - **includeAllFields**: `boolean`
         The flag determines whether or not to index all fields on a particular level of depth (default: false).
+
       - **trackListPositions**: `boolean`
         The flag determines whether or not values in a lists should be treated separate (default: false).
+
       - **storeValues**: `string`
         How should the view track the attribute values, this setting allows for additional value retrieval optimizations, one of:
+
         - **none**: Do not store values by the view
-        - **id**: 'string'
+
+        - **id**: `string`
           Store only information about value presence, to allow use of the EXISTS() function (default "none").
 
 - **primarySort**: `object` (optional)
