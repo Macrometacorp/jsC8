@@ -134,7 +134,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const data = await client.createView("some-view", { { "some-collection": { } } ,[ {field: "some-field", asc: true  } ]);
+const data = await client.createView("some-view", { "some-collection": { } }, [ { field: "some-field", asc: true } ]);
 ```
 
 ## client.getViewInfo
