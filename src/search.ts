@@ -5,6 +5,11 @@ export type SearchOptions = {
     analyzerName?: string;
 };
 
+export type PrimarySortFields = {
+    field?: string;
+    asc?: boolean;
+};
+
 export type LinksType = {
     [collectionName: string]: {
         analyzers?: [
@@ -17,11 +22,6 @@ export type LinksType = {
     }
   
 }
-
-export type PrimarySortFields = {
-    field?: string;
-    asc?: boolean;
-};
 
 
 export class Search {
