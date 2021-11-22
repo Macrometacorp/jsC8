@@ -6,23 +6,23 @@ export type SearchOptions = {
 };
 
 export type LinksType = {
-    links?: {
-        [collectionName: string]: {
-            analyzers?: [
-                string
-            ],
-            fields?: object,
-            includeAllFields?: boolean,
-            storeValues?: string,
-            trackListPositions?: boolean
-        }
+    [collectionName: string]: {
+        analyzers?: [
+            string
+        ],
+        fields?: object,
+        includeAllFields?: boolean,
+        storeValues?: string,
+        trackListPositions?: boolean
     }
+  
 }
 
-export type PrimarySortFields={
-    field: string;
-    asc: boolean
-}
+export type PrimarySortFields = {
+    field?: string;
+    asc?: boolean;
+};
+
 
 export class Search {
 
