@@ -76,7 +76,7 @@ describe("validating search apis", function () {
 
             it("update view properties", async () => {
                 await c8Client.createCollection(coll);
-                const response = await search.updateViewProperties({ links: { [coll]: { analyzers: ['identity'], fields: { 'v': {} } } } });
+                const response = await search.updateViewProperties({ [coll]: { analyzers: ['identity'], fields: { 'v': {} } }  });
                 expect(response.links).to.deep.equal({ [coll]: { analyzers: ['identity'], fields: { 'v': {} }, includeAllFields: false, storeValues: "none", trackListPositions: false } });
                 await c8Client.deleteCollection(coll);
             });
