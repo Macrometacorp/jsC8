@@ -37,7 +37,7 @@ export class ImportAndExport {
         );
     }
 
-    importDocuments(data: string[], showErrors: boolean = false, primaryKey: string, replace: boolean = false) {
+    importDocuments(data: Array<Record<string, any>>, showErrors: boolean = false, primaryKey: string, replace: boolean = false) {
         return this._connection.request(
             {
                 method: "POST",
