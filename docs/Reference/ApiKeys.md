@@ -589,7 +589,7 @@ Sets the attributes of a specific key-id for an apikey.
 
 - **data**: `object`
     
-    - key value pair to be set as attributes for the specific key-id for an apikey.
+    key value pair to be set as attributes for the specific key-id for an apikey.
 
 **Examples**
 
@@ -598,7 +598,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const result = await client.createApikeyAttributes("some-key", "{ key: value }");
+const result = await client.createApikeyAttributes("some-key", { key: "value" });
 ```
 ## client.updateApikeyAttributes
 
@@ -614,7 +614,7 @@ Updates the attributes of a specific key-id for an apikey.
 
 - **data**: `object`
     
-    - key value pair to be updated as attributes for the specific key-id for an apikey.
+    key value pair to be updated as attributes for the specific key-id for an apikey.
 
 **Examples**
 
