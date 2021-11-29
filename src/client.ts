@@ -981,9 +981,9 @@ export class C8Client extends Fabric {
     return new ImportAndExport(this._connection, collectionName)
   }
 
-  exportDataByQuery(query: string) {
+  exportDataByQuery(query: string, bindVars?: Record<string, any>) {
     const importAndExport = this.importAndExport();
-    return importAndExport.exportDataByQuery(query)
+    return importAndExport.exportDataByQuery(query, bindVars);
   }
 
   exportDataByCollectionName(collectionName: string, params: CollectionParams = {}) {

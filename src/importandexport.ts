@@ -15,12 +15,12 @@ export class ImportAndExport {
         this.collectionName = collectionName;
     }
 
-    exportDataByQuery(query: string) {
+    exportDataByQuery(query: string, bindVars?: Record<string, any>) {
         return this._connection.request(
             {
                 method: "POST",
                 path: "/_api/export",
-                body: { query },
+                body: { query, bindVars },
             },
             (res) => res.body
         );
