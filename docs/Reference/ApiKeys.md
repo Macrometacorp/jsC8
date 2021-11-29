@@ -623,7 +623,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const result = await client.updateApikeyAttributes("some-key", "{ key: value }");
+const result = await client.updateApikeyAttributes("some-key", { key: "value" });
 ```
 
 ## client.removeApikeyAttributes
