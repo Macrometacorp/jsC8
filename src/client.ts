@@ -7,7 +7,7 @@ import {
 } from "./collection";
 import { C8QLLiteral } from "./c8ql-query";
 import { KeyValue, KVCreateOptsObj, KVPairHandle, KVValueOptsObj } from "./keyValue";
-import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
+import { ApiKeyAttributesType, ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, LinksType, PrimarySortFields } from "./search";
 import { AccountDetails, Billing } from './billing';
 import { CollectionParams, ImportAndExport } from "./importandexport";
@@ -810,6 +810,28 @@ export class C8Client extends Fabric {
   setBillingAccessLevel(keyid: string, permission: "rw" | "ro" | "none") {
     const apiKeys = this.apiKeys(keyid);
     return apiKeys.setBillingAccessLevel(permission);
+  }
+
+  // ----------------------------------------
+
+  createApikeyAttributes(keyid: string, data:ApiKeyAttributesType) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.createApikeyAttributes(data);    
+  }
+
+  updateApikeyAttributes(keyid: string, data:ApiKeyAttributesType) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.updateApikeyAttributes(data);    
+  }
+
+  listApikeyAttributes(keyid: string) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.listApikeyAttributes();  
+  }
+
+  removeApikeyAttributes(keyid: string) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.removeApikeyAttributes();  
   }
 
   //--------------- Search ---------------

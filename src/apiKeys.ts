@@ -5,6 +5,10 @@ export type validateApiKeyHandle = {
     jwt?: string;
 }
 
+export type ApiKeyAttributesType = {
+    [key:string]: string;
+}
+
 export class ApiKeys {
     private _connection: Connection;
     keyid: string;
@@ -243,6 +247,55 @@ export class ApiKeys {
                 body: {
                     grant: permission
                 }
+            },
+            (res) => res.body
+        );
+    }
+
+     //---------------- ApiKey attributes ----------------
+
+
+    listApikeyAttributes() {
+        return this._connection.request(
+            {
+                method: "GET",
+                path: `/_api/key/${this.keyid}/attributes`,
+            },
+            (res) => res.body
+        );
+    }
+
+    createApikeyAttributes(data:ApiKeyAttributesType) {
+        return this._connection.request(
+            {
+                method: "POST",
+                path: `/_api/key/${this.keyid}/attributes`,
+                body: {
+                    attributes: data
+                }
+            },
+            (res) => res.body
+        );
+    }
+
+    updateApikeyAttributes(data:ApiKeyAttributesType) {
+        return this._connection.request(
+            {
+                method: "PUT",
+                path: `/_api/key/${this.keyid}/attributes`,
+                body: {
+                    attributes: data
+                }
+            },
+            (res) => res.body
+        );
+    }
+
+    removeApikeyAttributes() {
+       return this._connection.request(
+            {
+                method: "DELETE",
+                path: `/_api/key/${this.keyid}/attributes`,
             },
             (res) => res.body
         );
