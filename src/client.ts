@@ -981,9 +981,9 @@ export class C8Client extends Fabric {
     return new ImportAndExport(this._connection, collectionName)
   }
 
-  exportDataByQuery(query: string) {
+  exportDataByQuery(query: string, bindVars?: Record<string, any>) {
     const importAndExport = this.importAndExport();
-    return importAndExport.exportDataByQuery(query)
+    return importAndExport.exportDataByQuery(query, bindVars);
   }
 
   exportDataByCollectionName(collectionName: string, params: CollectionParams = {}) {
@@ -991,7 +991,7 @@ export class C8Client extends Fabric {
     return importAndExport.exportDataByCollectionName(params)
   }
 
-  importDocuments(collectionName: string, data: string[], showErrors: boolean, primaryKey: string, replace: boolean = false) {
+  importDocuments(collectionName: string, data: Array<Record<string, any>>, showErrors: boolean, primaryKey: string, replace: boolean = false) {
     const importAndExport = this.importAndExport(collectionName);
     return importAndExport.importDocuments(data, showErrors, primaryKey, replace)
   }

@@ -15,12 +15,12 @@ export class ImportAndExport {
         this.collectionName = collectionName;
     }
 
-    exportDataByQuery(query: string) {
+    exportDataByQuery(query: string, bindVars?: Record<string, any>) {
         return this._connection.request(
             {
                 method: "POST",
                 path: "/_api/export",
-                body: { query },
+                body: { query, bindVars },
             },
             (res) => res.body
         );
@@ -37,7 +37,7 @@ export class ImportAndExport {
         );
     }
 
-    importDocuments(data: string[], showErrors: boolean = false, primaryKey: string, replace: boolean = false) {
+    importDocuments(data: Array<Record<string, any>>, showErrors: boolean = false, primaryKey: string, replace: boolean = false) {
         return this._connection.request(
             {
                 method: "POST",

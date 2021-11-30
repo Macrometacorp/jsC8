@@ -43,7 +43,7 @@ describe("validating Import and Export apis", function () {
             });
 
             it("importAndExport.importDocuments", async () => {
-                const data: any = [{ value: "value" }];
+                const data: Array<Record<string, any>> = [{ value: "value" }];
                 const response = await c8Client.importDocuments(collectionName, data, true, "value");
                 expect(response.result.created).to.equal(data.length);
             });
@@ -75,7 +75,7 @@ describe("validating Import and Export apis", function () {
 
             it("importAndExport.importDocuments", async () => {
                 try {
-                    const data: any = [{ value: "value" }];
+                    const data: Array<Record<string, any>> = [{ value: "value" }];
                     const response = await c8Client.importDocuments(collectionName, data, true, "value");
                     expect(response.result.created).to.equal(data.length);
                 } catch (err) {
