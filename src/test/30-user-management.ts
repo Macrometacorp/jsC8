@@ -237,14 +237,14 @@ describe("User Management", function () {
 
     describe("user.createUpdateUserAttributes", () => {
       it("Create or update user attributes", async () => {
-        const response = await user.createUpdateUserAttributes({"name":"anurag"});
+        const response = await user.createUpdateUserAttributes({ name: "anurag" });
         expect(response.error).to.be.false;
       });
     });
 
     describe("user.clearUserAttributes", () => {
       it("Clear a particular user attribute", async () => {
-        const response = await user.clearUserAttributes('name');
+        const response = await user.deleteUserAttribute('name');
         expect(response.error).to.be.false;
       });
     });

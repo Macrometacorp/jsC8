@@ -842,12 +842,12 @@ Create/Update attributes of a user.
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 
 const user = client.user("sample_user", "sample_user@macrometa.io");
-await user.createUpdateUserAttributes({ "name": "some-name" });
+await user.createUpdateUserAttributes({ name: "some-name" });
 ```
 
-## user.clearUserAttributes
+## user.deleteUserAttribute
 
-`async clearUserAttributes(attributeId)`
+`async deleteUserAttribute(attributeId)`
 
 Removes the specified attribute of a user.
 
@@ -863,28 +863,7 @@ Removes the specified attribute of a user.
 const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 
 const user = client.user("sample_user", "sample_user@macrometa.io");
-await user.attributeId("some-id");
-```
-
-## user.clearUserAttributes
-
-`async clearUserAttributes(attributeId)`
-
-Removes the specified attribute of a user.
-
-**Arguments**
-
-- **attributeId**: `string`
-
-  Attribute Id which needs to be removed from the user.
-
-**Examples**
-
-```js
-const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
-
-const user = client.user("sample_user", "sample_user@macrometa.io");
-await user.attributeId("some-id");
+await user.deleteUserAttribute("some-id");
 ```
 
 ## user.getUserAttributes

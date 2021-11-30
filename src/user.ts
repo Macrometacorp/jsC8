@@ -298,21 +298,17 @@ class User {
     return this._connection.request(
       {
         method: "GET",
-        path: `${this.urlPrefix}/${
-          this.user
-          }/attributes`
+        path: `${this.urlPrefix}/${this.user}/attributes`
       },
       res => res.body
     );
   }
 
-  clearUserAttributes(attributeId: string) {
+  deleteUserAttribute(attributeId: string) {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `${this.urlPrefix}/${
-          this.user
-          }/attributes/${attributeId}`
+        path: `${this.urlPrefix}/${this.user}/attributes/${attributeId}`
       },
       res => res.body
     );

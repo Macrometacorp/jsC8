@@ -653,9 +653,9 @@ export class C8Client extends Fabric {
     return user.getUserAttributes();
   }
 
-  clearUserAttributes(userName: string, attributeId: string){
+  deleteUserAttribute(userName: string, attributeId: string){
     const user = this.user(userName);
-    return user.clearUserAttributes(attributeId);
+    return user.deleteUserAttribute(attributeId);
   }
 
   createUpdateUserAttributes(userName: string, data: UserAttributesType){
