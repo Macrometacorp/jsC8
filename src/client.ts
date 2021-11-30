@@ -832,14 +832,9 @@ export class C8Client extends Fabric {
 
   // ----------------------------------------
 
-  createApikeyAttributes(keyid: string, data:ApiKeyAttributesType) {
+  createUpdateApikeyAttributes(keyid: string, data:ApiKeyAttributesType) {
     const apiKeys = this.apiKeys(keyid);
-    return apiKeys.createApikeyAttributes(data);    
-  }
-
-  updateApikeyAttributes(keyid: string, data:ApiKeyAttributesType) {
-    const apiKeys = this.apiKeys(keyid);
-    return apiKeys.updateApikeyAttributes(data);    
+    return apiKeys.createUpdateApikeyAttributes(data);    
   }
 
   listApikeyAttributes(keyid: string) {
@@ -847,9 +842,9 @@ export class C8Client extends Fabric {
     return apiKeys.listApikeyAttributes();  
   }
 
-  removeApikeyAttributes(keyid: string) {
+  deleteApikeyAttributes(keyid: string, attributeId: string) {
     const apiKeys = this.apiKeys(keyid);
-    return apiKeys.removeApikeyAttributes();  
+    return apiKeys.deleteApikeyAttributes(attributeId);  
   }
 
   //--------------- Search ---------------

@@ -265,37 +265,22 @@ export class ApiKeys {
         );
     }
 
-    createApikeyAttributes(data:ApiKeyAttributesType) {
+    createUpdateApikeyAttributes(data:ApiKeyAttributesType) {
         return this._connection.request(
             {
                 method: "POST",
                 path: `/_api/key/${this.keyid}/attributes`,
-                body: {
-                    attributes: data
-                }
+                body:data
             },
             (res) => res.body
         );
     }
 
-    updateApikeyAttributes(data:ApiKeyAttributesType) {
-        return this._connection.request(
-            {
-                method: "PUT",
-                path: `/_api/key/${this.keyid}/attributes`,
-                body: {
-                    attributes: data
-                }
-            },
-            (res) => res.body
-        );
-    }
-
-    removeApikeyAttributes() {
+    deleteApikeyAttributes(attributeId: string) {
        return this._connection.request(
             {
                 method: "DELETE",
-                path: `/_api/key/${this.keyid}/attributes`,
+                path: `/_api/key/${this.keyid}/attributes/${attributeId}`,
             },
             (res) => res.body
         );
