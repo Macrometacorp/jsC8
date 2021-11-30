@@ -281,7 +281,6 @@ describe("User Management", function () {
             expect(err).to.have.property("errorMessage","invalid api key id");
         }
       });
-
     });
-    });
+  });
 });
