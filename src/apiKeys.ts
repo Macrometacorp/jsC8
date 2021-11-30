@@ -255,7 +255,7 @@ export class ApiKeys {
      //---------------- ApiKey attributes ----------------
 
 
-    listApikeyAttributes() {
+    getApikeyAttributes() {
         return this._connection.request(
             {
                 method: "GET",
@@ -276,7 +276,7 @@ export class ApiKeys {
         );
     }
 
-    deleteApikeyAttributes(attributeId: string) {
+    deleteApikeyAttribute(attributeId: string) {
        return this._connection.request(
             {
                 method: "DELETE",
