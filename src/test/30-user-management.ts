@@ -227,5 +227,27 @@ describe("User Management", function () {
         });
       });
     });
+
+    describe("user.getUserAttributes", () => {
+      it("Get user attributes", async () => {
+        const response = await user.getUserAttributes();
+        expect(response.error).to.be.false;
+      });
+    });
+
+    describe("user.createUpdateUserAttributes", () => {
+      it("Create or update user attributes", async () => {
+        const response = await user.createUpdateUserAttributes({"name":"anurag"});
+        expect(response.error).to.be.false;
+      });
+    });
+
+    describe("user.clearUserAttributes", () => {
+      it("Clear a particular user attribute", async () => {
+        const response = await user.clearUserAttributes('name');
+        expect(response.error).to.be.false;
+      });
+    });
+    
   });
 });

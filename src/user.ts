@@ -3,6 +3,10 @@ import { isC8Error } from "./error";
 
 export const USER_NOT_FOUND = 1703;
 
+export type UserAttributesType = {
+    [key:string]: string;
+}
+
 class User {
   _connection: Connection;
   user = "";
@@ -285,6 +289,45 @@ class User {
         body: {
           grant: permission
         }
+      },
+      res => res.body
+    );
+  }
+
+  getUserAttributes() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `${this.urlPrefix}/${
+          this.user
+          }/attributes`
+      },
+      res => res.body
+    );
+  }
+
+  clearUserAttributes(attributeId: string) {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `${this.urlPrefix}/${
+          this.user
+          }/attributes/${attributeId}`
+      },
+      res => res.body
+    );
+  }
+
+  createUpdateUserAttributes(
+    data:UserAttributesType
+  ) {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `${this.urlPrefix}/${
+          this.user
+          }/attributes`,
+        body: data
       },
       res => res.body
     );

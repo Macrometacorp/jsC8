@@ -823,3 +823,81 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 const user = client.user("sample_user", "sample_user@macrometa.io");
 await user.setBillingAccessLevel("rw");
 ```
+
+## user.createUpdateUserAttributes
+
+`async createUpdateUserAttributes(data)`
+
+Create/Update attributes of a user.
+
+**Arguments**
+
+- **data**: `object`
+
+  It is a key-value pair which holds the attributes' data.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.createUpdateUserAttributes({ "name": "some-name" });
+```
+
+## user.clearUserAttributes
+
+`async clearUserAttributes(attributeId)`
+
+Removes the specified attribute of a user.
+
+**Arguments**
+
+- **attributeId**: `string`
+
+  Attribute Id which needs to be removed from the user.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.attributeId("some-id");
+```
+
+## user.clearUserAttributes
+
+`async clearUserAttributes(attributeId)`
+
+Removes the specified attribute of a user.
+
+**Arguments**
+
+- **attributeId**: `string`
+
+  Attribute Id which needs to be removed from the user.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.attributeId("some-id");
+```
+
+## user.getUserAttributes
+
+`async getUserAttributes()`
+
+Gets the attributes of the user.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+
+const user = client.user("sample_user", "sample_user@macrometa.io");
+await user.getUserAttributes();
+```

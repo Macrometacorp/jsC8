@@ -13,6 +13,7 @@ import { AccountDetails, Billing } from './billing';
 import { CollectionParams, ImportAndExport } from "./importandexport";
 import { Plan, PlanDetails, UpdateTenantPlan } from "./plan";
 import { CreateTenant, ModifyTenant } from "./tenant";
+import { UserAttributesType } from "./user";
 
 const csv = require("csvtojson");
 
@@ -643,6 +644,23 @@ export class C8Client extends Fabric {
       return user.clearCollectionAccessLevel(fabricName, collectionName);
     }
     return user.clearDatabaseAccessLevel(fabricName);
+  }
+
+  //------------ User Attributes ----------
+
+  getUserAttributes(userName: string){
+    const user = this.user(userName);
+    return user.getUserAttributes();
+  }
+
+  clearUserAttributes(userName: string, attributeId: string){
+    const user = this.user(userName);
+    return user.clearUserAttributes(attributeId);
+  }
+
+  createUpdateUserAttributes(userName: string, data: UserAttributesType){
+    const user = this.user(userName);
+    return user.createUpdateUserAttributes(data);
   }
 
   //--------------- Key Value ---------------
