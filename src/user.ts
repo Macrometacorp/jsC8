@@ -4,7 +4,7 @@ import { isC8Error } from "./error";
 export const USER_NOT_FOUND = 1703;
 
 export type UserAttributesType = {
-    [key:string]: string;
+    [key:string]: string | number;
 }
 
 class User {

@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { C8Client } from "../jsC8";
 import User from "../user";
+import { HttpError } from "../error";
 import { getDCListString } from "../util/helper";
 
 describe("User Management", function () {
@@ -233,6 +234,17 @@ describe("User Management", function () {
         const response = await user.getUserAttributes();
         expect(response.error).to.be.false;
       });
+
+      it("user.getUserAttributes", async () => {
+        try {
+          const response = await user.getUserAttributes();
+          expect(response.error).to.be.false;
+        } catch (err) {
+            expect(err).is.instanceof(HttpError);
+            expect(err).to.have.property("code", 404);
+            expect(err).to.have.property("errorMessage","invalid api key id");
+        }
+      });
     });
 
     describe("user.createUpdateUserAttributes", () => {
@@ -240,14 +252,36 @@ describe("User Management", function () {
         const response = await user.createUpdateUserAttributes({ name: "anurag" });
         expect(response.error).to.be.false;
       });
+
+      it("user.createUpdateUserAttributes", async () => {
+        try {
+          const response = await user.createUpdateUserAttributes({ age:12 });
+          expect(response.error).to.be.false;
+        } catch (err) {
+            expect(err).is.instanceof(HttpError);
+            expect(err).to.have.property("code", 400);
+            expect(err).to.have.property("errorMessage","Failed to parse JSON object. Error code: 17");
+        }
+      });
     });
 
-    describe("user.clearUserAttributes", () => {
-      it("Clear a particular user attribute", async () => {
+    describe("user.deleteUserAttribute", () => {
+      it("Delete a particular user attribute", async () => {
         const response = await user.deleteUserAttribute('name');
         expect(response.error).to.be.false;
       });
+
+      it("user.deleteUserAttribute", async () => {
+        try {
+          const response = await user.deleteUserAttribute("attributId");
+          expect(response.error).to.be.false;
+        } catch (err) {
+            expect(err).is.instanceof(HttpError);
+            expect(err).to.have.property("code", 404);
+            expect(err).to.have.property("errorMessage","invalid api key id");
+        }
+      });
+
     });
-    
-  });
+    });
 });

@@ -268,7 +268,7 @@ export class ApiKeys {
     createUpdateApikeyAttributes(data:ApiKeyAttributesType) {
         return this._connection.request(
             {
-                method: "POST",
+                method: "PUT",
                 path: `/_api/key/${this.keyid}/attributes`,
                 body:data
             },
