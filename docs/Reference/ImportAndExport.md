@@ -1,9 +1,9 @@
 ## ImportAndExport
 
 
-## client.getDataByQuery
+## client.exportDataByQuery
 
-`async client.getDataByQuery(query)`
+`async client.exportDataByQuery(query)`
 
 Execute the query and return list of result documents. query cannot contains the following keywords: INSERT, UPDATE, REPLACE and REMOVE. Offset, limit and order are not applied. You must specify them in the query.
 
@@ -18,12 +18,12 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const result = await client.getDataByQuery('FOR x in some-collection LIMIT 0, 1000 RETURN x');
+const result = await client.exportDataByQuery('FOR x in some-collection LIMIT 0, 1000 RETURN x');
 ```
 
-## client.getDataByCollectionName
+## client.exportDataByCollectionName
 
-`async client.getDataByCollectionName(collectionName, [params])`
+`async client.exportDataByCollectionName(collectionName, [params])`
 
  Return a list of documents in the specified collection. If offset, limit and order are not specified their default values will be applied.
 
@@ -53,12 +53,12 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const result = await client.getDataByCollectionName('collection-name', {});
+const result = await client.exportDataByCollectionName('collection-name', {});
 ```
 
-## client.createDocuments
+## client.importDocuments
 
-`async client.createDocuments(collectionName, data, details, primaryKey, replace)`
+`async client.importDocuments(collectionName, data, details, primaryKey, replace)`
 
  Create documents in the collection identified by collection parameter.
 
@@ -76,7 +76,7 @@ const result = await client.getDataByCollectionName('collection-name', {});
 
 - **primaryKey**: `string`
 
-     if specified, this attribure will be used as _key of the new document. It must follow https://macrometa.dev/documents/naming-conventions/#document-keys . If document already contains _key then it will be renamed as old_key.
+     if specified, this attribute will be used as _key of the new document. It must follow https://macrometa.dev/documents/naming-conventions/#document-keys . If document already contains _key then it will be renamed as old_key.
 
 - **replace**: `boolean`
 
@@ -89,5 +89,5 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const result = await client.createDocuments('collection-name', [{key:value}], true, 'key', true);
+const result = await client.importDocuments('collection-name', [{key:value}], true, 'key', true);
 ```
