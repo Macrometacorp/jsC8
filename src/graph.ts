@@ -22,13 +22,15 @@ export class GraphVertexCollection extends BaseCollection {
 
   document(
     documentHandle: DocumentHandle,
-    graceful: boolean = false
+    graceful: boolean = false,
+    opts: any = {}
   ): Promise<any> {
     const result = this._connection.request(
       {
         path: `/_api/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
-        )}`
+        )}`,
+        qs: opts
       },
       res => res.body.vertex
     );
@@ -48,7 +50,7 @@ export class GraphVertexCollection extends BaseCollection {
     return this.document(documentHandle, graceful);
   }
 
-  save(data: any, opts?: { waitForSync?: boolean }) {
+  save(data: any, opts?: { waitForSync?: boolean, returnNew?: boolean }) {
     return this._connection.request(
       {
         method: "POST",
@@ -164,18 +166,18 @@ export class GraphEdgeCollection extends EdgeCollection {
     });
   }
 
-  save(data: any, opts?: { waitForSync?: boolean }): Promise<any>;
+  save(data: any, opts?: { waitForSync?: boolean, returnNew?: boolean }): Promise<any>;
   save(
     data: any,
     fromId: DocumentHandle,
     toId: DocumentHandle,
-    opts?: { waitForSync?: boolean }
+    opts?: { waitForSync?: boolean, returnNew?: boolean }
   ): Promise<any>;
   save(
     data: any,
     fromId?: DocumentHandle | any,
     toId?: DocumentHandle,
-    opts?: { waitForSync?: boolean }
+    opts?: { waitForSync?: boolean, returnNew?: boolean }
   ) {
     if (fromId !== undefined) {
       if (toId !== undefined) {
