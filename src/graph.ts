@@ -147,13 +147,15 @@ export class GraphEdgeCollection extends EdgeCollection {
 
   document(
     documentHandle: DocumentHandle,
-    graceful: boolean = false
+    graceful: boolean = false,
+    opts: Record<string, any> = {}
   ): Promise<any> {
     const result = this._connection.request(
       {
         path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(
           documentHandle
-        )}`
+        )}`,
+        qs: opts
       },
       res => res.body.edge
     );
