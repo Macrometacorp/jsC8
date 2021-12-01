@@ -14,6 +14,8 @@ import { CollectionParams, ImportAndExport } from "./importandexport";
 import { Plan, PlanDetails, UpdateTenantPlan } from "./plan";
 import { CreateTenant, ModifyTenant } from "./tenant";
 import { UserAttributesType } from "./user";
+import { Stream } from "./stream";
+import { Graph } from "./graph";
 
 const csv = require("csvtojson");
 
@@ -333,7 +335,7 @@ export class C8Client extends Fabric {
     streamName: string,
     local: boolean,
     isCollectionStream: boolean = false
-  ) {
+  ): Stream {
     const stream = this.stream(streamName, local, isCollectionStream);
     return stream;
   }
@@ -485,7 +487,7 @@ export class C8Client extends Fabric {
     return graph.get();
   }
 
-  getGraphs() {
+  getGraphs(): Promise<Graph[]> {
     return this.graphs();
   }
 

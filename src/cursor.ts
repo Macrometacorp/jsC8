@@ -1,4 +1,5 @@
 import { Connection } from "./connection";
+import { C8jsResponse } from "./util/request";
 
 export class ArrayCursor {
   extra: any;
@@ -35,7 +36,7 @@ export class ArrayCursor {
     }
   }
 
-  nextBatch(){
+  nextBatch(): Promise<C8jsResponse> {
     return this._connection.request({
       method: "PUT",
       path: `/cursor/${this._id}`,
