@@ -3,6 +3,10 @@ import { isC8Error } from "./error";
 
 export const USER_NOT_FOUND = 1703;
 
+export type UserAttributesType = {
+    [key:string]: string | number;
+}
+
 class User {
   _connection: Connection;
   user = "";
@@ -215,7 +219,7 @@ class User {
   setStreamAccessLevel(
     databaseName: string,
     streamName: string,
-    permission: "rw" | "ro" | "none"
+    permission: "rw" | "ro" | "none" | "wo"
   ) {
     return this._connection.request(
       {
@@ -285,6 +289,40 @@ class User {
         body: {
           grant: permission
         }
+      },
+      res => res.body
+    );
+  }
+
+  getUserAttributes() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `${this.urlPrefix}/${this.user}/attributes`
+      },
+      res => res.body
+    );
+  }
+
+  deleteUserAttribute(attributeId: string) {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `${this.urlPrefix}/${this.user}/attributes/${attributeId}`
+      },
+      res => res.body
+    );
+  }
+
+  async createUpdateUserAttributes(
+    data:UserAttributesType
+  ) {
+    const getAttributes = await this.getUserAttributes();
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `${this.urlPrefix}/${this.user}/attributes`,
+        body: { ...getAttributes.result, ...data }
       },
       res => res.body
     );

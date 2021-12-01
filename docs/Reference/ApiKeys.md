@@ -552,3 +552,77 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const result = await client.setBillingAccessLevel("some-key", "rw");
 ```
+
+## client.getApikeyAttributes
+
+`async client.getApikeyAttributes(keyid)`
+
+List the attributes of a specific key-id for an apikey.
+
+**Arguments**
+
+- **keyid**: `string`
+    
+    The id of the api key.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
+
+const result = await client.getApikeyAttributes("some-key");
+```
+
+## client.createUpdateApikeyAttributes
+
+`async client.createUpdateApikeyAttributes(keyid, data)`
+
+Create/Updates the attributes of a specific key-id for an apikey.
+
+**Arguments**
+
+- **keyid**: `string`
+    
+    The id of the api key.
+
+- **data**: `object`
+    
+    key value pair to be set as attributes for the specific key-id for an apikey.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
+
+const result = await client.createUpdateApikeyAttributes("some-key", { key: "value" });
+```
+
+## client.deleteApikeyAttribute
+
+`async client.deleteApikeyAttribute(keyid, attributeId)`
+
+Removes the attribute of a specific key-id for an apikey.
+
+**Arguments**
+
+- **keyid**: `string`
+    
+    The id of the api key.
+
+- **attributeId**: `string`
+    
+    The attribute id of the api key which needs to be deleted.    
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
+
+const result = await client.deleteApikeyAttribute("some-key", "some-attribute");
+```

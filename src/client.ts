@@ -7,12 +7,13 @@ import {
 } from "./collection";
 import { C8QLLiteral } from "./c8ql-query";
 import { KeyValue, KVCreateOptsObj, KVPairHandle, KVValueOptsObj } from "./keyValue";
-import { ApiKeys, validateApiKeyHandle } from "./apiKeys";
+import { ApiKeyAttributesType, ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, LinksType, PrimarySortFields } from "./search";
 import { AccountDetails, Billing } from './billing';
 import { CollectionParams, ImportAndExport } from "./importandexport";
 import { Plan, PlanDetails, UpdateTenantPlan } from "./plan";
 import { CreateTenant, ModifyTenant } from "./tenant";
+import { UserAttributesType } from "./user";
 
 const csv = require("csvtojson");
 
@@ -645,6 +646,23 @@ export class C8Client extends Fabric {
     return user.clearDatabaseAccessLevel(fabricName);
   }
 
+  //------------ User Attributes ----------
+
+  getUserAttributes(userName: string){
+    const user = this.user(userName);
+    return user.getUserAttributes();
+  }
+
+  deleteUserAttribute(userName: string, attributeId: string){
+    const user = this.user(userName);
+    return user.deleteUserAttribute(attributeId);
+  }
+
+  createUpdateUserAttributes(userName: string, data: UserAttributesType){
+    const user = this.user(userName);
+    return user.createUpdateUserAttributes(data);
+  }
+
   //--------------- Key Value ---------------
 
   keyValue(collectionName: string): KeyValue {
@@ -810,6 +828,23 @@ export class C8Client extends Fabric {
   setBillingAccessLevel(keyid: string, permission: "rw" | "ro" | "none") {
     const apiKeys = this.apiKeys(keyid);
     return apiKeys.setBillingAccessLevel(permission);
+  }
+
+  // ----------------------------------------
+
+  createUpdateApikeyAttributes(keyid: string, data:ApiKeyAttributesType) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.createUpdateApikeyAttributes(data);    
+  }
+
+  getApikeyAttributes(keyid: string) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.getApikeyAttributes();  
+  }
+
+  deleteApikeyAttribute(keyid: string, attributeId: string) {
+    const apiKeys = this.apiKeys(keyid);
+    return apiKeys.deleteApikeyAttribute(attributeId);  
   }
 
   //--------------- Search ---------------

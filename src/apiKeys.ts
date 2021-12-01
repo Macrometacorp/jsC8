@@ -5,6 +5,10 @@ export type validateApiKeyHandle = {
     jwt?: string;
 }
 
+export type ApiKeyAttributesType = {
+    [key:string]: string;
+}
+
 export class ApiKeys {
     private _connection: Connection;
     keyid: string;
@@ -200,7 +204,7 @@ export class ApiKeys {
         );
     }
 
-    setStreamAccessLevel(streamName: string, permission: "rw" | "ro" | "none") {
+    setStreamAccessLevel(streamName: string, permission: "rw" | "ro" | "none" | "wo") {
         return this._connection.request(
             {
                 method: "PUT",
@@ -243,6 +247,40 @@ export class ApiKeys {
                 body: {
                     grant: permission
                 }
+            },
+            (res) => res.body
+        );
+    }
+
+     //---------------- ApiKey attributes ----------------
+
+    getApikeyAttributes() {
+        return this._connection.request(
+            {
+                method: "GET",
+                path: `/_api/key/${this.keyid}/attributes`,
+            },
+            (res) => res.body
+        );
+    }
+
+    async createUpdateApikeyAttributes(data:ApiKeyAttributesType) {
+        const getAttributes = await this.getApikeyAttributes();
+        return this._connection.request(
+            {
+                method: "PUT",
+                path: `/_api/key/${this.keyid}/attributes`,
+                body: { ...getAttributes.result, ...data }
+            },
+            (res) => res.body
+        );
+    }
+
+    deleteApikeyAttribute(attributeId: string) {
+       return this._connection.request(
+            {
+                method: "DELETE",
+                path: `/_api/key/${this.keyid}/attributes/${attributeId}`,
             },
             (res) => res.body
         );
