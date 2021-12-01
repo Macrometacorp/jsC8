@@ -219,7 +219,7 @@ class User {
   setStreamAccessLevel(
     databaseName: string,
     streamName: string,
-    permission: "rw" | "ro" | "none"
+    permission: "rw" | "ro" | "none" | "wo"
   ) {
     return this._connection.request(
       {
@@ -314,16 +314,15 @@ class User {
     );
   }
 
-  createUpdateUserAttributes(
+  async createUpdateUserAttributes(
     data:UserAttributesType
   ) {
+    const getAttributes = await this.getUserAttributes();
     return this._connection.request(
       {
         method: "PUT",
-        path: `${this.urlPrefix}/${
-          this.user
-          }/attributes`,
-        body: data
+        path: `${this.urlPrefix}/${this.user}/attributes`,
+        body: { ...getAttributes.result, ...data }
       },
       res => res.body
     );

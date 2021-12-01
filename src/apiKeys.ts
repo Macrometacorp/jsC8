@@ -204,7 +204,7 @@ export class ApiKeys {
         );
     }
 
-    setStreamAccessLevel(streamName: string, permission: "rw" | "ro" | "none") {
+    setStreamAccessLevel(streamName: string, permission: "rw" | "ro" | "none" | "wo") {
         return this._connection.request(
             {
                 method: "PUT",
@@ -265,12 +265,13 @@ export class ApiKeys {
         );
     }
 
-    createUpdateApikeyAttributes(data:ApiKeyAttributesType) {
+    async createUpdateApikeyAttributes(data:ApiKeyAttributesType) {
+        const getAttributes = await this.getApikeyAttributes();
         return this._connection.request(
             {
                 method: "PUT",
                 path: `/_api/key/${this.keyid}/attributes`,
-                body:data
+                body: { ...getAttributes.result, ...data }
             },
             (res) => res.body
         );
