@@ -22,13 +22,15 @@ export class GraphVertexCollection extends BaseCollection {
 
   document(
     documentHandle: DocumentHandle,
-    graceful: boolean = false
+    graceful: boolean = false,
+    opts: Record<string, any> = {}
   ): Promise<any> {
     const result = this._connection.request(
       {
         path: `/_api/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
-        )}`
+        )}`,
+        qs: opts
       },
       res => res.body.vertex
     );
@@ -48,7 +50,7 @@ export class GraphVertexCollection extends BaseCollection {
     return this.document(documentHandle, graceful);
   }
 
-  save(data: any, opts?: { waitForSync?: boolean }) {
+  save(data: any, opts?: { waitForSync?: boolean, returnNew?: boolean }) {
     return this._connection.request(
       {
         method: "POST",
@@ -60,7 +62,7 @@ export class GraphVertexCollection extends BaseCollection {
     );
   }
 
-  replace(documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
+  replace(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -84,7 +86,7 @@ export class GraphVertexCollection extends BaseCollection {
     );
   }
 
-  update(documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
+  update(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -108,7 +110,7 @@ export class GraphVertexCollection extends BaseCollection {
     );
   }
 
-  remove(documentHandle: DocumentHandle, opts: any = {}) {
+  remove(documentHandle: DocumentHandle, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -164,18 +166,18 @@ export class GraphEdgeCollection extends EdgeCollection {
     });
   }
 
-  save(data: any, opts?: { waitForSync?: boolean }): Promise<any>;
+  save(data: any, opts?: { waitForSync?: boolean, returnNew?: boolean }): Promise<any>;
   save(
     data: any,
     fromId: DocumentHandle,
     toId: DocumentHandle,
-    opts?: { waitForSync?: boolean }
+    opts?: { waitForSync?: boolean, returnNew?: boolean }
   ): Promise<any>;
   save(
     data: any,
     fromId?: DocumentHandle | any,
     toId?: DocumentHandle,
-    opts?: { waitForSync?: boolean }
+    opts?: { waitForSync?: boolean, returnNew?: boolean }
   ) {
     if (fromId !== undefined) {
       if (toId !== undefined) {
@@ -196,7 +198,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     );
   }
 
-  replace(documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
+  replace(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -220,7 +222,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     );
   }
 
-  update(documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
+  update(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -244,7 +246,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     );
   }
 
-  remove(documentHandle: DocumentHandle, opts: any = {}) {
+  remove(documentHandle: DocumentHandle, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
