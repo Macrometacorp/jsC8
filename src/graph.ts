@@ -157,15 +157,13 @@ export class GraphEdgeCollection extends EdgeCollection {
       headers["if-none-match"] = ifNoneMatch;
     }
     if (opts['if-match']) {
-      let ifMatch:string
-      ({ ['if-match']:ifMatch, ...opts } = opts);
+      let ifMatch: string;
+      ({ ['if-match']: ifMatch, ...opts } = opts);
       headers["if-match"] = ifMatch;
     }
     const result = this._connection.request(
       {
-        path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(
-          documentHandle
-        )}`,
+        path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(documentHandle)}`,
         qs:opts,
         headers
       },
