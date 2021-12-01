@@ -58,7 +58,7 @@ export class GraphVertexCollection extends BaseCollection {
         body: data,
         qs: opts
       },
-      res => res.body.vertex
+      res => res.body
     );
   }
 
@@ -129,7 +129,7 @@ export class GraphVertexCollection extends BaseCollection {
         qs: opts,
         headers
       },
-      res => res.body.removed
+      res => res.body
     );
   }
 }
@@ -150,12 +150,22 @@ export class GraphEdgeCollection extends EdgeCollection {
     graceful: boolean = false,
     opts: Record<string, any> = {}
   ): Promise<any> {
+    const headers: { [key: string]: string } = {};
+    if (opts['if-none-match']) {
+      let ifNoneMatch: string;
+      ({['if-none-match']: ifNoneMatch, ...opts } = opts);
+      headers["if-none-match"] = ifNoneMatch;
+    }
+    if (opts['if-match']) {
+      let ifMatch: string;
+      ({ ['if-match']: ifMatch, ...opts } = opts);
+      headers["if-match"] = ifMatch;
+    }
     const result = this._connection.request(
       {
-        path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(
-          documentHandle
-        )}`,
-        qs: opts
+        path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(documentHandle)}`,
+        qs:opts,
+        headers
       },
       res => res.body.edge
     );
@@ -168,13 +178,6 @@ export class GraphEdgeCollection extends EdgeCollection {
     });
   }
 
-  save(data: any, opts?: { waitForSync?: boolean, returnNew?: boolean }): Promise<any>;
-  save(
-    data: any,
-    fromId: DocumentHandle,
-    toId: DocumentHandle,
-    opts?: { waitForSync?: boolean, returnNew?: boolean }
-  ): Promise<any>;
   save(
     data: any,
     fromId?: DocumentHandle | any,
@@ -196,7 +199,7 @@ export class GraphEdgeCollection extends EdgeCollection {
         body: data,
         qs: opts
       },
-      res => res.body.edge
+      res => res.body
     );
   }
 
