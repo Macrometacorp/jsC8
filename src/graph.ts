@@ -23,7 +23,7 @@ export class GraphVertexCollection extends BaseCollection {
   document(
     documentHandle: DocumentHandle,
     graceful: boolean = false,
-    opts: any = {}
+    opts: Record<string, any> = {}
   ): Promise<any> {
     const result = this._connection.request(
       {
@@ -62,7 +62,7 @@ export class GraphVertexCollection extends BaseCollection {
     );
   }
 
-  replace(documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
+  replace(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -86,7 +86,7 @@ export class GraphVertexCollection extends BaseCollection {
     );
   }
 
-  update(documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
+  update(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -110,7 +110,7 @@ export class GraphVertexCollection extends BaseCollection {
     );
   }
 
-  remove(documentHandle: DocumentHandle, opts: any = {}) {
+  remove(documentHandle: DocumentHandle, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -198,7 +198,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     );
   }
 
-  replace(documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
+  replace(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -222,7 +222,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     );
   }
 
-  update(documentHandle: DocumentHandle, newValue: any, opts: any = {}) {
+  update(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -246,7 +246,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     );
   }
 
-  remove(documentHandle: DocumentHandle, opts: any = {}) {
+  remove(documentHandle: DocumentHandle, opts: Record<string, any> = {}) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
