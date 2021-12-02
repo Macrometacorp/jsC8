@@ -799,20 +799,11 @@ export class Fabric {
     );
   }
 
-  createRestqlCursor(query: string, bindVars: any = {}) {
+  createCursorForRestql(id: string) {
     return this._connection.request(
       {
-        method: "POST",
-        path: `/restql/dynamic`,
-        body: {
-          bindVars: [bindVars],
-          cache: true,
-          count: true,
-          options: {
-            profile: true,
-          },
-          query: query,
-        },
+        method: "PUT",
+        path: `/restql/fetch/${id}`,
       },
       (res) => res.body
     );

@@ -291,6 +291,10 @@ export class C8Client extends Fabric {
     return this.deleteSavedQuery(restqlName);
   }
 
+  createRestqlCursor(id: string) {
+    return this.createCursorForRestql(id);
+  }
+
   getRestqls() {
     return this.listSavedQueries();
   }
@@ -812,7 +816,7 @@ export class C8Client extends Fabric {
     return apiKeys.clearStreamAccessLevel(streamName);
   }
 
-  setStreamAccessLevel(keyid: string, dbName: string, streamName: string, permission: "rw" | "ro" | "none") {
+  setStreamAccessLevel(keyid: string, dbName: string, streamName: string, permission: "rw" | "ro" | "none" | "wo") {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.setStreamAccessLevel(streamName, permission);
   }

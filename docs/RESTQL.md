@@ -110,23 +110,19 @@ await client.deleteRestql("testRestql");
 
 ## client.createRestqlCursor(query: string, bindVars: any)
 
-`createRestqlCursor(query: string, bindVars: any)`
+`createRestqlCursor(id: string)`
 
 Creates a restql cursor for running a query.
 
 **Arguments**
 
-- **query**: `string`
+- **id**: `string`
 
-  The query to be executed.
-
-- **bindVars**: `any`
-
-    The variables if needed, for the query to execute.
+  Cursor identifier.
 
 **Examples**
 
 ```js
 const client = new jsc8();
-client.createRestqlCursor(query: "FOR x IN TestCollection RETURN x", bindVars: {})
+client.createRestqlCursor(id:"291129")
 ```
