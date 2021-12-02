@@ -108,25 +108,21 @@ const client = new jsc8();
 await client.deleteRestql("testRestql");
 ```
 
-## client.createRestqlCursor(query: string, bindVars: any)
+## client.getNextBatchFromCursor(query: string, bindVars: any)
 
-`createRestqlCursor(query: string, bindVars: any)`
+`getNextBatchFromCursor(id: string)`
 
-Creates a restql cursor for running a query.
+Read next batch from cursor for restql.
 
 **Arguments**
 
-- **query**: `string`
+- **id**: `string`
 
-  The query to be executed.
-
-- **bindVars**: `any`
-
-    The variables if needed, for the query to execute.
+  Cursor identifier.
 
 **Examples**
 
 ```js
 const client = new jsc8();
-client.createRestqlCursor(query: "FOR x IN TestCollection RETURN x", bindVars: {})
+await client.getNextBatchFromCursor("291129");
 ```
