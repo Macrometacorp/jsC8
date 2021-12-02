@@ -799,7 +799,7 @@ export class Fabric {
     );
   }
 
-  createCursorForRestql(id: string) {
+  getNextBatchFromCursor(id: string) {
     return this._connection.request(
       {
         method: "PUT",

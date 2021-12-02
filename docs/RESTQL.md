@@ -108,11 +108,11 @@ const client = new jsc8();
 await client.deleteRestql("testRestql");
 ```
 
-## client.createRestqlCursor(query: string, bindVars: any)
+## client.getNextBatchFromCursor(query: string, bindVars: any)
 
-`createRestqlCursor(id: string)`
+`getNextBatchFromCursor(id: string)`
 
-Creates a restql cursor for running a query.
+Read next batch from cursor for restql.
 
 **Arguments**
 
@@ -124,5 +124,5 @@ Creates a restql cursor for running a query.
 
 ```js
 const client = new jsc8();
-client.createRestqlCursor(id:"291129")
+client.getNextBatchFromCursor("291129");
 ```

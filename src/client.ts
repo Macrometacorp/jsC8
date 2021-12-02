@@ -291,10 +291,6 @@ export class C8Client extends Fabric {
     return this.deleteSavedQuery(restqlName);
   }
 
-  createRestqlCursor(id: string) {
-    return this.createCursorForRestql(id);
-  }
-
   getRestqls() {
     return this.listSavedQueries();
   }
