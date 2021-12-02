@@ -124,5 +124,5 @@ Read next batch from cursor for restql.
 
 ```js
 const client = new jsc8();
-client.getNextBatchFromCursor("291129");
+await client.getNextBatchFromCursor("291129");
 ```
