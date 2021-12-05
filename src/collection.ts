@@ -37,6 +37,10 @@ export interface ImportOptions {
   details?: boolean;
 }
 
+export type EnableCollectionStreamType = {
+  hasStream:boolean;
+}
+
 export interface ImportResult {
   error: false;
   created: number;
@@ -198,6 +202,17 @@ export abstract class BaseCollection implements C8Collection {
         method: "DELETE",
         path: `/collection/${this.name}`,
         qs: opts,
+      },
+      (res) => res.body
+    );
+  }
+
+  enableCollecttionStream(data: EnableCollectionStreamType) {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `/collection/${this.name}/stream`,
+        body: data
       },
       (res) => res.body
     );

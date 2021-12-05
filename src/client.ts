@@ -4,6 +4,7 @@ import {
   DocumentHandle,
   DocumentsHandle,
   DocumentSaveOptions,
+  EnableCollectionStreamType,
 } from "./collection";
 import { C8QLLiteral } from "./c8ql-query";
 import { KeyValue, KVCreateOptsObj, KVPairHandle, KVValueOptsObj } from "./keyValue";
@@ -59,6 +60,11 @@ export class C8Client extends Fabric {
       collection = this.collection(collectionName);
     }
     return collection.create(properties);
+  }
+
+  enableCollecttionStream(collectionName: string, data: EnableCollectionStreamType) {
+    const collection = this.collection(collectionName);
+    return collection.enableCollecttionStream(data);
   }
 
   deleteCollection(collectionName: string, opts?: any) {

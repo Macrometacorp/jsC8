@@ -208,6 +208,35 @@ listener.on('open',() => console.log("connection open"));
 listener.on('close',() => console.log("connection closed"));
 ```
 
+## client.enableCollecttionStream
+
+`async client.enableCollecttionStream(collection-name, hasStreamBody): Object`
+
+Updates the collection stream flag.
+
+**Arguments**
+
+- **data**: `Object`
+
+  An object with the following key-value:
+
+  - **hasStream**: `boolean` 
+
+    Whether the stream should be enabled on the collection or not.
+
+    This parameter must be set to `true` when enabling a stream on the collection.
+    You can't set the flag to `false` as on-demand stream deletion is not allowed.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
+
+const collection = await client.enableCollecttionStream('some-collection', { hasStream: true });
+
+```
 # Advanced User
 
 ## collection.create
@@ -346,5 +375,36 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
 await collection.drop();
+// the collection "some-collection" no longer exists
+```
+
+## collection.enableCollecttionStream
+
+`async collection.enableCollecttionStream(hasStreamBody): Object`
+
+Updates the collection stream flag.
+
+**Arguments**
+
+- **data**: `Object`
+
+  An object with the following key-value:
+
+  - **hasStream**: `boolean` 
+
+    Whether the stream should be enabled on the collection or not.
+
+    This parameter must be set to `true` when enabling a stream on the collection.
+    You can't set the flag to `false` as on-demand stream deletion is not allowed.
+
+**Examples**
+
+```js
+const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
+//---- OR ----
+const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
+
+const collection = client.collection('some-collection');
+await collection.enableCollecttionStream( { hasStream: true } );
 // the collection "some-collection" no longer exists
 ```
