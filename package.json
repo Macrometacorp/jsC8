@@ -75,7 +75,7 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "1.7.0",
+    "babel-preset-env": "^1.7.0",
     "chai": "^4.0.2",
     "cpy-cli": "^2.0.0",
     "eslint": "^4.13.0",

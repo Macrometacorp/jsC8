@@ -210,7 +210,7 @@ listener.on('close',() => console.log("connection closed"));
 
 ## client.enableCollectionStream
 
-`async client.enableCollectionStream(collection-name, hasStreamBody): Object`
+`async client.enableCollectionStream(collection-name, enableStream): Object`
 
 Updates the collection stream flag.
 
@@ -220,8 +220,7 @@ Updates the collection stream flag.
   Whether the stream should be enabled on the collection or not.
   This parameter must be set to `true` when enabling a stream on the collection.
 
-  **NOTE**
-    You can't set the flag to `false` as on-demand stream deletion is not allowed.
+  **NOTE**: You can't set the flag to `false` as on-demand stream deletion is not allowed.
 
 **Examples**
 
@@ -376,7 +375,7 @@ await collection.drop();
 
 ## collection.enableCollectionStream
 
-`async collection.enableCollectionStream(hasStreamBody): Object`
+`async collection.enableCollectionStream(enableStream): Object`
 
 Updates the collection stream flag.
 
@@ -388,8 +387,7 @@ Updates the collection stream flag.
 
   This parameter must be set to `true` when enabling a stream on the collection.
 
-**NOTE**
-    You can't set the flag to `false` as on-demand stream deletion is not allowed.
+**NOTE**: You can't set the flag to `false` as on-demand stream deletion is not allowed.
 
 **Examples**
 
