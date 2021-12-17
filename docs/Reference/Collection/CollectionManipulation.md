@@ -229,7 +229,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const collection = await client.enableCollectionStream('some-collection', { hasStream: enableStream });
+const collection = await client.enableCollectionStream('some-collection', enableStream);
 
 ```
 # Advanced User
@@ -397,6 +397,6 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
-await collection.enableCollectionStream( { hasStream: enableStream } );
+await collection.enableCollectionStream(enableStream);
 // the collection "some-collection" no longer exists
 ```
