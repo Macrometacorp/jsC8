@@ -208,23 +208,19 @@ listener.on('open',() => console.log("connection open"));
 listener.on('close',() => console.log("connection closed"));
 ```
 
-## client.enableCollecttionStream
+## client.enableCollectionStream
 
-`async client.enableCollecttionStream(collection-name, hasStreamBody): Object`
+`async client.enableCollectionStream(collection-name, hasStreamBody): Object`
 
 Updates the collection stream flag.
 
 **Arguments**
 
-- **data**: `Object`
+- **enableStream**: `boolean`
+  Whether the stream should be enabled on the collection or not.
+  This parameter must be set to `true` when enabling a stream on the collection.
 
-  An object with the following key-value:
-
-  - **hasStream**: `boolean` 
-
-    Whether the stream should be enabled on the collection or not.
-
-    This parameter must be set to `true` when enabling a stream on the collection.
+  **NOTE**
     You can't set the flag to `false` as on-demand stream deletion is not allowed.
 
 **Examples**
@@ -234,7 +230,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const collection = await client.enableCollecttionStream('some-collection', { hasStream: true });
+const collection = await client.enableCollectionStream('some-collection', { hasStream: enableStream });
 
 ```
 # Advanced User
@@ -378,23 +374,21 @@ await collection.drop();
 // the collection "some-collection" no longer exists
 ```
 
-## collection.enableCollecttionStream
+## collection.enableCollectionStream
 
-`async collection.enableCollecttionStream(hasStreamBody): Object`
+`async collection.enableCollectionStream(hasStreamBody): Object`
 
 Updates the collection stream flag.
 
 **Arguments**
 
-- **data**: `Object`
+- **enableStream**: `boolean` 
 
-  An object with the following key-value:
+  Whether the stream should be enabled on the collection or not.
 
-  - **hasStream**: `boolean` 
+  This parameter must be set to `true` when enabling a stream on the collection.
 
-    Whether the stream should be enabled on the collection or not.
-
-    This parameter must be set to `true` when enabling a stream on the collection.
+**NOTE**
     You can't set the flag to `false` as on-demand stream deletion is not allowed.
 
 **Examples**
@@ -405,6 +399,6 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
-await collection.enableCollecttionStream( { hasStream: true } );
+await collection.enableCollectionStream( { hasStream: enableStream } );
 // the collection "some-collection" no longer exists
 ```

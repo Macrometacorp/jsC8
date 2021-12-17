@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "csvtojson": "^2.0.10",
-    "es6-error": "^4.0.1",
+    "es6-error": "^4.1.1",
     "jwt-decode": "^2.2.0",
     "linkedlist": "^1.0.1",
     "multi-part": "^2.0.0",
@@ -75,7 +75,7 @@
     "babel-loader": "^7.1.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
+    "babel-preset-env": "1.7.0",
     "chai": "^4.0.2",
     "cpy-cli": "^2.0.0",
     "eslint": "^4.13.0",

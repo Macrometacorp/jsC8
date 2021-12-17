@@ -37,10 +37,6 @@ export interface ImportOptions {
   details?: boolean;
 }
 
-export type EnableCollectionStreamType = {
-  hasStream:boolean;
-}
-
 export interface ImportResult {
   error: false;
   created: number;
@@ -207,12 +203,12 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
-  enableCollecttionStream(data: EnableCollectionStreamType) {
+  enableCollectionStream(enableStream: boolean) {
     return this._connection.request(
       {
         method: "PUT",
         path: `/collection/${this.name}/stream`,
-        body: data
+        body: { hasStream: enableStream }
       },
       (res) => res.body
     );
