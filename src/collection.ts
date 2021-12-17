@@ -203,6 +203,17 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
+  enableCollectionStream(enableStream: boolean) {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `/collection/${this.name}/stream`,
+        body: { hasStream: enableStream }
+      },
+      (res) => res.body
+    );
+  }
+
   documentExists(documentHandle: DocumentHandle): Promise<boolean> {
     return this._connection
       .request(

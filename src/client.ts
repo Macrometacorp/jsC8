@@ -61,6 +61,11 @@ export class C8Client extends Fabric {
     return collection.create(properties);
   }
 
+  enableCollectionStream(collectionName: string, enableStream: boolean) {
+    const collection = this.collection(collectionName);
+    return collection.enableCollectionStream(enableStream);
+  }
+
   deleteCollection(collectionName: string, opts?: any) {
     const collection = this.collection(collectionName);
     return collection.drop(opts);
