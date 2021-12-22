@@ -16,8 +16,7 @@ import { CreateTenant, ModifyTenant } from "./tenant";
 import { UserAttributesType } from "./user";
 import { Stream } from "./stream";
 import { Graph } from "./graph";
-
-const csv = require("csvtojson");
+import { parseCSVToJSON } from "./util/parseCsv";
 
 export class C8Client extends Fabric {
   constructor(config: Config) {
@@ -133,10 +132,10 @@ export class C8Client extends Fabric {
 
   async insertDocumentFromFile(
     collectionName: string,
-    csvPath: string,
+    file: string | File,
     opts?: DocumentSaveOptions | boolean
   ) {
-    const data = await csv().fromFile(csvPath);
+    const data = await parseCSVToJSON(file);
     const collection = this.collection(collectionName);
     return collection.save(data, opts);
   }
@@ -655,17 +654,17 @@ export class C8Client extends Fabric {
 
   //------------ User Attributes ----------
 
-  getUserAttributes(userName: string){
+  getUserAttributes(userName: string) {
     const user = this.user(userName);
     return user.getUserAttributes();
   }
 
-  deleteUserAttribute(userName: string, attributeId: string){
+  deleteUserAttribute(userName: string, attributeId: string) {
     const user = this.user(userName);
     return user.deleteUserAttribute(attributeId);
   }
 
-  createUpdateUserAttributes(userName: string, data: UserAttributesType){
+  createUpdateUserAttributes(userName: string, data: UserAttributesType) {
     const user = this.user(userName);
     return user.createUpdateUserAttributes(data);
   }
@@ -839,19 +838,19 @@ export class C8Client extends Fabric {
 
   // ----------------------------------------
 
-  createUpdateApikeyAttributes(keyid: string, data:ApiKeyAttributesType) {
+  createUpdateApikeyAttributes(keyid: string, data: ApiKeyAttributesType) {
     const apiKeys = this.apiKeys(keyid);
-    return apiKeys.createUpdateApikeyAttributes(data);    
+    return apiKeys.createUpdateApikeyAttributes(data);
   }
 
   getApikeyAttributes(keyid: string) {
     const apiKeys = this.apiKeys(keyid);
-    return apiKeys.getApikeyAttributes();  
+    return apiKeys.getApikeyAttributes();
   }
 
   deleteApikeyAttribute(keyid: string, attributeId: string) {
     const apiKeys = this.apiKeys(keyid);
-    return apiKeys.deleteApikeyAttribute(attributeId);  
+    return apiKeys.deleteApikeyAttribute(attributeId);
   }
 
   //--------------- Search ---------------

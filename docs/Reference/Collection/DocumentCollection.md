@@ -183,7 +183,7 @@ const insertedDocs = await client.insertDocumentMany("some-collection", [{some: 
 
 ## client.insertDocumentFromFile
 
-`async client.insertDocumentFromFile(collectionName, csvPath, [opts]): Array<Object>`
+`async client.insertDocumentFromFile(collectionName, csvPath | fileObject, [opts]): Array<Object>`
 
 Inserts documents from file. Only accepts CSV file.
 
@@ -193,9 +193,13 @@ Inserts documents from file. Only accepts CSV file.
 
   Name of the collection
 
-- **csvPath**: `string`
+- **csvPath**: `string` (This is for Nodejs)
 
-  path of the csv file
+  Path of the csv file
+
+- **fileObject**: `File` (This is for Browser)
+
+  File Object
 
 - **opts**: `Object` (optional)
 
@@ -237,6 +241,8 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const insertedDocsFromFile  = await client.insertDocumentFromFile("some-collection", '~/data.csv');
+//---- OR ----
+const insertedDocsFromFile  = await client.insertDocumentFromFile("some-collection", files[0]);
 ```
 
 # Advanced User
