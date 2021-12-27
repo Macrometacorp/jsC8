@@ -23,12 +23,6 @@ import { Event } from "./event";
 import User from "./user";
 import { Streamapps } from "./streamapps";
 
-function colToString(collection: string | C8Collection): string {
-  if (isC8Collection(collection)) {
-    return String(collection.name);
-  } else return String(collection);
-}
-
 export type TenantListObj = {
   tenant: string;
   active: boolean;
@@ -60,23 +54,6 @@ export type EdgeLocation = {
     role: string;
     url: string;
   };
-};
-
-export type TransactionCollections =
-  | string
-  | C8Collection
-  | (string | C8Collection)[]
-  | {
-    write?: string | C8Collection | (string | C8Collection)[];
-    read?: string | C8Collection | (string | C8Collection)[];
-  };
-
-export type TransactionOptions = {
-  lockTimeout?: number;
-  maxTransactionSize?: number;
-  intermediateCommitCount?: number;
-  intermediateCommitSize?: number;
-  waitForSync?: boolean;
 };
 
 export type ServiceOptions = {
@@ -340,79 +317,6 @@ export class Fabric {
   }
 
   // Queries
-
-  transaction(
-    collections: TransactionCollections,
-    action: string
-  ): Promise<any>;
-  transaction(
-    collections: TransactionCollections,
-    action: string,
-    params?: Object
-  ): Promise<any>;
-  transaction(
-    collections: TransactionCollections,
-    action: string,
-    params?: Object,
-    options?: TransactionOptions
-  ): Promise<any>;
-  transaction(
-    collections: TransactionCollections,
-    action: string,
-    lockTimeout?: number
-  ): Promise<any>;
-  transaction(
-    collections: TransactionCollections,
-    action: string,
-    params?: Object,
-    lockTimeout?: number
-  ): Promise<any>;
-  transaction(
-    collections: TransactionCollections,
-    action: string,
-    params?: Object | number,
-    options?: TransactionOptions | number
-  ): Promise<any> {
-    if (typeof params === "number") {
-      options = params;
-      params = undefined;
-    }
-    if (typeof options === "number") {
-      options = { lockTimeout: options };
-    }
-    if (typeof collections === "string") {
-      collections = { write: [collections] };
-    } else if (Array.isArray(collections)) {
-      collections = { write: collections.map(colToString) };
-    } else if (isC8Collection(collections)) {
-      collections = { write: colToString(collections) };
-    } else if (collections && typeof collections === "object") {
-      collections = { ...collections };
-      if (collections.read) {
-        if (!Array.isArray(collections.read)) {
-          collections.read = colToString(collections.read);
-        } else collections.read = collections.read.map(colToString);
-      }
-      if (collections.write) {
-        if (!Array.isArray(collections.write)) {
-          collections.write = colToString(collections.write);
-        } else collections.write = collections.write.map(colToString);
-      }
-    }
-    return this._connection.request(
-      {
-        method: "POST",
-        path: "/transaction",
-        body: {
-          collections,
-          action,
-          params,
-          ...options,
-        },
-      },
-      (res) => res.body.result
-    );
-  }
 
   query(query: string | C8QLQuery | C8QLLiteral): Promise<ArrayCursor>;
   query(query: C8QLQuery, opts?: any): Promise<ArrayCursor>;
