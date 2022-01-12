@@ -9,7 +9,6 @@ import {
   constructCollection,
   DocumentCollection,
   EdgeCollection,
-  isC8Collection,
 } from "./collection";
 import { Config, Connection } from "./connection";
 import { ArrayCursor } from "./cursor";
@@ -489,7 +488,7 @@ export class Fabric {
 
   stream(
     streamName: string,
-    local: boolean,
+    local: boolean = false,
     isCollectionStream: boolean = false
   ): Stream {
     return new Stream(

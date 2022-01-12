@@ -443,6 +443,11 @@ export class C8Client extends Fabric {
     return stream.deleteSubscriptions(subscription);
   }
 
+  deleteStream(streamName: string, force: boolean = true) {
+    const stream = this.stream(streamName);
+    return stream.deleteStream(force);
+  }
+
   // createStreamApp() { } already present
   validateStreamApp(appDefinition: string) {
     return this.validateStreamappDefinition(appDefinition);
