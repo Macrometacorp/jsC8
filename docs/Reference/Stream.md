@@ -414,7 +414,31 @@ const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
 //---- OR ----
 const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
 
-const stream = client.stream("testStream", true, false);
+const stream = client.stream("my-stream", true, false);
+```
+
+## client.deleteStream
+
+`client.deleteStream(streamName, [force]): Object`
+
+**Arguments**
+
+- **streamName**: `string`
+
+  The name of the stream to use.
+
+- **force**: `boolean` (optional) 
+
+  Stop all producer/consumer and delete stream forcefully. (DEFAULT: true)
+
+**Examples**
+
+```js
+const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+//---- OR ----
+const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+
+const stream = client.deleteStream("my-stream");
 ```
 
 # Advanced User

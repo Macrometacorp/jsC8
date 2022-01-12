@@ -4,7 +4,7 @@ import { Stream } from "../stream";
 
 // TODO : @VIKAS Update Test cases
 
-describe("Manipulating streams", function() {
+describe("Manipulating streams", function () {
   // create fabric takes 11s in a standard cluster
   this.timeout(50000);
 
@@ -60,7 +60,33 @@ describe("Manipulating streams", function() {
     });
   });
 
-  describe("stream.manipulate", function() {
+  describe("stream.delete", () => {
+    describe("delete stream", () => {
+      let stream: Stream | undefined;
+
+      it("deletes global stream", async () => {
+        const name = `stream${Date.now()}`;
+        stream = fabric.stream(name, true);
+        const response = await stream.createStream();
+        expect(response.error).to.be.false;
+        stream = fabric.stream(response.result['stream-id']);
+        const deleteStreamResponse = await stream.deleteStream();
+        expect(deleteStreamResponse.error).to.be.false;
+      });
+
+      it("deletes global stream", async () => {
+        const name = `stream${Date.now()}`;
+        stream = fabric.stream(name, false);
+        const response = await stream.createStream();
+        expect(response.error).to.be.false;
+        stream = fabric.stream(response.result['stream-id']);
+        const deleteStreamResponse = await stream.deleteStream();
+        expect(deleteStreamResponse.error).to.be.false;
+      });
+    });
+  });
+
+  describe("stream.manipulate", function () {
     let stream: Stream;
     let consumer: any;
     let producer: any;
@@ -73,7 +99,7 @@ describe("Manipulating streams", function() {
 
     describe("stream.getBacklog", () => {
       it("gets estimated backlog for offline stream", async () => {
-        setTimeout(async function() {
+        setTimeout(async function () {
           const response = await stream.backlog();
           expect(response.error).to.be.false;
         }, 5000);
@@ -122,13 +148,13 @@ describe("Manipulating streams", function() {
         });
         consumer.on("message", callback);
 
-        it("stream.expireMessages", () => {});
+        it("stream.expireMessages", () => { });
 
-        it("stream.resetCursor", () => {});
+        it("stream.resetCursor", () => { });
 
-        it("stream.skipNumberOfMessages", () => {});
+        it("stream.skipNumberOfMessages", () => { });
 
-        it("stream.skipAllMessages", () => {});
+        it("stream.skipAllMessages", () => { });
 
         it("stream.getSubscriptionList", () => {
           it("gets subscription list", async () => {
@@ -171,7 +197,7 @@ describe("Manipulating streams", function() {
       //   });
       // });
 
-      describe("stream.websocket", function() {
+      describe("stream.websocket", function () {
         let dcName: string;
         let consumer: any;
         let producer: any;
@@ -185,7 +211,7 @@ describe("Manipulating streams", function() {
           if (producer) producer.close();
         });
 
-        it("gets data in consumer when sent by producer", function(done) {
+        it("gets data in consumer when sent by producer", function (done) {
           function callback(msg: string) {
             const parsedMsg = JSON.parse(msg);
             const { payload } = parsedMsg;

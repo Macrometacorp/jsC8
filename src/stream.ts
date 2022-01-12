@@ -167,12 +167,12 @@ export class Stream {
     );
   }
 
-  deleteStream(force: boolean = false) {
+  deleteStream(force: boolean = true) {
     return this._connection.request(
       {
         method: "DELETE",
-        path: this._getPath(false),
-        qs: `global=${this.global}&force=${force}`,
+        path: this._getPath(true),
+        qs: `force=${force}`,
       },
       (res) => res.body
     );
@@ -197,9 +197,8 @@ export class Stream {
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
-    let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${
-      this.topic
-    }/${subscriptionName}`;
+    let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${this.topic
+      }/${subscriptionName}`;
 
     // Appending query params to the url
     consumerUrl = `${consumerUrl}?${queryParams}`;
@@ -226,9 +225,8 @@ export class Stream {
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
-    let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${
-      this.topic
-    }`;
+    let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.topic
+      }`;
 
     // Appending query params to the url
     producerUrl = `${producerUrl}?${queryParams}`;
@@ -253,7 +251,7 @@ export class Stream {
     );
   }
 
-  getMessageTtl(){
+  getMessageTtl() {
     return this._connection.request(
       {
         method: "GET",
@@ -263,7 +261,7 @@ export class Stream {
     );
   }
 
-  setMessageTtl(ttl: number = 3600){
+  setMessageTtl(ttl: number = 3600) {
     return this._connection.request(
       {
         method: "POST",
