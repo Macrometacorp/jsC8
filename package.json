@@ -64,7 +64,7 @@
     "papaparse": "^5.3.1",
     "query-string": "^6.11.1",
     "ws": "^6.1.0",
-    "xhr": "^2.4.1"
+    "xhr": "^2.6.0"
   },
   "devDependencies": {
     "@types/chai": "^4.0.10",
