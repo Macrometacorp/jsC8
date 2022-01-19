@@ -125,7 +125,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-await tenant.createTenant("tenant@test.com", "myPassword", "macrometa", "free" "test-eu-west-1,test-us-west-2");
+await client.createTenant("tenant@test.com", "myPassword", "macrometa", "free" "test-eu-west-1,test-us-west-2");
 ```
 
 ## tenant.dropTenant
