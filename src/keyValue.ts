@@ -9,6 +9,7 @@ export type KVPairHandle = {
 export type KVCreateOptsObj = {
     stream?: boolean;
     expiration?: boolean;
+    waitForSync?: boolean
 }
 
 export type KVValueOptsObj = {
@@ -67,7 +68,7 @@ export class KeyValue {
     }
 
     createCollection(opts?: KVCreateOptsObj) {
-        let [expiration, stream] = [false, false];
+        let [expiration, stream, waitForSync] = [false, false, false];
 
         if (opts && opts.expiration) {
             expiration = opts.expiration;
@@ -77,6 +78,10 @@ export class KeyValue {
             stream = opts.stream;
         }
 
+        if (opts && opts.waitForSync) {
+            waitForSync = opts.waitForSync;
+        }
+
         return this._connection.request(
             {
                 method: "POST",
@@ -84,7 +89,7 @@ export class KeyValue {
                 qs: {
                     expiration
                 },
-                body: { stream }
+                body: { stream, waitForSync }
             },
             (res) => res.body
         );

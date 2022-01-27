@@ -126,6 +126,10 @@ Returns value for given key
 
         If it is set to true then creates a local stream for collection. Default is false.
 
+    - **waitForSync**: `boolean` (optional)
+
+        If true then creating or changing a document will wait until the data has been synchronized to disk. Default is false.
+
 **Examples**
 
 ```js

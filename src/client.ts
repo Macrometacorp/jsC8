@@ -4,6 +4,8 @@ import {
   DocumentHandle,
   DocumentsHandle,
   DocumentSaveOptions,
+  CollectionUpdateProperties,
+  CollectionCreateProperties,
 } from "./collection";
 import { C8QLLiteral } from "./c8ql-query";
 import { KeyValue, KVCreateOptsObj, KVPairHandle, KVValueOptsObj } from "./keyValue";
@@ -50,7 +52,7 @@ export class C8Client extends Fabric {
     }
   }
 
-  createCollection(collectionName: string, properties?: any, isEdge: boolean = false) {
+  createCollection(collectionName: string, properties?: CollectionCreateProperties, isEdge: boolean = false) {
     let collection;
     if (isEdge) {
       collection = this.edgeCollection(collectionName);
@@ -60,9 +62,13 @@ export class C8Client extends Fabric {
     return collection.create(properties);
   }
 
-  enableCollectionStream(collectionName: string, enableStream: boolean) {
+  updateCollectionProperties(collectionName: string, properties: CollectionUpdateProperties) {
+    if (Object.keys(properties).length === 0) {
+      throw new Error("Properties can not be empty.");
+
+    }
     const collection = this.collection(collectionName);
-    return collection.enableCollectionStream(enableStream);
+    return collection.updateCollectionProperties(properties);
   }
 
   deleteCollection(collectionName: string, opts?: any) {
