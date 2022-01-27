@@ -14,7 +14,22 @@ Creates collection
   Name of the collection
 
 - **properties**: `Object` (optional)
-  For more information on the 'properties` object, see  [the HTTP API documentation for creating collections](https://developer.document360.io/docs/using-c8-rest-api).
+
+    - **stream**: `boolean` (optional)
+
+        If it is set to true then creates a local stream for collection. Default is false.
+
+    - **waitForSync**: `boolean` (optional)
+
+        If true then creating or changing a document will wait until the data has been synchronized to disk. Default is false.
+
+    - **isSystem**: `boolean` (optional)
+
+         If true, create a system collection.  Default is false.
+
+    - **isLocal**: `boolean` (optional)
+
+        If true, create a local collection. For a local collection data is not replicated across regions. Default is false.
 
 - **isEdge**: `boolean` (optional)
   If yes then it will create an Edge Collection. Default is false.
@@ -208,22 +223,27 @@ listener.on('open',() => console.log("connection open"));
 listener.on('close',() => console.log("connection closed"));
 ```
 
-## client.enableCollectionStream
+## client.updateCollectionProperties
 
-`async client.enableCollectionStream(collectionName, enableStream): Object`
+`async client.updateCollectionProperties(collectionName, properties): Object`
 
-Updates the collection stream flag.
+Updates the collection properties.
 
 **Arguments**
 
 - **collectionName**: `string`
   Name of the collection
 
-- **enableStream**: `boolean`
-  Whether the stream should be enabled on the collection or not.
-  This parameter must be set to `true` when enabling a stream on the collection.
+- **properties**: `Object` 
 
-**NOTE**: You can't set the flag to `false` as on-demand stream deletion is not allowed.
+    - **hasStream**: `boolean`
+
+        Whether the stream should be enabled on the collection or not.
+        This parameter must be set to `true` when enabling a stream on the collection.
+
+    - **waitForSync**: `boolean`
+
+        If true then creating or changing a document will wait until the data has been synchronized to disk.
 
 **Examples**
 
@@ -232,7 +252,7 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const collection = await client.enableCollectionStream('some-collection', enableStream);
+const collection = await client.updateCollectionProperties('some-collection', { hasStream: true, waitForSync: true });
 
 ```
 # Advanced User
@@ -246,7 +266,22 @@ Creates a collection with the given `properties` for this collection's name, the
 **Arguments**
 
 - **properties**: `Object` (optional)
-  For more information on the 'properties` object, see  [the HTTP API documentation for creating collections](https://developer.document360.io/docs/using-c8-rest-api).
+
+    - **stream**: `boolean` (optional)
+
+        If it is set to true then creates a local stream for collection. Default is false.
+
+    - **waitForSync**: `boolean` (optional)
+
+        If true then creating or changing a document will wait until the data has been synchronized to disk. Default is false.
+
+    - **isSystem**: `boolean` (optional)
+
+         If true, create a system collection.  Default is false.
+
+    - **isLocal**: `boolean` (optional)
+
+        If true, create a local collection. For a local collection data is not replicated across regions. Default is false.
 
 **Examples**
 
@@ -376,19 +411,25 @@ await collection.drop();
 // the collection "some-collection" no longer exists
 ```
 
-## collection.enableCollectionStream
+## collection.updateCollectionProperties
 
-`async collection.enableCollectionStream(enableStream): Object`
+`async collection.updateCollectionProperties(properties): Object`
 
-Updates the collection stream flag.
+Updates the collection properties.
 
 **Arguments**
 
-- **enableStream**: `boolean` 
-  Whether the stream should be enabled on the collection or not.
-  This parameter must be set to `true` when enabling a stream on the collection.
+- **properties**: `Object` 
 
-**NOTE**: You can't set the flag to `false` as on-demand stream deletion is not allowed.
+    - **hasStream**: `boolean`
+
+        Whether the stream should be enabled on the collection or not.
+        This parameter must be set to `true` when enabling a stream on the collection.
+
+    - **waitForSync**: `boolean`
+
+        If true then creating or changing a document will wait until the data has been synchronized to disk.
+
 
 **Examples**
 
@@ -398,5 +439,5 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const collection = client.collection('some-collection');
-await collection.enableCollectionStream(enableStream);
+await collection.updateCollectionProperties({ hasStream: true, waitForSync: false });
 ```

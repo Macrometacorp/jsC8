@@ -47,6 +47,18 @@ export interface ImportResult {
   details?: string[];
 }
 
+export interface CollectionUpdateProperties {
+  hasStream: boolean;
+  waitForSync: boolean;
+}
+
+export interface CollectionCreateProperties {
+  stream?: boolean;
+  waitForSync?: boolean;
+  isSystem?: boolean;
+  isLocal?: boolean;
+}
+
 export function isC8Collection(collection: any): collection is C8Collection {
   return Boolean(collection && collection.isC8Collection);
 }
@@ -146,7 +158,7 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
-  create(properties?: any) {
+  create(properties?: CollectionCreateProperties) {
     return this._connection.request(
       {
         method: "POST",
@@ -203,12 +215,12 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
-  enableCollectionStream(enableStream: boolean) {
+  updateCollectionProperties(properties: CollectionUpdateProperties) {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/collection/${this.name}/stream`,
-        body: { hasStream: enableStream }
+        path: `/collection/${this.name}/properties`,
+        body: { ...properties }
       },
       (res) => res.body
     );
