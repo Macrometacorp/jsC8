@@ -1,6 +1,6 @@
 ## Manipulating the collection
 
-These functions implement [the HTTP API for modifying collections](https://developer.document360.io/docs/using-c8-rest-api)
+These functions implement the HTTP API for modifying collections.
 
 ## client.createCollection
 
