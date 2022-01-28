@@ -1009,6 +1009,9 @@ export class C8Client extends Fabric {
   }
 
   getInvoiceOfSpecificMonthYear(tenantName: string, year: number, month: number) {
+    if (!(month > 0 && month <= 12)) {
+      throw new Error("Please provide valid month");
+    }
     const billing = this.billing(tenantName);
     return billing.getInvoiceOfSpecificMonthYear(year, month);
   }
