@@ -3,13 +3,17 @@
 
 ## client.exportDataByQuery
 
-`async client.exportDataByQuery(query)`
+`async client.exportDataByQuery(query, [bindVars])`
 
 Execute the query and return list of result documents. query cannot contains the following keywords: INSERT, UPDATE, REPLACE and REMOVE. Offset, limit and order are not applied. You must specify them in the query.
 
  **Arguments**
 
 - **query**: `string`
+
+- **bindVars**: `Object` (optional)
+
+  An object defining the variables to bind the query to.
 
 **Examples**
 
