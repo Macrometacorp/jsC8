@@ -48,8 +48,8 @@ export interface ImportResult {
 }
 
 export interface CollectionUpdateProperties {
-  hasStream: boolean;
-  waitForSync: boolean;
+  hasStream?: boolean;
+  waitForSync?: boolean;
 }
 
 export interface CollectionCreateProperties {
