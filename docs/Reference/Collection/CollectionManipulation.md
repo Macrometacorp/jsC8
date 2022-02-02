@@ -421,12 +421,12 @@ Updates the collection properties.
 
 - **properties**: `Object` 
 
-    - **hasStream**: `boolean`
+    - **hasStream**: `boolean` (optional)
 
         Whether the stream should be enabled on the collection or not.
         This parameter must be set to `true` when enabling a stream on the collection.
 
-    - **waitForSync**: `boolean`
+    - **waitForSync**: `boolean` (optional)
 
         If true then creating or changing a document will wait until the data has been synchronized to disk.
 
