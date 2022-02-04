@@ -167,11 +167,11 @@ export class Stream {
     );
   }
 
-  deleteStream(force: boolean = true) {
+  deleteStream(force: boolean = true, useName = false) {
     return this._connection.request(
       {
         method: "DELETE",
-        path: this._getPath(true),
+        path: this._getPath(useName),
         qs: `force=${force}`,
       },
       (res) => res.body
