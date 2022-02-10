@@ -537,7 +537,7 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
-  createFulltextIndex(fields: string[] | string, minLength?: number) {
+  createFulltextIndex(fields: string[] | string, opts?: any) {
     if (typeof fields === "string") {
       fields = [fields];
     }
@@ -545,14 +545,14 @@ export abstract class BaseCollection implements C8Collection {
       {
         method: "POST",
         path: "/index",
-        body: { fields, minLength, type: "fulltext" },
+        body: { ...opts, fields, type: "fulltext" },
         qs: { collection: this.name },
       },
       (res) => res.body
     );
   }
 
-  createTtlIndex(fields: string[] | string, expireAfter: number) {
+  createTtlIndex(fields: string[] | string, expireAfter: number, name?: string) {
     if (typeof fields === "string") {
       fields = [fields];
     }
@@ -560,7 +560,7 @@ export abstract class BaseCollection implements C8Collection {
       {
         method: "POST",
         path: "/index",
-        body: { fields, expireAfter, type: "ttl" },
+        body: { fields, expireAfter, type: "ttl", name },
         qs: { collection: this.name },
       },
       (res) => res.body
