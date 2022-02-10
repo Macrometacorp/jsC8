@@ -43,6 +43,10 @@ Creates a Hash index on the collection.
 
   An object containing additional properties of the index.
 
+    * **name**: `string` 
+
+      Name of the index. If left blank, a name will be generated automatically.
+
     * **unique**: `boolean` 
 
       If true, then create a unique index.
@@ -86,6 +90,10 @@ Creates a Geo index on the collection.
 
   An object containing additional properties of the index.
 
+    * **name**: `string` 
+
+      Name of the index. If left blank, a name will be generated automatically.
+
     * **geoJson**: `string` 
 
       If a geo-spatial index on a location is constructed and geoJson is true, then the order within the array is longitude followed by latitude. This corresponds to the format described in http://geojson.org/geojson-spec.html#positions.
@@ -120,6 +128,10 @@ Creates a skiplist index on the collection.
 * **opts**: `Object` (optional)
 
   An object containing additional properties of the index.
+
+    * **name**: `string` 
+
+      Name of the index. If left blank, a name will be generated automatically.
 
     * **unique**: `boolean` 
 
@@ -164,6 +176,10 @@ Creates a Persistent index on the collection.
 
   An object containing additional properties of the index.
 
+    * **name**: `string` 
+
+      Name of the index. If left blank, a name will be generated automatically.
+
     * **unique**: `boolean` 
 
       If true, then create a unique index.
@@ -188,7 +204,7 @@ const persistentIndex = await client.addPersistentIndex("some-collection", ['som
 
 ## client.addFullTextIndex
 
-`async client.addFullTextIndex(collectionName, fields, [minLength]): Object`
+`async client.addFullTextIndex(collectionName, fields, [opts]): Object`
 
 Creates a FullText index on the collection.
 
@@ -203,10 +219,18 @@ Creates a FullText index on the collection.
   An array of names of document fields on which to create the index. If the
   value is a string, it will be wrapped in an array automatically.
 
-* **minLength**: `Number` (optional)
+  * **opts**: `Object` (optional)
 
-  Minimum character length of words to index. Will default to a server-defined value if unspecified. It is thus recommended to set this value explicitly when creating the index.
+    An object containing additional properties of the index.
 
+    * **name**: `string` 
+
+      Name of the index. If left blank, a name will be generated automatically.
+
+    * **minLength**: `boolean` 
+
+      Minimum character length of words to index. Will default to a server-defined value if unspecified. It is thus recommended to set this value explicitly when creating the index.
+  
 **Examples**
 
 ```js
@@ -219,7 +243,7 @@ const fullTextIndex = await client.addFullTextIndex("some-collection", 'descript
 
 ## client.addTtlIndex
 
-`async client.addTtlIndex(collectionName, fields, expireAfter): Object`
+`async client.addTtlIndex(collectionName, fields, expireAfter, [name]): Object`
 
 Creates a Ttl index on the collection.
 
@@ -237,6 +261,10 @@ Creates a Ttl index on the collection.
 * **expireAfter**: `Number`
 
   The time (in seconds) after a document's creation after which the documents count as "expired".
+
+* **name**: `string` (optional)
+
+  Name of the index. If left blank, a name will be generated automatically.
 
 **Examples**
 
@@ -338,6 +366,10 @@ Creates a hash index on the collection.
 
   An object containing additional properties of the index.
 
+    * **name**: `string` 
+
+      Name of the index. If left blank, a name will be generated automatically.
+
     * **unique**: `boolean` 
 
       If true, then create a unique index.
@@ -385,6 +417,10 @@ Creates a skiplist index on the collection.
 * **opts**: `Object` (optional)
 
   An object containing additional properties of the index.
+
+    * **name**: `string` 
+
+      Name of the index. If left blank, a name will be generated automatically.
 
     * **unique**: `boolean` 
 
@@ -434,6 +470,10 @@ Creates a geo-spatial index on the collection.
 
   An object containing additional properties of the index.
 
+    * **name**: `string` 
+
+      Name of the index. If left blank, a name will be generated automatically.
+
     * **geoJson**: `string` 
 
       If a geo-spatial index on a location is constructed and geoJson is true, then the order within the array is longitude followed by latitude. This corresponds to the format described in http://geojson.org/geojson-spec.html#positions
@@ -460,7 +500,7 @@ assert.deepEqual(index.fields, ['location']);
 
 ## collection.createFulltextIndex
 
-`async collection.createFulltextIndex(fields, [minLength]): Object`
+`async collection.createFulltextIndex(fields, [opts]): Object`
 
 Creates a fulltext index on the collection.
 
@@ -470,9 +510,17 @@ Creates a fulltext index on the collection.
 
   An array of names of document fields on which to create the index. Currently, fulltext indexes must cover exactly one field. If the value is a string, it will be wrapped in an array automatically.
 
-* **minLength** (optional):
+* **opts**: `Object` (optional)
 
-  Minimum character length of words to index. Uses a server-specific default value if not specified.
+  An object containing additional properties of the index.
+
+  * **name**: `string` 
+
+    Name of the index. If left blank, a name will be generated automatically.
+
+  * **minLength**: `boolean` 
+
+    Minimum character length of words to index. Will default to a server-defined value if unspecified. It is thus recommended to set this value explicitly when creating the index.
 
 **Examples**
 
@@ -509,6 +557,10 @@ Creates a Persistent index on the collection. Persistent indexes are similarly i
 * **opts**: `Object` (optional)
 
   An object containing additional properties of the index.
+
+    * **name**: `string` 
+
+      Name of the index. If left blank, a name will be generated automatically.
 
     * **unique**: `boolean` 
 

@@ -234,19 +234,20 @@ export class C8Client extends Fabric {
   addFullTextIndex(
     collectionName: string,
     fields: string[] | string,
-    minLength?: number
+    opts?: any
   ) {
     const collection = this.collection(collectionName);
-    return collection.createFulltextIndex(fields, minLength);
+    return collection.createFulltextIndex(fields, opts);
   }
 
   addTtlIndex(
     collectionName: string,
     fields: string[] | string,
-    expireAfter: number
+    expireAfter: number,
+    name?: string,
   ) {
     const collection = this.collection(collectionName);
-    return collection.createTtlIndex(fields, expireAfter);
+    return collection.createTtlIndex(fields, expireAfter, name);
   }
 
   deleteIndex(collectionName: string, indexName: string) {
