@@ -82,13 +82,11 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 const allTenants = client.listTenants();
 ```
 
-# Advanced User
+# Admin User Only
 
-Note:- Below apis work with admin user only.
+## client.createTenant
 
-## tenant.createTenant
-
-`async tenant.createTenant(email, password, plan, attribution, dcList, [extra]): Object`
+`async client.createTenant(email, password, plan, attribution, dcList, [extra]): Object`
 
 Creates a tenant.
 
@@ -128,9 +126,9 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 await client.createTenant("tenant@test.com", "myPassword", "macrometa", "free" "test-eu-west-1,test-us-west-2");
 ```
 
-## tenant.dropTenant
+## client.dropTenant
 
-`async tenant.dropTenant(tenantEmail): Object`
+`async client.dropTenant(tenantEmail): Object`
 
 Deletes the tenant.
 
@@ -141,12 +139,12 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-await tenant.dropTenant("tenant@test.com");
+await client.dropTenant("tenant@test.com");
 ```
 
-## tenant.getDCListByTenantName
+## client.getDCListByTenantName
 
-`async tenant.getDCListByTenantName(tenantEmail): Object`
+`async client.getDCListByTenantName(tenantEmail): Object`
 
 Fetches data about the Edge Locations specific to this tenant.
 
@@ -156,13 +154,13 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-const locations = await tenant.getDCListByTenantName("tenant@test.com");
+const locations = await client.getDCListByTenantName("tenant@test.com");
 ```
 
 
-## tenant.tenantDetails
+## client.tenantDetails
 
-`async tenant.tenantDetails(tenantEmail): Object`
+`async client.tenantDetails(tenantEmail): Object`
 
 Gets the details of a tenant.
 
@@ -173,12 +171,12 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-await tenant.tenantDetails("tenant@test.com");
+await client.tenantDetails("tenant@test.com");
 ```
 
-## tenant.updateTenant
+## client.updateTenant
 
-`async tenant.updateTenant(tenantEmail, data): Object`
+`async client.updateTenant(tenantEmail, data): Object`
 
 Modifies the given tenant.
 
@@ -206,5 +204,5 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", token: "XXXX"});
 //---- OR ----
 const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
-await tenant.updateTenant("tenant@test.com", { active: true, status: 'active', metadata: {"key": "value"} });
+await client.updateTenant("tenant@test.com", { active: true, status: 'active', metadata: {"key": "value"} });
 ```
