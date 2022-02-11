@@ -49,7 +49,7 @@ export class Stream {
     this.name = name;
 
     let topic = this.name;
-    if (!this.isCollectionStream) {
+    if (!this.isCollectionStream && !this.name.includes("c8locals") && !this.name.includes("c8globals")) {
       if (this.global) topic = `c8globals.${this.name}`;
       else topic = `c8locals.${this.name}`;
     }

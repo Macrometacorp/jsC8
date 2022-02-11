@@ -227,7 +227,7 @@ Creates a FullText index on the collection.
 
       Name of the index. If left blank, a name will be generated automatically.
 
-    * **minLength**: `boolean` 
+    * **minLength**: `Number` 
 
       Minimum character length of words to index. Will default to a server-defined value if unspecified. It is thus recommended to set this value explicitly when creating the index.
   
@@ -518,7 +518,7 @@ Creates a fulltext index on the collection.
 
     Name of the index. If left blank, a name will be generated automatically.
 
-  * **minLength**: `boolean` 
+  * **minLength**: `Number` 
 
     Minimum character length of words to index. Will default to a server-defined value if unspecified. It is thus recommended to set this value explicitly when creating the index.
 
