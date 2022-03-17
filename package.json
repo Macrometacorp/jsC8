@@ -63,7 +63,7 @@
     "multi-part": "^2.0.0",
     "papaparse": "^5.3.1",
     "query-string": "^6.11.1",
-    "ws": "^6.1.0",
+    "ws": "^6.2.2",
     "xhr": "^2.4.1"
   },
   "devDependencies": {
