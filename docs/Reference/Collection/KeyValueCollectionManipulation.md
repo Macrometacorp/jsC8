@@ -108,7 +108,7 @@ const result = await client.getValueForKey('some-collection', 'some-key');
 
 `async client.createKVCollection(collectionName, [opts])`
 
-Returns value for given key
+Create a new KV collection
 
 **Arguments**
 
@@ -310,7 +310,7 @@ const result = await client.getKVCollectionValues('some-collection', ['some-key1
 
 `async client.truncateKVCollectionByName(collectionName)`
 
-Get collection values
+Deletes all KV collection by name
 
 **Arguments**
 
