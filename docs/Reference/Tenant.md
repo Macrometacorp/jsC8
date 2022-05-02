@@ -66,6 +66,9 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 const tenant = client.tenant(tenant-email);
 ```
 
+
+# Admin User Only
+
 ## client.listTenants
 
 `async client.listTenants(): Array<Object>`
@@ -81,8 +84,6 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const allTenants = client.listTenants();
 ```
-
-# Admin User Only
 
 ## client.createTenant
 
