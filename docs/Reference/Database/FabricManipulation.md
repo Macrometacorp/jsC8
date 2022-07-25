@@ -192,8 +192,7 @@ Creates a new Fabric with the given `fabricName`.
 
   - **dcList**: `string`
   
-    A comma separated list of data centers. It is a mandatory field, but if not specified (due to user error), it defaults
-to the local Edge Location.
+    At least two regions should be present in the datacenter list. This is mandatory for createFabric API.
 
   - **spotDc**: `string` (optional)
 
@@ -211,7 +210,7 @@ to the local Edge Location.
 
 - **users**: `Array<string>` (optional)
 
-  An array of usernames
+  'users' parameter must be an array. End user must pass empty array to API. This is mandatory parameter.
 
 **Examples**
 
@@ -222,6 +221,9 @@ const client = new jsc8({url: "https://gdn1.macrometa.io", apiKey: "XXXX"});
 
 const info = await client.createFabric('mydb', ['root'], {dcList: "dc-list"});
 // the fabric has been created
+
+const info = await client.createFabric("qa-auto",[],{dcList: 'smoke2-eu-west', 'smoke2-us-west' });
+//example with second argument
 ```
 
 ## client.updateFabricSpotRegion
