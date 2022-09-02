@@ -16,8 +16,8 @@ describe("Test Sql query functions", function() {
   before(async () => {
     fabric = new Fabric({ url: testUrl, c8Version: Number(process.env.C8_VERSION || 30400) });
 
-    await fabric.login("demo@macrometa.io", "demo");
-    fabric.useTenant("demo");
+    await fabric.login("guest@macrometa.io", "guest");
+    fabric.useTenant("guest");
 
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
@@ -34,7 +34,7 @@ describe("Test Sql query functions", function() {
 
       collection.save({ category_id: "0", name: "Kindle" }, true);
     } catch (e) {
-      console.log("Collection creation did not succeed due to " + e);
+      console.error("Collection creation did not succeed due to " + e);
     }
   });
 
