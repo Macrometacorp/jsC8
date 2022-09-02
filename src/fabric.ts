@@ -338,7 +338,11 @@ export class Fabric {
       query = query.toC8QL();
     }
     return this._connection.request(
-      { method: "POST", path: apiPath, body: { ...opts, query, bindVars } },
+      {
+        method: "POST",
+        path: apiPath,
+        body: { ...opts, query, bindVars },
+      },
       res => new ArrayCursor(this._connection, res.body, res.host)
     );
   }
