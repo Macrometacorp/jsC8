@@ -329,6 +329,7 @@ export class Fabric {
     bindVars?: any,
     opts?: any
   ): Promise<ArrayCursor> {
+    const apiPath = opts && opts.isSQL ? "/cursor/sql" : "/cursor";
     if (isC8QLQuery(query)) {
       opts = bindVars;
       bindVars = query.bindVars;
@@ -337,12 +338,8 @@ export class Fabric {
       query = query.toC8QL();
     }
     return this._connection.request(
-      {
-        method: "POST",
-        path: "/cursor",
-        body: { ...opts, query, bindVars },
-      },
-      (res) => new ArrayCursor(this._connection, res.body, res.host)
+      { method: "POST", path: apiPath, body: { ...opts, query, bindVars } },
+      res => new ArrayCursor(this._connection, res.body, res.host)
     );
   }
 
