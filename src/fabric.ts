@@ -1,5 +1,15 @@
-import { C8QLLiteral, C8QLQuery, isC8QLLiteral, isC8QLQuery } from "./c8ql-query";
-import { C8Collection, constructCollection, DocumentCollection, EdgeCollection } from "./collection";
+import {
+  C8QLLiteral,
+  C8QLQuery,
+  isC8QLLiteral,
+  isC8QLQuery,
+} from "./c8ql-query";
+import {
+  C8Collection,
+  constructCollection,
+  DocumentCollection,
+  EdgeCollection,
+} from "./collection";
 import { Config, Connection } from "./connection";
 import { ArrayCursor } from "./cursor";
 import { isC8Error } from "./error";
@@ -51,6 +61,7 @@ export type ServiceOptions = {
   dependencies?: { [key: string]: any };
 };
 
+
 export interface CreateFabricOptions {
   dcList: string; //comma separated string, can also be ""
   spotDc?: string;
@@ -91,18 +102,24 @@ export class Fabric {
   }
 
   useBasicAuth(username: string, password: string): this {
-    this._connection.setHeader("authorization", `Basic ${btoa(`${username}:${password}`)}`);
+    this._connection.setHeader(
+      "authorization",
+      `Basic ${btoa(`${username}:${password}`)}`
+    );
     return this;
   }
 
   get() {
-    return this._connection.request({ path: "/database/current" }, res => res.body.result);
+    return this._connection.request(
+      { path: "/database/current" },
+      (res) => res.body.result
+    );
   }
 
   exists(): Promise<boolean> {
     return this.get().then(
       () => true,
-      err => {
+      (err) => {
         if (isC8Error(err) && err.errorNum === FABRIC_NOT_FOUND) {
           return false;
         }
@@ -110,23 +127,33 @@ export class Fabric {
       }
     );
   }
-  createFabric(fabricName: string, users: string[] | undefined, options: CreateFabricOptions): Promise<any> {
+  createFabric(
+    fabricName: string,
+    users: string[] | undefined,
+    options: CreateFabricOptions
+  ): Promise<any> {
     return this._connection.request(
       {
         method: "POST",
         path: "/_api/database",
         body: { users: users || [], name: fabricName, options },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   listFabrics() {
-    return this._connection.request({ path: "/database" }, res => res.body.result);
+    return this._connection.request(
+      { path: "/database" },
+      (res) => res.body.result
+    );
   }
 
   listUserFabrics() {
-    return this._connection.request({ path: "/database/user" }, res => res.body.result);
+    return this._connection.request(
+      { path: "/database/user" },
+      (res) => res.body.result
+    );
   }
 
   dropFabric(fabricName: string) {
@@ -135,7 +162,7 @@ export class Fabric {
         method: "DELETE",
         path: `/database/${fabricName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -145,7 +172,7 @@ export class Fabric {
         method: "GET",
         path: "/database/metadata",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -154,9 +181,9 @@ export class Fabric {
       {
         method: "PUT",
         path: "/database/metadata",
-        body: { metadata },
+        body: { metadata }
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -165,9 +192,9 @@ export class Fabric {
       {
         method: "PATCH",
         path: "/database/metadata",
-        body: { metadata },
+        body: { metadata }
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -179,7 +206,7 @@ export class Fabric {
         body: { email, password },
         absolutePath: true,
       },
-      res => {
+      (res) => {
         this.useBearerAuth(res.body.jwt);
         this.useTenant(res.body.tenant);
         return res.body;
@@ -187,14 +214,18 @@ export class Fabric {
     );
   }
 
-  updateFabricSpotRegion(tenantName: string, fabricName: string, datacenter: string = "") {
+  updateFabricSpotRegion(
+    tenantName: string,
+    fabricName: string,
+    datacenter: string = ""
+  ) {
     return this._connection.request(
       {
         method: "PUT",
         path: `_tenant/${tenantName}/_fabric/${fabricName}/database/${datacenter}`,
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -204,7 +235,7 @@ export class Fabric {
         method: "GET",
         path: `/events`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -215,7 +246,7 @@ export class Fabric {
         path: `/events`,
         body: JSON.stringify(eventIds),
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -239,13 +270,16 @@ export class Fabric {
         path: "/collection",
         qs: { excludeSystem },
       },
-      res => (this._connection.c8Major <= 2 ? res.body.collections : res.body.result)
+      (res) =>
+        this._connection.c8Major <= 2 ? res.body.collections : res.body.result
     );
   }
 
   async collections(excludeSystem: boolean = true): Promise<C8Collection[]> {
     const collections = await this.listCollections(excludeSystem);
-    return collections.map((data: any) => constructCollection(this._connection, data));
+    return collections.map((data: any) =>
+      constructCollection(this._connection, data)
+    );
   }
 
   async truncate(excludeSystem: boolean = true) {
@@ -257,7 +291,7 @@ export class Fabric {
             method: "PUT",
             path: `/collection/${data.name}/truncate`,
           },
-          res => res.body
+          (res) => res.body
         )
       )
     );
@@ -270,7 +304,10 @@ export class Fabric {
   }
 
   listGraphs() {
-    return this._connection.request({ path: "/_api/graph" }, res => res.body.graphs);
+    return this._connection.request(
+      { path: "/_api/graph" },
+      (res) => res.body.graphs
+    );
   }
 
   async graphs(): Promise<Graph[]> {
@@ -282,8 +319,16 @@ export class Fabric {
 
   query(query: string | C8QLQuery | C8QLLiteral): Promise<ArrayCursor>;
   query(query: C8QLQuery, opts?: any): Promise<ArrayCursor>;
-  query(query: string | C8QLLiteral, bindVars?: any, opts?: any): Promise<ArrayCursor>;
-  query(query: string | C8QLQuery | C8QLLiteral, bindVars?: any, opts?: any): Promise<ArrayCursor> {
+  query(
+    query: string | C8QLLiteral,
+    bindVars?: any,
+    opts?: any
+  ): Promise<ArrayCursor>;
+  query(
+    query: string | C8QLQuery | C8QLLiteral,
+    bindVars?: any,
+    opts?: any
+  ): Promise<ArrayCursor> {
     const apiPath = opts && opts.sql ? "/cursor/sql" : "/cursor";
     if (isC8QLQuery(query)) {
       opts = bindVars;
@@ -319,7 +364,7 @@ export class Fabric {
         path: "/query",
         body: { query },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -330,7 +375,7 @@ export class Fabric {
         path: "/_api/explain",
         body: { ...explainQueryObj },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -339,7 +384,7 @@ export class Fabric {
       {
         path: "/query/current",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -349,7 +394,7 @@ export class Fabric {
         method: "DELETE",
         path: "/query/slow",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -358,7 +403,7 @@ export class Fabric {
       {
         path: "/query/slow",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -368,14 +413,17 @@ export class Fabric {
         method: "DELETE",
         path: `/query/${queryId}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   // Function management
 
   listFunctions() {
-    return this._connection.request({ path: "/c8qlfunction" }, res => res.body);
+    return this._connection.request(
+      { path: "/c8qlfunction" },
+      (res) => res.body
+    );
   }
 
   createFunction(name: string, code: string, isDeterministic?: boolean) {
@@ -385,18 +433,21 @@ export class Fabric {
         path: "/c8qlfunction",
         body: { name, code, isDeterministic },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   dropFunction(name: string, group?: boolean) {
-    const path = typeof group === "boolean" ? `/c8qlfunction/${name}?group=${group}` : `/c8qlfunction/${name}`;
+    const path =
+      typeof group === "boolean"
+        ? `/c8qlfunction/${name}?group=${group}`
+        : `/c8qlfunction/${name}`;
     return this._connection.request(
       {
         method: "DELETE",
         path,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -408,7 +459,7 @@ export class Fabric {
         absolutePath: true,
         qs: { details },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -430,14 +481,23 @@ export class Fabric {
         path: "/_api/tenants",
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   //Stream
 
-  stream(streamName: string, local: boolean = false, isCollectionStream: boolean = false): Stream {
-    return new Stream(this._connection, streamName, local, isCollectionStream);
+  stream(
+    streamName: string,
+    local: boolean = false,
+    isCollectionStream: boolean = false
+  ): Stream {
+    return new Stream(
+      this._connection,
+      streamName,
+      local,
+      isCollectionStream,
+    );
   }
 
   /* -------------------------------- DUPLICATE ------------------------------- */
@@ -450,7 +510,7 @@ export class Fabric {
         path: "/streams",
         qs: global === undefined ? "" : `global=${global}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -460,7 +520,7 @@ export class Fabric {
         method: "GET",
         path: "/streams",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -473,7 +533,7 @@ export class Fabric {
         path: `/streams/persistent`,
         qs: `local=${local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -483,7 +543,7 @@ export class Fabric {
         method: "POST",
         path: "/streams/clearbacklog",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -493,7 +553,7 @@ export class Fabric {
         method: "POST",
         path: `/streams/clearbacklog/${subscription}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -503,7 +563,7 @@ export class Fabric {
         method: "POST",
         path: `/streams/unsubscribe/${subscription}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -516,7 +576,7 @@ export class Fabric {
         path: "/datacenter/all",
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -527,7 +587,7 @@ export class Fabric {
         path: `/datacenter/_tenant/${this._connection.getTenantName()}`,
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -538,7 +598,7 @@ export class Fabric {
         path: "/datacenter/local",
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -549,13 +609,13 @@ export class Fabric {
         path: `_api/datacenter/${dcName}/${isSpot}`,
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   //user
 
-  user(user: string, email: string = ""): User {
+  user(user: string, email: string = ''): User {
     return new User(this._connection, user, email);
   }
 
@@ -565,7 +625,7 @@ export class Fabric {
         method: "GET",
         path: `/_admin/user`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -577,7 +637,7 @@ export class Fabric {
         method: "GET",
         path: `/restql/user`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -597,7 +657,7 @@ export class Fabric {
             },
           },
         },
-        res => res.body
+        (res) => res.body
       );
     } catch (err) {
       return err;
@@ -613,7 +673,7 @@ export class Fabric {
           bindVars: bindVars,
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -629,7 +689,7 @@ export class Fabric {
           },
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -639,7 +699,7 @@ export class Fabric {
         method: "DELETE",
         path: `/restql/${queryName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -649,7 +709,7 @@ export class Fabric {
         method: "PUT",
         path: `/restql/fetch/${id}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -669,7 +729,7 @@ export class Fabric {
           regions: regions,
         }),
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -679,7 +739,7 @@ export class Fabric {
         method: "GET",
         path: "/_api/streamapps",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -692,7 +752,7 @@ export class Fabric {
           definition: appDefinition,
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -702,7 +762,7 @@ export class Fabric {
         method: "GET",
         path: "/_api/streamapps/samples",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 }
