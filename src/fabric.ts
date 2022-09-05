@@ -329,7 +329,7 @@ export class Fabric {
     bindVars?: any,
     opts?: any
   ): Promise<ArrayCursor> {
-    const apiPath = opts && opts.isSQL ? "/cursor/sql" : "/cursor";
+    const apiPath = opts && opts.sql ? "/cursor/sql" : "/cursor";
     if (isC8QLQuery(query)) {
       opts = bindVars;
       bindVars = query.bindVars;

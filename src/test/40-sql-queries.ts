@@ -13,11 +13,15 @@ describe("Test Sql query functions", function() {
   const collectionName = "products";
   let dcList: string;
 
+  const email = "guest@macrometa.io";
+  const password = "guest";
+  const tenant = "guest";
+
   before(async () => {
     fabric = new Fabric({ url: testUrl, c8Version: Number(process.env.C8_VERSION || 30400) });
 
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
+    await fabric.login(email, password);
+    fabric.useTenant(tenant);
 
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
@@ -50,7 +54,7 @@ describe("Test Sql query functions", function() {
   describe("Sql query with query() function", () => {
     it("executes sql query with empty bindVars object", done => {
       fabric
-        .query("SELECT * FROM products", {}, { isSQL: true })
+        .query("SELECT * FROM products", {}, { sql: true })
         .then(cursor => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           expect(cursor["_result"]).is.not.empty;
@@ -61,7 +65,7 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with named bindVars", done => {
       fabric
-        .query("SELECT * FROM products where name = $prodName", { prodName: "Kindle" }, { isSQL: true })
+        .query("SELECT * FROM products where name = $prodName", { prodName: "Kindle" }, { sql: true })
         .then(cursor => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           expect(cursor["_result"]).is.not.empty;
@@ -73,7 +77,7 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with array", done => {
       fabric
-        .query("SELECT * FROM products where name = $1", ["Kindle"], { isSQL: true })
+        .query("SELECT * FROM products where name = $1", ["Kindle"], { sql: true })
         .then(cursor => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           expect(cursor["_result"]).is.not.empty;
@@ -85,7 +89,7 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with empty array", done => {
       fabric
-        .query("SELECT * FROM products", [], { isSQL: true })
+        .query("SELECT * FROM products", [], { sql: true })
         .then(cursor => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           expect(cursor["_result"]).is.not.empty;
@@ -96,7 +100,7 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with options", done => {
       fabric
-        .query("SELECT * FROM products", [], { isSQL: true, count: true })
+        .query("SELECT * FROM products", [], { sql: true, count: true })
         .then(cursor => {
           expect(cursor).to.have.property("count");
           done();
@@ -106,7 +110,7 @@ describe("Test Sql query functions", function() {
 
     it("throws an exception on error", done => {
       fabric
-        .query("SELECT * FROM fakeProducts", undefined, { isSQL: true })
+        .query("SELECT * FROM fakeProducts", undefined, { sql: true })
         .then(() => {
           expect.fail();
           done();
@@ -121,7 +125,7 @@ describe("Test Sql query functions", function() {
 
     it("throws an exception on error (async await)", async () => {
       try {
-        await fabric.query("SELECT * FROM fakeProducts", undefined, { isSQL: true });
+        await fabric.query("SELECT * FROM fakeProducts", undefined, { sql: true });
         expect.fail();
       } catch (err) {
         expect(err).is.instanceof(C8Error);
@@ -135,14 +139,14 @@ describe("Test Sql query functions", function() {
     let c8Client = new C8Client({ url: testUrl, c8Version: C8_VERSION });
 
     before(async () => {
-      await c8Client.login("demo@macrometa.io", "demo");
-      c8Client.useTenant("demo");
+      await c8Client.login(email, password);
+      c8Client.useTenant(tenant);
       c8Client.useFabric(name);
     });
 
     it("executes sql query with empty bindVars object", done => {
       c8Client
-        .executeQuery("SELECT * FROM products", {}, { isSQL: true })
+        .executeQuery("SELECT * FROM products", {}, { sql: true })
         .then(result => {
           expect(result).is.not.empty;
           expect(result[0]).includes({ name: "Kindle" });
@@ -153,7 +157,7 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with named bindVars", done => {
       c8Client
-        .executeQuery("SELECT * FROM products where name = $prodName", { prodName: "Kindle" }, { isSQL: true })
+        .executeQuery("SELECT * FROM products where name = $prodName", { prodName: "Kindle" }, { sql: true })
         .then(result => {
           expect(result).is.not.empty;
           expect(result[0]).includes({ name: "Kindle" });
@@ -164,7 +168,7 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with array", done => {
       c8Client
-        .executeQuery("SELECT * FROM products where name = $1", ["Kindle"], { isSQL: true })
+        .executeQuery("SELECT * FROM products where name = $1", ["Kindle"], { sql: true })
         .then(result => {
           expect(result).is.not.empty;
           expect(result[0]).includes({ name: "Kindle" });
@@ -175,7 +179,7 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with empty array", done => {
       c8Client
-        .executeQuery("SELECT * FROM products", [], { isSQL: true })
+        .executeQuery("SELECT * FROM products", [], { sql: true })
         .then(result => {
           expect(result).is.not.empty;
           done();
@@ -185,7 +189,7 @@ describe("Test Sql query functions", function() {
 
     it("throws an exception on error", done => {
       c8Client
-        .executeQuery("SELECT * FROM fakeProducts", undefined, { isSQL: true })
+        .executeQuery("SELECT * FROM fakeProducts", undefined, { sql: true })
         .then(() => {
           expect.fail();
           done();
@@ -200,7 +204,7 @@ describe("Test Sql query functions", function() {
 
     it("throws an exception on error (async await)", async () => {
       try {
-        await c8Client.executeQuery("SELECT * FROM fakeProducts", undefined, { isSQL: true });
+        await c8Client.executeQuery("SELECT * FROM fakeProducts", undefined, { sql: true });
         expect.fail();
       } catch (err) {
         expect(err).is.instanceof(C8Error);
