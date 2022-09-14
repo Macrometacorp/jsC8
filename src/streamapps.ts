@@ -25,10 +25,10 @@ export class Streamapps {
             {
                 method: "PUT",
                 path: `/_api/streamapps/${this.name}`,
-                body: JSON.stringify({
+                body: {
                     "definition": appDefinition, 
                     "regions": regions,
-                })
+                }
             },
             res => res.body
         );
