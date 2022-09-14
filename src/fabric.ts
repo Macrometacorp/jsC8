@@ -724,10 +724,10 @@ export class Fabric {
       {
         method: "POST",
         path: "/_api/streamapps",
-        body: JSON.stringify({
+        body: {
           definition: appDefinition,
           regions: regions,
-        }),
+        },
       },
       (res) => res.body
     );
