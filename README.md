@@ -4,7 +4,7 @@ Today’s applications are required to be highly responsive and always online. T
 
 Globally distributed applications need a geo distributed fast data platform that can transparently replicate the data anywhere in the world to enable the applications to operate on a copy of the data that's close to its users. Similarly the applications need geo-replicated and local streams to handle pub-sub, ETL and real-time updates from the fast data platform.
 
-C8 is a fully managed geo-distributed fast data service with turnkey global distribution and transparent multi-master replication. You can run globally distributed, low-latency workloads within C8. This article is an introduction to using C8 with jsC8 (JavaScript Driver).
+Macrometa Global Date Netwwork (GDN) is a fully managed geo-distributed fast data service with turnkey global distribution and transparent multi-master replication. You can run globally distributed, low-latency workloads within GDN. This article is an introduction to using GDN with jsC8 (JavaScript Driver).
 
 [jsc8_tutorial](https://cdn.document360.io/d1a6730a-fd70-4f0a-a08d-dfa28ca8b958/Images/Documentation/pyc8_tutorial.png)
 
@@ -12,7 +12,7 @@ In jsC8, a **document** is an object that is a JSON serializable object with the
 
 - Contains the `_key` field, which identifies the document uniquely within a specific collection.
 - Contains the `_id` field (also called the _handle_), which identifies the document uniquely across all collections within a fabric. This ID is a combination of the collection name and the document key using the format `{collection}/{key}` (see example below).
-- Contains the `_rev` field. C8 supports MVCC (Multiple Version Concurrency Control) and is capable of storing each document in multiple revisions. Latest revision of a document is indicated by this field. The field is populated by C8 and is not required as input unless you want to validate a document against its current revision.
+- Contains the `_rev` field. GDN supports MVCC (Multiple Version Concurrency Control) and is capable of storing each document in multiple revisions. Latest revision of a document is indicated by this field. The field is populated by GDN and is not required as input unless you want to validate a document against its current revision.
 
 Here is an example of a valid document:
 
@@ -46,7 +46,7 @@ Here is an example of a valid document:
     }
 ```
 
-## Pre-requisite
+## Prerequisites
 
 Let's assume your tenant name is `demotenant` and `root` user password is `demopwd`.
 
@@ -75,9 +75,15 @@ npm install
 npm run dist
 ```
 
-## Connect to C8
+## Update jsC8
 
-The first step in using C8 is to establish a connection to a local region. When this code executes, it initializes the server connection to the region URL you sepcified and returns a client. Then this client can be used to perform operations.
+## Connect to GDN
+
+```bash
+npm update jsC8
+```
+
+The first step in using GDN is to establish a connection to a local region. When this code executes, it initializes the server connection to the region URL you sepcified and returns a client. Then this client can be used to perform operations.
 
 ```js
 const jsc8 = require("jsc8");
