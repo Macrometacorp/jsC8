@@ -56,11 +56,6 @@ export class Stream {
     this.topic = topic;
   }
 
-  _getPath(useName: boolean, urlSuffix?: string): string {
-    let topic = useName ? this.name : this.topic;
-    return getFullStreamPath(topic, urlSuffix);
-  }
-
   getOtp() {
     return this._connection.request(
       {
