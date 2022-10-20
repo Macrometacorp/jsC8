@@ -1,5 +1,4 @@
 import { Connection } from "./connection";
-import { getFullStreamPath } from "./util/helper";
 import { stringify } from "query-string";
 
 // 2 document
