@@ -76,7 +76,7 @@ export class Stream {
     return this._connection.request(
       {
         method: "POST",
-        path: this._getPath(true),
+        path: `/_api/streams/${this.name}`,
         qs: `global=${this.global}`,
       },
       (res) => res.body
@@ -84,11 +84,10 @@ export class Stream {
   }
 
   backlog() {
-    const urlSuffix = "/backlog";
     return this._connection.request(
       {
         method: "GET",
-        path: this._getPath(false, urlSuffix),
+        path: `/_api/streams/${this.topic}/backlog`,
         qs: `global=${this.global}`,
       },
       (res) => res.body
@@ -96,11 +95,10 @@ export class Stream {
   }
 
   clearBacklog() {
-    const urlSuffix = `/clearbacklog`;
     return this._connection.request(
       {
         method: "POST",
-        path: this._getPath(false, urlSuffix),
+        path: `/_api/streams/clearbacklog`,
         qs: `global=${this.global}`,
       },
       (res) => res.body
@@ -108,11 +106,10 @@ export class Stream {
   }
 
   getStreamStatistics() {
-    const urlSuffix = "/stats";
     return this._connection.request(
       {
         method: "GET",
-        path: this._getPath(false, urlSuffix),
+        path: `/_api/streams/${this.topic}/stats`,
         qs: `global=${this.global}`,
       },
       (res) => res.body
@@ -120,11 +117,10 @@ export class Stream {
   }
 
   deleteSubscription(subscription: string) {
-    const urlSuffix = `/subscription/${subscription}`;
     return this._connection.request(
       {
         method: "DELETE",
-        path: this._getPath(false, urlSuffix),
+        path: `/_api/streams/subscription/${subscription}`,
         qs: `global=${this.global}`,
       },
       (res) => res.body
@@ -132,11 +128,10 @@ export class Stream {
   }
 
   expireMessages(expireTimeInSeconds: number) {
-    const urlSuffix = `/expiry/${expireTimeInSeconds}`;
     return this._connection.request(
       {
         method: "POST",
-        path: this._getPath(false, urlSuffix),
+        path: `/_api/streams/${this.topic}/expiry/${expireTimeInSeconds}`,
         qs: `global=${this.global}`,
       },
       (res) => res.body
@@ -144,11 +139,10 @@ export class Stream {
   }
 
   clearSubscriptionBacklog(subscription: string) {
-    const urlSuffix = `/clearbacklog/${subscription}`;
     return this._connection.request(
       {
         method: "POST",
-        path: this._getPath(false, urlSuffix),
+        path: `/_api/streams/clearbacklog/${subscription}`,
         qs: `global=${this.global}`,
       },
       (res) => res.body
@@ -156,22 +150,21 @@ export class Stream {
   }
 
   getSubscriptionList() {
-    const urlSuffix = "/subscriptions";
     return this._connection.request(
       {
         method: "GET",
-        path: this._getPath(false, urlSuffix),
+        path: `/_api/streams/${this.topic}/subscriptions`,
         qs: `global=${this.global}`,
       },
       (res) => res.body
     );
   }
 
-  deleteStream(force: boolean = true, useName = false) {
+  deleteStream(force: boolean = true) {
     return this._connection.request(
       {
         method: "DELETE",
-        path: this._getPath(useName),
+        path: `/_api/streams/${this.topic}`,
         qs: `force=${force}`,
       },
       (res) => res.body
@@ -239,11 +232,10 @@ export class Stream {
   }
 
   publishMessage(message: any) {
-    const urlSuffix = "/publish";
     return this._connection.request(
       {
         method: "POST",
-        path: this._getPath(false, urlSuffix),
+        path: `/_api/streams/${this.topic}/publish`,
         qs: `global=${this.global}`,
         body: message,
       },
@@ -272,11 +264,10 @@ export class Stream {
   }
 
   deleteSubscriptions(subscription: string) {
-    const urlSuffix = `/subscriptions/${subscription}`;
     return this._connection.request(
       {
         method: "DELETE",
-        path: this._getPath(false, urlSuffix),
+        path: `/_api/streams/${this.topic}/subscriptions/${subscription}`,
         qs: `global=${this.global}`,
       },
       (res) => res.body
