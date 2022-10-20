@@ -451,7 +451,7 @@ export class C8Client extends Fabric {
 
   deleteStream(streamName: string, force: boolean = true) {
     const stream = this.stream(streamName);
-    return stream.deleteStream(force, true);
+    return stream.deleteStream(force);
   }
 
   // createStreamApp() { } already present
