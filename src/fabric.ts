@@ -507,7 +507,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: "/streams",
+        path: "/_api/streams",
         qs: global === undefined ? "" : `global=${global}`,
       },
       (res) => res.body
@@ -518,7 +518,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: "/streams",
+        path: "/_api/streams",
       },
       (res) => res.body
     );
@@ -530,7 +530,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "GET",
-        path: `/streams/persistent`,
+        path: `/_api/streams/persistent`,
         qs: `local=${local}`,
       },
       (res) => res.body
@@ -541,7 +541,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "POST",
-        path: "/streams/clearbacklog",
+        path: "/_api/streams/clearbacklog",
       },
       (res) => res.body
     );
@@ -551,7 +551,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "POST",
-        path: `/streams/clearbacklog/${subscription}`,
+        path: `/_api/streams/clearbacklog/${subscription}`,
       },
       (res) => res.body
     );
@@ -561,7 +561,7 @@ export class Fabric {
     return this._connection.request(
       {
         method: "POST",
-        path: `/streams/unsubscribe/${subscription}`,
+        path: `/_api/streams/unsubscribe/${subscription}`,
       },
       (res) => res.body
     );
