@@ -178,7 +178,7 @@ export class Connection {
   private get _fabricPath() {
     return this._fabricName === false
       ? ""
-      : `/_tenant/${this._tenantName}/_fabric/${this._fabricName}`;
+      : `/_fabric/${this._fabricName}`;
   }
 
   private _runQueue() {
@@ -355,6 +355,8 @@ export class Connection {
   ): Promise<T> {
     return new Promise((resolve, reject) => {
       let contentType = "text/plain";
+      let path = urlInfo.path
+
       if (isBinary) {
         contentType = "application/octet-stream";
       } else if (body) {
@@ -364,6 +366,8 @@ export class Connection {
         } else {
           body = String(body);
         }
+      } else if ((path && path.includes("/streams")) === true) {
+        contentType = "application/json";
       }
 
       const extraHeaders: { [key: string]: string } = {
