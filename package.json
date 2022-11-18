@@ -55,7 +55,7 @@
     "dist": "rimraf lib && npm-run-all --parallel dist:* && cpy src/index.all.js --rename index.js lib/",
     "prepare": "npm run dist && node -e 'require(\".\");'",
     "predevTest": "npm run dist",
-    "devTest": "env TEST_C8_URL=https://test.eng1.macrometa.io mocha --reporter spec --timeout 60000 lib/async/test/28-manipulating-streams.js"
+    "devTest": "env TEST_C8_URL=https://dino-fra.eng.macrometa.io/ mocha --reporter spec --timeout 60000 lib/async/test/41-redis.js"
   },
   "dependencies": {
     "es6-error": "^4.1.1",
@@ -81,6 +81,7 @@
     "babel-preset-env": "^1.7.0",
     "chai": "^4.0.2",
     "cpy-cli": "^2.0.0",
+    "dotenv": "^16.0.3",
     "eslint": "^4.13.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.3.1",
@@ -92,6 +93,8 @@
     "rimraf": "^2.6.2",
     "source-map-support": "^0.5.0",
     "ts-loader": "^3.2.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.0",
     "typescript": "^2.6.2",
     "webpack": "^3.0.0",
     "xunit-file": "^1.0.0",
