@@ -110,7 +110,12 @@ npm update jsC8
 On every commit we will run pre-commit hooks. Pre-commit hooks are running
 pretty-quick package that runs prettier code formatting. You can find more about
 pretty-quick and prettier
-[here. (Option 2.)](https://prettier.io/docs/en/precommit.html)
+[here. (Option 2.)](https://prettier.io/docs/en/precommit.html) To enable
+pre-commit hooks you need to run once:
+
+```bash
+ npx husky install
+```
 
 ## Connect to GDN
 
