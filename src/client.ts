@@ -151,8 +151,8 @@ export class C8Client extends Fabric {
     data: any,
     opts?: DocumentSaveOptions | boolean
   ) {
-    const collection = this.collection(collectionName);
-    return collection.save(data, opts);
+    const collection = this.collection(collectionName) ;
+    return collection.save(data, opts) ;
   }
 
   async insertDocumentFromFile(
