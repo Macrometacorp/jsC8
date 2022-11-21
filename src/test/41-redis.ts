@@ -443,6 +443,167 @@ describe("validating redis apis", function() {
         expect(response.code).to.equal(200);
       });
     });
-    describe("test redis hash commands", () => {});
+    describe("test redis hash commands", () => {
+      it("redis.hset", async () => {
+        const response = await c8Client.redis.hset(
+          "games",
+          { action: "elden", driving: "GT7" },
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.hget", async () => {
+        const response = await c8Client.redis.hget(
+          "games",
+          "action",
+          collectionName
+        );
+        expect(response.result).to.equal("elden");
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hdel", async () => {
+        const response = await c8Client.redis.hdel(
+          "games",
+          ["action"],
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hexists", async () => {
+        const response = await c8Client.redis.hexists(
+          "games",
+          "driving",
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hgetall", async () => {
+        const response = await c8Client.redis.hgetall("games", collectionName);
+        expect(response.result).to.eql(["driving", "GT7"]);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hincrby", async () => {
+        const response = await c8Client.redis.hincrby(
+          "myhash",
+          "field",
+          5,
+          collectionName
+        );
+        expect(response.result).to.equal("5");
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hincrbyfloat", async () => {
+        const response = await c8Client.redis.hincrbyfloat(
+          "myhashfloat",
+          "field",
+          10.5,
+          collectionName
+        );
+        expect(response.result).to.equal("10.500000");
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hkeys", async () => {
+        const response = await c8Client.redis.hkeys("games", collectionName);
+        expect(response.result).to.eql(["driving"]);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hlen", async () => {
+        const response = await c8Client.redis.hlen("games", collectionName);
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hmget", async () => {
+        await c8Client.redis.hset(
+          "newgames",
+          { action: "elden", driving: "GT7" },
+          collectionName
+        );
+        const response = await c8Client.redis.hmget(
+          "newgames",
+          ["action", "driving"],
+          collectionName
+        );
+        expect(response.result).to.eql(["elden", "GT7"]);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hmset", async () => {
+        const response = await c8Client.redis.hmset(
+          "world",
+          { land: "dog", sea: "octopus" },
+          collectionName
+        );
+        expect(response.result).to.equal("OK");
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hscan1", async () => {
+        const response = await c8Client.redis.hscan("games", 0, collectionName);
+        expect(response.result).to.eql(["cursor:driving", ["driving", "GT7"]]);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hscan2", async () => {
+        const response = await c8Client.redis.hscan(
+          "games",
+          0,
+          collectionName,
+          "*",
+          100
+        );
+        expect(response.result).to.eql(["cursor:driving", ["driving", "GT7"]]);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hstrlen", async () => {
+        const response = await c8Client.redis.hstrlen(
+          "games",
+          "driving",
+          collectionName
+        );
+        expect(response.result).to.equal(3);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hrandfield1", async () => {
+        await c8Client.redis.hmset(
+          "coin",
+          { heads: "obverse", tails: "reverse", edge: "null" },
+          collectionName
+        );
+        const response = await c8Client.redis.hrandfield(
+          "coin",
+          collectionName
+        );
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hrandfield2", async () => {
+        const response = await c8Client.redis.hrandfield(
+          "coin",
+          collectionName,
+          -5,
+          "WITHVALUES"
+        );
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.hvals", async () => {
+        const response = await c8Client.redis.hvals("coin", collectionName);
+        expect(response.result).to.eql(["obverse", "reverse", "null"]);
+        expect(response.code).to.equal(200);
+      });
+    });
   });
 });

@@ -376,4 +376,91 @@ export class Redis {
     const command: string = "HINCRBY";
     return this._commandParser(command, collection, key, field, increment);
   }
+
+  hincrbyfloat(
+    key: string,
+    field: string,
+    increment: number,
+    collection: string
+  ) {
+    const command: string = "HINCRBYFLOAT";
+    return this._commandParser(command, collection, key, field, increment);
+  }
+
+  hkeys(key: string, collection: string) {
+    const command: string = "HKEYS";
+    return this._commandParser(command, collection, key);
+  }
+
+  hlen(key: string, collection: string) {
+    const command: string = "HLEN";
+    return this._commandParser(command, collection, key);
+  }
+
+  hmget(key: string, fields: string[], collection: string) {
+    const command: string = "HMGET";
+    return this._commandParser(command, collection, key, ...fields);
+  }
+
+  hmset(key: string, data: object, collection: string) {
+    const dataArray: string[] = [];
+    for (const [key, value] of Object.entries(data)) {
+      dataArray.push(key);
+      dataArray.push(value);
+    }
+    const command: string = "HMSET";
+    return this._commandParser(command, collection, key, ...dataArray);
+  }
+
+  hscan(
+    key: string,
+    cursor: number,
+    collection: string,
+    pattern?: string | undefined,
+    count?: number | undefined
+  ) {
+    const command: string = "HSCAN";
+
+    let patternArray: any[] = [];
+    if (pattern !== undefined) {
+      patternArray.push("MATCH");
+      patternArray.push(pattern);
+    }
+
+    let countArray: any[] = [];
+    if (count !== undefined) {
+      countArray.push("COUNT");
+      countArray.push(count);
+    }
+
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      cursor,
+      ...patternArray,
+      ...countArray
+    );
+  }
+
+  hstrlen(key: string, field: string, collection: string) {
+    const command: string = "HSTRLEN";
+    return this._commandParser(command, collection, key, field);
+  }
+
+  hrandfield(
+    key: string,
+    collection: string,
+    count?: number | undefined,
+    modifier?: string | undefined
+  ) {
+    const command: string = "HRANDFIELD";
+
+    return this._commandParser(command, collection, key, count, modifier);
+  }
+
+  hvals(key: string, collection: string) {
+    const command: string = "HVALS";
+    return this._commandParser(command, collection, key);
+  }
 }
