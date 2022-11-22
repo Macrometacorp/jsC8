@@ -601,4 +601,456 @@ export class Redis {
     const command: string = "ZCOUNT";
     return this._commandParser(command, collection, key, minimum, maximum);
   }
+
+  zdiff(
+    numKeys: number,
+    keys: string[],
+    collection: string,
+    withScores: boolean = false
+  ) {
+    const command: string = "ZDIFF";
+    let withScoresCommand: string | undefined;
+    if (withScores) {
+      withScoresCommand = "WITHSCORES";
+    } else {
+      withScoresCommand = undefined;
+    }
+    return this._commandParser(
+      command,
+      collection,
+      numKeys,
+      ...keys,
+      withScoresCommand
+    );
+  }
+
+  zdiffstore(
+    destination: string,
+    numkeys: number,
+    keys: string[],
+    collection: string
+  ) {
+    const command: string = "ZDIFFSTORE";
+    return this._commandParser(
+      command,
+      collection,
+      destination,
+      numkeys,
+      ...keys
+    );
+  }
+
+  zincrby(key: string, increment: number, member: string, collection: string) {
+    const command: string = "ZINCRBY";
+    return this._commandParser(command, collection, key, increment, member);
+  }
+
+  zinter(
+    numKeys: number,
+    keys: string[],
+    collection: string,
+    options: any[] | undefined = undefined,
+    withScores: boolean = false
+  ) {
+    const command: string = "ZINTER";
+
+    let optionsArray: any[] = [];
+    if (options !== undefined) {
+      optionsArray = [...options];
+    }
+    if (withScores) {
+      optionsArray.push("WITHSCORES");
+    }
+
+    return this._commandParser(
+      command,
+      collection,
+      numKeys,
+      ...keys,
+      ...optionsArray
+    );
+  }
+
+  zinterstore(
+    destination: string,
+    numKeys: number,
+    keys: string[],
+    collection: string,
+    options: any[] = []
+  ) {
+    const command: string = "ZINTERSTORE";
+    return this._commandParser(
+      command,
+      collection,
+      destination,
+      numKeys,
+      ...keys,
+      ...options
+    );
+  }
+
+  zlexcount(key: string, min: number, max: number, collection: string) {
+    const command: string = "ZLEXCOUNT";
+    return this._commandParser(command, collection, key, min, max);
+  }
+
+  zmscore(key: string, members: string[], collection: string) {
+    const command: string = "ZMSCORE";
+    return this._commandParser(command, collection, key, ...members);
+  }
+
+  zpopmax(
+    key: string,
+    collection: string,
+    count: number | undefined = undefined
+  ) {
+    const command: string = "ZPOPMAX";
+    return this._commandParser(command, collection, key, count);
+  }
+
+  zpopmin(
+    key: string,
+    collection: string,
+    count: number | undefined = undefined
+  ) {
+    const command: string = "ZPOPMIN";
+    return this._commandParser(command, collection, key, count);
+  }
+
+  zrandmember(
+    key: string,
+    collection: string,
+    count: number | undefined = undefined,
+    withScores: boolean = false
+  ) {
+    const command: string = "ZRANDMEMBER";
+    let withScoresCommand: string | undefined;
+    if (withScores) {
+      withScoresCommand = "WITHSCORES";
+    } else {
+      withScoresCommand = undefined;
+    }
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      count,
+      withScoresCommand
+    );
+  }
+
+  zrange(
+    key: string,
+    start: string,
+    stop: string,
+    collection: string,
+    options: any[] = []
+  ) {
+    const command: string = "ZRANGE";
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      start,
+      stop,
+      ...options
+    );
+  }
+
+  zrangebylex(
+    key: string,
+    min: string,
+    max: string,
+    collection: string,
+    offset: string | undefined = undefined,
+    count: number | undefined = undefined
+  ) {
+    const command: string = "ZRANGEBYLEX";
+    let limitList: any[] = [];
+    if (offset !== undefined && count !== undefined) {
+      limitList.push("WITHSCORES");
+      limitList.push(offset);
+      limitList.push(count);
+    }
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      min,
+      max,
+      ...limitList
+    );
+  }
+
+  zrangebyscore(
+    key: string,
+    min: string,
+    max: string,
+    collection: string,
+    withScores: boolean = false,
+    offset: string | undefined = undefined,
+    count: number | undefined = undefined
+  ) {
+    const command: string = "ZRANGEBYSCORE";
+    let withScoresCommand: string | undefined;
+    if (withScores) {
+      withScoresCommand = "WITHSCORES";
+    } else {
+      withScoresCommand = undefined;
+    }
+    let limitList: any[] = [];
+    if (offset !== undefined && count !== undefined) {
+      limitList.push("WITHSCORES");
+      limitList.push(offset);
+      limitList.push(count);
+    }
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      min,
+      max,
+      withScoresCommand,
+      ...limitList
+    );
+  }
+
+  zrangestore(
+    dst: string,
+    key: string,
+    min: string,
+    max: string,
+    collection: string,
+    options: any[] = []
+  ) {
+    const command: string = "ZRANGESTORE";
+    return this._commandParser(
+      command,
+      collection,
+      dst,
+      key,
+      min,
+      max,
+      ...options
+    );
+  }
+
+  zrank(key: string, member: string, collection: string) {
+    const command: string = "ZRANK";
+    return this._commandParser(command, collection, key, member);
+  }
+
+  zrem(key: string, members: string[], collection: string) {
+    const command: string = "ZREM";
+    return this._commandParser(command, collection, key, ...members);
+  }
+
+  zremrangebylex(
+    key: string,
+    minimum: string,
+    maxiumum: string,
+    collection: string
+  ) {
+    const command: string = "ZREMRANGEBYLEX";
+    return this._commandParser(command, collection, key, minimum, maxiumum);
+  }
+
+  zremrangebyrank(
+    key: string,
+    start: string,
+    stop: string,
+    collection: string
+  ) {
+    const command: string = "ZREMRANGEBYRANK";
+    return this._commandParser(command, collection, key, start, stop);
+  }
+
+  zremrangebyscore(
+    key: string,
+    minimum: string,
+    maxiumum: string,
+    collection: string
+  ) {
+    const command: string = "ZREMRANGEBYSCORE";
+    return this._commandParser(command, collection, key, minimum, maxiumum);
+  }
+
+  zrevrange(
+    key: string,
+    start: string,
+    stop: string,
+    collection: string,
+    withScores: boolean = false
+  ) {
+    const command: string = "ZREVRANGE";
+    let withScoresCommand: string | undefined;
+    if (withScores) {
+      withScoresCommand = "WITHSCORES";
+    } else {
+      withScoresCommand = undefined;
+    }
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      start,
+      stop,
+      withScoresCommand
+    );
+  }
+
+  zrevrangebylex(
+    key: string,
+    min: string,
+    max: string,
+    collection: string,
+    offset: string | undefined = undefined,
+    count: number | undefined = undefined
+  ) {
+    const command: string = "ZREVRANGEBYLEX";
+
+    let limitList: any[] = [];
+    if (offset !== undefined && count !== undefined) {
+      limitList.push("LIMIT");
+      limitList.push(offset);
+      limitList.push(count);
+    }
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      min,
+      max,
+      ...limitList
+    );
+  }
+
+  zrevrangebyscore(
+    key: string,
+    min: string,
+    max: string,
+    collection: string,
+    withScores: boolean = false,
+    offset: string | undefined = undefined,
+    count: number | undefined = undefined
+  ) {
+    const command: string = "ZREVRANGEBYSCORE";
+    let withScoresCommand: string | undefined;
+    if (withScores) {
+      withScoresCommand = "WITHSCORES";
+    } else {
+      withScoresCommand = undefined;
+    }
+    let limitList: any[] = [];
+    if (offset !== undefined && count !== undefined) {
+      limitList.push("LIMIT");
+      limitList.push(offset);
+      limitList.push(count);
+    }
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      min,
+      max,
+      withScoresCommand,
+      ...limitList
+    );
+  }
+
+  zrevrank(key: string, member: string, collection: string) {
+    const command: string = "ZREVRANK";
+    return this._commandParser(command, collection, key, member);
+  }
+
+  zscan(
+    key: string,
+    cursor: number,
+    collection: string,
+    pattern?: string | undefined,
+    count?: number | undefined
+  ) {
+    const command: string = "ZSCAN";
+
+    let patternArray: any[] = [];
+    if (pattern !== undefined) {
+      patternArray.push("MATCH");
+      patternArray.push(pattern);
+    }
+
+    let countArray: any[] = [];
+    if (count !== undefined) {
+      countArray.push("COUNT");
+      countArray.push(count);
+    }
+
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      cursor,
+      ...patternArray,
+      ...countArray
+    );
+  }
+
+  zscore(key: string, member: string, collection: string) {
+    const command: string = "ZSCORE";
+    return this._commandParser(command, collection, key, member);
+  }
+
+  zunion(
+    numKeys: number,
+    keys: string[],
+    collection: string,
+    options: any[] | undefined = undefined,
+    withScores: boolean = false
+  ) {
+    const command: string = "ZUNION";
+
+    let optionsArray: any[] = [];
+    if (options !== undefined) {
+      optionsArray = [...options];
+    }
+    if (withScores) {
+      optionsArray.push("WITHSCORES");
+    }
+
+    return this._commandParser(
+      command,
+      collection,
+      numKeys,
+      ...keys,
+      ...optionsArray
+    );
+  }
+
+  zunionstore(
+    destination: string,
+    numKeys: number,
+    keys: string[],
+    collection: string,
+    options: any[] | undefined = undefined,
+    withScores: boolean = false
+  ) {
+    const command: string = "ZUNION";
+
+    let optionsArray: any[] = [];
+    if (options !== undefined) {
+      optionsArray = [...options];
+    }
+    if (withScores) {
+      optionsArray.push("WITHSCORES");
+    }
+
+    return this._commandParser(
+      command,
+      collection,
+      destination,
+      numKeys,
+      ...keys,
+      ...optionsArray
+    );
+  }
+  // End of SORTED SET commands
 }
