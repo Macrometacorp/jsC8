@@ -17,7 +17,7 @@ export class Redis {
     const filteredData = data.filter(element => {
       return element !== undefined;
     });
-    let request = this._connection.request(
+    return this._connection.request(
       {
         method: "POST",
         path: `/_api/redis/${collection}`,
@@ -25,10 +25,8 @@ export class Redis {
       },
       res => res.body
     );
-
-    return request;
   }
-
+  // Start of STRING commands
   set(key: string, value: string, collection: string, options: any[] = []) {
     const command: string = "SET";
     return this._commandParser(command, collection, key, value, ...options);
@@ -201,7 +199,9 @@ export class Redis {
     const command: string = "GETBIT";
     return this._commandParser(command, collection, key, offset);
   }
+  // End of STRING commands
 
+  // Start of LIST commands
   lpush(key: string, elements: string[], collection: string) {
     const command: string = "LPUSH";
     return this._commandParser(command, collection, key, ...elements);
@@ -341,7 +341,9 @@ export class Redis {
     const command: string = "RPOPLPUSH";
     return this._commandParser(command, collection, source, destination);
   }
+  // End of LIST commands
 
+  // Start of HASH commands
   hset(key: string, data: object, collection: string) {
     const dataArray: string[] = [];
     for (const [key, value] of Object.entries(data)) {
@@ -462,5 +464,141 @@ export class Redis {
   hvals(key: string, collection: string) {
     const command: string = "HVALS";
     return this._commandParser(command, collection, key);
+  }
+  // End of HASH commands
+
+  // Start of SET commands
+  sadd(key: string, members: string[], collection: string) {
+    const command: string = "SADD";
+    return this._commandParser(command, collection, key, ...members);
+  }
+
+  scard(key: string, collection: string) {
+    const command: string = "SCARD";
+    return this._commandParser(command, collection, key);
+  }
+
+  sdiff(keys: string[], collection: string) {
+    const command: string = "SDIFF";
+    return this._commandParser(command, collection, ...keys);
+  }
+
+  sdiffstore(destination: string, keys: string[], collection: string) {
+    const command: string = "SDIFFSTORE";
+    return this._commandParser(command, collection, destination, ...keys);
+  }
+
+  sinter(keys: string[], collection: string) {
+    const command: string = "SINTER";
+    return this._commandParser(command, collection, ...keys);
+  }
+
+  sinterstore(destination: string, keys: string[], collection: string) {
+    const command: string = "SINTERSTORE";
+    return this._commandParser(command, collection, destination, ...keys);
+  }
+
+  sismember(key: string, member: string, collection: string) {
+    const command: string = "SISMEMBER";
+    return this._commandParser(command, collection, key, member);
+  }
+
+  smembers(key: string, collection: string) {
+    const command: string = "SMEMBERS";
+    return this._commandParser(command, collection, key);
+  }
+
+  smismember(key: string, members: string[], collection: string) {
+    const command: string = "SMISMEMBER";
+    return this._commandParser(command, collection, key, ...members);
+  }
+
+  smove(
+    source: string,
+    destination: string,
+    member: string,
+    collection: string
+  ) {
+    const command: string = "SMOVE";
+    return this._commandParser(
+      command,
+      collection,
+      source,
+      destination,
+      member
+    );
+  }
+
+  spop(key: string, count: number, collection: string) {
+    const command: string = "SPOP";
+    return this._commandParser(command, collection, key, count);
+  }
+
+  srandmember(key: string, collection: string, count?: number | undefined) {
+    const command: string = "SRANDMEMBER";
+    return this._commandParser(command, collection, key, count);
+  }
+
+  srem(key: string, members: string[], collection: string) {
+    const command: string = "SREM";
+    return this._commandParser(command, collection, key, ...members);
+  }
+
+  sscan(
+    key: string,
+    cursor: number,
+    collection: string,
+    pattern?: string | undefined,
+    count?: number | undefined
+  ) {
+    const command: string = "SSCAN";
+
+    let patternArray: any[] = [];
+    if (pattern !== undefined) {
+      patternArray.push("MATCH");
+      patternArray.push(pattern);
+    }
+
+    let countArray: any[] = [];
+    if (count !== undefined) {
+      countArray.push("COUNT");
+      countArray.push(count);
+    }
+
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      cursor,
+      ...patternArray,
+      ...countArray
+    );
+  }
+
+  sunion(keys: string[], collection: string) {
+    const command: string = "SUNION";
+    return this._commandParser(command, collection, ...keys);
+  }
+
+  sunionstore(destination: string, keys: string[], collection: string) {
+    const command: string = "SUNIONSTORE";
+    return this._commandParser(command, collection, destination, ...keys);
+  }
+  // End of SET commands
+
+  // Start of SORTED SET commands
+  zadd(key: string, data: any[], collection: string, options: any[] = []) {
+    const command: string = "ZADD";
+    return this._commandParser(command, collection, key, ...data, ...options);
+  }
+
+  zcard(key: string, collection: string) {
+    const command: string = "ZCARD";
+    return this._commandParser(command, collection, key);
+  }
+
+  zcount(key: string, minimum: string, maximum: string, collection: string) {
+    const command: string = "ZCOUNT";
+    return this._commandParser(command, collection, key, minimum, maximum);
   }
 }

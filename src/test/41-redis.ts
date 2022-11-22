@@ -605,5 +605,12 @@ describe("validating redis apis", function() {
         expect(response.code).to.equal(200);
       });
     });
+    describe("test redis set commands", () => {
+      it("redis.sadd", async () => {
+        const response = await c8Client.redis.hkeys("games", collectionName);
+        expect(response.result).to.eql(["driving"]);
+        expect(response.code).to.equal(200);
+      });
+    });
   });
 });
