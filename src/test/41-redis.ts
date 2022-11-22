@@ -607,8 +607,162 @@ describe("validating redis apis", function() {
     });
     describe("test redis set commands", () => {
       it("redis.sadd", async () => {
-        const response = await c8Client.redis.hkeys("games", collectionName);
-        expect(response.result).to.eql(["driving"]);
+        const response = await c8Client.redis.sadd(
+          "animals",
+          ["dog"],
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.scard", async () => {
+        const response = await c8Client.redis.scard("animals", collectionName);
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.sdiff", async () => {
+        await c8Client.redis.sadd("key1sdiff", ["a", "b", "c"], collectionName);
+        await c8Client.redis.sadd("key2sdiff", ["c"], collectionName);
+        await c8Client.redis.sadd("key3sdiff", ["d", "e"], collectionName);
+        const response = await c8Client.redis.sdiff(
+          ["key1sdiff", "key2sdiff", "key3sdiff"],
+          collectionName
+        );
+        expect(response.result).to.eql(["b", "a"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.sdiffstore", async () => {
+        const response = await c8Client.redis.sdiffstore(
+          "destinationKeysdiffstore",
+          ["key1sdiff", "key2sdiff", "key3sdiff"],
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.sinter", async () => {
+        await c8Client.redis.sadd("key11", ["a", "b", "c"], collectionName);
+        await c8Client.redis.sadd("key22", ["c", "d", "e"], collectionName);
+        const response = await c8Client.redis.sinter(
+          ["key11", "key22"],
+          collectionName
+        );
+        expect(response.result).to.eql(["c"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.sinterstore", async () => {
+        const response = await c8Client.redis.sinterstore(
+          "destinationInter",
+          ["key11", "key22"],
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.sismember", async () => {
+        const response = await c8Client.redis.sismember(
+          "key11",
+          "a",
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.smembers", async () => {
+        const response = await c8Client.redis.smembers("key11", collectionName);
+        expect(response.result).to.eql(["a", "b", "c"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.smismember", async () => {
+        const response = await c8Client.redis.smismember(
+          "key11",
+          ["a", "b", "z"],
+          collectionName
+        );
+        expect(response.result).to.eql([1, 1, 0]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.smove", async () => {
+        const response = await c8Client.redis.smove(
+          "key11",
+          "key22",
+          "b",
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.spop", async () => {
+        const response = await c8Client.redis.spop(
+          "animals",
+          1,
+          collectionName
+        );
+        expect(response.result).to.eql(["dog"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.srandmember1", async () => {
+        const response = await c8Client.redis.srandmember(
+          "key22",
+          collectionName
+        );
+        expect(response.code).to.equal(200);
+      });
+      it("redis.srandmember2", async () => {
+        const response = await c8Client.redis.srandmember(
+          "key22",
+          collectionName,
+          -5
+        );
+        expect(response.code).to.equal(200);
+      });
+      it("redis.srem", async () => {
+        const response = await c8Client.redis.srem(
+          "key22",
+          ["e", "b"],
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.sscan1", async () => {
+        await c8Client.redis.sadd("keyScan", ["a", "b", "c"], collectionName);
+        const response = await c8Client.redis.sscan(
+          "keyScan",
+          0,
+          collectionName
+        );
+        expect(response.result).to.eql(["cursor:c", ["a", "b", "c"]]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.sscan2", async () => {
+        const response = await c8Client.redis.sscan(
+          "keyScan",
+          0,
+          collectionName,
+          "*",
+          100
+        );
+        expect(response.result).to.eql(["cursor:c", ["a", "b", "c"]]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.sunion", async () => {
+        await c8Client.redis.sadd("key111", ["a", "b", "c"], collectionName);
+        await c8Client.redis.sadd("key222", ["c", "d", "e"], collectionName);
+        const response = await c8Client.redis.sunion(
+          ["key111", "key222"],
+          collectionName
+        );
+        expect(response.result).to.eql(["a", "b", "c", "d", "e"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.sunionstore", async () => {
+        const response = await c8Client.redis.sunionstore(
+          "destinationUnionStore",
+          ["key111", "key222"],
+          collectionName
+        );
+        expect(response.result).to.equal(5);
         expect(response.code).to.equal(200);
       });
     });
