@@ -1182,5 +1182,214 @@ describe("validating redis apis", function() {
         expect(response.code).to.equal(200);
       });
     });
+    describe("test redis generic commands", () => {
+      it("redis.copy", async () => {
+        await c8Client.redis.set("dolly", "sheep", collectionName);
+        const response = await c8Client.redis.copy(
+          "dolly",
+          "clone",
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.exists", async () => {
+        const response = await c8Client.redis.exists(
+          ["dolly", "clone"],
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.delete", async () => {
+        const response = await c8Client.redis.delete(
+          ["dolly", "clone"],
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.expire", async () => {
+        await c8Client.redis.set("expire", "test", collectionName);
+        const response = await c8Client.redis.expire(
+          "expire",
+          30,
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.expire2", async () => {
+        await c8Client.redis.set("expire2", "test", collectionName);
+        const response = await c8Client.redis.expire(
+          "expire2",
+          30,
+          collectionName,
+          "NX"
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.expireat", async () => {
+        await c8Client.redis.set("expireat", "test", collectionName);
+        const response = await c8Client.redis.expireat(
+          "expireat",
+          30,
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.expireat2", async () => {
+        await c8Client.redis.set("expireat2", "test", collectionName);
+        const response = await c8Client.redis.expireat(
+          "expireat2",
+          30,
+          collectionName,
+          "NX"
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.persist", async () => {
+        const response = await c8Client.redis.persist(
+          "expireat2",
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.pexpire", async () => {
+        await c8Client.redis.set("pexpire", "test", collectionName);
+        const response = await c8Client.redis.pexpire(
+          "pexpire",
+          8000,
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.pexpire2", async () => {
+        await c8Client.redis.set("pexpire2", "test", collectionName);
+        const response = await c8Client.redis.pexpire(
+          "pexpire2",
+          8000,
+          collectionName,
+          "NX"
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.pexpireat", async () => {
+        await c8Client.redis.set("pexpireat", "test", collectionName);
+        const response = await c8Client.redis.pexpireat(
+          "pexpireat",
+          8000,
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.pexpireat2", async () => {
+        await c8Client.redis.set("pexpireat2", "test", collectionName);
+        const response = await c8Client.redis.pexpireat(
+          "pexpireat2",
+          8000,
+          collectionName,
+          "NX"
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.pttl", async () => {
+        await c8Client.redis.set("pttl", "test", collectionName);
+        const response = await c8Client.redis.pttl("pttl", collectionName);
+        expect(response.result).to.equal(-1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.randomkey", async () => {
+        const response = await c8Client.redis.randomkey(collectionName);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.rename", async () => {
+        await c8Client.redis.set("rename", "test", collectionName);
+        const response = await c8Client.redis.rename(
+          "rename",
+          "newName",
+          collectionName
+        );
+        expect(response.result).to.equal("OK");
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.renamenx", async () => {
+        await c8Client.redis.set("renamenx", "test", collectionName);
+        const response = await c8Client.redis.renamenx(
+          "renamenx",
+          "newNamenx",
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.scan", async () => {
+        const response = await c8Client.redis.scan(0, collectionName);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.scan2", async () => {
+        const response = await c8Client.redis.scan(0, collectionName, "*", 100);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.ttl", async () => {
+        await c8Client.redis.set("ttl", "test", collectionName);
+        const response = await c8Client.redis.ttl("ttl", collectionName);
+        expect(response.result).to.equal(-1);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.type", async () => {
+        await c8Client.redis.set("type", "test", collectionName);
+        const response = await c8Client.redis.type("type", collectionName);
+        expect(response.result).to.equal("string");
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.unlink", async () => {
+        await c8Client.redis.set("unlink1", "test", collectionName);
+        await c8Client.redis.set("unlink2", "test", collectionName);
+        const response = await c8Client.redis.unlink(
+          ["unlink1", "unlink2"],
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+
+      it("redis.echo", async () => {
+        const response = await c8Client.redis.echo(
+          "Hello World!",
+          collectionName
+        );
+        expect(response.result).to.equal("Hello World!");
+        expect(response.code).to.equal(200);
+      });
+    });
   });
 });

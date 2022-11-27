@@ -1053,4 +1053,180 @@ export class Redis {
     );
   }
   // End of SORTED SET commands
+
+  // Start of GENERIC commands
+  copy(
+    source: string,
+    destination: string,
+    collection: string,
+    destinationDatabase?: string | undefined,
+    replace?: false
+  ) {
+    const command: string = "COPY";
+
+    let optionsCommand: string[] = [];
+    if (destinationDatabase !== undefined) {
+      optionsCommand.push("DB");
+      optionsCommand.push(destinationDatabase);
+    }
+    if (replace) {
+      optionsCommand.push("WITHSCORES");
+    }
+    return this._commandParser(
+      command,
+      collection,
+      source,
+      destination,
+      ...optionsCommand
+    );
+  }
+
+  delete(keys: string[], collection: string) {
+    const command: string = "DEL";
+    return this._commandParser(command, collection, ...keys);
+  }
+
+  exists(keys: string[], collection: string) {
+    const command: string = "EXISTS";
+    return this._commandParser(command, collection, ...keys);
+  }
+
+  expire(
+    key: string,
+    seconds: number,
+    collection: string,
+    options?: string | undefined
+  ) {
+    const command: string = "EXPIRE";
+    return this._commandParser(command, collection, key, seconds, options);
+  }
+
+  expireat(
+    key: string,
+    unixTimeSeconds: number,
+    collection: string,
+    options?: string | undefined
+  ) {
+    const command: string = "EXPIREAT";
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      unixTimeSeconds,
+      options
+    );
+  }
+
+  persist(key: string, collection: string) {
+    const command: string = "PERSIST";
+    return this._commandParser(command, collection, key);
+  }
+
+  pexpire(
+    key: string,
+    milliseconds: number,
+    collection: string,
+    options?: string | undefined
+  ) {
+    const command: string = "PEXPIRE";
+    return this._commandParser(command, collection, key, milliseconds, options);
+  }
+
+  pexpireat(
+    key: string,
+    unixTimeMilliseconds: number,
+    collection: string,
+    options?: string | undefined
+  ) {
+    const command: string = "PEXPIREAT";
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      unixTimeMilliseconds,
+      options
+    );
+  }
+
+  pttl(key: string, collection: string) {
+    const command: string = "PTTL";
+    return this._commandParser(command, collection, key);
+  }
+
+  randomkey(collection: string) {
+    const command: string = "RANDOMKEY";
+    return this._commandParser(command, collection);
+  }
+
+  rename(key: string, newKey: string, collection: string) {
+    const command: string = "RENAME";
+    return this._commandParser(command, collection, key, newKey);
+  }
+
+  renamenx(key: string, newKey: string, collection: string) {
+    const command: string = "RENAMENX";
+    return this._commandParser(command, collection, key, newKey);
+  }
+
+  scan(
+    cursor: number,
+    collection: string,
+    pattern?: string | undefined,
+    count?: number | undefined,
+    dataType?: number | undefined
+  ) {
+    const command: string = "SCAN";
+
+    let patternArray: any[] = [];
+    if (pattern !== undefined) {
+      patternArray.push("MATCH");
+      patternArray.push(pattern);
+    }
+
+    let countArray: any[] = [];
+    if (count !== undefined) {
+      countArray.push("COUNT");
+      countArray.push(count);
+    }
+
+    let typeArray: any[] = [];
+    if (dataType !== undefined) {
+      typeArray.push("TYPE");
+      typeArray.push(count);
+    }
+
+    return this._commandParser(
+      command,
+      collection,
+      cursor,
+      ...patternArray,
+      ...countArray,
+      ...typeArray
+    );
+  }
+
+  ttl(key: string, collection: string) {
+    const command: string = "TTL";
+    return this._commandParser(command, collection, key);
+  }
+
+  type(key: string, collection: string) {
+    const command: string = "TYPE";
+    return this._commandParser(command, collection, key);
+  }
+
+  unlink(keys: string[], collection: string) {
+    const command: string = "UNLINK";
+    return this._commandParser(command, collection, ...keys);
+  }
+
+  echo(message: string, collection: string) {
+    const command: string = "ECHO";
+    return this._commandParser(command, collection, message);
+  }
+  // End of GENERIC commands
+
+  // Start of SERVER commands
+
+  // End of SERVER commands
 }
