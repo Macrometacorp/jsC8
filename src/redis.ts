@@ -589,7 +589,7 @@ export class Redis {
   // Start of SORTED SET commands
   zadd(key: string, data: any[], collection: string, options: any[] = []) {
     const command: string = "ZADD";
-    return this._commandParser(command, collection, key, ...data, ...options);
+    return this._commandParser(command, collection, key, ...options, ...data);
   }
 
   zcard(key: string, collection: string) {
@@ -689,7 +689,7 @@ export class Redis {
     );
   }
 
-  zlexcount(key: string, min: number, max: number, collection: string) {
+  zlexcount(key: string, min: string, max: string, collection: string) {
     const command: string = "ZLEXCOUNT";
     return this._commandParser(command, collection, key, min, max);
   }
@@ -1033,7 +1033,7 @@ export class Redis {
     options: any[] | undefined = undefined,
     withScores: boolean = false
   ) {
-    const command: string = "ZUNION";
+    const command: string = "ZUNIONSTORE";
 
     let optionsArray: any[] = [];
     if (options !== undefined) {

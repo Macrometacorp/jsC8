@@ -766,5 +766,421 @@ describe("validating redis apis", function() {
         expect(response.code).to.equal(200);
       });
     });
+    describe("test redis sorted set commands", () => {
+      it("redis.zadd", async () => {
+        const response = await c8Client.redis.zadd(
+          "testZadd",
+          [1, "test"],
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zadd2", async () => {
+        const response = await c8Client.redis.zadd(
+          "testZadd2",
+          [1, "test2"],
+          collectionName,
+          ["NX", "INCR"]
+        );
+        expect(response.result).to.equal("1");
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrange", async () => {
+        const response = await c8Client.redis.zrange(
+          "testZadd",
+          "0",
+          "1",
+          collectionName
+        );
+        expect(response.result).to.eql(["test"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrange2", async () => {
+        const response = await c8Client.redis.zrange(
+          "testZadd",
+          "0",
+          "1",
+          collectionName,
+          ["WITHSCORES"]
+        );
+        expect(response.result).to.eql(["test", 1]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zcard", async () => {
+        const response = await c8Client.redis.zcard("testZadd", collectionName);
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zcount", async () => {
+        const response = await c8Client.redis.zcount(
+          "testZadd",
+          "0",
+          "2",
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zdiff", async () => {
+        await c8Client.redis.zadd("testDiff1", [1, "one"], collectionName);
+        await c8Client.redis.zadd("testDiff1", [2, "two"], collectionName);
+        await c8Client.redis.zadd("testDiff1", [3, "three"], collectionName);
+        await c8Client.redis.zadd("testDiff2", [1, "one"], collectionName);
+        await c8Client.redis.zadd("testDiff2", [1, "two"], collectionName);
+        const response = await c8Client.redis.zdiff(
+          2,
+          ["testDiff1", "testDiff2"],
+          collectionName
+        );
+        expect(response.result).to.eql(["three"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zdiff2", async () => {
+        const response = await c8Client.redis.zdiff(
+          2,
+          ["testDiff1", "testDiff2"],
+          collectionName,
+          true
+        );
+        expect(response.result).to.eql(["three", 3]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zdiffstore", async () => {
+        const response = await c8Client.redis.zdiffstore(
+          "destinationZdiff",
+          2,
+          ["testDiff1", "testDiff2"],
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zincrby", async () => {
+        const response = await c8Client.redis.zincrby(
+          "testZadd",
+          1.5,
+          "test",
+          collectionName
+        );
+        expect(response.result).to.equal(2.5);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zinter", async () => {
+        await c8Client.redis.zadd(
+          "zset1",
+          [1, "one", 2, "two"],
+          collectionName
+        );
+        await c8Client.redis.zadd(
+          "zset2",
+          [1, "one", 2, "two", 3, "three"],
+          collectionName
+        );
+        const response = await c8Client.redis.zinter(
+          2,
+          ["zset1", "zset2"],
+          collectionName
+        );
+        expect(response.result).to.eql(["one", "two"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zinter2", async () => {
+        const response = await c8Client.redis.zinter(
+          2,
+          ["zset1", "zset2"],
+          collectionName,
+          [],
+          true
+        );
+        expect(response.result).to.eql(["one", 2, "two", 4]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zinterstore", async () => {
+        const response = await c8Client.redis.zinterstore(
+          "zinterStore",
+          2,
+          ["zset1", "zset2"],
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zlexcount", async () => {
+        await c8Client.redis.zadd(
+          "zlexSet1",
+          [0, "a", 0, "b", 0, "c", 0, "d", 0, "e"],
+          collectionName
+        );
+        await c8Client.redis.zadd("zlexSet1", [0, "f", 0, "g"], collectionName);
+        const response = await c8Client.redis.zlexcount(
+          "zlexSet1",
+          "-",
+          "+",
+          collectionName
+        );
+        expect(response.result).to.equal(7);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zmscore", async () => {
+        const response = await c8Client.redis.zmscore(
+          "zlexSet1",
+          ["a", "b"],
+          collectionName
+        );
+        expect(response.result).to.eql([0, 0]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zpopmax", async () => {
+        await c8Client.redis.zadd(
+          "zpop",
+          [1, "one", 2, "two", 3, "three"],
+          collectionName
+        );
+        const response = await c8Client.redis.zpopmax("zpop", collectionName);
+        expect(response.result).to.eql(["three", "3"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zpopmin", async () => {
+        await c8Client.redis.zadd(
+          "zpop",
+          [1, "one", 2, "two", 3, "three"],
+          collectionName
+        );
+        const response = await c8Client.redis.zpopmin("zpop", collectionName);
+        expect(response.result).to.eql(["one", "1"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrandmember", async () => {
+        const response = await c8Client.redis.zrandmember(
+          "zpop",
+          collectionName
+        );
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrangebylex", async () => {
+        await c8Client.redis.zadd(
+          "zrangeByLexSet1",
+          [0, "a", 0, "b", 0, "c", 0, "d", 0, "e", 0, "f", 0, "g"],
+          collectionName
+        );
+        const response = await c8Client.redis.zrangebylex(
+          "zrangeByLexSet1",
+          "-",
+          "[c",
+          collectionName
+        );
+        expect(response.result).to.eql(["a", "b", "c"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrangebyscore", async () => {
+        await c8Client.redis.zadd(
+          "zrangeByScoreSet1",
+          [1, "one", 2, "two", 3, "three"],
+          collectionName
+        );
+        const response = await c8Client.redis.zrangebyscore(
+          "zrangeByScoreSet1",
+          "-inf",
+          "+inf",
+          collectionName
+        );
+        expect(response.result).to.eql(["one", "two", "three"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrank", async () => {
+        const response = await c8Client.redis.zrank(
+          "zrangeByScoreSet1",
+          "three",
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrem", async () => {
+        const response = await c8Client.redis.zrem(
+          "zrangeByScoreSet1",
+          ["two", "three"],
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zremrangebylex", async () => {
+        await c8Client.redis.zadd(
+          "zremrangebylex",
+          [0, "aaaaa", 0, "b", 0, "c", 0, "d", 0, "e"],
+          collectionName
+        );
+        await c8Client.redis.zadd(
+          "zremrangebylex",
+          [0, "foo", 0, "zap", 0, "zip", 0, "ALPHA", 0, "alpha"],
+          collectionName
+        );
+        const response = await c8Client.redis.zremrangebylex(
+          "zremrangebylex",
+          "[alpha",
+          "[omega",
+          collectionName
+        );
+        expect(response.result).to.equal(6);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zremrangebyrank", async () => {
+        await c8Client.redis.zadd(
+          "zremrangebyrank",
+          [1, "one", 2, "two", 3, "three"],
+          collectionName
+        );
+        const response = await c8Client.redis.zremrangebyrank(
+          "zremrangebyrank",
+          "0",
+          "1",
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zremrangebyscore", async () => {
+        await c8Client.redis.zadd(
+          "zremrangebyscore2",
+          [1, "one", 2, "two", 3, "three"],
+          collectionName
+        );
+        const response = await c8Client.redis.zremrangebyscore(
+          "zremrangebyscore2",
+          "-inf",
+          "(2",
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrevrange", async () => {
+        await c8Client.redis.zadd(
+          "zrevrange",
+          [1, "one", 2, "two", 3, "three"],
+          collectionName
+        );
+        const response = await c8Client.redis.zrevrange(
+          "zrevrange",
+          "0",
+          "-1",
+          collectionName
+        );
+        expect(response.result).to.eql(["three", "two", "one"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrevrangebylex", async () => {
+        await c8Client.redis.zadd(
+          "zrevrangebylex",
+          [0, "a", 0, "b", 0, "c", 0, "d", 0, "e", 0, "f", 0, "g"],
+          collectionName
+        );
+        const response = await c8Client.redis.zrevrangebylex(
+          "zrevrangebylex",
+          "[c",
+          "-",
+          collectionName
+        );
+        expect(response.result).to.eql(["c", "b", "a"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrevrangebyscore", async () => {
+        await c8Client.redis.zadd(
+          "zrevrangebyscore",
+          [1, "one", 2, "two", 3, "three"],
+          collectionName
+        );
+        const response = await c8Client.redis.zrevrangebyscore(
+          "zrevrangebyscore",
+          "+inf",
+          "-inf",
+          collectionName
+        );
+        expect(response.result).to.eql(["three", "two", "one"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zrevrank", async () => {
+        const response = await c8Client.redis.zrevrank(
+          "zrevrangebyscore",
+          "one",
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zscan", async () => {
+        const response = await c8Client.redis.zscan(
+          "zrevrangebyscore",
+          0,
+          collectionName
+        );
+        expect(response.result).to.eql([
+          "cursor:3-three",
+          [1, "one", 2, "two", 3, "three"],
+        ]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zscore", async () => {
+        const response = await c8Client.redis.zscore(
+          "zrevrangebyscore",
+          "one",
+          collectionName
+        );
+        expect(response.result).to.equal(1);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zunion", async () => {
+        await c8Client.redis.zadd(
+          "zunionSet1",
+          [1, "one", 2, "two"],
+          collectionName
+        );
+        await c8Client.redis.zadd(
+          "zunionSet2",
+          [1, "one", 2, "two", 3, "three"],
+          collectionName
+        );
+        const response = await c8Client.redis.zunion(
+          2,
+          ["zunionSet1", "zunionSet2"],
+          collectionName
+        );
+        expect(response.result).to.eql(["one", "three", "two"]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zunion2", async () => {
+        const response = await c8Client.redis.zunion(
+          2,
+          ["zunionSet1", "zunionSet2"],
+          collectionName,
+          [],
+          true
+        );
+        expect(response.result).to.eql(["one", 2, "three", 3, "two", 4]);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.zunionstore", async () => {
+        await c8Client.redis.zadd(
+          "zunionStoreSet1",
+          [1, "one", 2, "two"],
+          collectionName
+        );
+        await c8Client.redis.zadd(
+          "zunionStoreSet2",
+          [1, "one", 2, "two", 3, "three"],
+          collectionName
+        );
+        const response = await c8Client.redis.zunionstore(
+          "zunionDestination",
+          2,
+          ["zunionStoreSet1", "zunionStoreSet2"],
+          collectionName
+        );
+        expect(response.result).to.equal(3);
+        expect(response.code).to.equal(200);
+      });
+    });
   });
 });
