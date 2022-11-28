@@ -55,7 +55,7 @@
     "dist": "rimraf lib && npm-run-all --parallel dist:* && cpy src/index.all.js --rename index.js lib/",
     "prepare": "npm run dist && node -e 'require(\".\");'",
     "predevTest": "npm run dist",
-    "devTest": "env TEST_C8_URL=https://dino-fra.eng.macrometa.io/ mocha --reporter spec --timeout 60000 lib/async/test/41-redis.js"
+    "devTest": "env TEST_C8_URL=https://test.eng1.macrometa.io mocha --reporter spec --timeout 60000 lib/async/test/41-redis.js"
   },
   "dependencies": {
     "es6-error": "^4.1.1",

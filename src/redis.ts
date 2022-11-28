@@ -26,6 +26,37 @@ export class Redis {
       res => res.body
     );
   }
+
+  private _commonScan(
+    pattern: string | undefined,
+    count: number | undefined,
+    command: string,
+    collection: string,
+    key: string,
+    cursor: number
+  ) {
+    let patternArray: (string | number)[] = [];
+    if (pattern !== undefined) {
+      patternArray.push("MATCH");
+      patternArray.push(pattern);
+    }
+
+    let countArray: any[] = [];
+    if (count !== undefined) {
+      countArray.push("COUNT");
+      countArray.push(count);
+    }
+
+    return this._commandParser(
+      command,
+      collection,
+      key,
+      cursor,
+      ...patternArray,
+      ...countArray
+    );
+  }
+
   // Start of STRING commands
   set(key: string, value: string, collection: string, options: any[] = []) {
     const command: string = "SET";
@@ -150,9 +181,9 @@ export class Redis {
   bitcount(
     key: string,
     collection: string,
-    start?: number | undefined,
-    end?: number | undefined,
-    dataFormat?: string | undefined
+    start?: number,
+    end?: number,
+    dataFormat?: string
   ) {
     const command: string = "BITCOUNT";
     return this._commandParser(
@@ -179,9 +210,9 @@ export class Redis {
     key: string,
     bit: number,
     collection: string,
-    start?: number | undefined,
-    end?: number | undefined,
-    dataFormat?: string | undefined
+    start?: number,
+    end?: number,
+    dataFormat?: string
   ) {
     const command: string = "BITPOS";
     return this._commandParser(
@@ -262,13 +293,13 @@ export class Redis {
     key: string,
     element: string,
     collection: string,
-    rank?: number | undefined,
-    count?: number | undefined,
-    maxLen?: number | undefined
+    rank?: number,
+    count?: number,
+    maxLen?: number
   ) {
     const command: string = "LPOS";
 
-    let rankArray: any[] = [];
+    let rankArray: (string | number)[] = [];
     if (rank !== undefined) {
       rankArray.push("RANK");
       rankArray.push(rank);
@@ -302,7 +333,7 @@ export class Redis {
     return this._commandParser(command, collection, key, ...elements);
   }
 
-  lpop(key: string, collection: string, count?: number | undefined) {
+  lpop(key: string, collection: string, count?: number) {
     const command: string = "LPOP";
     return this._commandParser(command, collection, key, count);
   }
@@ -332,7 +363,7 @@ export class Redis {
     return this._commandParser(command, collection, key, start, stop);
   }
 
-  rpop(key: string, collection: string, count?: Number | undefined) {
+  rpop(key: string, collection: string, count?: Number) {
     const command: string = "RPOP";
     return this._commandParser(command, collection, key, count);
   }
@@ -418,31 +449,11 @@ export class Redis {
     key: string,
     cursor: number,
     collection: string,
-    pattern?: string | undefined,
-    count?: number | undefined
+    pattern?: string,
+    count?: number
   ) {
     const command: string = "HSCAN";
-
-    let patternArray: any[] = [];
-    if (pattern !== undefined) {
-      patternArray.push("MATCH");
-      patternArray.push(pattern);
-    }
-
-    let countArray: any[] = [];
-    if (count !== undefined) {
-      countArray.push("COUNT");
-      countArray.push(count);
-    }
-
-    return this._commandParser(
-      command,
-      collection,
-      key,
-      cursor,
-      ...patternArray,
-      ...countArray
-    );
+    return this._commonScan(pattern, count, command, collection, key, cursor);
   }
 
   hstrlen(key: string, field: string, collection: string) {
@@ -453,8 +464,8 @@ export class Redis {
   hrandfield(
     key: string,
     collection: string,
-    count?: number | undefined,
-    modifier?: string | undefined
+    count?: number,
+    modifier?: string
   ) {
     const command: string = "HRANDFIELD";
 
@@ -534,7 +545,7 @@ export class Redis {
     return this._commandParser(command, collection, key, count);
   }
 
-  srandmember(key: string, collection: string, count?: number | undefined) {
+  srandmember(key: string, collection: string, count?: number) {
     const command: string = "SRANDMEMBER";
     return this._commandParser(command, collection, key, count);
   }
@@ -548,31 +559,11 @@ export class Redis {
     key: string,
     cursor: number,
     collection: string,
-    pattern?: string | undefined,
-    count?: number | undefined
+    pattern?: string,
+    count?: number
   ) {
     const command: string = "SSCAN";
-
-    let patternArray: any[] = [];
-    if (pattern !== undefined) {
-      patternArray.push("MATCH");
-      patternArray.push(pattern);
-    }
-
-    let countArray: any[] = [];
-    if (count !== undefined) {
-      countArray.push("COUNT");
-      countArray.push(count);
-    }
-
-    return this._commandParser(
-      command,
-      collection,
-      key,
-      cursor,
-      ...patternArray,
-      ...countArray
-    );
+    return this._commonScan(pattern, count, command, collection, key, cursor);
   }
 
   sunion(keys: string[], collection: string) {
@@ -609,11 +600,9 @@ export class Redis {
     withScores: boolean = false
   ) {
     const command: string = "ZDIFF";
-    let withScoresCommand: string | undefined;
+    let withScoresCommand: string | undefined = undefined;
     if (withScores) {
       withScoresCommand = "WITHSCORES";
-    } else {
-      withScoresCommand = undefined;
     }
     return this._commandParser(
       command,
@@ -649,12 +638,12 @@ export class Redis {
     numKeys: number,
     keys: string[],
     collection: string,
-    options: any[] | undefined = undefined,
+    options?: any[],
     withScores: boolean = false
   ) {
     const command: string = "ZINTER";
 
-    let optionsArray: any[] = [];
+    let optionsArray: (string | number)[] = [];
     if (options !== undefined) {
       optionsArray = [...options];
     }
@@ -699,20 +688,12 @@ export class Redis {
     return this._commandParser(command, collection, key, ...members);
   }
 
-  zpopmax(
-    key: string,
-    collection: string,
-    count: number | undefined = undefined
-  ) {
+  zpopmax(key: string, collection: string, count?: number) {
     const command: string = "ZPOPMAX";
     return this._commandParser(command, collection, key, count);
   }
 
-  zpopmin(
-    key: string,
-    collection: string,
-    count: number | undefined = undefined
-  ) {
+  zpopmin(key: string, collection: string, count?: number) {
     const command: string = "ZPOPMIN";
     return this._commandParser(command, collection, key, count);
   }
@@ -720,15 +701,13 @@ export class Redis {
   zrandmember(
     key: string,
     collection: string,
-    count: number | undefined = undefined,
+    count?: number,
     withScores: boolean = false
   ) {
     const command: string = "ZRANDMEMBER";
-    let withScoresCommand: string | undefined;
+    let withScoresCommand: string | undefined = undefined;
     if (withScores) {
       withScoresCommand = "WITHSCORES";
-    } else {
-      withScoresCommand = undefined;
     }
     return this._commandParser(
       command,
@@ -762,11 +741,11 @@ export class Redis {
     min: string,
     max: string,
     collection: string,
-    offset: string | undefined = undefined,
-    count: number | undefined = undefined
+    offset?: string,
+    count?: number
   ) {
     const command: string = "ZRANGEBYLEX";
-    let limitList: any[] = [];
+    let limitList: (string | number)[] = [];
     if (offset !== undefined && count !== undefined) {
       limitList.push("WITHSCORES");
       limitList.push(offset);
@@ -787,18 +766,16 @@ export class Redis {
     min: string,
     max: string,
     collection: string,
-    withScores: boolean = false,
-    offset: string | undefined = undefined,
-    count: number | undefined = undefined
+    withScores?: boolean,
+    offset?: string,
+    count?: number
   ) {
     const command: string = "ZRANGEBYSCORE";
-    let withScoresCommand: string | undefined;
+    let withScoresCommand: string | undefined = undefined;
     if (withScores) {
       withScoresCommand = "WITHSCORES";
-    } else {
-      withScoresCommand = undefined;
     }
-    let limitList: any[] = [];
+    let limitList: (string | number)[] = [];
     if (offset !== undefined && count !== undefined) {
       limitList.push("WITHSCORES");
       limitList.push(offset);
@@ -883,11 +860,9 @@ export class Redis {
     withScores: boolean = false
   ) {
     const command: string = "ZREVRANGE";
-    let withScoresCommand: string | undefined;
+    let withScoresCommand: string | undefined = undefined;
     if (withScores) {
       withScoresCommand = "WITHSCORES";
-    } else {
-      withScoresCommand = undefined;
     }
     return this._commandParser(
       command,
@@ -904,12 +879,12 @@ export class Redis {
     min: string,
     max: string,
     collection: string,
-    offset: string | undefined = undefined,
-    count: number | undefined = undefined
+    offset?: string,
+    count?: number
   ) {
     const command: string = "ZREVRANGEBYLEX";
 
-    let limitList: any[] = [];
+    let limitList: (string | number)[] = [];
     if (offset !== undefined && count !== undefined) {
       limitList.push("LIMIT");
       limitList.push(offset);
@@ -931,17 +906,15 @@ export class Redis {
     max: string,
     collection: string,
     withScores: boolean = false,
-    offset: string | undefined = undefined,
-    count: number | undefined = undefined
+    offset?: string,
+    count?: number
   ) {
     const command: string = "ZREVRANGEBYSCORE";
-    let withScoresCommand: string | undefined;
+    let withScoresCommand: string | undefined = undefined;
     if (withScores) {
       withScoresCommand = "WITHSCORES";
-    } else {
-      withScoresCommand = undefined;
     }
-    let limitList: any[] = [];
+    let limitList: (string | number)[] = [];
     if (offset !== undefined && count !== undefined) {
       limitList.push("LIMIT");
       limitList.push(offset);
@@ -967,31 +940,11 @@ export class Redis {
     key: string,
     cursor: number,
     collection: string,
-    pattern?: string | undefined,
-    count?: number | undefined
+    pattern?: string,
+    count?: number
   ) {
     const command: string = "ZSCAN";
-
-    let patternArray: any[] = [];
-    if (pattern !== undefined) {
-      patternArray.push("MATCH");
-      patternArray.push(pattern);
-    }
-
-    let countArray: any[] = [];
-    if (count !== undefined) {
-      countArray.push("COUNT");
-      countArray.push(count);
-    }
-
-    return this._commandParser(
-      command,
-      collection,
-      key,
-      cursor,
-      ...patternArray,
-      ...countArray
-    );
+    return this._commonScan(pattern, count, command, collection, key, cursor);
   }
 
   zscore(key: string, member: string, collection: string) {
@@ -1003,12 +956,12 @@ export class Redis {
     numKeys: number,
     keys: string[],
     collection: string,
-    options: any[] | undefined = undefined,
-    withScores: boolean = false
+    options?: any[],
+    withScores?: boolean
   ) {
     const command: string = "ZUNION";
 
-    let optionsArray: any[] = [];
+    let optionsArray: (string | number)[] = [];
     if (options !== undefined) {
       optionsArray = [...options];
     }
@@ -1030,12 +983,12 @@ export class Redis {
     numKeys: number,
     keys: string[],
     collection: string,
-    options: any[] | undefined = undefined,
-    withScores: boolean = false
+    options?: any[],
+    withScores?: boolean
   ) {
     const command: string = "ZUNIONSTORE";
 
-    let optionsArray: any[] = [];
+    let optionsArray: (string | number)[] = [];
     if (options !== undefined) {
       optionsArray = [...options];
     }
@@ -1059,11 +1012,10 @@ export class Redis {
     source: string,
     destination: string,
     collection: string,
-    destinationDatabase?: string | undefined,
+    destinationDatabase?: string,
     replace?: false
   ) {
     const command: string = "COPY";
-
     let optionsCommand: string[] = [];
     if (destinationDatabase !== undefined) {
       optionsCommand.push("DB");
@@ -1091,12 +1043,7 @@ export class Redis {
     return this._commandParser(command, collection, ...keys);
   }
 
-  expire(
-    key: string,
-    seconds: number,
-    collection: string,
-    options?: string | undefined
-  ) {
+  expire(key: string, seconds: number, collection: string, options?: string) {
     const command: string = "EXPIRE";
     return this._commandParser(command, collection, key, seconds, options);
   }
@@ -1105,7 +1052,7 @@ export class Redis {
     key: string,
     unixTimeSeconds: number,
     collection: string,
-    options?: string | undefined
+    options?: string
   ) {
     const command: string = "EXPIREAT";
     return this._commandParser(
@@ -1126,7 +1073,7 @@ export class Redis {
     key: string,
     milliseconds: number,
     collection: string,
-    options?: string | undefined
+    options?: string
   ) {
     const command: string = "PEXPIRE";
     return this._commandParser(command, collection, key, milliseconds, options);
@@ -1136,7 +1083,7 @@ export class Redis {
     key: string,
     unixTimeMilliseconds: number,
     collection: string,
-    options?: string | undefined
+    options?: string
   ) {
     const command: string = "PEXPIREAT";
     return this._commandParser(
@@ -1171,13 +1118,13 @@ export class Redis {
   scan(
     cursor: number,
     collection: string,
-    pattern?: string | undefined,
-    count?: number | undefined,
-    dataType?: number | undefined
+    pattern?: string,
+    count?: number,
+    dataType?: number
   ) {
     const command: string = "SCAN";
 
-    let patternArray: any[] = [];
+    let patternArray: (string | number)[] = [];
     if (pattern !== undefined) {
       patternArray.push("MATCH");
       patternArray.push(pattern);
@@ -1227,7 +1174,7 @@ export class Redis {
     return this._commandParser(command, collection, message);
   }
 
-  ping(collection: string, message?: string | undefined) {
+  ping(collection: string, message?: string) {
     const command: string = "PING";
     return this._commandParser(command, collection, message);
   }
@@ -1237,13 +1184,11 @@ export class Redis {
     return this._commandParser(command, collection);
   }
 
-  flushdb(collection: string, asyncFlush?: boolean | undefined) {
+  flushdb(collection: string, asyncFlush?: boolean) {
     const command: string = "FLUSHDB";
-    let asyncFlushCommand: string | undefined;
+    let asyncFlushCommand: string | undefined = undefined;
     if (asyncFlush === true) {
       asyncFlushCommand = "ASYNC";
-    } else {
-      asyncFlushCommand = undefined;
     }
     return this._commandParser(command, collection, asyncFlushCommand);
   }
