@@ -1219,14 +1219,38 @@ export class Redis {
     const command: string = "UNLINK";
     return this._commandParser(command, collection, ...keys);
   }
+  // End of GENERIC commands
 
+  // Start of SERVER commands
   echo(message: string, collection: string) {
     const command: string = "ECHO";
     return this._commandParser(command, collection, message);
   }
-  // End of GENERIC commands
 
-  // Start of SERVER commands
+  ping(collection: string, message?: string | undefined) {
+    const command: string = "PING";
+    return this._commandParser(command, collection, message);
+  }
 
+  dbsize(collection: string) {
+    const command: string = "DBSIZE";
+    return this._commandParser(command, collection);
+  }
+
+  flushdb(collection: string, asyncFlush?: boolean | undefined) {
+    const command: string = "FLUSHDB";
+    let asyncFlushCommand: string | undefined;
+    if (asyncFlush === true) {
+      asyncFlushCommand = "ASYNC";
+    } else {
+      asyncFlushCommand = undefined;
+    }
+    return this._commandParser(command, collection, asyncFlushCommand);
+  }
+
+  time(collection: string) {
+    const command: string = "TIME";
+    return this._commandParser(command, collection);
+  }
   // End of SERVER commands
 }

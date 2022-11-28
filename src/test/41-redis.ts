@@ -1361,12 +1361,45 @@ describe("validating redis apis", function() {
         expect(response.result).to.equal(2);
         expect(response.code).to.equal(200);
       });
+    });
+    describe("test redis server commands", () => {
       it("redis.echo", async () => {
         const response = await c8Client.redis.echo(
           "Hello World!",
           collectionName
         );
         expect(response.result).to.equal("Hello World!");
+        expect(response.code).to.equal(200);
+      });
+      it("redis.ping", async () => {
+        const response = await c8Client.redis.ping(collectionName);
+        expect(response.result).to.equal("PONG");
+        expect(response.code).to.equal(200);
+      });
+      it("redis.ping2", async () => {
+        const response = await c8Client.redis.ping(
+          collectionName,
+          "Hello World!"
+        );
+        expect(response.result).to.equal("Hello World!");
+        expect(response.code).to.equal(200);
+      });
+      it("redis.dbsize", async () => {
+        const response = await c8Client.redis.dbsize(collectionName);
+        expect(response.code).to.equal(200);
+      });
+      it("redis.flushdb", async () => {
+        const response = await c8Client.redis.flushdb(collectionName);
+        expect(response.result).to.equal("OK");
+        expect(response.code).to.equal(200);
+      });
+      it("redis.flushdb2", async () => {
+        const response = await c8Client.redis.flushdb(collectionName, true);
+        expect(response.result).to.equal("OK");
+        expect(response.code).to.equal(200);
+      });
+      it("redis.time", async () => {
+        const response = await c8Client.redis.time(collectionName);
         expect(response.code).to.equal(200);
       });
     });
