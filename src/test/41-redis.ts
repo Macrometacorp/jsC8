@@ -1403,5 +1403,44 @@ describe("validating redis apis", function() {
         expect(response.code).to.equal(200);
       });
     });
+    describe("negative test cases", () => {
+      it("redis.collectionDoesNotExist", async () => {
+        try {
+          await c8Client.redis.set("testKey", "1", "DoesNotExist");
+        } catch (err) {
+          expect(err).to.have.property("message", "Bad Request");
+        }
+      });
+      it("redis.wrong command parameters 1", async () => {
+        try {
+          await c8Client.redis.zunion(
+            2,
+            ["zunionSet1", "zunionSet2"],
+            collectionName,
+            ["test", "fail"],
+            true
+          );
+        } catch (err) {
+          expect(err).to.have.property("message", "Bad Request");
+        }
+      });
+      it("redis.wrong command parameters 2", async () => {
+        try {
+          await c8Client.redis.zadd(
+            "zrevrangebyscore",
+            [1, "one", 2, "two", 3, "three"],
+            collectionName
+          );
+          await c8Client.redis.zrevrangebyscore(
+            "zrevrangebyscore",
+            "Wrong",
+            "Parameters",
+            collectionName
+          );
+        } catch (err) {
+          expect(err).to.have.property("message", "Bad Request");
+        }
+      });
+    });
   });
 });
