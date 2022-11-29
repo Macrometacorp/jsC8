@@ -988,6 +988,22 @@ describe("validating redis apis", function() {
         expect(response.result).to.eql(["one", "two", "three"]);
         expect(response.code).to.equal(200);
       });
+      it("redis.zrangestore", async () => {
+        await c8Client.redis.zadd(
+          "zrangeStore1",
+          [1, "one", 2, "two", 3, "three", 4, "four"],
+          collectionName
+        );
+        const response = await c8Client.redis.zrangestore(
+          "zrangeStoreDst1",
+          "zrangeStore1",
+          "2",
+          "-1",
+          collectionName
+        );
+        expect(response.result).to.equal(2);
+        expect(response.code).to.equal(200);
+      });
       it("redis.zrank", async () => {
         const response = await c8Client.redis.zrank(
           "zrangeByScoreSet1",
