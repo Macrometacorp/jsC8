@@ -44,7 +44,7 @@ const result = await client.exportDataByQuery('FOR x in some-collection LIMIT 0,
 
     - **limit**: `string`
 
-        This option can be used to simulate paging. Limit the result. Default 20, max 100
+        This option can be used to simulate paging. Limit the result. Default 20, max 1000
 
     - **order**: `string`
 
