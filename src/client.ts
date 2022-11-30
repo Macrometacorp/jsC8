@@ -19,10 +19,14 @@ import { UserAttributesType } from "./user";
 import { Stream } from "./stream";
 import { Graph } from "./graph";
 import { parseCSVToJSON } from "./util/parseCsv";
+import { Function} from "./function";
 
 export class C8Client extends Fabric {
+  function: Function;
+
   constructor(config: Config) {
     super(config);
+    this.function = new Function(config)
   }
 
   useApiKeyAuth(apikey: string): this {
