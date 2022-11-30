@@ -8,10 +8,15 @@ import {
   CollectionCreateProperties,
 } from "./collection";
 import { C8QLLiteral } from "./c8ql-query";
-import { KeyValue, KVCreateOptsObj, KVPairHandle, KVValueOptsObj } from "./keyValue";
+import {
+  KeyValue,
+  KVCreateOptsObj,
+  KVPairHandle,
+  KVValueOptsObj,
+} from "./keyValue";
 import { ApiKeyAttributesType, ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, LinksType, PrimarySortFields } from "./search";
-import { AccountDetails, Billing } from './billing';
+import { AccountDetails, Billing } from "./billing";
 import { CollectionParams, ImportAndExport } from "./importandexport";
 import { Plan, PlanDetails, UpdateTenantPlan } from "./plan";
 import { CreateTenant, ModifyTenant } from "./tenant";
@@ -19,14 +24,17 @@ import { UserAttributesType } from "./user";
 import { Stream } from "./stream";
 import { Graph } from "./graph";
 import { parseCSVToJSON } from "./util/parseCsv";
-import { Function} from "./function";
+import { Redis } from "./redis";
+import { Function } from "./function";
 
 export class C8Client extends Fabric {
+  redis: Redis;
   function: Function;
 
   constructor(config: Config) {
     super(config);
-    this.function = new Function(config)
+    this.redis = new Redis(config);
+    this.function = new Function(config);
   }
 
   useApiKeyAuth(apikey: string): this {
@@ -47,7 +55,9 @@ export class C8Client extends Fabric {
 
   async loginWithApiKey(apikey: string) {
     this.useApiKeyAuth(apikey);
-    const { error, errorMessage, result } = await this.validateApiKey({ apikey });
+    const { error, errorMessage, result } = await this.validateApiKey({
+      apikey,
+    });
     if (error) {
       throw new Error(errorMessage);
     } else {
@@ -56,7 +66,11 @@ export class C8Client extends Fabric {
     }
   }
 
-  createCollection(collectionName: string, properties?: CollectionCreateProperties, isEdge: boolean = false) {
+  createCollection(
+    collectionName: string,
+    properties?: CollectionCreateProperties,
+    isEdge: boolean = false
+  ) {
     let collection;
     if (isEdge) {
       collection = this.edgeCollection(collectionName);
@@ -66,10 +80,12 @@ export class C8Client extends Fabric {
     return collection.create(properties);
   }
 
-  updateCollectionProperties(collectionName: string, properties: CollectionUpdateProperties) {
+  updateCollectionProperties(
+    collectionName: string,
+    properties: CollectionUpdateProperties
+  ) {
     if (Object.keys(properties).length === 0) {
       throw new Error("Properties can not be empty.");
-
     }
     const collection = this.collection(collectionName);
     return collection.updateCollectionProperties(properties);
@@ -118,7 +134,9 @@ export class C8Client extends Fabric {
   }
 
   getDocumentMany(collectionName: string, limit?: number, skip?: number) {
-    const getDocumentsQuery = `FOR doc IN ${collectionName} ${limit ? `limit ${skip ? `${skip},` : ""}${limit}` : ""} return doc`;
+    const getDocumentsQuery = `FOR doc IN ${collectionName} ${
+      limit ? `limit ${skip ? `${skip},` : ""}${limit}` : ""
+    } return doc`;
     return this.executeQuery(getDocumentsQuery);
   }
 
@@ -248,7 +266,7 @@ export class C8Client extends Fabric {
     collectionName: string,
     fields: string[] | string,
     expireAfter: number,
-    name?: string,
+    name?: string
   ) {
     const collection = this.collection(collectionName);
     return collection.createTtlIndex(fields, expireAfter, name);
@@ -277,7 +295,7 @@ export class C8Client extends Fabric {
   // validateQuery() { } already available
 
   executeQuery(query: string | C8QLLiteral, bindVars?: any, opts?: any) {
-    return this.query(query, bindVars, opts).then((cursor) => cursor.all());
+    return this.query(query, bindVars, opts).then(cursor => cursor.all());
   }
 
   // explainQuery() { } already available
@@ -327,10 +345,18 @@ export class C8Client extends Fabric {
     return stream.createStream();
   }
 
-  hasStream(streamName: string, local: boolean, isCollectionStream: boolean = false): Promise<boolean> {
+  hasStream(
+    streamName: string,
+    local: boolean,
+    isCollectionStream: boolean = false
+  ): Promise<boolean> {
     let topic = streamName;
 
-    if (!isCollectionStream && !streamName.includes("c8locals") && !streamName.includes("c8globals")) {
+    if (
+      !isCollectionStream &&
+      !streamName.includes("c8locals") &&
+      !streamName.includes("c8globals")
+    ) {
       topic = local ? `c8locals.${streamName}` : `c8globals.${streamName}`;
     }
 
@@ -338,8 +364,8 @@ export class C8Client extends Fabric {
     // If 200 api exits else api does not exist
 
     return this.getStreams(!local).then(
-      (res) => !!res.result.find((stream: any) => stream.topic === topic),
-      (err) => {
+      res => !!res.result.find((stream: any) => stream.topic === topic),
+      err => {
         throw err;
       }
     );
@@ -560,16 +586,18 @@ export class C8Client extends Fabric {
     graphName: string,
     collectionName: string,
     fromId: string | string[],
-    toId: string | string[],
+    toId: string | string[]
   ) {
     const graph = this.graph(graphName);
     return graph.create({
-      edgeDefinitions: [{
-        collection: collectionName,
-        from: fromId,
-        to: toId
-      }]
-    })
+      edgeDefinitions: [
+        {
+          collection: collectionName,
+          from: fromId,
+          to: toId,
+        },
+      ],
+    });
   }
 
   hasUser(userName: string) {
@@ -618,10 +646,7 @@ export class C8Client extends Fabric {
     return user.replaceUser(data);
   }
 
-  getPermissions(
-    userName: string,
-    isFullRequested?: boolean
-  ) {
+  getPermissions(userName: string, isFullRequested?: boolean) {
     const user = this.user(userName);
     return user.getAllDatabases(isFullRequested);
   }
@@ -691,7 +716,7 @@ export class C8Client extends Fabric {
   }
 
   getKVCollections() {
-    const keyValueColl = this.keyValue('');
+    const keyValueColl = this.keyValue("");
     return keyValueColl.getCollections();
   }
 
@@ -735,7 +760,11 @@ export class C8Client extends Fabric {
     return keyValueColl.deleteCollection();
   }
 
-  getKVCollectionValues(collectionName: string, keys: string[], opts?: KVValueOptsObj) {
+  getKVCollectionValues(
+    collectionName: string,
+    keys: string[],
+    opts?: KVValueOptsObj
+  ) {
     const keyValueColl = this.keyValue(collectionName);
     return keyValueColl.getKVCollectionValues(keys, opts);
   }
@@ -747,7 +776,7 @@ export class C8Client extends Fabric {
 
   //--------------- Api keys ---------------
 
-  apiKeys(keyid: string = '', dbName: string = ''): ApiKeys {
+  apiKeys(keyid: string = "", dbName: string = ""): ApiKeys {
     return new ApiKeys(this._connection, keyid, dbName);
   }
 
@@ -791,7 +820,11 @@ export class C8Client extends Fabric {
     return apiKeys.clearDatabaseAccessLevel();
   }
 
-  setDatabaseAccessLevel(keyid: string, dbName: string, permission: "rw" | "ro" | "none") {
+  setDatabaseAccessLevel(
+    keyid: string,
+    dbName: string,
+    permission: "rw" | "ro" | "none"
+  ) {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.setDatabaseAccessLevel(permission);
   }
@@ -801,17 +834,30 @@ export class C8Client extends Fabric {
     return apiKeys.listAccessibleCollections(full);
   }
 
-  getCollectionAccessLevel(keyid: string, dbName: string, collectionName: string) {
+  getCollectionAccessLevel(
+    keyid: string,
+    dbName: string,
+    collectionName: string
+  ) {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.getCollectionAccessLevel(collectionName);
   }
 
-  clearCollectionAccessLevel(keyid: string, dbName: string, collectionName: string) {
+  clearCollectionAccessLevel(
+    keyid: string,
+    dbName: string,
+    collectionName: string
+  ) {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.clearCollectionAccessLevel(collectionName);
   }
 
-  setCollectionAccessLevel(keyid: string, dbName: string, collectionName: string, permission: "rw" | "ro" | "none") {
+  setCollectionAccessLevel(
+    keyid: string,
+    dbName: string,
+    collectionName: string,
+    permission: "rw" | "ro" | "none"
+  ) {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.setCollectionAccessLevel(collectionName, permission);
   }
@@ -831,7 +877,12 @@ export class C8Client extends Fabric {
     return apiKeys.clearStreamAccessLevel(streamName);
   }
 
-  setStreamAccessLevel(keyid: string, dbName: string, streamName: string, permission: "rw" | "ro" | "none" | "wo") {
+  setStreamAccessLevel(
+    keyid: string,
+    dbName: string,
+    streamName: string,
+    permission: "rw" | "ro" | "none" | "wo"
+  ) {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.setStreamAccessLevel(streamName, permission);
   }
@@ -879,9 +930,19 @@ export class C8Client extends Fabric {
     return search.setSearch(collectionName, enable, field);
   }
 
-  searchInCollection(collectionName: string, searchString: string, bindVars?: object, ttl?: number) {
+  searchInCollection(
+    collectionName: string,
+    searchString: string,
+    bindVars?: object,
+    ttl?: number
+  ) {
     const search = this.search();
-    return search.searchInCollection(collectionName, searchString, bindVars, ttl);
+    return search.searchInCollection(
+      collectionName,
+      searchString,
+      bindVars,
+      ttl
+    );
   }
 
   getListOfViews() {
@@ -889,7 +950,11 @@ export class C8Client extends Fabric {
     return search.getListOfViews();
   }
 
-  createView(viewName: string, links?: LinksType, primarySort?: Array<PrimarySortFields>) {
+  createView(
+    viewName: string,
+    links?: LinksType,
+    primarySort?: Array<PrimarySortFields>
+  ) {
     const search = this.search({ viewName });
     return search.createView(links, primarySort);
   }
@@ -924,7 +989,12 @@ export class C8Client extends Fabric {
     return search.getListOfAnalyzers();
   }
 
-  createAnalyzer(analyzerName: string, type: string, properties?: object, features?: Array<string>) {
+  createAnalyzer(
+    analyzerName: string,
+    type: string,
+    properties?: object,
+    features?: Array<string>
+  ) {
     const search = this.search({ analyzerName });
     return search.createAnalyzer(type, properties, features);
   }
@@ -1013,7 +1083,11 @@ export class C8Client extends Fabric {
     return billing.getCurrentInvoices();
   }
 
-  getInvoiceOfSpecificMonthYear(tenantName: string, year: number, month: number) {
+  getInvoiceOfSpecificMonthYear(
+    tenantName: string,
+    year: number,
+    month: number
+  ) {
     if (!(month > 0 && month <= 12)) {
       throw new Error("Please provide valid month");
     }
@@ -1026,18 +1100,26 @@ export class C8Client extends Fabric {
     return billing.getUsageOfTenant(startDate, endDate);
   }
 
-  getUsageOfTenantForSpecificRegion(tenantName: string, region: string, startDate?: string, endDate?: string) {
+  getUsageOfTenantForSpecificRegion(
+    tenantName: string,
+    region: string,
+    startDate?: string,
+    endDate?: string
+  ) {
     const billing = this.billing(tenantName);
-    return billing.getUsageOfTenantForSpecificRegion(region, startDate, endDate);
+    return billing.getUsageOfTenantForSpecificRegion(
+      region,
+      startDate,
+      endDate
+    );
   }
 
   /** billing apis ends here */
 
-
   /**export and import apis starts from here */
 
   importAndExport(collectionName: string = "") {
-    return new ImportAndExport(this._connection, collectionName)
+    return new ImportAndExport(this._connection, collectionName);
   }
 
   exportDataByQuery(query: string, bindVars?: Record<string, any>) {
@@ -1045,23 +1127,42 @@ export class C8Client extends Fabric {
     return importAndExport.exportDataByQuery(query, bindVars);
   }
 
-  exportDataByCollectionName(collectionName: string, params: CollectionParams = {}) {
+  exportDataByCollectionName(
+    collectionName: string,
+    params: CollectionParams = {}
+  ) {
     const importAndExport = this.importAndExport(collectionName);
-    return importAndExport.exportDataByCollectionName(params)
+    return importAndExport.exportDataByCollectionName(params);
   }
 
-  importDocuments(collectionName: string, data: Array<Record<string, any>>, showErrors: boolean, primaryKey: string, replace: boolean = false) {
+  importDocuments(
+    collectionName: string,
+    data: Array<Record<string, any>>,
+    showErrors: boolean,
+    primaryKey: string,
+    replace: boolean = false
+  ) {
     const importAndExport = this.importAndExport(collectionName);
-    return importAndExport.importDocuments(data, showErrors, primaryKey, replace)
+    return importAndExport.importDocuments(
+      data,
+      showErrors,
+      primaryKey,
+      replace
+    );
   }
 
   /**export and import apis ends */
 
   //--------------- Tenant ---------------
 
-
-  createTenant(email: string, passwd: string, plan: string, attribution: string, dcList: string, otherParams: CreateTenant = {}) {
-
+  createTenant(
+    email: string,
+    passwd: string,
+    plan: string,
+    attribution: string,
+    dcList: string,
+    otherParams: CreateTenant = {}
+  ) {
     if (!email) {
       throw new Error("Please provide email.");
     }
