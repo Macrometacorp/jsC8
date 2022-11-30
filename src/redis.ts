@@ -41,7 +41,7 @@ export class Redis {
       patternArray.push(pattern);
     }
 
-    let countArray: any[] = [];
+    let countArray: (string | number)[] = [];
     if (count !== undefined) {
       countArray.push("COUNT");
       countArray.push(count);
@@ -305,13 +305,13 @@ export class Redis {
       rankArray.push(rank);
     }
 
-    let countArray: any[] = [];
+    let countArray: (string | number)[] = [];
     if (count !== undefined) {
       countArray.push("COUNT");
       countArray.push(count);
     }
 
-    let maxLenArray: any[] = [];
+    let maxLenArray: (string | number)[] = [];
     if (maxLen !== undefined) {
       maxLenArray.push("MAXLEN");
       maxLenArray.push(maxLen);
@@ -1130,16 +1130,16 @@ export class Redis {
       patternArray.push(pattern);
     }
 
-    let countArray: any[] = [];
+    let countArray: (string | number)[] = [];
     if (count !== undefined) {
       countArray.push("COUNT");
       countArray.push(count);
     }
 
-    let typeArray: any[] = [];
+    let typeArray: (string | number)[] = [];
     if (dataType !== undefined) {
       typeArray.push("TYPE");
-      typeArray.push(count);
+      typeArray.push(dataType);
     }
 
     return this._commandParser(
