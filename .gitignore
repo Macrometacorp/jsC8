@@ -1,3 +1,13 @@
 /node_modules
 /lib
 .DS_Store
+
+// Ignoring main.ts used for debuging in VS code
+main.ts
+
+// Ignoring .env files
+.env
+.env.test
+
+// Igniring Jetbrains IDE
+.idea/
