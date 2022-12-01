@@ -1,9 +1,24 @@
 import { Config, Connection } from "./connection";
 
-export interface DeployParameters {
+export interface DeployQueryWorkerParameters {
   type: string;
   name: string;
   queryWorkerName: string;
+  environment: string;
+}
+
+export interface DeployStreamAdhocQueryParameters {
+  type: string;
+  name: string;
+  streamWorkerName: string;
+  environment: string;
+}
+
+export interface DeployStreamPublisherParameters {
+  type: string;
+  name: string;
+  streamWorkerName: string;
+  streamName: string;
   environment: string;
 }
 
@@ -35,11 +50,37 @@ export class Function {
     );
   }
 
-  deployQueryWorkerToEdgeWorker(parameters: DeployParameters) {
+  deployQueryWorkerToEdgeWorker(parameters: DeployQueryWorkerParameters) {
     return this._connection.request(
       {
         method: "POST",
         path: "/_api/function/generate",
+        qs: parameters,
+      },
+      res => res.body
+    );
+  }
+
+  deployStreamAdhocQueryToEdgeWorker(
+    parameters: DeployStreamAdhocQueryParameters
+  ) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/_api/function/generate/query",
+        qs: parameters,
+      },
+      res => res.body
+    );
+  }
+
+  deployStreamPublisherToEdgeWorker(
+    parameters: DeployStreamPublisherParameters
+  ) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/_api/function/generate/publisher",
         qs: parameters,
       },
       res => res.body
