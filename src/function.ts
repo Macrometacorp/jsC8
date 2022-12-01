@@ -2,9 +2,20 @@ import { Config, Connection } from "./connection";
 
 export interface DeployParameters {
   type: string;
-  edgeWorkerName: string;
+  name: string;
   queryWorkerName: string;
   environment: string;
+}
+
+export interface MetadataParameters {
+  type: string;
+  accessToken: string;
+  baseUri: string;
+  clientSecret: string;
+  clientToken: string;
+  resourceTierId: string;
+  groupId: string;
+  hostName: string;
 }
 
 export class Function {
@@ -35,11 +46,32 @@ export class Function {
     );
   }
 
-  getFuctionWorkerInfo(functionName: string) {
+  getFunctionWorkerInfo(functionName: string) {
     return this._connection.request(
       {
         method: "GET",
         path: `/_api/function/${functionName}`,
+      },
+      res => res.body
+    );
+  }
+
+  removeFunctionWorker(functionName: string) {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `/_api/function/${functionName}`,
+      },
+      res => res.body
+    );
+  }
+
+  invokeFunctionWorker(functionName: string, parameters: any) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: `/_api/function/invoke/${functionName}`,
+        qs: parameters,
       },
       res => res.body
     );
@@ -50,6 +82,37 @@ export class Function {
       {
         method: "GET",
         path: "/_api/function/metadata",
+      },
+      res => res.body
+    );
+  }
+  modifyEdgeWorkerMetadata(body: MetadataParameters) {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: "/_api/function/metadata",
+        body: body,
+      },
+      res => res.body
+    );
+  }
+
+  deleteEdgeWorkerMetadata() {
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: "/_api/function/metadata",
+      },
+      res => res.body
+    );
+  }
+
+  createEdgeWorkerMetadata(body: MetadataParameters) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: "/_api/function/metadata",
+        body: body,
       },
       res => res.body
     );
