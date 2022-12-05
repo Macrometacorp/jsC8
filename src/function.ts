@@ -112,7 +112,7 @@ export class Function {
       {
         method: "POST",
         path: `/_api/function/invoke/${functionName}`,
-        qs: { params: parameters },
+        qs: `params=${JSON.stringify(parameters)}`,
       },
       res => res.body
     );
