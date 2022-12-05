@@ -108,14 +108,15 @@ export class Function {
   }
 
   invokeFunctionWorker(functionName: string, parameters: any) {
-    return this._connection.request(
+    const request = this._connection.request(
       {
         method: "POST",
         path: `/_api/function/invoke/${functionName}`,
-        qs: parameters,
+        qs: { params: parameters },
       },
       res => res.body
     );
+    return request;
   }
 
   getEdgeWorkerMetadata() {
