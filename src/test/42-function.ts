@@ -120,8 +120,8 @@ describe("validating function endpoints", function() {
     it("function.deployQueryWorkerToEdgeWorker", async () => {
       const response = await c8Client.function.deployQueryWorkerToEdgeWorker({
         type: "akamai",
-        name: "testSdkEvNba",
-        queryWorkerName: "get-nba",
+        name: "testSdkEv",
+        queryWorkerName: "testSdkEv",
         environment: "PRODUCTION",
       });
       assertCreateEv(response);
@@ -154,14 +154,6 @@ describe("validating function endpoints", function() {
         "url"
       );
     });
-    it("function.removeFunctionWorker", async () => {
-      try {
-        await c8Client.function.removeFunctionWorker("testSdkEvStreamAdhoc");
-      } catch (err) {
-        expect(err.code).to.equal(403);
-        expect(err).to.have.property("message", "Forbidden");
-      }
-    });
     it("function.deployStreamAdhocQueryToEdgeWorker", async () => {
       const response = await c8Client.function.deployStreamAdhocQueryToEdgeWorker(
         {
@@ -172,6 +164,14 @@ describe("validating function endpoints", function() {
         }
       );
       assertCreateEv(response);
+    });
+    it("function.removeFunctionWorker", async () => {
+      try {
+        await c8Client.function.removeFunctionWorker("testSdkEvStreamAdhoc");
+      } catch (err) {
+        expect(err.code).to.equal(403);
+        expect(err).to.have.property("message", "Forbidden");
+      }
     });
     it("function.deployStreamPublisherToEdgeWorker", async () => {
       const response = await c8Client.function.deployStreamPublisherToEdgeWorker(
@@ -185,17 +185,6 @@ describe("validating function endpoints", function() {
       );
       assertCreateEv(response);
     });
-    it("function.invokeFunctionWorker", async () => {
-      try {
-        const response = await c8Client.function.invokeFunctionWorker(
-          "testSdkEv"
-        );
-        expect(response.code).to.equal(201);
-      } catch (err) {
-        expect(err.code).to.equal(400);
-        expect(err).to.have.property("message", "query is empty");
-      }
-    });
   });
   describe("Function negative test cases", () => {
     it("function.invokeFunctionWorkerThatIsNotDeployed", async () => {
@@ -207,6 +196,25 @@ describe("validating function endpoints", function() {
       } catch (err) {
         expect(err.code).to.equal(500);
         expect(err).to.have.property("message", "Internal Server Error");
+      }
+    });
+    it("function.invokeFunctionWorkerWithoutQuery", async () => {
+      try {
+        await c8Client.function.invokeFunctionWorker("testSdkEv");
+      } catch (err) {
+        expect(err.code).to.equal(400);
+        expect(err).to.have.property("message", "query is empty");
+      }
+    });
+
+    it("function.invokeStreamPublisherWithoutSource", async () => {
+      try {
+        await c8Client.function.invokeFunctionWorker(
+          "testSdkEvStreamPublisher"
+        );
+      } catch (err) {
+        expect(err.code).to.equal(404);
+        expect(err).to.have.property("message", "HTTP Source not found");
       }
     });
   });
