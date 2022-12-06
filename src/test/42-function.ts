@@ -4,6 +4,13 @@ import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
+function assertCreateEv(response: any) {
+  expect(response.code).to.equal(202);
+  expect(response.result).to.be.a("array");
+  expect(response.result).to.have.lengthOf(1);
+  expect(response.result[0]).to.have.all.keys("message");
+}
+
 describe("validating function endpoints", function() {
   dotenv.config();
   this.timeout(60000);
@@ -118,10 +125,7 @@ describe("validating function endpoints", function() {
         queryWorkerName: "testSdkKv",
         environment: "PRODUCTION",
       });
-      expect(response.code).to.equal(202);
-      expect(response.result).to.be.a("array");
-      expect(response.result).to.have.lengthOf(1);
-      expect(response.result[0]).to.have.all.keys("message");
+      assertCreateEv(response);
     });
     it("function.getFunctionWorkerInfo", async () => {
       const response = await c8Client.function.getFunctionWorkerInfo(
@@ -151,5 +155,51 @@ describe("validating function endpoints", function() {
         "url"
       );
     });
+    it("function.removeFunctionWorker", async () => {
+      try {
+        const response = await c8Client.function.removeFunctionWorker(
+          "testSdkEvStreamAdhoc"
+        );
+        expect(response.code).to.equal(202);
+        expect(response.result).to.be.a("array");
+        expect(response.result).to.have.lengthOf(1);
+        expect(response.result[0]).to.have.all.keys("message");
+      } catch (err) {
+        expect(err.code).to.equal(403);
+        expect(err).to.have.property("message", "Forbidden");
+      }
+    });
+  });
+  it("function.deployStreamAdhocQueryToEdgeWorker", async () => {
+    const response = await c8Client.function.deployStreamAdhocQueryToEdgeWorker(
+      {
+        type: "akamai",
+        name: "testSdkEvStreamAdhoc",
+        streamWorkerName: "testSdkKvStreamAdhoc",
+        environment: "PRODUCTION",
+      }
+    );
+    assertCreateEv(response);
+  });
+  it("function.deployStreamPublisherToEdgeWorker", async () => {
+    const response = await c8Client.function.deployStreamPublisherToEdgeWorker({
+      type: "akamai",
+      name: "testSdkEvStreamPublisher",
+      streamWorkerName: "testSdkEvStreamPublisher",
+      streamName: "testSdkKvStreamPublisher",
+      environment: "PRODUCTION",
+    });
+    assertCreateEv(response);
+  });
+  it("function.invokeFunctionWorker", async () => {
+    try {
+      const response = await c8Client.function.invokeFunctionWorker(
+        "testSdkEv22"
+      );
+      expect(response.code).to.equal(201);
+    } catch (err) {
+      expect(err.code).to.equal(400);
+      expect(err).to.have.property("message", "query is empty");
+    }
   });
 });

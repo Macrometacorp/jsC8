@@ -107,12 +107,16 @@ export class Function {
     );
   }
 
-  invokeFunctionWorker(functionName: string, parameters: any) {
+  invokeFunctionWorker(functionName: string, parameters?: any) {
+    let queryParameters = "";
+    if (parameters !== undefined) {
+      queryParameters = `params=${JSON.stringify(parameters)}`;
+    }
     const request = this._connection.request(
       {
         method: "POST",
         path: `/_api/function/invoke/${functionName}`,
-        qs: `params=${JSON.stringify(parameters)}`,
+        qs: queryParameters,
       },
       res => res.body
     );
