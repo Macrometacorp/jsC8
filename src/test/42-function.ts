@@ -24,7 +24,7 @@ describe("validating function endpoints", function() {
       c8Version: C8_VERSION,
     });
   });
-  // Akamai credentials
+  // Akamai credentials -> Needed in env file
   const accessToken = process.env.ACCESS_TOKEN ? process.env.ACCESS_TOKEN : "";
   const baseUri = process.env.BASE_URL ? process.env.BASE_URL : "";
   const clientSecret = process.env.CLIENT_SECRET
@@ -94,7 +94,6 @@ describe("validating function endpoints", function() {
       expect(response).to.equal("");
     });
   });
-
   describe("Function Edge Workers Endpoints", () => {
     it("function.listFunctionWorkers", async () => {
       const response = await c8Client.function.listFunctionWorkers();
@@ -121,8 +120,8 @@ describe("validating function endpoints", function() {
     it("function.deployQueryWorkerToEdgeWorker", async () => {
       const response = await c8Client.function.deployQueryWorkerToEdgeWorker({
         type: "akamai",
-        name: "testSdkEv",
-        queryWorkerName: "testSdkKv",
+        name: "testSdkEvNba",
+        queryWorkerName: "get-nba",
         environment: "PRODUCTION",
       });
       assertCreateEv(response);
@@ -157,49 +156,58 @@ describe("validating function endpoints", function() {
     });
     it("function.removeFunctionWorker", async () => {
       try {
-        const response = await c8Client.function.removeFunctionWorker(
-          "testSdkEvStreamAdhoc"
-        );
-        expect(response.code).to.equal(202);
-        expect(response.result).to.be.a("array");
-        expect(response.result).to.have.lengthOf(1);
-        expect(response.result[0]).to.have.all.keys("message");
+        await c8Client.function.removeFunctionWorker("testSdkEvStreamAdhoc");
       } catch (err) {
         expect(err.code).to.equal(403);
         expect(err).to.have.property("message", "Forbidden");
       }
     });
-  });
-  it("function.deployStreamAdhocQueryToEdgeWorker", async () => {
-    const response = await c8Client.function.deployStreamAdhocQueryToEdgeWorker(
-      {
-        type: "akamai",
-        name: "testSdkEvStreamAdhoc",
-        streamWorkerName: "testSdkKvStreamAdhoc",
-        environment: "PRODUCTION",
-      }
-    );
-    assertCreateEv(response);
-  });
-  it("function.deployStreamPublisherToEdgeWorker", async () => {
-    const response = await c8Client.function.deployStreamPublisherToEdgeWorker({
-      type: "akamai",
-      name: "testSdkEvStreamPublisher",
-      streamWorkerName: "testSdkEvStreamPublisher",
-      streamName: "testSdkKvStreamPublisher",
-      environment: "PRODUCTION",
-    });
-    assertCreateEv(response);
-  });
-  it("function.invokeFunctionWorker", async () => {
-    try {
-      const response = await c8Client.function.invokeFunctionWorker(
-        "testSdkEv22"
+    it("function.deployStreamAdhocQueryToEdgeWorker", async () => {
+      const response = await c8Client.function.deployStreamAdhocQueryToEdgeWorker(
+        {
+          type: "akamai",
+          name: "testSdkEvStreamAdhoc",
+          streamWorkerName: "testSdkKvStreamAdhoc",
+          environment: "PRODUCTION",
+        }
       );
-      expect(response.code).to.equal(201);
-    } catch (err) {
-      expect(err.code).to.equal(400);
-      expect(err).to.have.property("message", "query is empty");
-    }
+      assertCreateEv(response);
+    });
+    it("function.deployStreamPublisherToEdgeWorker", async () => {
+      const response = await c8Client.function.deployStreamPublisherToEdgeWorker(
+        {
+          type: "akamai",
+          name: "testSdkEvStreamPublisher",
+          streamWorkerName: "testSdkEvStreamPublisher",
+          streamName: "testSdkKvStreamPublisher",
+          environment: "PRODUCTION",
+        }
+      );
+      assertCreateEv(response);
+    });
+    it("function.invokeFunctionWorker", async () => {
+      try {
+        const response = await c8Client.function.invokeFunctionWorker(
+          "testSdkEv"
+        );
+        expect(response.code).to.equal(201);
+      } catch (err) {
+        expect(err.code).to.equal(400);
+        expect(err).to.have.property("message", "query is empty");
+      }
+    });
+  });
+  describe("Function negative test cases", () => {
+    it("function.invokeFunctionWorkerThatIsNotDeployed", async () => {
+      try {
+        await c8Client.function.invokeFunctionWorker("testSdkEvNotDeployed", {
+          offset: 0,
+          limit: 1,
+        });
+      } catch (err) {
+        expect(err.code).to.equal(500);
+        expect(err).to.have.property("message", "Internal Server Error");
+      }
+    });
   });
 });
