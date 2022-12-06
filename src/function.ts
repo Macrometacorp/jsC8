@@ -1,25 +1,22 @@
 import { Config, Connection } from "./connection";
 
-export interface DeployQueryWorkerParameters {
+export interface DeployParametersBase {
   type: string;
   name: string;
+  environment: string;
+}
+
+export interface DeployQueryWorkerParameters extends DeployParametersBase {
   queryWorkerName: string;
-  environment: string;
 }
 
-export interface DeployStreamAdhocQueryParameters {
-  type: string;
-  name: string;
+export interface DeployStreamAdhocQueryParameters extends DeployParametersBase {
   streamWorkerName: string;
-  environment: string;
 }
 
-export interface DeployStreamPublisherParameters {
-  type: string;
-  name: string;
+export interface DeployStreamPublisherParameters extends DeployParametersBase {
   streamWorkerName: string;
   streamName: string;
-  environment: string;
 }
 
 export interface MetadataParameters {
@@ -39,6 +36,7 @@ export class Function {
   constructor(config?: Config) {
     this._connection = new Connection(config);
   }
+
   listFunctionWorkers(type: string = "all") {
     return this._connection.request(
       {
@@ -112,7 +110,7 @@ export class Function {
     if (parameters !== undefined) {
       queryParameters = `params=${JSON.stringify(parameters)}`;
     }
-    const request = this._connection.request(
+    return this._connection.request(
       {
         method: "POST",
         path: `/_api/function/invoke/${functionName}`,
@@ -120,7 +118,6 @@ export class Function {
       },
       res => res.body
     );
-    return request;
   }
 
   getEdgeWorkerMetadata() {
