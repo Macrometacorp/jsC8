@@ -25,13 +25,16 @@ import { Stream } from "./stream";
 import { Graph } from "./graph";
 import { parseCSVToJSON } from "./util/parseCsv";
 import { Redis } from "./redis";
+import { Function } from "./function";
 
 export class C8Client extends Fabric {
   redis: Redis;
+  function: Function;
 
   constructor(config: Config) {
     super(config);
     this.redis = new Redis(config);
+    this.function = new Function(config);
   }
 
   useApiKeyAuth(apikey: string): this {
