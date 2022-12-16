@@ -18,7 +18,6 @@ import { ApiKeyAttributesType, ApiKeys, validateApiKeyHandle } from "./apiKeys";
 import { Search, SearchOptions, LinksType, PrimarySortFields } from "./search";
 import { AccountDetails, Billing } from "./billing";
 import { CollectionParams, ImportAndExport } from "./importandexport";
-import { Plan, PlanDetails, UpdateTenantPlan } from "./plan";
 import { CreateTenant, ModifyTenant } from "./tenant";
 import { UserAttributesType } from "./user";
 import { Stream } from "./stream";
@@ -1008,44 +1007,6 @@ export class C8Client extends Fabric {
     const search = this.search({ analyzerName });
     return search.getAnalyzerDefinition();
   }
-
-  /**plan apis starts from here */
-
-  plan(planName: string = "") {
-    return new Plan(this._connection, planName);
-  }
-
-  getListOfPlans() {
-    const plan = this.plan();
-    return plan.getListOfPlans();
-  }
-
-  createPlan(planDetails: PlanDetails) {
-    const plan = this.plan();
-    return plan.createPlan(planDetails);
-  }
-
-  deletePlan(planName: string) {
-    const plan = this.plan(planName);
-    return plan.deletePlan();
-  }
-
-  getPlanDetails(planName: string) {
-    const plan = this.plan(planName);
-    return plan.getPlanDetails();
-  }
-
-  updatePlan(planName: string, planDetails: PlanDetails) {
-    const plan = this.plan(planName);
-    return plan.updatePlan(planDetails);
-  }
-
-  updateTenantPlan(updateTenantPlan: UpdateTenantPlan) {
-    const plan = this.plan();
-    return plan.updateTenantPlan(updateTenantPlan);
-  }
-
-  /**plans apis ends here */
 
   /** billing apis starts from here */
 
