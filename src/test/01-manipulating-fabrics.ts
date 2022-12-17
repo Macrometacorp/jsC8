@@ -8,7 +8,7 @@ const range = (n: number): number[] => Array.from(Array(n).keys());
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const it2x = C8_VERSION < 30000 ? it : it.skip;
 
-describe("Manipulating fabrics", function () {
+describe("Manipulating fabrics", function() {
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
 
@@ -20,7 +20,7 @@ describe("Manipulating fabrics", function () {
   beforeEach(async () => {
     fabric = new Fabric({
       url: testUrl,
-      c8Version: C8_VERSION
+      c8Version: C8_VERSION,
     });
 
     await fabric.login("guest@macrometa.io", "guest");
@@ -28,7 +28,6 @@ describe("Manipulating fabrics", function () {
 
     const response = await fabric.getAllEdgeLocations();
     dcList = getDCListString(response);
-
   });
   afterEach(() => {
     fabric.close();
@@ -37,7 +36,7 @@ describe("Manipulating fabrics", function () {
     this.beforeAll(async () => {
       fabric = new Fabric({
         url: testUrl,
-        c8Version: C8_VERSION
+        c8Version: C8_VERSION,
       });
 
       await fabric.login("guest@macrometa.io", "guest");
@@ -45,7 +44,6 @@ describe("Manipulating fabrics", function () {
 
       const response = await fabric.getAllEdgeLocations();
       dcList = getDCListString(response);
-
     });
     this.afterAll(() => {
       fabric.close();
@@ -99,7 +97,7 @@ describe("Manipulating fabrics", function () {
     });
     it("creates a fabric with the given name", async () => {
       await fabric.createFabric(name, ["root"], {
-        dcList: dcList
+        dcList: dcList,
       });
       fabric.useFabric(name);
       const info = await fabric.get();
@@ -142,7 +140,7 @@ describe("Manipulating fabrics", function () {
     let name = `testfabric${Date.now()}`;
     beforeEach(async () => {
       await fabric.createFabric(name, ["root"], {
-        dcList: dcList
+        dcList: dcList,
       });
     });
     it("deletes the given fabric from the server", async () => {
@@ -164,7 +162,7 @@ describe("Manipulating fabrics", function () {
     let systemCollections = range(4).map(i => `c${i}${Date.now()}${i}`);
     beforeEach(async () => {
       await fabric.createFabric(name, ["root"], {
-        dcList: dcList
+        dcList: dcList,
       });
       fabric.useFabric(name);
       await Promise.all([
@@ -177,7 +175,7 @@ describe("Manipulating fabrics", function () {
           let collection = fabric.collection(name);
           await collection.create({ isSystem: true });
           await collection.save({ _key: "example" });
-        })
+        }),
       ]);
     });
     afterEach(async () => {
@@ -192,8 +190,12 @@ describe("Manipulating fabrics", function () {
             await fabric.collection(name).document("example");
             expect.fail("Expected document to be destroyed");
           } catch (e) {
-            expect(e).to.be.an.instanceof(C8Error);
-            expect(e.code).eq(404);
+            let message;
+            if (e instanceof C8Error) {
+              expect(e).to.be.an.instanceof(C8Error);
+              expect(e.code).eq(404);
+            } else message = String(e);
+            console.log(message);
             return;
           }
         }),
@@ -202,11 +204,15 @@ describe("Manipulating fabrics", function () {
             await fabric.collection(name).document("example");
             expect.fail("Expected document to be destroyed");
           } catch (e) {
-            expect(e).to.be.an.instanceof(C8Error);
-            expect(e.code).eq(404);
+            let message;
+            if (e instanceof C8Error) {
+              expect(e).to.be.an.instanceof(C8Error);
+              expect(e.code).eq(404);
+            } else message = String(e);
+            console.log(message);
             return;
           }
-        })
+        }),
       ]);
     });
     it2x(
@@ -249,7 +255,7 @@ describe("Manipulating fabrics", function () {
     let collection: DocumentCollection;
     this.beforeAll(async () => {
       const fabric2 = new Fabric({
-        url: testUrl
+        url: testUrl,
       });
       await fabric2.login("guest@macrometa.io", "guest");
       fabric2.useTenant("guest");
@@ -262,7 +268,7 @@ describe("Manipulating fabrics", function () {
     it("should explain query", async () => {
       const queryObject = {
         query: `for doc in ${collectionName} return doc`,
-        bindVars: {}
+        bindVars: {},
       };
       const response = await fabric.explainQuery(queryObject);
       expect(response.error).to.be.false;

@@ -163,7 +163,7 @@ export class Connection {
         ? config.url
         : [config.url]
       : ["https://test.macrometa.io"];
-    const apiUrls = urls.map((url) => {
+    const apiUrls = urls.map(url => {
       return `https://api-${url.split("https://")[1]}`;
     });
     this.addToHostList(apiUrls);
@@ -176,9 +176,7 @@ export class Connection {
   }
 
   private get _fabricPath() {
-    return this._fabricName === false
-      ? ""
-      : `/_fabric/${this._fabricName}`;
+    return this._fabricName === false ? "" : `/_fabric/${this._fabricName}`;
   }
 
   private _runQueue() {
@@ -191,6 +189,7 @@ export class Connection {
       this._activeHost = (this._activeHost + 1) % this._hosts.length;
     }
     this._activeTasks += 1;
+    // @ts-ignore
     this._hosts[host](task.options, (err, res) => {
       this._activeTasks -= 1;
       if (err) {
@@ -278,17 +277,17 @@ export class Connection {
   }
 
   addToHostList(urls: string | string[]): number[] {
-    const cleanUrls = (Array.isArray(urls) ? urls : [urls]).map((url) =>
+    const cleanUrls = (Array.isArray(urls) ? urls : [urls]).map(url =>
       this._sanitizeEndpointUrl(url)
     );
-    const newUrls = cleanUrls.filter((url) => this._urls.indexOf(url) === -1);
+    const newUrls = cleanUrls.filter(url => this._urls.indexOf(url) === -1);
     this._urls.push(...newUrls);
     this._hosts.push(
       ...newUrls.map((url: string) =>
         createRequest(url, this._agentOptions, this._agent)
       )
     );
-    return cleanUrls.map((url) => this._urls.indexOf(url));
+    return cleanUrls.map(url => this._urls.indexOf(url));
   }
 
   get c8Major() {
@@ -355,7 +354,7 @@ export class Connection {
   ): Promise<T> {
     return new Promise((resolve, reject) => {
       let contentType = "text/plain";
-      let path = urlInfo.path
+      let path = urlInfo.path;
 
       if (isBinary) {
         contentType = "application/octet-stream";
@@ -428,6 +427,7 @@ export class Connection {
                   if (typeof parsedBody !== "string") {
                     parsedBody = res.body.toString("utf-8");
                   }
+                  // @ts-ignore
                   e.response = res;
                   reject(e);
                   return;
