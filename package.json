@@ -68,7 +68,6 @@
     "xhr": "^2.4.1"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20221111.1",
     "@types/chai": "^4.0.10",
     "@types/mocha": "^5.2.7",
     "@types/papaparse": "^5.3.1",

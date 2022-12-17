@@ -1,6 +1,6 @@
 export function wsEdgeWorker(url: string) {
   const webSocketUrl = url.replace("wss:", "https:");
-
+  // @ts-ignore
   const [client, server]: any = Object.values(new WebSocketPair());
 
   return fetch(webSocketUrl, { headers: { upgrade: "websocket" } })
