@@ -190,13 +190,13 @@ describe("Manipulating fabrics", function() {
             await fabric.collection(name).document("example");
             expect.fail("Expected document to be destroyed");
           } catch (e) {
-            let message;
+            const message = String(e);
             if (e instanceof C8Error) {
               expect(e).to.be.an.instanceof(C8Error);
               expect(e.code).eq(404);
-            } else message = String(e);
+              return;
+            }
             console.log(message);
-            return;
           }
         }),
         ...systemCollections.map(async name => {
@@ -204,13 +204,13 @@ describe("Manipulating fabrics", function() {
             await fabric.collection(name).document("example");
             expect.fail("Expected document to be destroyed");
           } catch (e) {
-            let message;
+            const message = String(e);
             if (e instanceof C8Error) {
               expect(e).to.be.an.instanceof(C8Error);
               expect(e.code).eq(404);
-            } else message = String(e);
+              return;
+            }
             console.log(message);
-            return;
           }
         }),
       ]);
