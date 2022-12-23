@@ -10,7 +10,7 @@ export const isBrowser = true;
 
 function omit<T>(obj: T, keys: (keyof T)[]): T {
   const result = {} as T;
-  // @ts-ignore
+  // @ts-ignore TS2769: No overload matches this call.
   for (const key of Object.keys(obj)) {
     if (keys.includes(key as keyof T)) continue;
     result[key as keyof T] = obj[key as keyof T];

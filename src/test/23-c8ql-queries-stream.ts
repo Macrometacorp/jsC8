@@ -99,7 +99,7 @@ describe34("C8QL Stream queries", function() {
         .create()
         .then(() => {
           return Promise.all(
-            Array.apply(null, { length: 1000 } as any)
+            Array.apply(null, { length: 1000 } as Array<Number>)
               .map(Number.call, Number)
               .map((i: any) => collection.save({ hallo: i }))
           );
