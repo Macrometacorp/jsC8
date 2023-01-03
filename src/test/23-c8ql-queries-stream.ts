@@ -18,7 +18,7 @@ describe34("C8QL Stream queries", function() {
   before(async () => {
     fabric = new Fabric({
       url: testUrl,
-      c8Version: Number(process.env.C8_VERSION || 30400)
+      c8Version: Number(process.env.C8_VERSION || 30400),
     });
 
     await fabric.login("guest@macrometa.io", "guest");
@@ -65,7 +65,7 @@ describe34("C8QL Stream queries", function() {
           {},
           {
             batchSize: 2,
-            count: true
+            count: true,
           }
         )
         .then(cursor => {
@@ -79,7 +79,7 @@ describe34("C8QL Stream queries", function() {
     it("supports compact queries with options", done => {
       let query: any = {
         query: "FOR x IN RANGE(1, @max) RETURN x",
-        bindVars: { max: 10 }
+        bindVars: { max: 10 },
       };
       fabric
         .query(query, { batchSize: 2, count: true })
@@ -99,9 +99,9 @@ describe34("C8QL Stream queries", function() {
         .create()
         .then(() => {
           return Promise.all(
-            Array.apply(null, { length: 1000 })
+            Array.apply(null, { length: 1000 } as Array<Number>)
               .map(Number.call, Number)
-              .map((i: Number) => collection.save({ hallo: i }))
+              .map((i: any) => collection.save({ hallo: i }))
           );
         })
         .then(() => void done())
@@ -122,7 +122,9 @@ describe34("C8QL Stream queries", function() {
 
       let count = 0;
       Promise.all(
-        Array.apply(null, { length: 25 }).map(() => fabric.query(query, opts))
+        Array.apply(null, { length: 25 } as any).map(() =>
+          fabric.query(query, opts)
+        )
       )
         .then(cursors => {
           return Promise.all(

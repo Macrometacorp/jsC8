@@ -18,7 +18,9 @@ export function toForm(fields: Fields, callback: Errback<MultipartRequest>) {
       form.append(key, value);
     }
   } catch (e) {
-    callback(e);
+    if (e instanceof Error) {
+      callback(e);
+    }
     return;
   }
   callback(null, { body: form });
