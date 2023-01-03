@@ -70,6 +70,7 @@
   "devDependencies": {
     "@types/chai": "^4.0.10",
     "@types/mocha": "^5.2.7",
+    "@types/node": "^18.11.18",
     "@types/papaparse": "^5.3.1",
     "@types/request": "^2.47.1",
     "@types/request-promise": "^4.1.42",
