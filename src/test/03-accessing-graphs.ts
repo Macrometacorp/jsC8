@@ -1,47 +1,44 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 import { Graph } from "../graph";
 import { getDCListString } from "../util/helper";
+import * as dotenv from "dotenv";
 
 const range = (n: number): number[] => Array.from(Array(n).keys());
+const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 describe("Accessing graphs", function() {
   // create fabric takes 11s in a standard cluster
+  dotenv.config();
   this.timeout(600000);
-
+  let c8Client: C8Client;
   let name = `testdb${Date.now()}`;
-  let fabric: Fabric;
-  const testUrl: string =
-    process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   let dcList: string;
   before(async () => {
-    fabric = new Fabric({
-      url: testUrl,
-      c8Version: Number(process.env.C8_VERSION || 30400)
+    c8Client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
+      c8Version: C8_VERSION,
     });
-
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
-
-    const response = await fabric.getAllEdgeLocations();
+    const response = await c8Client.getAllEdgeLocations();
     dcList = getDCListString(response);
-
-    await fabric.createFabric(name, ["root"], { dcList: dcList });
-    fabric.useFabric(name);
+    await c8Client.createFabric(name, ["root"], { dcList: dcList });
+    c8Client.useFabric(name);
   });
   after(async () => {
     try {
-      fabric.useFabric("_system");
-      await fabric.dropFabric(name);
+      c8Client.useFabric("_system");
+      await c8Client.dropFabric(name);
     } finally {
-      fabric.close();
+      c8Client.close();
     }
   });
   describe("fabric.graph", () => {
     it("returns a Graph instance", () => {
       let name = "potato";
-      let graph = fabric.graph(name);
+      let graph = c8Client.graph(name);
       expect(graph).to.be.an.instanceof(Graph);
       expect(graph)
         .to.have.property("name")
@@ -54,45 +51,49 @@ describe("Accessing graphs", function() {
     let graphNames = range(4).map(i => `g${Date.now()}${i}`);
     before(done => {
       Promise.all([
-        ...vertexCollectionNames.map(name => fabric.collection(name).create()),
-        ...edgeCollectionNames.map(name => fabric.edgeCollection(name).create())
+        ...vertexCollectionNames.map(name =>
+          c8Client.collection(name).create()
+        ),
+        ...edgeCollectionNames.map(name =>
+          c8Client.edgeCollection(name).create()
+        ),
       ])
         .then(() =>
           Promise.all([
             ...graphNames.map(name =>
-              fabric.graph(name).create({
+              c8Client.graph(name).create({
                 edgeDefinitions: edgeCollectionNames.map(name => ({
                   collection: name,
                   from: vertexCollectionNames,
-                  to: vertexCollectionNames
+                  to: vertexCollectionNames,
                 })),
                 isSmart: true,
                 options: {
                   numberOfShards: 1,
-                  smartGraphAttribute: "test"
+                  smartGraphAttribute: "test",
                 },
-                orphanCollections: []
+                orphanCollections: [],
               })
-            )
+            ),
           ])
         )
         .then(() => void done())
         .catch(done);
     });
     after(done => {
-      Promise.all(graphNames.map(name => fabric.graph(name).drop()))
+      Promise.all(graphNames.map(name => c8Client.graph(name).drop()))
         .then(() =>
           Promise.all(
             vertexCollectionNames
               .concat(edgeCollectionNames)
-              .map(name => fabric.collection(name).drop())
+              .map(name => c8Client.collection(name).drop())
           )
         )
         .then(() => void done())
         .catch(done);
     });
     it("fetches information about all graphs", done => {
-      fabric
+      c8Client
         .listGraphs()
         .then(graphs => {
           expect(graphs.length).to.equal(graphNames.length);
@@ -108,39 +109,43 @@ describe("Accessing graphs", function() {
     let graphNames = range(4).map(i => `g${Date.now()}${i}`);
     before(done => {
       Promise.all([
-        ...vertexCollectionNames.map(name => fabric.collection(name).create()),
-        ...edgeCollectionNames.map(name => fabric.edgeCollection(name).create())
+        ...vertexCollectionNames.map(name =>
+          c8Client.collection(name).create()
+        ),
+        ...edgeCollectionNames.map(name =>
+          c8Client.edgeCollection(name).create()
+        ),
       ])
         .then(() =>
           Promise.all([
             ...graphNames.map(name =>
-              fabric.graph(name).create({
+              c8Client.graph(name).create({
                 edgeDefinitions: edgeCollectionNames.map(name => ({
                   collection: name,
                   from: vertexCollectionNames,
-                  to: vertexCollectionNames
-                }))
+                  to: vertexCollectionNames,
+                })),
               })
-            )
+            ),
           ])
         )
         .then(() => void done())
         .catch(done);
     });
     after(done => {
-      Promise.all(graphNames.map(name => fabric.graph(name).drop()))
+      Promise.all(graphNames.map(name => c8Client.graph(name).drop()))
         .then(() =>
           Promise.all(
             vertexCollectionNames
               .concat(edgeCollectionNames)
-              .map(name => fabric.collection(name).drop())
+              .map(name => c8Client.collection(name).drop())
           )
         )
         .then(() => void done())
         .catch(done);
     });
     it("creates Graph instances", done => {
-      fabric
+      c8Client
         .graphs()
         .then(graphs => {
           expect(graphs.length).to.equal(graphNames.length);
