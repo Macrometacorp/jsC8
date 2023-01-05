@@ -1,55 +1,58 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 import { Graph } from "../graph";
 import { getDCListString } from "../util/helper";
+import * as dotenv from "dotenv";
 
+const C8_VERSION = Number(process.env.C8_VERSION || 30400);
+
+// Works only with global MM api key
 describe("Manipulating graph edges", function() {
+  dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
+  let c8Client: C8Client;
 
   const dbName = `testdb${Date.now()}`;
-  let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   let dcList: string;
   const graphName = `testgraph${Date.now()}`;
   let graph: Graph;
   before(async () => {
-    fabric = new Fabric({
-      url: testUrl,
-      c8Version: Number(process.env.C8_VERSION || 30400)
+    c8Client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
+      c8Version: C8_VERSION,
     });
 
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
-
-    const response = await fabric.getAllEdgeLocations();
+    const response = await c8Client.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(dbName, ["root"], {
-      dcList: dcList
+    await c8Client.createFabric(dbName, ["root"], {
+      dcList: dcList,
     });
-    fabric.useFabric(dbName);
+    c8Client.useFabric(dbName);
   });
   after(async () => {
     try {
-      fabric.useFabric("_system");
-      await fabric.dropFabric(dbName);
+      c8Client.useFabric("_system");
+      await c8Client.dropFabric(dbName);
     } finally {
-      fabric.close();
+      c8Client.close();
     }
   });
   beforeEach(done => {
-    graph = fabric.graph(graphName);
+    graph = c8Client.graph(graphName);
     graph
       .create({
         edgeDefinitions: [
           {
             collection: "knows",
             from: ["person"],
-            to: ["person"]
-          }
-        ]
+            to: ["person"],
+          },
+        ],
       })
       .then(() => void done())
       .catch(done);
@@ -76,10 +79,16 @@ describe("Manipulating graph edges", function() {
             (e: any) => e.collection === "knows"
           );
           expect(
-            [].concat.apply([], edgeDefinition.map((e: any) => e.from))
+            [].concat.apply(
+              [],
+              edgeDefinition.map((e: any) => e.from)
+            )
           ).to.contain("person");
           expect(
-            [].concat.apply([], edgeDefinition.map((e: any) => e.to))
+            [].concat.apply(
+              [],
+              edgeDefinition.map((e: any) => e.to)
+            )
           ).to.contain("person");
         })
         .then(() => done())
@@ -131,7 +140,7 @@ describe("Manipulating graph edges", function() {
         .addEdgeDefinition({
           collection: "works_in",
           from: ["person"],
-          to: ["city"]
+          to: ["city"],
         })
         .then(info => {
           expect(info).to.have.property("name", graphName);
@@ -145,10 +154,16 @@ describe("Manipulating graph edges", function() {
             (e: any) => e.collection === "works_in"
           );
           expect(
-            [].concat.apply([], edgeDefinition.map((e: any) => e.from))
+            [].concat.apply(
+              [],
+              edgeDefinition.map((e: any) => e.from)
+            )
           ).to.contain("person");
           expect(
-            [].concat.apply([], edgeDefinition.map((e: any) => e.to))
+            [].concat.apply(
+              [],
+              edgeDefinition.map((e: any) => e.to)
+            )
           ).to.contain("city");
         })
         .then(() => done())
@@ -161,7 +176,7 @@ describe("Manipulating graph edges", function() {
         .replaceEdgeDefinition("knows", {
           collection: "knows",
           from: ["person"],
-          to: ["city"]
+          to: ["city"],
         })
         .then(info => {
           expect(info).to.have.property("name", graphName);
@@ -175,10 +190,16 @@ describe("Manipulating graph edges", function() {
             (e: any) => e.collection === "knows"
           );
           expect(
-            [].concat.apply([], edgeDefinition.map((e: any) => e.from))
+            [].concat.apply(
+              [],
+              edgeDefinition.map((e: any) => e.from)
+            )
           ).to.contain("person");
           expect(
-            [].concat.apply([], edgeDefinition.map((e: any) => e.to))
+            [].concat.apply(
+              [],
+              edgeDefinition.map((e: any) => e.to)
+            )
           ).to.contain("city");
         })
         .then(() => done())

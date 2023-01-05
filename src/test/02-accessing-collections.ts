@@ -10,8 +10,8 @@ const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 // Keep in mind that fabric extends C8Client
 // All the methods that fabric contains C8Client has as well
 describe("Accessing collections", function() {
-  // create fabric takes 11s in a standard cluster
   dotenv.config();
+  // create fabric takes 11s in a standard cluster
   this.timeout(600000);
   let c8Client: C8Client;
 

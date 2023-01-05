@@ -1,46 +1,46 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 import { DocumentCollection } from "../collection";
 import { getDCListString } from "../util/helper";
+import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const it3x = C8_VERSION >= 30000 ? it : it.skip;
 
-describe("DocumentCollection API", function () {
+describe("DocumentCollection API", function() {
+  dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
+  let c8Client: C8Client;
 
   let name = `testdb${Date.now()}`;
-  let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   let dcList: string;
   let collection: DocumentCollection;
   before(async () => {
-    fabric = new Fabric({
-      url: testUrl,
-      c8Version: C8_VERSION
+    c8Client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
+      c8Version: C8_VERSION,
     });
 
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
-
-    const response = await fabric.getAllEdgeLocations();
+    const response = await c8Client.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, ["root"], { dcList: dcList });
-    fabric.useFabric(name);
+    await c8Client.createFabric(name, ["root"], { dcList: dcList });
+    c8Client.useFabric(name);
   });
   after(async () => {
     try {
-      fabric.useFabric("_system");
-      await fabric.dropFabric(name);
+      c8Client.useFabric("_system");
+      await c8Client.dropFabric(name);
     } finally {
-      fabric.close();
+      c8Client.close();
     }
   });
   beforeEach(done => {
-    collection = fabric.collection(`c${Date.now()}`);
+    collection = c8Client.collection(`c${Date.now()}`);
     collection
       .create()
       .then(() => void done())
@@ -86,7 +86,7 @@ describe("DocumentCollection API", function () {
       expect(exists).to.equal(false);
     });
     it("returns false if the collection does not exist", async () => {
-      const exists = await fabric
+      const exists = await c8Client
         .collection("doesnotexist")
         .documentExists("lol");
       expect(exists).to.equal(false);
@@ -305,7 +305,7 @@ describe("DocumentCollection API", function () {
       const _key = `d_${Date.now()}`;
       const doc = { _key, potato: "tomato" };
       const replaceDocs = [{ _key, sup: "dawg" }];
-      
+
       collection
         .save(doc)
         .then(meta => {
@@ -347,7 +347,9 @@ describe("DocumentCollection API", function () {
     it("updates the given documents", done => {
       const _key = `d_${Date.now()}`;
       const doc = { _key, potato: "tomato", empty: false };
-      const updatedDocs = [{ _key, potato: "tomato", sup: "dawg", empty: null }];
+      const updatedDocs = [
+        { _key, potato: "tomato", sup: "dawg", empty: null },
+      ];
       collection
         .save(doc)
         .then(meta => {
@@ -373,16 +375,17 @@ describe("DocumentCollection API", function () {
     it("removes null values if keepNull is explicitly set to false", done => {
       const _key = `d_${Date.now()}`;
       const doc = { _key, potato: "tomato", empty: false };
-      const updatedDocs = [{ _key, potato: "tomato", sup: "dawg", empty: null }];
+      const updatedDocs = [
+        { _key, potato: "tomato", sup: "dawg", empty: null },
+      ];
       collection
         .save(doc)
         .then(meta => {
           delete meta.error;
           Object.assign(doc, meta);
-          return collection.updateDocuments(
-            updatedDocs as any,
-            { keepNull: false }
-          );
+          return collection.updateDocuments(updatedDocs as any, {
+            keepNull: false,
+          });
         })
         .then(() => collection.document((doc as any)._key))
         .then(data => {

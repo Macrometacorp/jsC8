@@ -144,6 +144,7 @@ describe("Manipulating fabrics", function() {
   });
   // We need to be sure that user can create system collection
   // C8Error: tenant cannot create system collection
+  // We need MM api key to run this test
   describe("fabric.truncate", () => {
     let name = `testfabric${Date.now()}`;
     let nonSystemCollections = range(4).map(i => `c${i}${Date.now()}`);

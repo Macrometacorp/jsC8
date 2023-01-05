@@ -1,43 +1,45 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 import { EdgeCollection } from "../collection";
 import { getDCListString } from "../util/helper";
+import * as dotenv from "dotenv";
+
+const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 describe("EdgeCollection API", function() {
+  dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
 
   let name = `testdb${Date.now()}`;
-  let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
+  let c8Client: C8Client;
 
   let dcList: string;
   let collection: EdgeCollection;
   before(async () => {
-    fabric = new Fabric({
-      url: testUrl,
-      c8Version: Number(process.env.C8_VERSION || 30400)
+    c8Client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
+      c8Version: C8_VERSION,
     });
 
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
-
-    const response = await fabric.getAllEdgeLocations();
+    const response = await c8Client.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(name, ["root"], { dcList: dcList });
-    fabric.useFabric(name);
+    await c8Client.createFabric(name, ["root"], { dcList: dcList });
+    c8Client.useFabric(name);
   });
   after(async () => {
     try {
-      fabric.useFabric("_system");
-      await fabric.dropFabric(name);
+      c8Client.useFabric("_system");
+      await c8Client.dropFabric(name);
     } finally {
-      fabric.close();
+      c8Client.close();
     }
   });
   beforeEach(done => {
-    collection = fabric.edgeCollection(`c${Date.now()}`);
+    collection = c8Client.edgeCollection(`c${Date.now()}`);
     collection
       .create()
       .then(() => void done())
@@ -140,7 +142,7 @@ describe("EdgeCollection API", function() {
         chicken: "chicken",
         _key: "banana",
         _from: "d/1",
-        _to: "d/2"
+        _to: "d/2",
       };
       const meta = await collection.save(data);
       expect(meta).to.be.an("object");
@@ -272,8 +274,8 @@ describe("EdgeCollection API", function() {
   describe("edgeCollection.traversal", () => {
     let knows: any;
     beforeEach(done => {
-      knows = fabric.edgeCollection("knows");
-      const person = fabric.collection("person");
+      knows = c8Client.edgeCollection("knows");
+      const person = c8Client.collection("person");
       Promise.all([person.create(), knows.create()])
         .then(() =>
           Promise.all([
@@ -282,15 +284,15 @@ describe("EdgeCollection API", function() {
               { _key: "Bob" },
               { _key: "Charlie" },
               { _key: "Dave" },
-              { _key: "Eve" }
+              { _key: "Eve" },
             ]),
             knows.import([
               { _from: "person/Alice", _to: "person/Bob" },
               { _from: "person/Bob", _to: "person/Charlie" },
               { _from: "person/Bob", _to: "person/Dave" },
               { _from: "person/Eve", _to: "person/Alice" },
-              { _from: "person/Eve", _to: "person/Bob" }
-            ])
+              { _from: "person/Eve", _to: "person/Bob" },
+            ]),
           ])
         )
         .then(() => done())
@@ -330,7 +332,7 @@ describe("EdgeCollection API", function() {
           return collection.replace(doc as any, {
             sup: "dawg",
             _from: "d/1",
-            _to: "d/2"
+            _to: "d/2",
           });
         })
         .then(() => collection.edge((doc as any)._key))

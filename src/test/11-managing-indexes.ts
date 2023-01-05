@@ -1,48 +1,47 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 import { DocumentCollection } from "../collection";
 import { getDCListString } from "../util/helper";
+import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const itPre34 = C8_VERSION < 30400 ? it : it.skip;
 const it34 = C8_VERSION >= 30400 ? it : it.skip;
 
 describe("Managing indexes", function() {
+  dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
-
-  let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
+  let c8Client: C8Client;
 
   let dcList: string;
   let dbName = `testdb${Date.now()}`;
   let collection: DocumentCollection;
   let collectionName = `collection${Date.now()}`;
   before(async () => {
-    fabric = new Fabric({
-      url: testUrl,
+    c8Client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
       c8Version: C8_VERSION,
     });
 
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
-
-    const response = await fabric.getAllEdgeLocations();
+    const response = await c8Client.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(dbName, ["root"], {
+    await c8Client.createFabric(dbName, ["root"], {
       dcList: dcList,
     });
-    fabric.useFabric(dbName);
-    collection = fabric.collection(collectionName);
+    c8Client.useFabric(dbName);
+    collection = c8Client.collection(collectionName);
     await collection.create();
   });
   after(async () => {
     try {
-      fabric.useFabric("_system");
-      await fabric.dropFabric(dbName);
+      c8Client.useFabric("_system");
+      await c8Client.dropFabric(dbName);
     } finally {
-      fabric.close();
+      c8Client.close();
     }
   });
   describe("collection.createIndex", () => {
@@ -209,7 +208,9 @@ describe("Managing indexes", function() {
           return collection.indexes().then(indexes => {
             expect(indexes).to.be.instanceof(Array);
             expect(indexes).to.not.be.empty;
-            expect(indexes.filter((i: any) => i.id === index.id).length).to.equal(1);
+            expect(
+              indexes.filter((i: any) => i.id === index.id).length
+            ).to.equal(1);
           });
         })
         .then(() => done())
@@ -220,14 +221,16 @@ describe("Managing indexes", function() {
     it("should drop existing index", done => {
       const indexName = `hash_${Date.now()}`;
       collection
-        .createHashIndex(["test"], { name: indexName, unique: true })
+        .createHashIndex(["test2"], { name: indexName })
         .then(info => {
           return collection.dropIndex(indexName).then(index => {
             expect(index).to.have.property("id", info.id);
             return collection.indexes().then(indexes => {
               expect(indexes).to.be.instanceof(Array);
               expect(indexes).to.not.be.empty;
-              expect(indexes.filter((i: any) => i.id === index.id).length).to.equal(0);
+              expect(
+                indexes.filter((i: any) => i.id === index.id).length
+              ).to.equal(0);
             });
           });
         })

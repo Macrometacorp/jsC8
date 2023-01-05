@@ -1,41 +1,41 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 import { COLLECTION_NOT_FOUND, DocumentCollection } from "../collection";
 import { getDCListString } from "../util/helper";
+import * as dotenv from "dotenv";
 
+const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 describe("Collection metadata", function() {
   // create fabric takes 11s in a standard cluster
+  dotenv.config();
   this.timeout(60000);
-
-  let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
+  let c8Client: C8Client;
 
   let dcList: string;
   let dbName = `testdb${Date.now()}`;
   let collection: DocumentCollection;
   let collectionName = `collection${Date.now()}`;
   before(async () => {
-    fabric = new Fabric({
-      url: testUrl,
-      c8Version: Number(process.env.C8_VERSION || 30400)
+    c8Client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
+      c8Version: C8_VERSION,
     });
 
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
-    
-    const response = await fabric.getAllEdgeLocations();
+    const response = await c8Client.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(dbName, ["root"], {
-      dcList: dcList
+    await c8Client.createFabric(dbName, ["root"], {
+      dcList: dcList,
     });
-    fabric.useFabric(dbName);
-    collection = fabric.collection(collectionName);
+    c8Client.useFabric(dbName);
+    collection = c8Client.collection(collectionName);
     await collection.create();
   });
   after(async () => {
-    fabric.useFabric("_system");
-    await fabric.dropFabric(dbName);
+    c8Client.useFabric("_system");
+    await c8Client.dropFabric(dbName);
   });
   describe("collection.get", () => {
     it("should return information about a collection", async () => {
@@ -47,7 +47,7 @@ describe("Collection metadata", function() {
     });
     it("should throw if collection does not exist", async () => {
       try {
-        await fabric.collection("no").get();
+        await c8Client.collection("no").get();
       } catch (e) {
         expect(e).to.have.property("errorNum", COLLECTION_NOT_FOUND);
         return;
@@ -61,7 +61,7 @@ describe("Collection metadata", function() {
       expect(exists).to.equal(true);
     });
     it("should return false if collection does not exist", async () => {
-      const exists = await fabric.collection("no").exists();
+      const exists = await c8Client.collection("no").exists();
       expect(exists).to.equal(false);
     });
   });
