@@ -148,7 +148,7 @@ describe("Manipulating fabrics", function() {
   describe("fabric.truncate", () => {
     let name = `testfabric${Date.now()}`;
     let nonSystemCollections = range(4).map(i => `c${i}${Date.now()}`);
-    let systemCollections = range(4).map(i => `c${i}${Date.now()}${i}`);
+    let systemCollections = range(4).map(i => `_c${i}${Date.now()}${i}`);
     beforeEach(async () => {
       const response = await c8Client.getAllEdgeLocations();
       let dcList: string = getDCListString(response);

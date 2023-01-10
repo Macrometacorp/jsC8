@@ -214,9 +214,14 @@ describe("Manipulating collections", async function() {
   describe("collection.onChange", () => {
     it("should get the message on collection change", async done => {
       if (process.env.URL) {
-        const handler = await collection.onChange(process.env.URL.substring(8));
+        let streamCollection = c8Client.collection("testRealTime");
+        await streamCollection.create({ stream: true });
+
+        const handler = await streamCollection.onChange(
+          process.env.URL.substring(8).slice(0, -1)
+        );
         handler.on("open", () => {
-          collection.save({ name: "Anthony", lastname: "Gonsalvis" });
+          streamCollection.save({ name: "Anthony", lastname: "Gonsalvis" });
         });
 
         handler.on("message", (msg: string) => {
