@@ -80,7 +80,7 @@ const jsc8 = require("jsc8");
 const client = new jsc8("https://gdn1.macrometa.io");
 ```
 
-or to have failover support:
+or to have fail-over support:
 
 ```js
 const jsc8 = require("jsc8");
@@ -120,7 +120,7 @@ async function login() {
 }
 ```
 
-Below line should print the jwt token. However, this is just for demonstative
+Below line should print the jwt token. However, this is just for demonstrative
 purposes as this token will be added to further requests. Simple client.login
 should suffice for most cases.
 
@@ -152,7 +152,7 @@ client = new jsc8({
 });
 ```
 
-or to have failover support:
+or to have fail-over support:
 
 ```js
 const jsc8 = require("jsc8");
@@ -181,7 +181,7 @@ client = new jsc8({
 });
 ```
 
-or to have failover support:
+or to have fail-over support:
 
 ```js
 const jsc8 = require("jsc8");
@@ -419,7 +419,7 @@ populate();
 C8QL is C8's query language. You can execute C8QL query on our newly created
 collection `employees` to get its contents.
 
-> The query `FOR employee IN employees RETURN employee` is equivalent to SQL's
+> The query `FOR employee IN employees RETURN employee` is equivalent to SQL`s
 > SELECT query.
 
 ```js
@@ -805,7 +805,7 @@ restqldemo().then(console.log("Starting Execution"));
 
 Let's create geo-fabric called `demofabric` by passing a parameter called
 `dclist`. The fabric `demofabric` is created in all the regions specified in the
-dclist.
+`dclist`.
 
 ```js
 const jsc8 = require("jsc8");

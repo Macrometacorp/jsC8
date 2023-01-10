@@ -1,5 +1,9 @@
 ## jsc8 SDK
 
+![npm](https://img.shields.io/npm/v/jsc8)
+![npm type definitions](https://img.shields.io/npm/types/jsc8)
+![npm](https://img.shields.io/npm/dm/jsc8)
+
 Javacript SDK for the Macrometa Global Data Mesh.
 
 ---
@@ -7,7 +11,6 @@ Javacript SDK for the Macrometa Global Data Mesh.
 # ⚙️ Installation
 
 - From NPM
--
 
 ```bash
 npm install jsc8
