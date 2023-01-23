@@ -1,80 +1,77 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
+import { getDCListString } from "../util/helper";
 
+describe("manipulating restql", function() {
+  // create fabric takes 11s in a standard cluster
+  this.timeout(50000);
 
-describe("manipulating restql", function () {
-    // create fabric takes 11s in a standard cluster
-    this.timeout(50000);
+  let client: C8Client;
+  let name = `testdb${Date.now()}`;
+  let dcList: string;
 
-    let fabric: Fabric;
-    const testUrl: string =
-        process.env.TEST_C8_URL || "https://test.macrometa.io";
+  before(async () => {
+    client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC
+    });
+    const response = await client.getAllEdgeLocations();
+    dcList = getDCListString(response);
+    await client.createFabric(name, ["root"], { dcList: dcList });
+    client.useFabric(name);
+  });
 
+  after(() => {
+    client.close();
+  });
+
+  describe("client.saveQuery", () => {
+    it("should save a query", async () => {
+      const queryName = "testQuery";
+      const response: any = await client.saveQuery(
+        queryName,
+        {},
+        "for coll in _collections return coll"
+      );
+      expect(response.error).to.be.false;
+      expect(response.result.name).to.equal(queryName);
+    });
+  });
+
+  describe("client.listSavedQueries", () => {
+    it("should make a successful API call", async () => {
+      const response: any = await client.listSavedQueries();
+      expect(response.error).to.be.false;
+      expect(response.result.length).to.be.at.least(1);
+    });
+  });
+
+  describe("client.executeSavedQuery", () => {
+    let response: { error: any };
+    const queryName = "testQuery";
     before(async () => {
-        fabric = new Fabric({
-            url: testUrl,
-            c8Version: Number(process.env.C8_VERSION || 30400)
-        });
-        await fabric.login("guest@macrometa.io", "guest");
-        fabric.useTenant("guest");
+      response = await client.executeSavedQuery(queryName, {});
     });
 
-    after(() => {
-        fabric.close();
+    it("should execute a saved query", async () => {
+      expect(response.error).to.be.false;
     });
+  });
 
-   
-    describe("fabric.saveQuery", () => {
-        
-        it("should save a query", async () => {
-            const queryName = "testQuery";
-            const response = await fabric.saveQuery(queryName, {}, "for coll in _collections return coll");
-            expect(response.error).to.be.false;
-            expect(response.result.name).to.equal(queryName);
-            
-        })
+  describe("client.deleteSavedQuery", () => {
+    let response: { error: any };
+    const queryName = "testQuery";
+
+    it("should delete a saved query", async () => {
+      response = await client.deleteSavedQuery(queryName);
+      expect(response.error).to.be.false;
     });
+  });
 
-    describe("fabric.listSavedQueries", () => {
-        it("should make a successful API call", async () => {
-            const response = await fabric.listSavedQueries();
-            expect(response.error).to.be.false;
-            expect(response.result.length).to.be.at.least(1)
-        })
-    });
+  describe("client.createRestqlCursor", () => {
+    //const query = "FOR x IN _routing RETURN x";
 
-    describe("fabric.executeSavedQuery",()=>{
-        let response: { error: any; };
-        const queryName = "testQuery";
-        before(async () => {
-            response = await fabric.executeSavedQuery(queryName, {});
-        });
-       
-        it("should execute a saved query", async () => {
-            expect(response.error).to.be.false;
-        })
-
-    });
-
-    describe("fabric.deleteSavedQuery",()=>{
-        let response: { error: any; };
-        const queryName = "testQuery";
-
-        it("should delete a saved query", async () => {
-            response = await fabric.deleteSavedQuery(queryName)
-            expect(response.error).to.be.false;
-        })
-
-
-    });
-
-    describe("fabric.createRestqlCursor",()=>{
-        //const query = "FOR x IN _routing RETURN x";
-
-        it("should delete a saved query");
-
-
-    });
-
-
-})
+    it("should delete a saved query");
+  });
+});
