@@ -8,32 +8,30 @@ describe("User Management", function () {
   // create fabric takes 11s in a standard cluster
   this.timeout(20000);
 
-  let fabric: C8Client;
+  let client: C8Client;
+  let name = `testdb${Date.now()}`;
   let dcList: string;
-  const testUrl: string =
-    process.env.TEST_C8_URL || "https://test.macrometa.io";
   const tenant = "guest";
 
   before(async () => {
-    fabric = new C8Client({
-      url: testUrl,
-      c8Version: Number(process.env.C8_VERSION || 30400)
+    client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC
     });
-
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant(tenant);
-
-    const response = await fabric.getAllEdgeLocations();
+    const response = await client.getAllEdgeLocations();
     dcList = getDCListString(response);
+    await client.createFabric(name, ["root"], { dcList: dcList });
+    client.useFabric(name);
   });
 
   after(() => {
-    fabric.close();
+    client.close();
   });
 
-  describe("fabric.user", () => {
+  describe("client.user", () => {
     it("creates a new user instance", () => {
-      expect(fabric.user("testUser", "testUser@test.com")).to.be.instanceof(
+      expect(client.user("testUser", "testUser@test.com")).to.be.instanceof(
         User
       );
     });
@@ -45,7 +43,7 @@ describe("User Management", function () {
     it("creates a user", async () => {
       const userName = `user${Date.now()}`;
       const userEmail = `${userName}@test.com`;
-      user = fabric.user(userName, userEmail);
+      user = client.user(userName, userEmail);
       const response = await user.createUser("testPass");
       expect(response.error).to.be.false;
     });
@@ -55,9 +53,9 @@ describe("User Management", function () {
     });
   });
 
-  describe("fabric.getAllUsers", () => {
+  describe("client.getAllUsers", () => {
     it("Lists all users", async () => {
-      const response = await fabric.getAllUsers();
+      const response = await client.getAllUsers();
       expect(response.error).to.be.false;
     });
   });
@@ -67,7 +65,7 @@ describe("User Management", function () {
     beforeEach(async () => {
       const userName = `user${Date.now()}`;
       const userEmail = `${userName}@test.com`;
-      user = fabric.user(userName, userEmail);
+      user = client.user(userName, userEmail);
       await user.createUser("testPass");
     });
 
@@ -114,15 +112,15 @@ describe("User Management", function () {
       const testFabricName = `testFabric${Date.now()}`;
 
       beforeEach(async () => {
-        await fabric.createFabric(testFabricName, [user.user], {
+        await client.createFabric(testFabricName, [user.user], {
           dcList: dcList
         });
-        // fabric.useFabric(testFabricName);
+        // client.useFabric(testFabricName);
       });
 
       afterEach(async () => {
-        fabric.useFabric("_system");
-        await fabric.dropFabric(testFabricName);
+        client.useFabric("_system");
+        await client.dropFabric(testFabricName);
       });
 
       it("Lists the accessible databases and their permissions ", async () => {
@@ -147,7 +145,7 @@ describe("User Management", function () {
 
       it("Gets the access level of a collection in a database ", async () => {
         const collectionName = `coll${Date.now()}`;
-        await fabric.collection(collectionName).create();
+        await client.collection(collectionName).create();
         const response = await user.getCollectionAccessLevel(
           testFabricName,
           collectionName
@@ -162,9 +160,9 @@ describe("User Management", function () {
       });
 
       it.skip("Clears the access level of a collection in a database ", async () => {
-        fabric.useFabric(testFabricName);
+        client.useFabric(testFabricName);
         const collectionName = `coll${Date.now()}`;
-        await fabric.collection(collectionName).create();
+        await client.collection(collectionName).create();
         const response = await user.clearCollectionAccessLevel(
           testFabricName,
           collectionName
@@ -175,7 +173,7 @@ describe("User Management", function () {
 
       it.skip("Sets the access level of a collection in a database ", async () => {
         const collectionName = `coll${Date.now()}`;
-        await fabric.collection(collectionName).create();
+        await client.collection(collectionName).create();
         const response = await user.setCollectionAccessLevel(
           testFabricName,
           collectionName,
@@ -201,17 +199,17 @@ describe("User Management", function () {
       const collectionName = `testColle${Date.now()}`;
 
       beforeEach(async () => {
-        await fabric.createFabric(testFabricName, [user.user], {
+        await client.createFabric(testFabricName, [user.user], {
           dcList: dcList
         });
-        // fabric.useFabric(testFabricName);
-        await fabric.createCollection(collectionName);
+        // client.useFabric(testFabricName);
+        await client.createCollection(collectionName);
       });
 
       afterEach(async () => {
-        fabric.useFabric("_system");
-        await fabric.deleteCollection(collectionName);
-        await fabric.dropFabric(testFabricName);
+        client.useFabric("_system");
+        await client.deleteCollection(collectionName);
+        await client.dropFabric(testFabricName);
       });
 
       describe("user.listAccessibleCollections", () => {
