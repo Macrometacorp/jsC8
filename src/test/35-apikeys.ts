@@ -1,24 +1,22 @@
 import { expect } from "chai";
 import { ApiKeys } from "../apiKeys";
 import { C8Client } from "../jsC8";
+import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 describe("validating new apis", function () {
+    dotenv.config();
     this.timeout(60000);
-
     let c8Client: C8Client;
-    const testUrl: string =
-        process.env.TEST_C8_URL || "https://test.macrometa.io";
 
     beforeEach(async () => {
         c8Client = new C8Client({
-            url: testUrl,
-            c8Version: C8_VERSION
+            url: process.env.URL,
+            apiKey: process.env.API_KEY,
+            fabricName: process.env.FABRIC,
+            c8Version: C8_VERSION,
         });
-
-        await c8Client.login("guest@macrometa.io", "guest");
-        c8Client.useTenant("guest");
     });
     afterEach(() => {
         c8Client.close();
@@ -116,16 +114,16 @@ describe("validating new apis", function () {
         });
 
         // describe("apikey stream access level", () => {
-            // beforeEach(async () => {
-            //     await c8Client.createStream(streamName, false);
-            // });
+        // beforeEach(async () => {
+        //     await c8Client.createStream(streamName, false);
+        // });
 
-            // afterEach(async () => {
-            //     try {
-            //         const stream = await c8Client.stream(streamName, false);
-            //         await stream.deleteStream(true);
-            //     } catch (error) { }
-            // });
+        // afterEach(async () => {
+        //     try {
+        //         const stream = await c8Client.stream(streamName, false);
+        //         await stream.deleteStream(true);
+        //     } catch (error) { }
+        // });
         //     describe("apiKey.listAccessibleStreams", () => {
         //         it("list accessible streams", async () => {
         //             const response = await apiKeys.listAccessibleStreams();

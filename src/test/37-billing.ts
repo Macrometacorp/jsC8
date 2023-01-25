@@ -1,23 +1,22 @@
 import { expect } from "chai";
 import { C8Client } from "../jsC8";
 import { HttpError } from "../error";
+import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("validating billing apis", function() {
+describe("validating billing apis", function () {
+  dotenv.config();
   this.timeout(60000);
-
   let c8Client: C8Client;
-  const testUrl: string =
-    process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   beforeEach(async () => {
     c8Client = new C8Client({
-      url: testUrl,
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
       c8Version: C8_VERSION,
     });
-    await c8Client.login("guest@macrometa.io", "guest");
-    c8Client.useTenant("guest");
   });
 
   const contactDetails: {

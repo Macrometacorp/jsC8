@@ -1,23 +1,22 @@
 import { expect } from "chai";
 import { C8Client } from "../jsC8";
 import { Search } from "../search";
+import * as dotenv from "dotenv";
+
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 describe("validating search apis", function () {
+    dotenv.config();
     this.timeout(60000);
-
     let c8Client: C8Client;
-    const testUrl: string =
-        process.env.TEST_C8_URL || "https://test.macrometa.io";
 
     beforeEach(async () => {
         c8Client = new C8Client({
-            url: testUrl,
-            c8Version: C8_VERSION
+            url: process.env.URL,
+            apiKey: process.env.API_KEY,
+            fabricName: process.env.FABRIC,
+            c8Version: C8_VERSION,
         });
-
-        await c8Client.login("guest@macrometa.io", "guest");
-        c8Client.useTenant("guest");
     });
     afterEach(() => {
         c8Client.close();
@@ -76,7 +75,7 @@ describe("validating search apis", function () {
 
             it("update view properties", async () => {
                 await c8Client.createCollection(coll);
-                const response = await search.updateViewProperties({ [coll]: { analyzers: ['identity'], fields: { 'v': {} } }  });
+                const response = await search.updateViewProperties({ [coll]: { analyzers: ['identity'], fields: { 'v': {} } } });
                 expect(response.links).to.deep.equal({ [coll]: { analyzers: ['identity'], fields: { 'v': {} }, includeAllFields: false, storeValues: "none", trackListPositions: false } });
                 await c8Client.deleteCollection(coll);
             });
