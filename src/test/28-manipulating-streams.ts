@@ -1,40 +1,39 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 import { Stream } from "../stream";
+import * as dotenv from "dotenv";
 
 // TODO : @VIKAS Update Test cases
 
 describe("Manipulating streams", function () {
+  dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(50000);
 
-  let fabric: Fabric;
-  const testUrl: string =
-    process.env.TEST_C8_URL || "https://test.macrometa.io";
+  let client: C8Client;
 
   before(async () => {
-    fabric = new Fabric({
-      url: testUrl,
-      c8Version: Number(process.env.C8_VERSION || 30400),
+    client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC
     });
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
   });
 
   after(() => {
-    fabric.close();
+    client.close();
   });
 
-  describe("fabric.stream", () => {
+  describe("client.stream", () => {
     it("returns a new Stream instance", () => {
-      expect(fabric.stream("testStream", true)).to.be.instanceof(Stream);
+      expect(client.stream("testStream", true)).to.be.instanceof(Stream);
     });
     it("gets all streams", async () => {
-      const response = await fabric.getStreams();
+      const response = await client.getStreams();
       expect(response.error).to.be.false;
     });
     it("clears backlog", async () => {
-      const response = await fabric.clearBacklog();
+      const response = await client.clearBacklog();
       expect(response.error).to.be.false;
     });
     it("clears subscription backlog");
@@ -47,13 +46,13 @@ describe("Manipulating streams", function () {
 
       it("creates a persistent local stream", async () => {
         const name = `stream${Date.now()}`;
-        stream = fabric.stream(name, true);
+        stream = client.stream(name, true);
         const response = await stream.createStream();
         expect(response.error).to.be.false;
       });
       it("creates a persistent global stream", async () => {
         const name = `stream${Date.now()}`;
-        stream = fabric.stream(name, false);
+        stream = client.stream(name, false);
         const response = await stream.createStream();
         expect(response.error).to.be.false;
       });
@@ -66,20 +65,20 @@ describe("Manipulating streams", function () {
 
       it("deletes global stream", async () => {
         const name = `stream${Date.now()}`;
-        stream = fabric.stream(name, true);
+        stream = client.stream(name, true);
         const response = await stream.createStream();
         expect(response.error).to.be.false;
-        stream = fabric.stream(response.result['stream-id']);
+        stream = client.stream(response.result['stream-id']);
         const deleteStreamResponse = await stream.deleteStream();
         expect(deleteStreamResponse.error).to.be.false;
       });
 
       it("deletes global stream", async () => {
         const name = `stream${Date.now()}`;
-        stream = fabric.stream(name, false);
+        stream = client.stream(name, false);
         const response = await stream.createStream();
         expect(response.error).to.be.false;
-        stream = fabric.stream(response.result['stream-id']);
+        stream = client.stream(response.result['stream-id']);
         const deleteStreamResponse = await stream.deleteStream();
         expect(deleteStreamResponse.error).to.be.false;
       });
@@ -91,7 +90,7 @@ describe("Manipulating streams", function () {
     let consumer: any;
     let producer: any;
     this.beforeAll(async () => {
-      stream = fabric.stream(`testStream${Date.now()}`, false);
+      stream = client.stream(`testStream${Date.now()}`, false);
       await stream.createStream();
     });
 
@@ -116,7 +115,7 @@ describe("Manipulating streams", function () {
       let dcName: string;
 
       this.beforeAll(async () => {
-        const response = await fabric.getLocalEdgeLocation();
+        const response = await client.getLocalEdgeLocation();
         dcName = response.tags.url;
       });
       this.afterAll(() => {
@@ -170,7 +169,7 @@ describe("Manipulating streams", function () {
       //       let stream: Stream;
       //       beforeEach(async () => {
       //         const streamName = `stream${Date.now()}`;
-      //         stream = fabric.stream(streamName, true);
+      //         stream = client.stream(streamName, true);
       //         await stream.createStream();
       //       });
       //       it("terminates persistent local stream", async () => {
@@ -184,7 +183,7 @@ describe("Manipulating streams", function () {
       //       let stream: Stream;
       //       beforeEach(async () => {
       //         const streamName = `stream${Date.now()}`;
-      //         stream = fabric.stream(streamName, false);
+      //         stream = client.stream(streamName, false);
       //         await stream.createStream();
       //       });
       //       it("terminates persistent global stream", async () => {
@@ -203,7 +202,7 @@ describe("Manipulating streams", function () {
         let producer: any;
 
         this.beforeAll(async () => {
-          const response = await fabric.getLocalEdgeLocation();
+          const response = await client.getLocalEdgeLocation();
           dcName = response.tags.url;
         });
         this.afterAll(() => {
