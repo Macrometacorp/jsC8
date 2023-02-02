@@ -1,46 +1,39 @@
 import { expect } from "chai";
-import { c8ql, Fabric } from "../jsC8";
-import { ArrayCursor } from "../cursor";
+import { c8ql } from "../jsC8";
+import { C8Client } from "../jsC8";
 import { getDCListString } from "../util/helper";
+import { ArrayCursor } from "../cursor";
+import * as dotenv from "dotenv";
 
-const C8_VERSION = Number(process.env.C8_VERSION || 30400);
-const describe34 = C8_VERSION >= 30400 ? describe : describe.skip;
-
-describe34("C8QL Stream queries", function() {
+describe("C8QL Stream queries", function() {
   // create fabric takes 11s in a standard cluster and sometimes even more
+  dotenv.config();
   this.timeout(1000000);
-
+  let c8Client: C8Client;
   let name = `testdb${Date.now()}`;
-  let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
-
   let dcList: string;
   before(async () => {
-    fabric = new Fabric({
-      url: testUrl,
-      c8Version: Number(process.env.C8_VERSION || 30400),
+    c8Client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
     });
-
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
-
-    const response = await fabric.getAllEdgeLocations();
+    const response = await c8Client.getAllEdgeLocations();
     dcList = getDCListString(response);
-
-    await fabric.createFabric(name, ["root"], { dcList: dcList });
-    fabric.useFabric(name);
+    await c8Client.createFabric(name, ["root"], { dcList: dcList });
+    c8Client.useFabric(name);
   });
   after(async () => {
     try {
-      fabric.useFabric("_system");
-      await fabric.dropFabric(name);
+      c8Client.useFabric("_system");
+      await c8Client.dropFabric(name);
     } finally {
-      fabric.close();
+      c8Client.close();
     }
   });
-  describe("fabric.query", () => {
+  describe("c8Client.query", () => {
     it("returns a cursor for the query result", done => {
-      fabric
+      c8Client
         .query("RETURN 23", {}, { options: { stream: true } })
         .then(cursor => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
@@ -49,7 +42,7 @@ describe34("C8QL Stream queries", function() {
         .catch(done);
     });
     it("supports bindVars", done => {
-      fabric
+      c8Client
         .query("RETURN @x", { x: 5 }, { options: { stream: true } })
         .then(cursor => cursor.next())
         .then(value => {
@@ -59,7 +52,7 @@ describe34("C8QL Stream queries", function() {
         .catch(done);
     });
     it("supports options", done => {
-      fabric
+      c8Client
         .query(
           "FOR x IN 1..10 RETURN x",
           {},
@@ -81,7 +74,7 @@ describe34("C8QL Stream queries", function() {
         query: "FOR x IN RANGE(1, @max) RETURN x",
         bindVars: { max: 10 },
       };
-      fabric
+      c8Client
         .query(query, { batchSize: 2, count: true })
         .then(cursor => {
           expect(cursor.count).to.equal(10);
@@ -94,7 +87,7 @@ describe34("C8QL Stream queries", function() {
   describe.skip("with some data", () => {
     let cname = "MyTestCollection";
     before(done => {
-      let collection = fabric.collection(cname);
+      let collection = c8Client.collection(cname);
       collection
         .create()
         .then(() => {
@@ -108,22 +101,21 @@ describe34("C8QL Stream queries", function() {
         .catch(done);
     });
     after(done => {
-      fabric
+      c8Client
         .collection(cname)
         .drop()
         .then(() => done())
         .catch(done);
     });
-
     it("can access large collection in parallel", done => {
-      let collection = fabric.collection(cname);
+      let collection = c8Client.collection(cname);
       let query = c8ql`FOR doc in ${collection} RETURN doc`;
       const opts = { batchSize: 250, options: { stream: true } };
 
       let count = 0;
       Promise.all(
         Array.apply(null, { length: 25 } as any).map(() =>
-          fabric.query(query, opts)
+          c8Client.query(query, opts)
         )
       )
         .then(cursors => {
@@ -142,15 +134,13 @@ describe34("C8QL Stream queries", function() {
         .catch(done);
     });
     it("can do writes and reads", done => {
-      let collection = fabric.collection(cname);
+      let collection = c8Client.collection(cname);
       let readQ = c8ql`FOR doc in ${collection} RETURN doc`;
       let writeQ = c8ql`FOR i in 1..1000 LET y = SLEEP(1) INSERT {forbidden: i} INTO ${collection}`;
       const opts = { batchSize: 500, ttl: 5, options: { stream: true } };
-
       // 900s lock timeout + 5s ttl
-      let readCursor = fabric.query(readQ, opts);
-      let writeCursor = fabric.query(writeQ, opts);
-
+      let readCursor = c8Client.query(readQ, opts);
+      let writeCursor = c8Client.query(writeQ, opts);
       // the read cursor should always win
       Promise.race([readCursor, writeCursor])
         .then(c => {

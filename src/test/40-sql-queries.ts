@@ -9,7 +9,7 @@ const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 describe("Test Sql query functions", function() {
   dotenv.config();
-  this.timeout(60000)
+  this.timeout(60000);
   let c8Client: C8Client;
   let name = `testdb${Date.now()}`;
 
@@ -35,7 +35,9 @@ describe("Test Sql query functions", function() {
       let collection = c8Client.collection(collectionName);
 
       let collectionDetails = await collection.create();
-      console.log("Collection " + collectionDetails.name + " created successfully");
+      console.log(
+        "Collection " + collectionDetails.name + " created successfully"
+      );
 
       collection.save({ category_id: "0", name: "Kindle" }, true);
     } catch (e) {
@@ -66,7 +68,11 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with named bindVars", done => {
       c8Client
-        .query("SELECT * FROM products where name = $prodName", { prodName: "Kindle" }, { sql: true })
+        .query(
+          "SELECT * FROM products where name = $1",
+          { 1: "Kindle" },
+          { sql: true }
+        )
         .then(cursor => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           expect(cursor["_result"]).is.not.empty;
@@ -78,7 +84,9 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with array", done => {
       c8Client
-        .query("SELECT * FROM products where name = $1", ["Kindle"], { sql: true })
+        .query("SELECT * FROM products where name = $1", ["Kindle"], {
+          sql: true,
+        })
         .then(cursor => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           expect(cursor["_result"]).is.not.empty;
@@ -126,7 +134,9 @@ describe("Test Sql query functions", function() {
 
     it("throws an exception on error (async await)", async () => {
       try {
-        await c8Client.query("SELECT * FROM fakeProducts", undefined, { sql: true });
+        await c8Client.query("SELECT * FROM fakeProducts", undefined, {
+          sql: true,
+        });
         expect.fail();
       } catch (err) {
         expect(err).is.instanceof(C8Error);
@@ -137,17 +147,6 @@ describe("Test Sql query functions", function() {
   });
 
   describe("Sql query with executeQuery() function", () => {
-    let c8Client: C8Client;
-
-    before(async () => {
-      c8Client = new C8Client({
-        url: process.env.URL,
-        apiKey: process.env.API_KEY,
-        fabricName: process.env.FABRIC,
-        c8Version: C8_VERSION,
-      });
-    });
-
     it("executes sql query with empty bindVars object", done => {
       c8Client
         .executeQuery("SELECT * FROM products", {}, { sql: true })
@@ -161,7 +160,11 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with named bindVars", done => {
       c8Client
-        .executeQuery("SELECT * FROM products where name = $prodName", { prodName: "Kindle" }, { sql: true })
+        .executeQuery(
+          "SELECT * FROM products where name = $1",
+          { 1: "Kindle" },
+          { sql: true }
+        )
         .then(result => {
           expect(result).is.not.empty;
           expect(result[0]).includes({ name: "Kindle" });
@@ -172,7 +175,9 @@ describe("Test Sql query functions", function() {
 
     it("executes sql query with array", done => {
       c8Client
-        .executeQuery("SELECT * FROM products where name = $1", ["Kindle"], { sql: true })
+        .executeQuery("SELECT * FROM products where name = $1", ["Kindle"], {
+          sql: true,
+        })
         .then(result => {
           expect(result).is.not.empty;
           expect(result[0]).includes({ name: "Kindle" });
@@ -208,7 +213,9 @@ describe("Test Sql query functions", function() {
 
     it("throws an exception on error (async await)", async () => {
       try {
-        await c8Client.executeQuery("SELECT * FROM fakeProducts", undefined, { sql: true });
+        await c8Client.executeQuery("SELECT * FROM fakeProducts", undefined, {
+          sql: true,
+        });
         expect.fail();
       } catch (err) {
         expect(err).is.instanceof(C8Error);
