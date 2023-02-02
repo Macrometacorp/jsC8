@@ -1,30 +1,35 @@
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 
 import { getDCListString } from "../util/helper";
 
 import { expect } from "chai";
 
 describe(" StreamApps ", function() {
-  let fabric: Fabric;
-  const testUrl: string =
-    process.env.TEST_C8_URL || "https://test.macrometa.io";
+  this.timeout(50000);
+
+  let client: C8Client;
+  let name = `testdb${Date.now()}`;
+  let dcList: string;
 
   before(async () => {
-    fabric = new Fabric({
-      url: testUrl,
-      c8Version: Number(process.env.C8_VERSION || 30400)
+    client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC
     });
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
+    const response = await client.getAllEdgeLocations();
+    dcList = getDCListString(response);
+    await client.createFabric(name, ["root"], { dcList: dcList });
+    client.useFabric(name);
   });
 
   after(() => {
-    fabric.close();
+    client.close();
   });
 
-  describe("fabric.createStreamApp", async () => {
+  describe("client.createStreamApp", async () => {
     it("Should create a Stream Apllication", async () => {
-      const response = await fabric.getAllEdgeLocations();
+      const response = await client.getAllEdgeLocations();
       let dcListAll = getDCListString(response);
       let dcList = dcListAll.split(",");
 
@@ -38,19 +43,19 @@ describe(" StreamApps ", function() {
                 select weight, sum(weight) as totalWeight
                 from srcCargoStream
                 insert into destCargoTable;`;
-      let resp = await fabric.createStreamApp(dcList, appDefinition);
+      let resp = await client.createStreamApp(dcList, appDefinition);
       expect(resp.error).to.be.false;
     });
   });
 
-  describe("fabric.getAllStreamApps", () => {
+  describe("client.getAllStreamApps", () => {
     it("get all stream apps", async () => {
-      let response = await fabric.getAllStreamApps();
+      let response = await client.getAllStreamApps();
       expect(response.error).to.be.false;
     });
   });
 
-  describe("fabric.validateStreamappDefinition", () => {
+  describe("client.validateStreamappDefinition", () => {
     it("validate the streamapp definition", async () => {
       let appDefinition = `@App:name('Sample-Cargo-App')
                 -- Stream
@@ -62,21 +67,21 @@ describe(" StreamApps ", function() {
                 select weight, sum(weight) as totalWeight
                 from srcCargoStream
                 insert into destCargoTable;`;
-      let response = await fabric.validateStreamappDefinition(appDefinition);
+      let response = await client.validateStreamappDefinition(appDefinition);
       expect(response.error).to.be.false;
     });
   });
 
-  describe("fabric.getSampleStreamApps", () => {
+  describe("client.getSampleStreamApps", () => {
     it("get sample stream apps", async () => {
-      let response = await fabric.getSampleStreamApps();
+      let response = await client.getSampleStreamApps();
       expect(response.error).to.be.false;
     });
   });
 
   describe("streamapps.activateStreamApplication", () => {
     it("Activate a stream App", async () => {
-      const app = fabric.streamApp("Sample-Cargo-App");
+      const app = client.streamApp("Sample-Cargo-App");
       let response = await app.activateStreamApplication(true);
       expect(response.error).to.be.false;
     });
@@ -84,7 +89,7 @@ describe(" StreamApps ", function() {
 
   describe("streamapps.retriveApplication", () => {
     it("Retrive a stream App", async () => {
-      const app = fabric.streamApp("Sample-Cargo-App");
+      const app = client.streamApp("Sample-Cargo-App");
       let response = await app.retriveApplication();
       expect(response.error).to.be.false;
     });
@@ -92,7 +97,7 @@ describe(" StreamApps ", function() {
 
   describe("streamapps.updateApplication", () => {
     it("Update a stream App", async () => {
-      const resp = await fabric.getAllEdgeLocations();
+      const resp = await client.getAllEdgeLocations();
       let dcListAll = getDCListString(resp);
       let dcList = dcListAll.split(",");
       let appdef = `@App:name('Sample-Cargo-App')
@@ -105,7 +110,7 @@ describe(" StreamApps ", function() {
                 select weight, sum(weight) as totalWeight
                 from srcCargoStream
                 insert into destCargoTable;`;
-      const app = fabric.streamApp("Sample-Cargo-App");
+      const app = client.streamApp("Sample-Cargo-App");
       let response = await app.updateApplication(dcList, appdef);
       expect(response.error).to.be.false;
     });
@@ -113,7 +118,7 @@ describe(" StreamApps ", function() {
 
    describe("streamapps.query", () => {
      it("runs query", async () => {
-       const app = fabric.streamApp("Sample-Cargo-App");
+       const app = client.streamApp("Sample-Cargo-App");
        let response = await app.query("select * from destCargoTable limit 3");
        expect(response.error).to.be.false;
      });
@@ -121,7 +126,7 @@ describe(" StreamApps ", function() {
 
    describe("streamapps.deleteApplication", () => {
      it("Delete a stream App", async () => {
-       const app = fabric.streamApp("Sample-Cargo-App");
+       const app = client.streamApp("Sample-Cargo-App");
        let response = await app.deleteApplication();
        expect(response.error).to.be.false;
      });
