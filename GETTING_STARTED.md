@@ -146,7 +146,7 @@ in Object with your region URL with specific fabric.
 ```js
 const jsc8 = require("jsc8");
 client = new jsc8({
-  url: "https://gdn1.macrometa.io",
+  url: "https://play.paas.macrometa.io",
   token: "XXXX",
   fabricName: "_system",
 });
