@@ -66,7 +66,7 @@ Here is an example of a valid edge document:
 ## 🔐 Auth - Connect to GDN
 
 The first step to start using GDN is establishing a connection to
-[play.macrometa.io](https://play.macrometa.io/). When this code executes, it
+[play.paas.macrometa.io](https://play.paas.macrometa.io/). When this code executes, it
 initializes the server connection to your nearest region. You can access your
 Macrometa GDN account using several methods, such as
 [API keys](https://macrometa.com/docs/account-management/api-keys/),
