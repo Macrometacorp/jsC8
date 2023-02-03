@@ -77,7 +77,7 @@ Macrometa GDN account using several methods, such as
 
 ```js
 const jsc8 = require("jsc8");
-const client = new jsc8("https://gdn1.macrometa.io");
+const client = new jsc8("https://play.paas.macrometa.io");
 ```
 
 or to have fail-over support:
