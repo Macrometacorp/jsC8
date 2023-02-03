@@ -11,7 +11,11 @@ function assertCreateEv(response: any) {
   expect(response.result[0]).to.have.all.keys("message");
 }
 
-describe("validating function endpoints", function() {
+// To run this tests we need to have Akamai integration set up
+// Only run when Akamai property is configured
+// When running from terminal or with npm run devtest
+// To enable tests, remove skip flag from describe method
+describe.skip("validating function endpoints", function() {
   dotenv.config();
   this.timeout(60000);
   let c8Client: C8Client;
