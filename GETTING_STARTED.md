@@ -91,7 +91,7 @@ const client = new jsc8([
 ```
 
 This connection string actually represents the default value(
-`"https://gdn1.macrometa.io"` ), so if this is the value you want, you can omit
+`"https://play.paas.macrometa.io"` ), so if this is the value you want, you can omit
 url while invocation:
 
 ```js
