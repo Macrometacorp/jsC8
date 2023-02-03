@@ -86,7 +86,7 @@ or to have fail-over support:
 const jsc8 = require("jsc8");
 const client = new jsc8([
   "https://play1.paas.macrometa.io",
-  "https://gdn2.macrometa.io",
+  "https://play2.paas.macrometa.io",
 ]);
 ```
 
