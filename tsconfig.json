@@ -24,6 +24,7 @@
     "strict": true,
     "strictFunctionTypes": true,
     "strictNullChecks": true,
-    "target": "es2016"
+    "target": "es2016",
+    "types": ["@types/mocha"]
   }
 }

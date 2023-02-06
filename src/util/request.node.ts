@@ -2,7 +2,7 @@ import {
   Agent as HttpAgent,
   ClientRequest,
   IncomingMessage,
-  request as httpRequest
+  request as httpRequest,
 } from "http";
 import { Agent as HttpsAgent, request as httpsRequest } from "https";
 import { parse as parseUrl, Url } from "url";
@@ -95,13 +95,15 @@ export function createRequest(
       } catch (e) {
         if (called) return;
         called = true;
-        callback(e);
+        if (e instanceof Error) {
+          callback(e);
+        }
       }
     },
     {
       close() {
         agent.destroy();
-      }
+      },
     }
   );
 }
