@@ -162,8 +162,8 @@ export class Connection {
       ? Array.isArray(config.url)
         ? config.url
         : [config.url]
-      : ["https://test.macrometa.io"];
-    const apiUrls = urls.map((url) => {
+      : ["https://play.macrometa.io/"];
+    const apiUrls = urls.map(url => {
       return `https://api-${url.split("https://")[1]}`;
     });
     this.addToHostList(apiUrls);
@@ -176,9 +176,7 @@ export class Connection {
   }
 
   private get _fabricPath() {
-    return this._fabricName === false
-      ? ""
-      : `/_fabric/${this._fabricName}`;
+    return this._fabricName === false ? "" : `/_fabric/${this._fabricName}`;
   }
 
   private _runQueue() {
@@ -278,17 +276,17 @@ export class Connection {
   }
 
   addToHostList(urls: string | string[]): number[] {
-    const cleanUrls = (Array.isArray(urls) ? urls : [urls]).map((url) =>
+    const cleanUrls = (Array.isArray(urls) ? urls : [urls]).map(url =>
       this._sanitizeEndpointUrl(url)
     );
-    const newUrls = cleanUrls.filter((url) => this._urls.indexOf(url) === -1);
+    const newUrls = cleanUrls.filter(url => this._urls.indexOf(url) === -1);
     this._urls.push(...newUrls);
     this._hosts.push(
       ...newUrls.map((url: string) =>
         createRequest(url, this._agentOptions, this._agent)
       )
     );
-    return cleanUrls.map((url) => this._urls.indexOf(url));
+    return cleanUrls.map(url => this._urls.indexOf(url));
   }
 
   get c8Major() {
@@ -355,7 +353,7 @@ export class Connection {
   ): Promise<T> {
     return new Promise((resolve, reject) => {
       let contentType = "text/plain";
-      let path = urlInfo.path
+      let path = urlInfo.path;
 
       if (isBinary) {
         contentType = "application/octet-stream";
