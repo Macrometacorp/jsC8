@@ -13,7 +13,8 @@ function assertCreateEv(response: any) {
 
 // To run this tests we need to have Akamai integration set up
 // Only run when Akamai property is configured
-// When running from terminal or with npm run devtest
+// When running from terminal or with npm run devtest function tests will
+// be skipped
 // To enable tests, remove skip flag from describe method
 describe.skip("validating function endpoints", function() {
   dotenv.config();

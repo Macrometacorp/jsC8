@@ -132,44 +132,6 @@ describe("Manipulating collections", async function() {
         .catch(done);
     });
   });
-  /* describe("collection.load", () => {
-     it("should load a collection", done => {
-       collection
-         .load()
-         .then(info => {
-           expect(info).to.have.property("name", collection.name);
-           expect(info).to.have.property("status", 3); // loaded
-         })
-         .then(() => void done())
-         .catch(done);
-     });
-   });*/
-  /*describe("collection.unload", () => {
-    it("should unload a collection", done => {
-      collection
-        .unload()
-        .then(info => {
-          expect(info).to.have.property("name", collection.name);
-          expect(info).to.have.property("status");
-          expect(info.status === 2 || info.status === 4).to.be.true; // unloaded
-        })
-        .then(() => void done())
-        .catch(done);
-    });
-  });*/
-  /*
-  describe("collection.setProperties", () => {
-    it("should change properties", done => {
-      collection
-        .setProperties({ waitForSync: true })
-        .then(info => {
-          expect(info).to.have.property("name", collection.name);
-          expect(info).to.have.property("waitForSync", true);
-        })
-        .then(() => void done())
-        .catch(done);
-    });
-  });*/
   describe("collection.truncate", () => {
     it("should truncate a non-empty collection", done => {
       collection.save({}).then(() => {
@@ -212,7 +174,7 @@ describe("Manipulating collections", async function() {
     });
   });
   describe("collection.onChange", () => {
-    it("should get the message on collection change", async done => {
+    it("should get the message on collection change", async () => {
       if (process.env.URL) {
         let streamCollection = c8Client.collection("testRealTime");
         await streamCollection.create({ stream: true });
@@ -221,12 +183,12 @@ describe("Manipulating collections", async function() {
           process.env.URL.substring(8).slice(0, -1)
         );
         handler.on("open", () => {
-          streamCollection.save({ name: "Anthony", lastname: "Gonsalvis" });
+          streamCollection.save({ name: "John", lastname: "Doe" });
         });
 
-        handler.on("message", (msg: string) => {
+        handler.on("message", async (msg: string) => {
           console.log("msg=>", msg);
-          done();
+          await Promise.resolve();
         });
 
         handler.on("error", (err: any) => {
