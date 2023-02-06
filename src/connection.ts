@@ -162,7 +162,7 @@ export class Connection {
       ? Array.isArray(config.url)
         ? config.url
         : [config.url]
-      : ["https://test.macrometa.io"];
+      : ["https://play.macrometa.io/"];
     const apiUrls = urls.map(url => {
       return `https://api-${url.split("https://")[1]}`;
     });
