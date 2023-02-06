@@ -66,7 +66,7 @@ Here is an example of a valid edge document:
 ## 🔐 Auth - Connect to GDN
 
 The first step to start using GDN is establishing a connection to
-[play.macrometa.io](https://play.macrometa.io/). When this code executes, it
+[play.paas.macrometa.io](https://play.paas.macrometa.io/). When this code executes, it
 initializes the server connection to your nearest region. You can access your
 Macrometa GDN account using several methods, such as
 [API keys](https://macrometa.com/docs/account-management/api-keys/),
@@ -77,7 +77,7 @@ Macrometa GDN account using several methods, such as
 
 ```js
 const jsc8 = require("jsc8");
-const client = new jsc8("https://gdn1.macrometa.io");
+const client = new jsc8("https://play.paas.macrometa.io");
 ```
 
 or to have fail-over support:
@@ -85,13 +85,13 @@ or to have fail-over support:
 ```js
 const jsc8 = require("jsc8");
 const client = new jsc8([
-  "https://gdn1.macrometa.io",
-  "https://gdn2.macrometa.io",
+  "https://play1.paas.macrometa.io",
+  "https://play2.paas.macrometa.io",
 ]);
 ```
 
 This connection string actually represents the default value(
-`"https://gdn1.macrometa.io"` ), so if this is the value you want, you can omit
+`"https://play.paas.macrometa.io"` ), so if this is the value you want, you can omit
 url while invocation:
 
 ```js
@@ -146,7 +146,7 @@ in Object with your region URL with specific fabric.
 ```js
 const jsc8 = require("jsc8");
 client = new jsc8({
-  url: "https://gdn1.macrometa.io",
+  url: "https://play.paas.macrometa.io",
   token: "XXXX",
   fabricName: "_system",
 });
@@ -157,7 +157,7 @@ or to have fail-over support:
 ```js
 const jsc8 = require("jsc8");
 client = new jsc8({
-  url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"],
+  url: ["https://play1.paas.macrometa.io", "https://play2.paas.macrometa.io"],
   token: "XXXX",
   fabricName: "_system",
 });
@@ -175,7 +175,7 @@ in Object with your region URL with specific fabric.
 ```js
 const jsc8 = require("jsc8");
 client = new jsc8({
-  url: "https://gdn1.macrometa.io",
+  url: "https://play.paas.macrometa.io",
   apiKey: "XXXX",
   fabricName: "_system",
 });
@@ -186,7 +186,7 @@ or to have fail-over support:
 ```js
 const jsc8 = require("jsc8");
 client = new jsc8({
-  url: ["https://gdn1.macrometa.io", "https://gdn2.macrometa.io"],
+  url: ["https://play1.paas.macrometa.io", "https://play2.paas.macrometa.io"],
   apiKey: "XXXX",
   fabricName: "_system",
 });
@@ -205,9 +205,9 @@ The below example shows the steps.
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", apiKey: "XXXX" });
 
 async function createCollection() {
   let collectionDetails;
@@ -228,7 +228,7 @@ createCollection().then(console.log);
 
 ```js
 const jsc8 = require("jsc8");
-const client = new jsc8("https://gdn1.macrometa.io");
+const client = new jsc8("https://play.paas.macrometa.io");
 
 async function createCollection() {
   await console.log("Logging in...");
@@ -268,9 +268,9 @@ refer to user guide for details on other available index types.
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", apiKey: "XXXX" });
 
 async function createIndex() {
   let index;
@@ -295,7 +295,7 @@ Checkout more for - [Indexes](docs/Reference/Collection/Indexes.md)
 
 ```js
 const jsc8 = require("jsc8");
-const client = new jsc8("https://gdn1.macrometa.io");
+const client = new jsc8("https://play.paas.macrometa.io");
 
 async function createIndex() {
   await console.log("Logging in...");
@@ -371,9 +371,9 @@ const docs = [docJean, docJames, docHan, docBruce];
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", apiKey: "XXXX" });
 
 async function populate() {
   await console.log("Creating the collection object to be used...");
@@ -388,7 +388,7 @@ populate();
 
 ```js
 const jsc8 = require("jsc8");
-const client = new jsc8("https://gdn1.macrometa.io");
+const client = new jsc8("https://play.paas.macrometa.io");
 
 async function populate() {
   await console.log("Logging in...");
@@ -425,9 +425,9 @@ collection `employees` to get its contents.
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", apiKey: "XXXX" });
 
 async function c8Queries() {
   const result = await client.executeQuery(
@@ -444,7 +444,7 @@ c8Queries();
 ```js
 const jsc8 = require("jsc8");
 const c8ql = jsc8.c8ql;
-const client = new jsc8("https://gdn1.macrometa.io");
+const client = new jsc8("https://play.paas.macrometa.io");
 
 async function c8Queries() {
   await console.log("Logging in...");
@@ -478,9 +478,9 @@ Example for real-time updates from a collection in fabric:
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", apiKey: "XXXX" });
 
 async function callback_fn(collectionName) {
   await console.log("Connection open on ", collectionName);
@@ -506,7 +506,7 @@ realTimeListener();
 
 ```js
 const jsc8 = require("jsc8");
-const client = new jsc8("https://gdn1.macrometa.io");
+const client = new jsc8("https://play.paas.macrometa.io");
 
 async function callback_fn(collection) {
   await console.log("Connection open on ", collection.name);
@@ -525,7 +525,7 @@ async function realTimeListener() {
   await console.log("Creating the collection object to be used...");
   let collection = client.collection("employees");
 
-  const listener = await collection.onChange("gdn1.macrometa.io");
+  const listener = await collection.onChange("play.paas.macrometa.io");
 
   listener.on("message", msg => console.log("message=>", msg));
   listener.on("open", () => {
@@ -547,9 +547,9 @@ stream or could be a `geo-replicated` stream.
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", apiKey: "XXXX" });
 
 async function streamDemo() {
   await client.createStream("newStreamFromJSC8", false);
@@ -585,7 +585,7 @@ streamDemo();
 
 ```js
 const jsc8 = require("jsc8");
-const client = new jsc8("https://gdn1.macrometa.io");
+const client = new jsc8("https://play.paas.macrometa.io");
 
 async function streamDemo() {
   await console.log("Logging in...");
@@ -600,12 +600,12 @@ async function streamDemo() {
   await stream.createStream();
 
   const consumerOTP = await stream.getOtp(); // OTP expiry 10s
-  const consumer = stream.consumer("my-sub", "gdn1.macrometa.io", {
+  const consumer = stream.consumer("my-sub", "play.paas.macrometa.io", {
     otp: consumerOTP,
   });
 
   const producerOTP = await stream.getOtp(); // OTP expiry 10s
-  const producer = stream.producer("gdn1.macrometa.io", { otp: producerOTP });
+  const producer = stream.producer("play.paas.macrometa.io", { otp: producerOTP });
 
   consumer.on("message", msg => {
     const { payload, messageId } = JSON.parse(msg);
@@ -638,7 +638,7 @@ for separate backend servers & containers.
 const jsc8 = require("jsc8");
 
 //Variables
-const fed_url = "https://gdn1.macrometa.io";
+const fed_url = "https://play.paas.macrometa.io";
 const collection_name =
   "addresses" + Math.floor(1000 + Math.random() * 9000).toString();
 
@@ -656,9 +656,9 @@ const delete_data = "REMOVE 'abc' IN " + collection_name;
 
 const get_count = "RETURN COUNT(FOR doc IN " + collection_name + " RETURN 1)";
 
-const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", apiKey: "XXXX" });
 
 async function restqldemo() {
   console.log("------- CREATE GEO-REPLICATED COLLECTION  ------");
@@ -718,7 +718,7 @@ restqldemo().then(console.log("Starting Execution"));
 const jsc8 = require("jsc8");
 
 //Variables
-const fed_url = "https://gdn1.macrometa.io";
+const fed_url = "https://play.paas.macrometa.io";
 const guest_tenant_email = "guest@macrometa.io";
 const guest_tenant = "guest";
 const guest_password = "guest5";
@@ -810,9 +810,9 @@ Let's create geo-fabric called `demofabric` by passing a parameter called
 ```js
 const jsc8 = require("jsc8");
 
-const client = new jsc8({ url: "https://gdn1.macrometa.io", token: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", token: "XXXX" });
 //---- OR ----
-const client = new jsc8({ url: "https://gdn1.macrometa.io", apiKey: "XXXX" });
+const client = new jsc8({ url: "https://play.paas.macrometa.io", apiKey: "XXXX" });
 
 async function createFabric() {
   try {
@@ -849,13 +849,13 @@ To get details of `fabric` geo-fabric
 const jsc8 = require("jsc8");
 
 const client = new jsc8({
-  url: "https://gdn1.macrometa.io",
+  url: "https://play.paas.macrometa.io",
   token: "XXXX",
   fabricName: "_system",
 });
 //---- OR ----
 const client = new jsc8({
-  url: "https://gdn1.macrometa.io",
+  url: "https://play.paas.macrometa.io",
   apiKey: "XXXX",
   fabricName: "_system",
 });
