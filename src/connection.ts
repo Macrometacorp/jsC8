@@ -189,6 +189,7 @@ export class Connection {
       this._activeHost = (this._activeHost + 1) % this._hosts.length;
     }
     this._activeTasks += 1;
+    // @ts-ignore TS2345: Argument of type
     this._hosts[host](task.options, (err, res) => {
       this._activeTasks -= 1;
       if (err) {
@@ -426,6 +427,7 @@ export class Connection {
                   if (typeof parsedBody !== "string") {
                     parsedBody = res.body.toString("utf-8");
                   }
+                  // @ts-ignore TS18046: 'e' is of type 'unknown'.
                   e.response = res;
                   reject(e);
                   return;

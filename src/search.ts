@@ -48,7 +48,6 @@ export class Search {
                     enable,
                     field
                 },
-                absolutePath: true,
                 body: {}
             },
             res => res.body
@@ -66,7 +65,6 @@ export class Search {
                     bindVars,
                     ttl
                 },
-                absolutePath: true
             },
             res => res.body
         );
@@ -77,7 +75,6 @@ export class Search {
             {
                 method: "GET",
                 path: `${this.viewUrlPrefix}`,
-                absolutePath: true
             },
             res => res.body
         );
@@ -94,7 +91,6 @@ export class Search {
                     links,
                     primarySort
                 },
-                absolutePath: true
             },
             res => res.body
         );
@@ -105,7 +101,6 @@ export class Search {
             {
                 method: "GET",
                 path: `${this.viewUrlPrefix}/${this._viewName}`,
-                absolutePath: true
             },
             res => res.body
         );
@@ -116,7 +111,6 @@ export class Search {
             {
                 method: "PUT",
                 path: `${this.viewUrlPrefix}/${this._viewName}/rename`,
-                absolutePath: true,
                 body: {
                     name
                 }
@@ -130,7 +124,6 @@ export class Search {
             {
                 method: "DELETE",
                 path: `${this.viewUrlPrefix}/${this._viewName}`,
-                absolutePath: true
             },
             res => res.body
         );
@@ -141,7 +134,6 @@ export class Search {
             {
                 method: "GET",
                 path: `${this.viewUrlPrefix}/${this._viewName}/properties`,
-                absolutePath: true
             },
             res => res.body
         );
@@ -152,7 +144,6 @@ export class Search {
             {
                 method: "PUT",
                 path: `${this.viewUrlPrefix}/${this._viewName}/properties`,
-                absolutePath: true,
                 body: properties
             },
             res => res.body
@@ -164,7 +155,6 @@ export class Search {
             {
                 method: "GET",
                 path: `${this.analyzerUrlPrefix}`,
-                absolutePath: true
             },
             res => res.body
         );
@@ -181,7 +171,6 @@ export class Search {
                     features,
                     properties
                 },
-                absolutePath: true
             },
             res => res.body
         );
@@ -192,7 +181,6 @@ export class Search {
             {
                 method: "GET",
                 path: `${this.analyzerUrlPrefix}/${this._analyzerName}`,
-                absolutePath: true
             },
             res => res.body
         );
@@ -206,7 +194,6 @@ export class Search {
                 qs: {
                     force
                 },
-                absolutePath: true
             },
             res => res.body
         );
