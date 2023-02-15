@@ -73,7 +73,7 @@ export function createRequest(
           options,
           (res: IncomingMessage) => {
             const data: Buffer[] = [];
-            res.on("data", chunk => data.push(chunk as Buffer));
+            res.on("data", (chunk) => data.push(chunk as Buffer));
             res.on("end", () => {
               const result = res as C8jsResponse;
               result.body = Buffer.concat(data);
@@ -83,7 +83,7 @@ export function createRequest(
             });
           }
         );
-        req.on("error", err => {
+        req.on("error", (err) => {
           const error = err as C8jsError;
           error.request = req;
           if (called) return;

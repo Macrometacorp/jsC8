@@ -1,5 +1,5 @@
-const socketConn = require('ws');
+const socketConn = require("ws");
 
 export function ws(url: string) {
-    return new socketConn(url);
+  return new socketConn(url);
 }

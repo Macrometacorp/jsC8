@@ -1,4 +1,4 @@
-const papaParser = require('papaparse');
+const papaParser = require("papaparse");
 
 export function parseCSVToJSON(fileObject: File) {
   if (fileObject instanceof File) {
@@ -10,7 +10,7 @@ export function parseCSVToJSON(fileObject: File) {
         },
         error: function (error: any) {
           reject(error);
-        }
+        },
       });
     });
   } else {

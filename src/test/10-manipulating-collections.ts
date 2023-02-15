@@ -6,7 +6,7 @@ import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("Manipulating collections", async function() {
+describe("Manipulating collections", async function () {
   // create fabric takes 11s in a standard cluster
   dotenv.config();
   this.timeout(60000);
@@ -38,14 +38,14 @@ describe("Manipulating collections", async function() {
       c8Client.close();
     }
   });
-  beforeEach(done => {
+  beforeEach((done) => {
     collection = c8Client.collection(`collection${Date.now()}`);
     collection
       .create()
       .then(() => void done())
       .catch(done);
   });
-  afterEach(done => {
+  afterEach((done) => {
     collection
       .get()
       .then(() => {
@@ -57,7 +57,7 @@ describe("Manipulating collections", async function() {
       .catch(() => void done());
   });
   describe("collection.create", () => {
-    it("creates a new document collection", done => {
+    it("creates a new document collection", (done) => {
       const collection = c8Client.collection(`documentcollection${Date.now()}`);
       collection
         .create()
@@ -65,7 +65,7 @@ describe("Manipulating collections", async function() {
           return c8Client
             .collection(collection.name)
             .get()
-            .then(info => {
+            .then((info) => {
               expect(info).to.have.property("name", collection.name);
               expect(info).to.have.property("isSystem", false);
               expect(info).to.have.property("status", 3); // loaded
@@ -75,7 +75,7 @@ describe("Manipulating collections", async function() {
         .then(() => void done())
         .catch(done);
     });
-    it("creates a new local document collection", done => {
+    it("creates a new local document collection", (done) => {
       const collection = c8Client.collection(`documentcollection${Date.now()}`);
       collection
         .create({ isLocal: true })
@@ -83,7 +83,7 @@ describe("Manipulating collections", async function() {
           return c8Client
             .collection(collection.name)
             .get()
-            .then(info => {
+            .then((info) => {
               expect(info).to.have.property("name", collection.name);
               expect(info).to.have.property("isSystem", false);
               expect(info).to.have.property("status", 3); // loaded
@@ -94,7 +94,7 @@ describe("Manipulating collections", async function() {
         .then(() => void done())
         .catch(done);
     });
-    it("creates a new edge collection", done => {
+    it("creates a new edge collection", (done) => {
       const collection = c8Client.edgeCollection(`edgecollection${Date.now()}`);
       collection
         .create()
@@ -102,7 +102,7 @@ describe("Manipulating collections", async function() {
           return c8Client
             .collection(collection.name)
             .get()
-            .then(info => {
+            .then((info) => {
               expect(info).to.have.property("name", collection.name);
               expect(info).to.have.property("isSystem", false);
               expect(info).to.have.property("status", 3); // loaded
@@ -112,7 +112,7 @@ describe("Manipulating collections", async function() {
         .then(() => void done())
         .catch(done);
     });
-    it("creates a new local edge collection", done => {
+    it("creates a new local edge collection", (done) => {
       const collection = c8Client.edgeCollection(`edgecollection${Date.now()}`);
       collection
         .create({ isLocal: true })
@@ -120,7 +120,7 @@ describe("Manipulating collections", async function() {
           return c8Client
             .collection(collection.name)
             .get()
-            .then(info => {
+            .then((info) => {
               expect(info).to.have.property("name", collection.name);
               expect(info).to.have.property("isSystem", false);
               expect(info).to.have.property("status", 3); // loaded
@@ -133,12 +133,12 @@ describe("Manipulating collections", async function() {
     });
   });
   describe("collection.truncate", () => {
-    it("should truncate a non-empty collection", done => {
+    it("should truncate a non-empty collection", (done) => {
       collection.save({}).then(() => {
         return collection
           .truncate()
           .then(() => {
-            collection.count().then(info => {
+            collection.count().then((info) => {
               expect(info).to.have.property("name", collection.name);
               expect(info).to.have.property("count", 0);
             });
@@ -147,11 +147,11 @@ describe("Manipulating collections", async function() {
           .catch(done);
       });
     });
-    it("should allow truncating a empty collection", done => {
+    it("should allow truncating a empty collection", (done) => {
       collection.truncate().then(() => {
         return collection
           .count()
-          .then(info => {
+          .then((info) => {
             expect(info).to.have.property("name", collection.name);
             expect(info).to.have.property("count", 0);
           })
@@ -161,12 +161,12 @@ describe("Manipulating collections", async function() {
     });
   });
   describe("collection.drop", () => {
-    it("should drop a collection", done => {
+    it("should drop a collection", (done) => {
       collection.drop().then(() => {
         return collection
           .get()
           .then(done)
-          .catch(err => {
+          .catch((err) => {
             expect(err).to.have.property("errorNum", 1203);
             void done();
           });
@@ -191,7 +191,7 @@ describe("Manipulating collections", async function() {
       if (handler) handler.close();
     });
 
-    it("should get the message on collection change", function(done) {
+    it("should get the message on collection change", function (done) {
       if (process.env.URL) {
         handler.on("message", (msg: any) => {
           console.log("msg=> %s", JSON.stringify(msg));

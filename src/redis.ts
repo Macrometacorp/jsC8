@@ -14,7 +14,7 @@ export class Redis {
   ) {
     // Create a body for all the commands
     const data = [command, ...args];
-    const filteredData = data.filter(element => {
+    const filteredData = data.filter((element) => {
       return element !== undefined;
     });
     return this._connection.request(
@@ -23,7 +23,7 @@ export class Redis {
         path: `/_api/redis/${collection}`,
         body: filteredData,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 

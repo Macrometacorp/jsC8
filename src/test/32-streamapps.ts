@@ -3,7 +3,7 @@ import { C8Client } from "../jsC8";
 import { getDCListString } from "../util/helper";
 import * as dotenv from "dotenv";
 
-describe(" StreamApps ", function() {
+describe(" StreamApps ", function () {
   this.timeout(50000);
   dotenv.config();
   let client: C8Client;
@@ -149,14 +149,14 @@ describe(" StreamApps ", function() {
         FROM SampleCargoAppInputTable;`;
       const app = client.streamApp("Sample-Cargo-App");
       let response = await app.updateApplication(dcList, appdef);
-      await new Promise(r => setTimeout(r, 15000));
+      await new Promise((r) => setTimeout(r, 15000));
       expect(response.error).to.be.false;
     });
   });
 
   describe("streamapps.query", () => {
     it("runs query", async () => {
-      await new Promise(r => setTimeout(r, 6000));
+      await new Promise((r) => setTimeout(r, 6000));
       await client.insertDocumentMany("SampleCargoAppInputTable", [
         { weight: 10 },
         { weight: 9 },

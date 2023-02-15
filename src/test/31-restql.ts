@@ -3,7 +3,7 @@ import { C8Client } from "../jsC8";
 import { getDCListString } from "../util/helper";
 import * as dotenv from "dotenv";
 
-describe("manipulating restql", function() {
+describe("manipulating restql", function () {
   // create fabric takes 11s in a standard cluster
   dotenv.config();
   this.timeout(50000);
@@ -53,7 +53,7 @@ describe("manipulating restql", function() {
     const queryName = "testQuery";
 
     it("should execute a saved query", async () => {
-      await new Promise(r => setTimeout(r, 2000));
+      await new Promise((r) => setTimeout(r, 2000));
       response = await client.executeSavedQuery(queryName, {});
       expect(response.error).to.be.false;
     });
@@ -69,7 +69,7 @@ describe("manipulating restql", function() {
       expect(response.error).to.be.false;
     });
   });
-  
+
   describe("client.createRestqlCursor", () => {
     //const query = "FOR x IN _routing RETURN x";
 

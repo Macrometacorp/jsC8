@@ -7,7 +7,7 @@ import * as dotenv from "dotenv";
 const range = (n: number): number[] => Array.from(Array(n).keys());
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("Accessing graphs", function() {
+describe("Accessing graphs", function () {
   // create fabric takes 11s in a standard cluster
   dotenv.config();
   this.timeout(600000);
@@ -40,29 +40,27 @@ describe("Accessing graphs", function() {
       let name = "potato";
       let graph = c8Client.graph(name);
       expect(graph).to.be.an.instanceof(Graph);
-      expect(graph)
-        .to.have.property("name")
-        .that.equals(name);
+      expect(graph).to.have.property("name").that.equals(name);
     });
   });
   describe("fabric.listGraphs", () => {
-    let vertexCollectionNames = range(2).map(i => `vc${Date.now()}${i}`);
-    let edgeCollectionNames = range(2).map(i => `ec${Date.now()}${i}`);
-    let graphNames = range(4).map(i => `g${Date.now()}${i}`);
-    before(done => {
+    let vertexCollectionNames = range(2).map((i) => `vc${Date.now()}${i}`);
+    let edgeCollectionNames = range(2).map((i) => `ec${Date.now()}${i}`);
+    let graphNames = range(4).map((i) => `g${Date.now()}${i}`);
+    before((done) => {
       Promise.all([
-        ...vertexCollectionNames.map(name =>
+        ...vertexCollectionNames.map((name) =>
           c8Client.collection(name).create()
         ),
-        ...edgeCollectionNames.map(name =>
+        ...edgeCollectionNames.map((name) =>
           c8Client.edgeCollection(name).create()
         ),
       ])
         .then(() =>
           Promise.all([
-            ...graphNames.map(name =>
+            ...graphNames.map((name) =>
               c8Client.graph(name).create({
-                edgeDefinitions: edgeCollectionNames.map(name => ({
+                edgeDefinitions: edgeCollectionNames.map((name) => ({
                   collection: name,
                   from: vertexCollectionNames,
                   to: vertexCollectionNames,
@@ -80,22 +78,22 @@ describe("Accessing graphs", function() {
         .then(() => void done())
         .catch(done);
     });
-    after(done => {
-      Promise.all(graphNames.map(name => c8Client.graph(name).drop()))
+    after((done) => {
+      Promise.all(graphNames.map((name) => c8Client.graph(name).drop()))
         .then(() =>
           Promise.all(
             vertexCollectionNames
               .concat(edgeCollectionNames)
-              .map(name => c8Client.collection(name).drop())
+              .map((name) => c8Client.collection(name).drop())
           )
         )
         .then(() => void done())
         .catch(done);
     });
-    it("fetches information about all graphs", done => {
+    it("fetches information about all graphs", (done) => {
       c8Client
         .listGraphs()
-        .then(graphs => {
+        .then((graphs) => {
           expect(graphs.length).to.equal(graphNames.length);
           expect(graphs.map((g: any) => g._key).sort()).to.eql(graphNames);
           done();
@@ -104,23 +102,23 @@ describe("Accessing graphs", function() {
     });
   });
   describe("fabric.graphs", () => {
-    let vertexCollectionNames = range(2).map(i => `vc${Date.now()}${i}`);
-    let edgeCollectionNames = range(2).map(i => `ec${Date.now()}${i}`);
-    let graphNames = range(4).map(i => `g${Date.now()}${i}`);
-    before(done => {
+    let vertexCollectionNames = range(2).map((i) => `vc${Date.now()}${i}`);
+    let edgeCollectionNames = range(2).map((i) => `ec${Date.now()}${i}`);
+    let graphNames = range(4).map((i) => `g${Date.now()}${i}`);
+    before((done) => {
       Promise.all([
-        ...vertexCollectionNames.map(name =>
+        ...vertexCollectionNames.map((name) =>
           c8Client.collection(name).create()
         ),
-        ...edgeCollectionNames.map(name =>
+        ...edgeCollectionNames.map((name) =>
           c8Client.edgeCollection(name).create()
         ),
       ])
         .then(() =>
           Promise.all([
-            ...graphNames.map(name =>
+            ...graphNames.map((name) =>
               c8Client.graph(name).create({
-                edgeDefinitions: edgeCollectionNames.map(name => ({
+                edgeDefinitions: edgeCollectionNames.map((name) => ({
                   collection: name,
                   from: vertexCollectionNames,
                   to: vertexCollectionNames,
@@ -132,22 +130,22 @@ describe("Accessing graphs", function() {
         .then(() => void done())
         .catch(done);
     });
-    after(done => {
-      Promise.all(graphNames.map(name => c8Client.graph(name).drop()))
+    after((done) => {
+      Promise.all(graphNames.map((name) => c8Client.graph(name).drop()))
         .then(() =>
           Promise.all(
             vertexCollectionNames
               .concat(edgeCollectionNames)
-              .map(name => c8Client.collection(name).drop())
+              .map((name) => c8Client.collection(name).drop())
           )
         )
         .then(() => void done())
         .catch(done);
     });
-    it("creates Graph instances", done => {
+    it("creates Graph instances", (done) => {
       c8Client
         .graphs()
-        .then(graphs => {
+        .then((graphs) => {
           expect(graphs.length).to.equal(graphNames.length);
           expect(graphs.map((g: any) => g.name).sort()).to.eql(graphNames);
           graphs.forEach((graph: any) =>

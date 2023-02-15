@@ -6,7 +6,7 @@ import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("GraphVertexCollection API", function() {
+describe("GraphVertexCollection API", function () {
   dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
@@ -51,7 +51,7 @@ describe("GraphVertexCollection API", function() {
       c8Client.close();
     }
   });
-  beforeEach(done => {
+  beforeEach((done) => {
     collection
       .truncate()
       .then(() => done())
@@ -96,22 +96,16 @@ describe("GraphVertexCollection API", function() {
     });
   });
   describe("graphVertexCollection.save", () => {
-    it("creates a vertex in the collection", done => {
+    it("creates a vertex in the collection", (done) => {
       let data = { foo: "bar" };
       collection
         .save(data)
-        .then(meta => {
+        .then((meta) => {
           expect(meta).to.be.an("object");
-          expect(meta.vertex)
-            .to.have.property("_id")
-            .that.is.a("string");
-          expect(meta.vertex)
-            .to.have.property("_rev")
-            .that.is.a("string");
-          expect(meta.vertex)
-            .to.have.property("_key")
-            .that.is.a("string");
-          return collection.vertex(meta.vertex._id).then(doc => {
+          expect(meta.vertex).to.have.property("_id").that.is.a("string");
+          expect(meta.vertex).to.have.property("_rev").that.is.a("string");
+          expect(meta.vertex).to.have.property("_key").that.is.a("string");
+          return collection.vertex(meta.vertex._id).then((doc) => {
             expect(doc).to.have.keys("_key", "_id", "_rev", "foo");
             expect(doc._id).to.equal(meta.vertex._id);
             expect(doc._key).to.equal(meta.vertex._key);
@@ -122,22 +116,16 @@ describe("GraphVertexCollection API", function() {
         .then(() => void done())
         .catch(done);
     });
-    it("uses the given _key if provided", done => {
+    it("uses the given _key if provided", (done) => {
       let data = { potato: "tomato", _key: "banana" };
       collection
         .save(data)
-        .then(meta => {
+        .then((meta) => {
           expect(meta).to.be.an("object");
-          expect(meta.vertex)
-            .to.have.property("_id")
-            .that.is.a("string");
-          expect(meta.vertex)
-            .to.have.property("_rev")
-            .that.is.a("string");
-          expect(meta.vertex)
-            .to.have.property("_key")
-            .that.equals(data._key);
-          return collection.vertex(meta.vertex._id).then(doc => {
+          expect(meta.vertex).to.have.property("_id").that.is.a("string");
+          expect(meta.vertex).to.have.property("_rev").that.is.a("string");
+          expect(meta.vertex).to.have.property("_key").that.equals(data._key);
+          return collection.vertex(meta.vertex._id).then((doc) => {
             expect(doc).to.have.keys("_key", "_id", "_rev", "potato");
             expect(doc._id).to.equal(meta.vertex._id);
             expect(doc._rev).to.equal(meta.vertex._rev);
@@ -150,32 +138,30 @@ describe("GraphVertexCollection API", function() {
     });
   });
   describe("graphVertexCollection.replace", () => {
-    it("replaces the given vertex", done => {
+    it("replaces the given vertex", (done) => {
       let doc = { potato: "tomato" };
       collection
         .save(doc)
-        .then(meta => {
+        .then((meta) => {
           delete meta.error;
           Object.assign(doc, meta);
           return collection.replace((doc as any).vertex, { sup: "dawg" });
         })
         .then(() => collection.vertex((doc as any).vertex._key))
-        .then(data => {
+        .then((data) => {
           expect(data).not.to.have.property("potato");
-          expect(data)
-            .to.have.property("sup")
-            .that.equals("dawg");
+          expect(data).to.have.property("sup").that.equals("dawg");
           done();
         })
         .catch(done);
     });
   });
   describe("graphVertexCollection.update", () => {
-    it("updates the given vertex", done => {
+    it("updates the given vertex", (done) => {
       let doc = { potato: "tomato", empty: false };
       collection
         .save(doc)
-        .then(meta => {
+        .then((meta) => {
           delete meta.error;
           Object.assign(doc, meta);
           return collection.update((doc as any).vertex, {
@@ -184,25 +170,19 @@ describe("GraphVertexCollection API", function() {
           });
         })
         .then(() => collection.vertex((doc as any).vertex._key))
-        .then(data => {
-          expect(data)
-            .to.have.property("potato")
-            .that.equals(doc.potato);
-          expect(data)
-            .to.have.property("sup")
-            .that.equals("dawg");
-          expect(data)
-            .to.have.property("empty")
-            .that.equals(null);
+        .then((data) => {
+          expect(data).to.have.property("potato").that.equals(doc.potato);
+          expect(data).to.have.property("sup").that.equals("dawg");
+          expect(data).to.have.property("empty").that.equals(null);
           done();
         })
         .catch(done);
     });
-    it("removes null values if keepNull is explicitly set to false", done => {
+    it("removes null values if keepNull is explicitly set to false", (done) => {
       let doc = { potato: "tomato", empty: false };
       collection
         .save(doc)
-        .then(meta => {
+        .then((meta) => {
           delete meta.error;
           Object.assign(doc, meta);
           return collection.update(
@@ -212,13 +192,9 @@ describe("GraphVertexCollection API", function() {
           );
         })
         .then(() => collection.vertex((doc as any).vertex._key))
-        .then(data => {
-          expect(data)
-            .to.have.property("potato")
-            .that.equals(doc.potato);
-          expect(data)
-            .to.have.property("sup")
-            .that.equals("dawg");
+        .then((data) => {
+          expect(data).to.have.property("potato").that.equals(doc.potato);
+          expect(data).to.have.property("sup").that.equals("dawg");
           expect(data).not.to.have.property("empty");
           done();
         })
@@ -227,13 +203,13 @@ describe("GraphVertexCollection API", function() {
   });
   describe("graphVertexCollection.remove", () => {
     let key = `d${Date.now()}`;
-    beforeEach(done => {
+    beforeEach((done) => {
       collection
         .save({ _key: key })
         .then(() => void done())
         .catch(done);
     });
-    it("deletes the given vertex", done => {
+    it("deletes the given vertex", (done) => {
       collection
         .remove(key)
         .then(() => collection.vertex(key))

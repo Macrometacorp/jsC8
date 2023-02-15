@@ -40,17 +40,17 @@ export class ArrayCursor {
     return this._connection.request({
       method: "PUT",
       path: `/cursor/${this._id}`,
-      host: this._host
-    })
+      host: this._host,
+    });
   }
 
   delete() {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/cursor/${this._id}`
+        path: `/cursor/${this._id}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 

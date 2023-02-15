@@ -6,7 +6,7 @@ import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("validating new apis", function() {
+describe("validating new apis", function () {
   dotenv.config();
   this.timeout(60000);
   let c8Client: C8Client;
@@ -22,21 +22,21 @@ describe("validating new apis", function() {
   afterEach(() => {
     c8Client.close();
   });
-  it("Validate createCollection, hasCollection, getCollection, deleteCollection", done => {
+  it("Validate createCollection, hasCollection, getCollection, deleteCollection", (done) => {
     const collectionName = "c8client_test";
     c8Client
       .createCollection(collectionName)
-      .then(async data => {
+      .then(async (data) => {
         expect(data).to.have.property("name", collectionName);
-        await c8Client.hasCollection(collectionName).then(hasCollection => {
+        await c8Client.hasCollection(collectionName).then((hasCollection) => {
           expect(hasCollection).to.be.true;
         });
-        await c8Client.getCollection(collectionName).then(collection => {
+        await c8Client.getCollection(collectionName).then((collection) => {
           expect(collection).to.have.property("name", collectionName);
         });
       })
       .then(async () => {
-        await c8Client.deleteCollection(collectionName).then(data => {
+        await c8Client.deleteCollection(collectionName).then((data) => {
           expect(data).to.have.property("error", false);
         });
       })
@@ -44,7 +44,7 @@ describe("validating new apis", function() {
       .catch(done);
   });
 
-  it("Validate insertDocumentMany, getDocumentMany", done => {
+  it("Validate insertDocumentMany, getDocumentMany", (done) => {
     const collectionName = "c8client_test";
     c8Client
       .createCollection(collectionName)
@@ -54,15 +54,15 @@ describe("validating new apis", function() {
             { value: "123" },
             { value: "1234" },
           ])
-          .then(data => {
+          .then((data) => {
             expect(data.length).to.equal(2);
           });
-        await c8Client.getDocumentMany(collectionName, 2, 0).then(data => {
+        await c8Client.getDocumentMany(collectionName, 2, 0).then((data) => {
           expect(data.length).to.equal(2);
         });
       })
       .then(async () => {
-        await c8Client.deleteCollection(collectionName).then(data => {
+        await c8Client.deleteCollection(collectionName).then((data) => {
           expect(data).to.have.property("error", false);
         });
       })
@@ -70,19 +70,19 @@ describe("validating new apis", function() {
       .catch(done);
   });
 
-  it("Validate insertDocumentFromFile", done => {
+  it("Validate insertDocumentFromFile", (done) => {
     const collectionName = "c8client_test";
     c8Client
       .createCollection(collectionName)
       .then(async () => {
         await c8Client
           .insertDocumentFromFile(collectionName, csvPath)
-          .then(data => {
+          .then((data) => {
             expect(data.length).to.equal(2);
           });
       })
       .then(async () => {
-        await c8Client.deleteCollection(collectionName).then(data => {
+        await c8Client.deleteCollection(collectionName).then((data) => {
           expect(data).to.have.property("error", false);
         });
       })
@@ -90,7 +90,7 @@ describe("validating new apis", function() {
       .catch(done);
   });
 
-  it("get Collection Ids, keys", done => {
+  it("get Collection Ids, keys", (done) => {
     const collectionName = "c8client_test";
 
     c8Client
@@ -103,26 +103,26 @@ describe("validating new apis", function() {
             { value: "123" },
             { value: "1234" },
           ])
-          .then(data => {
+          .then((data) => {
             ids = data.map((doc: any) => doc._id);
             keys = data.map((doc: any) => doc._key);
           });
-        await c8Client.getCollectionIds(collectionName).then(data => {
+        await c8Client.getCollectionIds(collectionName).then((data) => {
           expect(data).to.deep.equal(ids);
         });
-        await c8Client.getCollectionKeys(collectionName).then(data => {
+        await c8Client.getCollectionKeys(collectionName).then((data) => {
           expect(data).to.deep.equal(keys);
         });
       })
       .then(async () => {
-        await c8Client.deleteCollection(collectionName).then(data => {
+        await c8Client.deleteCollection(collectionName).then((data) => {
           expect(data).to.have.property("error", false);
         });
       })
       .then(() => void done())
       .catch(done);
   });
-  it("validate executeQuery", done => {
+  it("validate executeQuery", (done) => {
     const collectionName = "c8client_test";
     const query = `FOR doc IN ${collectionName} RETURN doc._id`;
     c8Client
@@ -134,15 +134,15 @@ describe("validating new apis", function() {
             { value: "123" },
             { value: "1234" },
           ])
-          .then(data => {
+          .then((data) => {
             ids = data.map((doc: any) => doc._id);
           });
-        await c8Client.executeQuery(query).then(data => {
+        await c8Client.executeQuery(query).then((data) => {
           expect(data).to.deep.equal(ids);
         });
       })
       .then(async () => {
-        await c8Client.deleteCollection(collectionName).then(data => {
+        await c8Client.deleteCollection(collectionName).then((data) => {
           expect(data).to.have.property("error", false);
         });
       })

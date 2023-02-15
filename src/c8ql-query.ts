@@ -3,19 +3,14 @@ import { C8Collection, isC8Collection } from "./collection";
 export interface C8QLQuery {
   query: string;
   bindVars: { [key: string]: any };
-  options?: any
+  options?: any;
 }
 
 export interface C8QLLiteral {
   toC8QL: () => string;
 }
 
-export type C8QLValue =
-  | string
-  | number
-  | boolean
-  | C8Collection
-  | C8QLLiteral;
+export type C8QLValue = string | number | boolean | C8Collection | C8QLLiteral;
 
 export function isC8QLQuery(query: any): query is C8QLQuery {
   return Boolean(query && query.query && query.bindVars);
@@ -59,6 +54,6 @@ export namespace c8ql {
   export const literal = (value: any): C8QLLiteral => ({
     toC8QL() {
       return String(value);
-    }
+    },
   });
 }

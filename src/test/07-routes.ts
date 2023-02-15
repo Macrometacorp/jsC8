@@ -8,7 +8,7 @@ import * as dotenv from "dotenv";
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 dotenv.config();
 
-describe("Arbitrary HTTP routes", function() {
+describe("Arbitrary HTTP routes", function () {
   describe("fabric.route", () => {
     let c8Client: C8Client;
     c8Client = new C8Client({
@@ -31,7 +31,7 @@ describe("Arbitrary HTTP routes", function() {
       expect((route as any)._headers).to.have.property("x-magic", "awesome");
     });
   });
-  describe("Route API", function() {
+  describe("Route API", function () {
     // create fabric takes 11s in a standard cluster
     this.timeout(60000);
 
@@ -116,11 +116,11 @@ describe("Arbitrary HTTP routes", function() {
       // });
     });
     describe("route.post", () => {
-      it("should passes body", done => {
+      it("should passes body", (done) => {
         c8Client
           .route(`/document/${collection.name}`)
           .post({ foo: "bar" })
-          .then(res => {
+          .then((res) => {
             expect(res).to.have.property("body");
             expect(res.body).to.have.property("_id");
             expect(res.body).to.have.property("_key");
@@ -132,20 +132,20 @@ describe("Arbitrary HTTP routes", function() {
     });
     describe("route.put", () => {
       let documentHandle: String;
-      beforeEach(done => {
+      beforeEach((done) => {
         collection
           .save({ foo: "bar" })
-          .then(doc => {
+          .then((doc) => {
             documentHandle = doc._id;
             done();
           })
           .catch(done);
       });
-      it("should passes body", done => {
+      it("should passes body", (done) => {
         c8Client
           .route(`/document/${documentHandle}`)
           .put({ hello: "world" })
-          .then(res => {
+          .then((res) => {
             expect(res).to.have.property("body");
             expect(res.body).to.have.property("_id");
             expect(res.body).to.have.property("_key");
@@ -157,20 +157,20 @@ describe("Arbitrary HTTP routes", function() {
     });
     describe("route.patch", () => {
       let documentHandle: String;
-      beforeEach(done => {
+      beforeEach((done) => {
         collection
           .save({ foo: "bar" })
-          .then(doc => {
+          .then((doc) => {
             documentHandle = doc._id;
             done();
           })
           .catch(done);
       });
-      it("should passes body", done => {
+      it("should passes body", (done) => {
         c8Client
           .route(`/document/${documentHandle}`)
           .patch({ hello: "world" })
-          .then(res => {
+          .then((res) => {
             expect(res).to.have.property("body");
             expect(res.body).to.have.property("_id");
             expect(res.body).to.have.property("_key");
@@ -182,20 +182,20 @@ describe("Arbitrary HTTP routes", function() {
     });
     describe("route.delete", () => {
       let documentHandle: String;
-      beforeEach(done => {
+      beforeEach((done) => {
         collection
           .save({ foo: "bar" })
-          .then(doc => {
+          .then((doc) => {
             documentHandle = doc._id;
             done();
           })
           .catch(done);
       });
-      it("should be executed using the route path", done => {
+      it("should be executed using the route path", (done) => {
         c8Client
           .route(`/document/${documentHandle}`)
           .delete()
-          .then(res => {
+          .then((res) => {
             expect(res).to.have.property("body");
             expect(res.body).to.have.property("_id");
             expect(res.body).to.have.property("_key");
@@ -207,20 +207,20 @@ describe("Arbitrary HTTP routes", function() {
     });
     describe("route.head", () => {
       let documentHandle: String;
-      beforeEach(done => {
+      beforeEach((done) => {
         collection
           .save({ foo: "bar" })
-          .then(doc => {
+          .then((doc) => {
             documentHandle = doc._id;
             done();
           })
           .catch(done);
       });
-      it("should be executed using the route path", done => {
+      it("should be executed using the route path", (done) => {
         c8Client
           .route(`/document/${documentHandle}`)
           .head()
-          .then(res => {
+          .then((res) => {
             expect(res).to.have.property("statusCode", 200);
           })
           .then(() => done())

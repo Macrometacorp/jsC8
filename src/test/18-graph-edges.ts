@@ -7,7 +7,7 @@ import * as dotenv from "dotenv";
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 // Works only with global MM api key
-describe("Manipulating graph edges", function() {
+describe("Manipulating graph edges", function () {
   dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
@@ -42,7 +42,7 @@ describe("Manipulating graph edges", function() {
       c8Client.close();
     }
   });
-  beforeEach(done => {
+  beforeEach((done) => {
     graph = c8Client.graph(graphName);
     graph
       .create({
@@ -57,17 +57,17 @@ describe("Manipulating graph edges", function() {
       .then(() => void done())
       .catch(done);
   });
-  afterEach(done => {
+  afterEach((done) => {
     graph
       .drop()
       .then(() => void done())
       .catch(done);
   });
   describe("graph.get", () => {
-    it("should return information about the graph", done => {
+    it("should return information about the graph", (done) => {
       graph
         .get()
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("name", graphName);
           expect(info).to.have.property("edgeDefinitions");
           expect(info.edgeDefinitions).to.be.instanceOf(Array);
@@ -96,10 +96,10 @@ describe("Manipulating graph edges", function() {
     });
   });
   describe("graph.edgeCollections", () => {
-    it("should contain edge collection", done => {
+    it("should contain edge collection", (done) => {
       graph
         .edgeCollections()
-        .then(info => {
+        .then((info) => {
           expect(info).to.be.instanceOf(Array);
           expect(info.length).to.equal(1);
           expect(info.map((c: any) => c.name)).to.contain("knows");
@@ -109,10 +109,10 @@ describe("Manipulating graph edges", function() {
     });
   });
   describe("graph.listEdgeCollections", () => {
-    it("should return all edge collection names", done => {
+    it("should return all edge collection names", (done) => {
       graph
         .listEdgeCollections()
-        .then(info => {
+        .then((info) => {
           expect(info).to.be.instanceOf(Array);
           expect(info.length).to.equal(1);
           expect(info).to.contain("knows");
@@ -122,10 +122,10 @@ describe("Manipulating graph edges", function() {
     });
   });
   describe("graph.listVertexCollections", () => {
-    it("should return all vertex collection names", done => {
+    it("should return all vertex collection names", (done) => {
       graph
         .listVertexCollections()
-        .then(info => {
+        .then((info) => {
           expect(info).to.be.instanceOf(Array);
           expect(info.length).to.equal(1);
           expect(info).to.contain("person");
@@ -135,14 +135,14 @@ describe("Manipulating graph edges", function() {
     });
   });
   describe("graph.addEdgeDefinition", () => {
-    it("should add an edgeDefinition to the graph", done => {
+    it("should add an edgeDefinition to the graph", (done) => {
       graph
         .addEdgeDefinition({
           collection: "works_in",
           from: ["person"],
           to: ["city"],
         })
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("name", graphName);
           expect(info).to.have.property("edgeDefinitions");
           expect(info.edgeDefinitions).to.be.instanceOf(Array);
@@ -171,14 +171,14 @@ describe("Manipulating graph edges", function() {
     });
   });
   describe("graph.replaceEdgeDefinition", () => {
-    it("should replace an existing edgeDefinition in the graph", done => {
+    it("should replace an existing edgeDefinition in the graph", (done) => {
       graph
         .replaceEdgeDefinition("knows", {
           collection: "knows",
           from: ["person"],
           to: ["city"],
         })
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("name", graphName);
           expect(info).to.have.property("edgeDefinitions");
           expect(info.edgeDefinitions).to.be.instanceOf(Array);
@@ -207,10 +207,10 @@ describe("Manipulating graph edges", function() {
     });
   });
   describe("graph.removeEdgeDefinition", () => {
-    it("should remove an edgeDefinition from the graph", done => {
+    it("should remove an edgeDefinition from the graph", (done) => {
       graph
         .removeEdgeDefinition("knows")
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("name", graphName);
           expect(info).to.have.property("edgeDefinitions");
           expect(info.edgeDefinitions).to.be.instanceOf(Array);

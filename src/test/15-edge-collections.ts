@@ -6,7 +6,7 @@ import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("EdgeCollection API", function() {
+describe("EdgeCollection API", function () {
   dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
@@ -38,14 +38,14 @@ describe("EdgeCollection API", function() {
       c8Client.close();
     }
   });
-  beforeEach(done => {
+  beforeEach((done) => {
     collection = c8Client.edgeCollection(`c${Date.now()}`);
     collection
       .create()
       .then(() => void done())
       .catch(done);
   });
-  afterEach(done => {
+  afterEach((done) => {
     collection
       .drop()
       .then(() => void done())
@@ -112,15 +112,9 @@ describe("EdgeCollection API", function() {
       const data = { chicken: "chicken", _from: "d/1", _to: "d/2" };
       const meta = await collection.save(data);
       expect(meta).to.be.an("object");
-      expect(meta)
-        .to.have.property("_id")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("_rev")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("_key")
-        .that.is.a("string");
+      expect(meta).to.have.property("_id").that.is.a("string");
+      expect(meta).to.have.property("_rev").that.is.a("string");
+      expect(meta).to.have.property("_key").that.is.a("string");
       const doc = await collection.edge(meta._id);
       expect(doc).to.have.keys(
         "chicken",
@@ -146,15 +140,9 @@ describe("EdgeCollection API", function() {
       };
       const meta = await collection.save(data);
       expect(meta).to.be.an("object");
-      expect(meta)
-        .to.have.property("_id")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("_rev")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("_key")
-        .that.equals(data._key);
+      expect(meta).to.have.property("_id").that.is.a("string");
+      expect(meta).to.have.property("_rev").that.is.a("string");
+      expect(meta).to.have.property("_key").that.equals(data._key);
       const doc = await collection.edge(meta._id);
       expect(doc).to.have.keys(
         "chicken",
@@ -177,15 +165,9 @@ describe("EdgeCollection API", function() {
       const to = "d/2";
       const meta = await collection.save(data, from, to);
       expect(meta).to.be.an("object");
-      expect(meta)
-        .to.have.property("_id")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("_rev")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("_key")
-        .that.is.a("string");
+      expect(meta).to.have.property("_id").that.is.a("string");
+      expect(meta).to.have.property("_rev").that.is.a("string");
+      expect(meta).to.have.property("_key").that.is.a("string");
       const doc = await collection.edge(meta._id);
       expect(doc).to.have.keys(
         "chicken",
@@ -206,18 +188,10 @@ describe("EdgeCollection API", function() {
       const data = { chicken: "chicken", _from: "d/1", _to: "d/2" };
       const meta = await collection.save(data, { returnNew: true });
       expect(meta).to.be.an("object");
-      expect(meta)
-        .to.have.property("_id")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("_rev")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("_key")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("new")
-        .that.is.an("object");
+      expect(meta).to.have.property("_id").that.is.a("string");
+      expect(meta).to.have.property("_rev").that.is.a("string");
+      expect(meta).to.have.property("_key").that.is.a("string");
+      expect(meta).to.have.property("new").that.is.an("object");
       expect(meta.new).to.have.property("chicken", data.chicken);
       const doc = await collection.edge(meta._id);
       expect(doc).to.have.keys(
@@ -241,18 +215,10 @@ describe("EdgeCollection API", function() {
       const to = "d/2";
       const meta = await collection.save(data, from, to, { returnNew: true });
       expect(meta).to.be.an("object");
-      expect(meta)
-        .to.have.property("_id")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("_rev")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("_key")
-        .that.is.a("string");
-      expect(meta)
-        .to.have.property("new")
-        .that.is.an("object");
+      expect(meta).to.have.property("_id").that.is.a("string");
+      expect(meta).to.have.property("_rev").that.is.a("string");
+      expect(meta).to.have.property("_key").that.is.a("string");
+      expect(meta).to.have.property("new").that.is.an("object");
       expect(meta.new).to.have.property("chicken", data.chicken);
       const doc = await collection.edge(meta._id);
       expect(doc).to.have.keys(
@@ -272,11 +238,11 @@ describe("EdgeCollection API", function() {
     });
   });
   describe("edgeCollection.replace", () => {
-    it("replaces the given edge", done => {
+    it("replaces the given edge", (done) => {
       const doc = { potato: "tomato", _from: "d/1", _to: "d/2" };
       collection
         .save(doc)
-        .then(meta => {
+        .then((meta) => {
           delete meta.error;
           Object.assign(doc, meta);
           return collection.replace(doc as any, {
@@ -286,7 +252,7 @@ describe("EdgeCollection API", function() {
           });
         })
         .then(() => collection.edge((doc as any)._key))
-        .then(data => {
+        .then((data) => {
           expect(data).not.to.have.property("potato");
           expect(data).to.have.property("sup", "dawg");
           done();
@@ -295,17 +261,17 @@ describe("EdgeCollection API", function() {
     });
   });
   describe("edgeCollection.update", () => {
-    it("updates the given document", done => {
+    it("updates the given document", (done) => {
       let doc = { potato: "tomato", empty: false, _from: "d/1", _to: "d/2" };
       collection
         .save(doc)
-        .then(meta => {
+        .then((meta) => {
           delete meta.error;
           Object.assign(doc, meta);
           return collection.update(doc as any, { sup: "dawg", empty: null });
         })
         .then(() => collection.edge((doc as any)._key))
-        .then(data => {
+        .then((data) => {
           expect(data).to.have.property("potato", doc.potato);
           expect(data).to.have.property("sup", "dawg");
           expect(data).to.have.property("empty", null);
@@ -313,11 +279,11 @@ describe("EdgeCollection API", function() {
         })
         .catch(done);
     });
-    it("removes null values if keepNull is explicitly set to false", done => {
+    it("removes null values if keepNull is explicitly set to false", (done) => {
       let doc = { potato: "tomato", empty: false, _from: "d/1", _to: "d/2" };
       collection
         .save(doc)
-        .then(meta => {
+        .then((meta) => {
           delete meta.error;
           Object.assign(doc, meta);
           return collection.update(
@@ -327,7 +293,7 @@ describe("EdgeCollection API", function() {
           );
         })
         .then(() => collection.edge((doc as any)._key))
-        .then(data => {
+        .then((data) => {
           expect(data).to.have.property("potato", doc.potato);
           expect(data).to.have.property("sup", "dawg");
           expect(data).not.to.have.property("empty");
@@ -338,13 +304,13 @@ describe("EdgeCollection API", function() {
   });
   describe("edgeCollection.remove", () => {
     let key = `d_${Date.now()}`;
-    beforeEach(done => {
+    beforeEach((done) => {
       collection
         .save({ _key: key, _from: "d/1", _to: "d/2" })
         .then(() => void done())
         .catch(done);
     });
-    it("deletes the given edge", done => {
+    it("deletes the given edge", (done) => {
       collection
         .remove(key)
         .then(() => collection.edge(key))

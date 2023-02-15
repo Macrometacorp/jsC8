@@ -8,7 +8,7 @@ import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("User Management", function() {
+describe("User Management", function () {
   // create fabric takes 11s in a standard cluster
   dotenv.config();
   this.timeout(100000);
@@ -195,7 +195,7 @@ describe("User Management", function() {
 
       describe("user.getCollectionAccessLevel", () => {
         it("get collection access level", async () => {
-          await new Promise(r => setTimeout(r, 1000));
+          await new Promise((r) => setTimeout(r, 1000));
           const response = await user.getCollectionAccessLevel(
             testFabricName,
             collectionName

@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("validating new apis", function() {
+describe("validating new apis", function () {
   dotenv.config();
   this.timeout(60000);
   let c8Client: C8Client;

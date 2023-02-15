@@ -4,8 +4,8 @@ import { isC8Error } from "./error";
 export const USER_NOT_FOUND = 1703;
 
 export type UserAttributesType = {
-    [key:string]: string | number;
-}
+  [key: string]: string | number;
+};
 
 class User {
   _connection: Connection;
@@ -14,7 +14,7 @@ class User {
 
   urlPrefix: string = "/_admin/user";
 
-  constructor(connection: Connection, user: string, email: string = '') {
+  constructor(connection: Connection, user: string, email: string = "") {
     this.user = user;
     this._connection = connection;
     this.email = email;
@@ -30,10 +30,10 @@ class User {
           email: this.email,
           passwd: passwd,
           active,
-          extra
-        }
+          extra,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -41,9 +41,9 @@ class User {
     return this._connection.request(
       {
         method: "GET",
-        path: `${this.urlPrefix}/${this.user}`
+        path: `${this.urlPrefix}/${this.user}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -55,7 +55,7 @@ class User {
           return false;
         }
         throw err;
-      },
+      }
     );
   }
 
@@ -63,9 +63,9 @@ class User {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `${this.urlPrefix}/${this.user}`
+        path: `${this.urlPrefix}/${this.user}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -78,10 +78,10 @@ class User {
         method: methodType,
         path: `${this.urlPrefix}/${this.user}`,
         body: {
-          ...config
-        }
+          ...config,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -99,10 +99,10 @@ class User {
         method: "GET",
         path: `${this.urlPrefix}/${this.user}/database`,
         qs: {
-          full: isFullRequested
-        }
+          full: isFullRequested,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -110,9 +110,9 @@ class User {
     return this._connection.request(
       {
         method: "GET",
-        path: `${this.urlPrefix}/${this.user}/database/${databaseName}`
+        path: `${this.urlPrefix}/${this.user}/database/${databaseName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -120,9 +120,9 @@ class User {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `${this.urlPrefix}/${this.user}/database/${fabricName}`
+        path: `${this.urlPrefix}/${this.user}/database/${fabricName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -132,10 +132,10 @@ class User {
         method: "PUT",
         path: `${this.urlPrefix}/${this.user}/database/${fabricName}`,
         body: {
-          grant: permission
-        }
+          grant: permission,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -143,11 +143,9 @@ class User {
     return this._connection.request(
       {
         method: "GET",
-        path: `${this.urlPrefix}/${
-          this.user
-          }/database/${databaseName}/collection/${collectionName}`
+        path: `${this.urlPrefix}/${this.user}/database/${databaseName}/collection/${collectionName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -155,11 +153,9 @@ class User {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `${this.urlPrefix}/${
-          this.user
-          }/database/${fabricName}/collection/${collectionName}`
+        path: `${this.urlPrefix}/${this.user}/database/${fabricName}/collection/${collectionName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -171,14 +167,12 @@ class User {
     return this._connection.request(
       {
         method: "PUT",
-        path: `${this.urlPrefix}/${
-          this.user
-          }/database/${fabricName}/collection/${collectionName}`,
+        path: `${this.urlPrefix}/${this.user}/database/${fabricName}/collection/${collectionName}`,
         body: {
-          grant: permission
-        }
+          grant: permission,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -186,9 +180,9 @@ class User {
     return this._connection.request(
       {
         method: "GET",
-        path: `${this.urlPrefix}`
+        path: `${this.urlPrefix}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -196,11 +190,9 @@ class User {
     return this._connection.request(
       {
         method: "GET",
-        path: `${this.urlPrefix}/${
-          this.user
-          }/database/${databaseName}/stream/${streamName}`
+        path: `${this.urlPrefix}/${this.user}/database/${databaseName}/stream/${streamName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -208,11 +200,9 @@ class User {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `${this.urlPrefix}/${
-          this.user
-          }/database/${databaseName}/stream/${streamName}`
+        path: `${this.urlPrefix}/${this.user}/database/${databaseName}/stream/${streamName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -224,40 +214,44 @@ class User {
     return this._connection.request(
       {
         method: "PUT",
-        path: `${this.urlPrefix}/${
-          this.user
-          }/database/${databaseName}/stream/${streamName}`,
+        path: `${this.urlPrefix}/${this.user}/database/${databaseName}/stream/${streamName}`,
         body: {
-          grant: permission
-        }
+          grant: permission,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
-  listAccessibleCollections(databaseName: string, isFullRequested: boolean = false) {
+  listAccessibleCollections(
+    databaseName: string,
+    isFullRequested: boolean = false
+  ) {
     return this._connection.request(
       {
         method: "GET",
         path: `${this.urlPrefix}/${this.user}/database/${databaseName}/collection`,
         qs: {
-          full: isFullRequested
-        }
+          full: isFullRequested,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
-  listAccessibleStreams(databaseName: string, isFullRequested: boolean = false) {
+  listAccessibleStreams(
+    databaseName: string,
+    isFullRequested: boolean = false
+  ) {
     return this._connection.request(
       {
         method: "GET",
         path: `${this.urlPrefix}/${this.user}/database/${databaseName}/stream`,
         qs: {
-          full: isFullRequested
-        }
+          full: isFullRequested,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -265,9 +259,9 @@ class User {
     return this._connection.request(
       {
         method: "GET",
-        path: `${this.urlPrefix}/${this.user}/billing`
+        path: `${this.urlPrefix}/${this.user}/billing`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -275,9 +269,9 @@ class User {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `${this.urlPrefix}/${this.user}/billing`
+        path: `${this.urlPrefix}/${this.user}/billing`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -287,10 +281,10 @@ class User {
         method: "PUT",
         path: `${this.urlPrefix}/${this.user}/billing`,
         body: {
-          grant: permission
-        }
+          grant: permission,
+        },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -298,9 +292,9 @@ class User {
     return this._connection.request(
       {
         method: "GET",
-        path: `${this.urlPrefix}/${this.user}/attributes`
+        path: `${this.urlPrefix}/${this.user}/attributes`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -308,23 +302,21 @@ class User {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `${this.urlPrefix}/${this.user}/attributes/${attributeId}`
+        path: `${this.urlPrefix}/${this.user}/attributes/${attributeId}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
-  async createUpdateUserAttributes(
-    data:UserAttributesType
-  ) {
+  async createUpdateUserAttributes(data: UserAttributesType) {
     const getAttributes = await this.getUserAttributes();
     return this._connection.request(
       {
         method: "PUT",
         path: `${this.urlPrefix}/${this.user}/attributes`,
-        body: { ...getAttributes.result, ...data }
+        body: { ...getAttributes.result, ...data },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 }

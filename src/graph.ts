@@ -5,7 +5,7 @@ import {
   DocumentHandle,
   DOCUMENT_NOT_FOUND,
   EdgeCollection,
-  isC8Collection
+  isC8Collection,
 } from "./collection";
 import { Connection } from "./connection";
 import { isC8Error } from "./error";
@@ -30,12 +30,12 @@ export class GraphVertexCollection extends BaseCollection {
         path: `/_api/graph/${this.graph.name}/vertex/${this._documentHandle(
           documentHandle
         )}`,
-        qs: opts
+        qs: opts,
       },
-      res => res.body.vertex
+      (res) => res.body.vertex
     );
     if (!graceful) return result;
-    return result.catch(err => {
+    return result.catch((err) => {
       if (isC8Error(err) && err.errorNum === DOCUMENT_NOT_FOUND) {
         return null;
       }
@@ -50,19 +50,23 @@ export class GraphVertexCollection extends BaseCollection {
     return this.document(documentHandle, graceful);
   }
 
-  save(data: any, opts?: { waitForSync?: boolean, returnNew?: boolean }) {
+  save(data: any, opts?: { waitForSync?: boolean; returnNew?: boolean }) {
     return this._connection.request(
       {
         method: "POST",
         path: `/_api/graph/${this.graph.name}/vertex/${this.name}`,
         body: data,
-        qs: opts
+        qs: opts,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
-  replace(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
+  replace(
+    documentHandle: DocumentHandle,
+    newValue: any,
+    opts: Record<string, any> = {}
+  ) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -80,13 +84,17 @@ export class GraphVertexCollection extends BaseCollection {
         )}`,
         body: newValue,
         qs: opts,
-        headers
+        headers,
       },
-      res => res.body.vertex
+      (res) => res.body.vertex
     );
   }
 
-  update(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
+  update(
+    documentHandle: DocumentHandle,
+    newValue: any,
+    opts: Record<string, any> = {}
+  ) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -104,9 +112,9 @@ export class GraphVertexCollection extends BaseCollection {
         )}`,
         body: newValue,
         qs: opts,
-        headers
+        headers,
       },
-      res => res.body.vertex
+      (res) => res.body.vertex
     );
   }
 
@@ -127,9 +135,9 @@ export class GraphVertexCollection extends BaseCollection {
           documentHandle
         )}`,
         qs: opts,
-        headers
+        headers,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 }
@@ -151,26 +159,28 @@ export class GraphEdgeCollection extends EdgeCollection {
     opts: Record<string, any> = {}
   ): Promise<any> {
     const headers: { [key: string]: string } = {};
-    if (opts['if-none-match']) {
+    if (opts["if-none-match"]) {
       let ifNoneMatch: string;
-      ({['if-none-match']: ifNoneMatch, ...opts } = opts);
+      ({ ["if-none-match"]: ifNoneMatch, ...opts } = opts);
       headers["if-none-match"] = ifNoneMatch;
     }
-    if (opts['if-match']) {
+    if (opts["if-match"]) {
       let ifMatch: string;
-      ({ ['if-match']: ifMatch, ...opts } = opts);
+      ({ ["if-match"]: ifMatch, ...opts } = opts);
       headers["if-match"] = ifMatch;
     }
     const result = this._connection.request(
       {
-        path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(documentHandle)}`,
-        qs:opts,
-        headers
+        path: `/_api/graph/${this.graph.name}/edge/${this._documentHandle(
+          documentHandle
+        )}`,
+        qs: opts,
+        headers,
       },
-      res => res.body.edge
+      (res) => res.body.edge
     );
     if (!graceful) return result;
-    return result.catch(err => {
+    return result.catch((err) => {
       if (isC8Error(err) && err.errorNum === DOCUMENT_NOT_FOUND) {
         return null;
       }
@@ -182,7 +192,7 @@ export class GraphEdgeCollection extends EdgeCollection {
     data: any,
     fromId?: DocumentHandle | any,
     toId?: DocumentHandle,
-    opts?: { waitForSync?: boolean, returnNew?: boolean }
+    opts?: { waitForSync?: boolean; returnNew?: boolean }
   ) {
     if (fromId !== undefined) {
       if (toId !== undefined) {
@@ -197,13 +207,17 @@ export class GraphEdgeCollection extends EdgeCollection {
         method: "POST",
         path: `/_api/graph/${this.graph.name}/edge/${this.name}`,
         body: data,
-        qs: opts
+        qs: opts,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
-  replace(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
+  replace(
+    documentHandle: DocumentHandle,
+    newValue: any,
+    opts: Record<string, any> = {}
+  ) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -221,13 +235,17 @@ export class GraphEdgeCollection extends EdgeCollection {
         )}`,
         body: newValue,
         qs: opts,
-        headers
+        headers,
       },
-      res => res.body.edge
+      (res) => res.body.edge
     );
   }
 
-  update(documentHandle: DocumentHandle, newValue: any, opts: Record<string, any> = {}) {
+  update(
+    documentHandle: DocumentHandle,
+    newValue: any,
+    opts: Record<string, any> = {}
+  ) {
     const headers: { [key: string]: string } = {};
     if (typeof opts === "string") {
       opts = { rev: opts };
@@ -245,9 +263,9 @@ export class GraphEdgeCollection extends EdgeCollection {
         )}`,
         body: newValue,
         qs: opts,
-        headers
+        headers,
       },
-      res => res.body.edge
+      (res) => res.body.edge
     );
   }
 
@@ -268,9 +286,9 @@ export class GraphEdgeCollection extends EdgeCollection {
           documentHandle
         )}`,
         qs: opts,
-        headers
+        headers,
       },
-      res => res.body.removed
+      (res) => res.body.removed
     );
   }
 }
@@ -289,14 +307,14 @@ export class Graph {
   get() {
     return this._connection.request(
       { path: `/_api/graph/${this.name}` },
-      res => res.body.graph
+      (res) => res.body.graph
     );
   }
 
   exists(): Promise<boolean> {
     return this.get().then(
       () => true,
-      err => {
+      (err) => {
         if (isC8Error(err) && err.errorNum === GRAPH_NOT_FOUND) {
           return false;
         }
@@ -312,10 +330,10 @@ export class Graph {
         path: "/_api/graph",
         body: {
           ...properties,
-          name: this.name
-        }
+          name: this.name,
+        },
       },
-      res => res.body.graph
+      (res) => res.body.graph
     );
   }
 
@@ -324,9 +342,9 @@ export class Graph {
       {
         method: "DELETE",
         path: `/_api/graph/${this.name}`,
-        qs: { dropCollections }
+        qs: { dropCollections },
       },
-      res => res.body.removed
+      (res) => res.body.removed
     );
   }
 
@@ -337,7 +355,7 @@ export class Graph {
   listVertexCollections() {
     return this._connection.request(
       { path: `/_api/graph/${this.name}/vertex` },
-      res => res.body.collections
+      (res) => res.body.collections
     );
   }
 
@@ -356,9 +374,9 @@ export class Graph {
       {
         method: "POST",
         path: `/_api/graph/${this.name}/vertex`,
-        body: { collection }
+        body: { collection },
       },
-      res => res.body.graph
+      (res) => res.body.graph
     );
   }
 
@@ -374,10 +392,10 @@ export class Graph {
         method: "DELETE",
         path: `/_api/graph/${this.name}/vertex/${collection}`,
         qs: {
-          dropCollection
-        }
+          dropCollection,
+        },
       },
-      res => res.body.graph
+      (res) => res.body.graph
     );
   }
 
@@ -388,7 +406,7 @@ export class Graph {
   listEdgeCollections() {
     return this._connection.request(
       { path: `/_api/graph/${this.name}/edge` },
-      res => res.body.collections
+      (res) => res.body.collections
     );
   }
 
@@ -404,9 +422,9 @@ export class Graph {
       {
         method: "POST",
         path: `/_api/graph/${this.name}/edge`,
-        body: definition
+        body: definition,
       },
-      res => res.body.graph
+      (res) => res.body.graph
     );
   }
 
@@ -415,9 +433,9 @@ export class Graph {
       {
         method: "PUT",
         path: `/_api/graph/${this.name}/edge/${definitionName}`,
-        body: definition
+        body: definition,
       },
-      res => res.body.graph
+      (res) => res.body.graph
     );
   }
 
@@ -430,10 +448,10 @@ export class Graph {
         method: "DELETE",
         path: `/_api/graph/${this.name}/edge/${definitionName}`,
         qs: {
-          dropCollection
-        }
+          dropCollection,
+        },
       },
-      res => res.body.graph
+      (res) => res.body.graph
     );
   }
 }

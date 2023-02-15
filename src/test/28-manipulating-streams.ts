@@ -5,7 +5,7 @@ import * as dotenv from "dotenv";
 
 // TODO : @VIKAS Update Test cases
 
-describe("Manipulating streams", function() {
+describe("Manipulating streams", function () {
   dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(50000);
@@ -83,7 +83,7 @@ describe("Manipulating streams", function() {
     });
   });
 
-  describe("stream.manipulate", function() {
+  describe("stream.manipulate", function () {
     let stream: Stream;
     let consumer: any;
     let producer: any;
@@ -96,7 +96,7 @@ describe("Manipulating streams", function() {
 
     describe("stream.getBacklog", () => {
       it("gets estimated backlog for offline stream", async () => {
-        setTimeout(async function() {
+        setTimeout(async function () {
           const response = await stream.backlog();
           expect(response.error).to.be.false;
         }, 5000);
@@ -120,7 +120,7 @@ describe("Manipulating streams", function() {
         if (consumer) consumer.close();
         if (producer) producer.close();
       });
-      it.skip("stream.resetSubscriptionToPosition", done => {
+      it.skip("stream.resetSubscriptionToPosition", (done) => {
         let numberOfMessages: number = 0;
         function callback(msg: string) {
           const parsedMsg = JSON.parse(msg);
@@ -139,7 +139,7 @@ describe("Manipulating streams", function() {
         producer = stream.producer(dcName);
 
         consumer.on("open", () => {
-          ["nandha", "abhishek", "rachit", "sulom", "pratik"].map(payload => {
+          ["nandha", "abhishek", "rachit", "sulom", "pratik"].map((payload) => {
             producer.send(JSON.stringify({ payload }));
           });
         });
@@ -194,7 +194,7 @@ describe("Manipulating streams", function() {
       //   });
       // });
 
-      describe("stream.websocket", function() {
+      describe("stream.websocket", function () {
         let dcName: string;
         let consumer: any;
         let producer: any;
@@ -216,7 +216,7 @@ describe("Manipulating streams", function() {
           if (producer) producer.close();
         });
 
-        it("gets data in consumer when sent by producer", function(done) {
+        it("gets data in consumer when sent by producer", function (done) {
           function callback(msg: string) {
             const parsedMsg = JSON.parse(msg);
             const { payload } = parsedMsg;

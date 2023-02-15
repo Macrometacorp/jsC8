@@ -37,6 +37,23 @@ pre-commit hooks you need to run once:
  npx husky install
 ```
 
+## 🧪 Testing
+
+End-to-end tests can be found in src/tests/.
+Before first run create .env file in the root of the project.
+In `.env` file add variables:
+
+* `URL="<your federation url>"`
+* `FABRIC="<selected fabric>"`
+* `API_KEY="<your api key>"`
+
+`.env` file is in `.gitignore`.
+
+To run tests position yourself in the project's root directory and run:
+```bash
+npm run devtest
+```
+
 ## 🔐 Authentication
 
 Currently, jsc8 supports API Key, JWT token, username and password
