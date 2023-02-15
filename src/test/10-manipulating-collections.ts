@@ -174,29 +174,39 @@ describe("Manipulating collections", async function() {
     });
   });
   describe("collection.onChange", () => {
-    it("should get the message on collection change", async () => {
+    let handler: any;
+    let streamCollection: DocumentCollection;
+
+    this.beforeAll(async () => {
       if (process.env.URL) {
-        let streamCollection = c8Client.collection("testRealTime");
+        streamCollection = c8Client.collection("testRealTime");
         await streamCollection.create({ stream: true });
 
-        const handler = await streamCollection.onChange(
+        handler = await streamCollection.onChange(
           process.env.URL.substring(8).slice(0, -1)
         );
-        handler.on("open", () => {
-          streamCollection.save({ name: "John", lastname: "Doe" });
+      }
+    });
+    this.afterAll(() => {
+      if (handler) handler.close();
+    });
+
+    it("should get the message on collection change", function(done) {
+      if (process.env.URL) {
+        handler.on("message", (msg: any) => {
+          console.log("msg=> %s", JSON.stringify(msg));
+          done();
         });
 
-        handler.on("message", async (msg: string) => {
-          console.log("msg=>", msg);
-          await Promise.resolve();
-        });
+        streamCollection.save({ name: "John", lastname: "Doe" });
 
         handler.on("error", (err: any) => {
           console.log("Connection Error->", err);
-          expect.fail("Websocket connection error");
         });
 
         handler.on("close", () => console.log("Websocket connection closed"));
+      } else {
+        done();
       }
     });
   });

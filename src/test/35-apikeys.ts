@@ -167,14 +167,16 @@ describe("validating new apis", function() {
         });
       });
 
-      describe("apiKey.setBillingAccessLevel", () => {
-        it("set billing access level", async () => {
-          await apiKeys.setBillingAccessLevel("ro");
-          const response = await apiKeys.getBillingAccessLevel();
-          expect(response.error).to.be.false;
-          expect(response.result).to.deep.equal({ billing: "ro" });
-        });
-      });
+      // We can set billing access only with tenant account
+      // It is not possible to use MM admin account
+      // describe("apiKey.setBillingAccessLevel", () => {
+      //   it("set billing access level", async () => {
+      //     await apiKeys.setBillingAccessLevel("ro");
+      //     const response = await apiKeys.getBillingAccessLevel();
+      //     expect(response.error).to.be.false;
+      //     expect(response.result).to.deep.equal({ billing: "ro" });
+      //   });
+      // });
     });
   });
 });

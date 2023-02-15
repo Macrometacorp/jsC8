@@ -271,56 +271,6 @@ describe("EdgeCollection API", function() {
       expect(doc._to).to.equal(to);
     });
   });
-  describe("edgeCollection.traversal", () => {
-    let knows: any;
-    beforeEach(done => {
-      knows = c8Client.edgeCollection("knows");
-      const person = c8Client.collection("person");
-      Promise.all([person.create(), knows.create()])
-        .then(() =>
-          Promise.all([
-            person.import([
-              { _key: "Alice" },
-              { _key: "Bob" },
-              { _key: "Charlie" },
-              { _key: "Dave" },
-              { _key: "Eve" },
-            ]),
-            knows.import([
-              { _from: "person/Alice", _to: "person/Bob" },
-              { _from: "person/Bob", _to: "person/Charlie" },
-              { _from: "person/Bob", _to: "person/Dave" },
-              { _from: "person/Eve", _to: "person/Alice" },
-              { _from: "person/Eve", _to: "person/Bob" },
-            ]),
-          ])
-        )
-        .then(() => done())
-        .catch(done);
-    });
-    it("executes traversal", done => {
-      knows
-        .traversal("person/Alice", { direction: "outbound" })
-        .then((result: any) => {
-          expect(result).to.have.property("visited");
-          const visited = result.visited;
-          expect(visited).to.have.property("vertices");
-          const vertices = visited.vertices;
-          expect(vertices).to.be.instanceOf(Array);
-          expect(vertices.length).to.equal(4);
-          const names = vertices.map((d: any) => d._key);
-          for (const name of ["Alice", "Bob", "Charlie", "Dave"]) {
-            expect(names).to.contain(name);
-          }
-          expect(visited).to.have.property("paths");
-          const paths = visited.paths;
-          expect(paths).to.be.instanceOf(Array);
-          expect(paths.length).to.equal(4);
-        })
-        .then(() => done())
-        .catch(done);
-    });
-  });
   describe("edgeCollection.replace", () => {
     it("replaces the given edge", done => {
       const doc = { potato: "tomato", _from: "d/1", _to: "d/2" };

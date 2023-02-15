@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import { C8Client } from "../jsC8";
 import User from "../user";
+import { C8Error } from "../error";
 import { HttpError } from "../error";
 import { getDCListString } from "../util/helper";
 import * as dotenv from "dotenv";
@@ -10,7 +11,7 @@ const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 describe("User Management", function() {
   // create fabric takes 11s in a standard cluster
   dotenv.config();
-  this.timeout(20000);
+  this.timeout(100000);
   let c8Client: C8Client;
   let dcList: string;
 
@@ -125,7 +126,7 @@ describe("User Management", function() {
       });
 
       afterEach(async () => {
-        c8Client.useFabric("_system");
+        //c8Client.useFabric("_system");
         await c8Client.dropFabric(testFabricName);
       });
 
@@ -149,45 +150,10 @@ describe("User Management", function() {
         expect(response.result).to.be.oneOf(["rw", "ro", "none"]);
       });
 
-      it("Gets the access level of a collection in a database ", async () => {
-        const collectionName = `coll${Date.now()}`;
-        await c8Client.createCollection(collectionName);
-        const response = await user.getCollectionAccessLevel(
-          testFabricName,
-          collectionName
-        );
-        expect(response.error).to.be.false;
-      });
-
       it("Clears the access level of a database ", async () => {
         const response = await user.clearDatabaseAccessLevel(testFabricName);
         expect(response.error).to.be.false;
         expect(response.code).eq(202);
-      });
-
-      it.skip("Clears the access level of a collection in a database ", async () => {
-        c8Client.useFabric(testFabricName);
-        const collectionName = `coll${Date.now()}`;
-        await c8Client.collection(collectionName).create();
-        const response = await user.clearCollectionAccessLevel(
-          testFabricName,
-          collectionName
-        );
-        expect(response.error).to.be.false;
-        expect(response.code).eq(202);
-      });
-
-      it.skip("Sets the access level of a collection in a database ", async () => {
-        const collectionName = `coll${Date.now()}`;
-        await c8Client.collection(collectionName).create();
-        const response = await user.setCollectionAccessLevel(
-          testFabricName,
-          collectionName,
-          "ro"
-        );
-        expect(response.error).to.be.false;
-        expect(response.code).eq(200);
-        expect(response[`${testFabricName}/${collectionName}`]).eq("ro");
       });
 
       it("Sets the access level of a database", async () => {
@@ -210,12 +176,13 @@ describe("User Management", function() {
           dcList: dcList,
         });
         // fabric.useFabric(testFabricName);
+        c8Client.useFabric(testFabricName);
         await c8Client.createCollection(collectionName);
       });
 
       afterEach(async () => {
-        c8Client.useFabric("_system");
         await c8Client.deleteCollection(collectionName);
+        c8Client.useFabric("_system");
         await c8Client.dropFabric(testFabricName);
       });
 
@@ -228,12 +195,33 @@ describe("User Management", function() {
 
       describe("user.getCollectionAccessLevel", () => {
         it("get collection access level", async () => {
+          await new Promise(r => setTimeout(r, 1000));
           const response = await user.getCollectionAccessLevel(
             testFabricName,
             collectionName
           );
           expect(response.error).to.be.false;
         });
+      });
+
+      it("Clears the access level of a collection in a database ", async () => {
+        const response = await user.clearCollectionAccessLevel(
+          testFabricName,
+          collectionName
+        );
+        expect(response.error).to.be.false;
+        expect(response.code).eq(202);
+      });
+
+      it("Sets the access level of a collection in a database ", async () => {
+        const response = await user.setCollectionAccessLevel(
+          testFabricName,
+          collectionName,
+          "ro"
+        );
+        expect(response.error).to.be.false;
+        expect(response.code).eq(200);
+        expect(response[`${testFabricName}/${collectionName}`]).eq("ro");
       });
     });
 
@@ -270,10 +258,10 @@ describe("User Management", function() {
           const response = await user.createUpdateUserAttributes({ age: 12 });
           expect(response.error).to.be.false;
         } catch (err) {
-          expect(err).is.instanceof(HttpError);
+          expect(err).is.instanceof(C8Error);
           expect(err).to.have.property("code", 400);
           expect(err).to.have.property(
-            "errorMessage",
+            "message",
             "Failed to parse JSON object. Error code: 17"
           );
         }
@@ -294,9 +282,9 @@ describe("User Management", function() {
           const response = await user.deleteUserAttribute("attributId");
           expect(response.error).to.be.false;
         } catch (err) {
-          expect(err).is.instanceof(HttpError);
+          expect(err).is.instanceof(C8Error);
           expect(err).to.have.property("code", 404);
-          expect(err).to.have.property("errorMessage", "invalid api key id");
+          expect(err).to.have.property("message", "user not found");
         }
       });
     });

@@ -107,25 +107,64 @@ describe(" StreamApps ", function() {
       let dcListAll = getDCListString(resp);
       let dcList = dcListAll.split(",");
       let appdef = `@App:name('Sample-Cargo-App')
-                -- Stream
-                define stream srcCargoStream (weight int);
-                -- Table
-                define table destCargoTable (weight int, totalWeight long);
-                -- Data Processing
-                @info(name='Query')
-                select weight, sum(weight) as totalWeight
-                from srcCargoStream
-                insert into destCargoTable;`;
+        @App:qlVersion("2")
+        @App:description('Basic stream application to demonstrate reading data from input stream and store it in the collection. The stream and collections are automatically created if they do not already exist.')
+        /**
+            Testing the Stream Application:
+            1. Open Stream SampleCargoAppDestStream in Console. The output can be monitored here.
+            2. Upload following data into SampleCargoAppInputTable C8DB Collection
+                {"weight": 1}
+                {"weight": 2}
+                {"weight": 3}
+                {"weight": 4}
+                {"weight": 5}
+            3. Following messages would be shown on the SampleCargoAppDestStream Stream Console.
+                [2021-08-27T14:12:15.795Z] {"weight":1}
+                [2021-08-27T14:12:15.799Z] {"weight":2}
+                [2021-08-27T14:12:15.805Z] {"weight":3}
+                [2021-08-27T14:12:15.809Z] {"weight":4}
+                [2021-08-27T14:12:15.814Z] {"weight":5}
+            4. Following messages would be stored into SampleCargoAppDestTable
+                {"weight":1}
+                {"weight":2}
+                {"weight":3}
+                {"weight":4}
+                {"weight":5}
+        */
+        -- Defines Table SampleCargoAppInputTable
+        CREATE SOURCE SampleCargoAppInputTable WITH (type = 'database', collection = "SampleCargoAppInputTable", collection.type="doc", replication.type="global", map.type='json') (weight int);
+        -- Define Stream SampleCargoAppDestStream
+        CREATE SINK SampleCargoAppDestStream WITH (type = 'stream', stream = "SampleCargoAppDestStream", replication.type="local") (weight int);
+        -- Defining a Destination table to dump the data from the stream
+        CREATE STORE SampleCargoAppDestTable WITH (type = 'database', stream = "SampleCargoAppDestTable") (weight int);
+        -- Data Processing
+        @info(name='Query')
+        INSERT INTO SampleCargoAppDestStream
+        SELECT weight
+        FROM SampleCargoAppInputTable;
+        -- Data Processing
+        @info(name='Dump')
+        INSERT INTO SampleCargoAppDestTable
+        SELECT weight
+        FROM SampleCargoAppInputTable;`;
       const app = client.streamApp("Sample-Cargo-App");
       let response = await app.updateApplication(dcList, appdef);
+      await new Promise(r => setTimeout(r, 15000));
       expect(response.error).to.be.false;
     });
   });
 
   describe("streamapps.query", () => {
     it("runs query", async () => {
+      await new Promise(r => setTimeout(r, 6000));
+      await client.insertDocumentMany("SampleCargoAppInputTable", [
+        { weight: 10 },
+        { weight: 9 },
+      ]);
       const app = client.streamApp("Sample-Cargo-App");
-      let response = await app.query("select * from destCargoTable limit 3");
+      let response = await app.query(
+        "select * from SampleCargoAppDestTable limit 2"
+      );
       expect(response.error).to.be.false;
     });
   });

@@ -198,10 +198,18 @@ describe("Manipulating streams", function() {
         let dcName: string;
         let consumer: any;
         let producer: any;
+        let consumerOtp: any;
+        let producerOtp: any;
 
         this.beforeAll(async () => {
           const response = await client.getLocalEdgeLocation();
           dcName = response.tags.url;
+          consumerOtp = await stream.getOtp();
+          producerOtp = await stream.getOtp();
+          consumer = await stream.consumer("Subscription123", dcName, {
+            otp: consumerOtp,
+          });
+          producer = await stream.producer(dcName, { otp: producerOtp });
         });
         this.afterAll(() => {
           if (consumer) consumer.close();
@@ -215,9 +223,6 @@ describe("Manipulating streams", function() {
             expect(payload).to.equal("test");
             done();
           }
-          consumer = stream.consumer(`streamSubscription${Date.now()}`, dcName);
-
-          producer = stream.producer(dcName);
 
           consumer.on("open", () => {
             producer.send(JSON.stringify({ payload: "test" }));

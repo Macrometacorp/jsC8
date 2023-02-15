@@ -53,6 +53,7 @@ describe("manipulating restql", function() {
     const queryName = "testQuery";
 
     it("should execute a saved query", async () => {
+      await new Promise(r => setTimeout(r, 2000));
       response = await client.executeSavedQuery(queryName, {});
       expect(response.error).to.be.false;
     });

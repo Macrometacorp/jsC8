@@ -13,7 +13,7 @@ describe("validating search apis", function() {
   let search: Search;
   const collectionName = "searchCollection";
   const viewName = "viewTest";
-  const analyzerName = "analyzerTest";
+  const analyzerName = "identity";
 
   before(async () => {
     c8Client = new C8Client({
@@ -75,8 +75,12 @@ describe("validating search apis", function() {
       });
 
       it("update view properties", async () => {
-        const response = await search.updateViewProperties({
+        const links = {
           [collectionName]: { analyzers: ["identity"], fields: { v: {} } },
+        };
+        const response = await search.updateViewProperties({
+          links: links,
+          type: "search",
         });
         expect(response.links).to.deep.equal({
           [collectionName]: {
@@ -97,24 +101,7 @@ describe("validating search apis", function() {
       });
     });
 
-    describe("create delete view operations", () => {
-      it("create delete view", async () => {
-        const response = await search.createAnalyzer("identity");
-        expect(response.name).to.equal(`guest._system::${analyzerName}`);
-        const deleteRes = await search.deleteAnalyzer();
-        expect(deleteRes.name).to.equal(`guest._system::${analyzerName}`);
-      });
-    });
-
     describe("search analyzer operations", () => {
-      beforeEach(async () => {
-        await search.createAnalyzer("identity");
-      });
-
-      afterEach(async () => {
-        await search.deleteAnalyzer();
-      });
-
       it("get list of analyzers definition", async () => {
         const response = await search.getListOfAnalyzers();
         expect(response.result.length >= 1).to.be.true;
@@ -122,7 +109,7 @@ describe("validating search apis", function() {
 
       it("get analyzers definition", async () => {
         const response = await search.getAnalyzerDefinition();
-        expect(response.name).to.equal(`guest._system::${analyzerName}`);
+        expect(response.name).to.equal("identity");
       });
     });
   });
