@@ -10,21 +10,21 @@ export enum CollectionType {
 export type DocumentHandle =
   | string
   | {
-    _key?: string;
-    _id?: string;
-  };
+      _key?: string;
+      _id?: string;
+    };
 
 export type DocumentsHandle = {
   _key: string;
   _id?: string | undefined;
   [key: string]: any;
-}
+};
 
 export type IndexHandle =
   | string
   | {
-    id?: string;
-  };
+      id?: string;
+    };
 
 export interface ImportOptions {
   type?: null | "auto" | "documents" | "array";
@@ -124,7 +124,7 @@ export abstract class BaseCollection implements C8Collection {
   protected _get(path: string, qs?: any) {
     return this._connection.request(
       { path: `/collection/${this.name}/${path}`, qs },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -135,21 +135,21 @@ export abstract class BaseCollection implements C8Collection {
         path: `/collection/${this.name}/${path}`,
         body,
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
   get() {
     return this._connection.request(
       { path: `/collection/${this.name}` },
-      (res) => res.body
+      res => res.body
     );
   }
 
   exists(): Promise<boolean> {
     return this.get().then(
       () => true,
-      (err) => {
+      err => {
         if (isC8Error(err) && err.errorNum === COLLECTION_NOT_FOUND) {
           return false;
         }
@@ -169,7 +169,7 @@ export abstract class BaseCollection implements C8Collection {
           type: this.type,
         },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -193,7 +193,7 @@ export abstract class BaseCollection implements C8Collection {
         path: `/collection/${this.name}/rename`,
         body: { name },
       },
-      (res) => res.body
+      res => res.body
     );
     this.name = name;
     this._idPrefix = `${name}/`;
@@ -211,7 +211,7 @@ export abstract class BaseCollection implements C8Collection {
         path: `/collection/${this.name}`,
         qs: opts,
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -220,9 +220,9 @@ export abstract class BaseCollection implements C8Collection {
       {
         method: "PUT",
         path: `/collection/${this.name}/properties`,
-        body: { ...properties }
+        body: { ...properties },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -235,7 +235,7 @@ export abstract class BaseCollection implements C8Collection {
         },
         () => true
       )
-      .catch((err) => {
+      .catch(err => {
         if (err.statusCode === 404) {
           return false;
         }
@@ -249,10 +249,10 @@ export abstract class BaseCollection implements C8Collection {
   ): Promise<any> {
     const result = this._connection.request(
       { path: `/${this._documentPath(documentHandle)}` },
-      (res) => res.body
+      res => res.body
     );
     if (!graceful) return result;
-    return result.catch((err) => {
+    return result.catch(err => {
       if (isC8Error(err) && err.errorNum === DOCUMENT_NOT_FOUND) {
         return null;
       }
@@ -278,7 +278,7 @@ export abstract class BaseCollection implements C8Collection {
         qs: opts,
         headers,
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -295,12 +295,12 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PUT",
-        path: `/${this._documentPath('')}`,
+        path: `/${this._documentPath("")}`,
         body: documents,
         qs: opts,
         headers,
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -322,7 +322,7 @@ export abstract class BaseCollection implements C8Collection {
         qs: opts,
         headers,
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -339,12 +339,12 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "PATCH",
-        path: `/${this._documentPath('')}`,
+        path: `/${this._documentPath("")}`,
         body: documents,
         qs: opts,
         headers,
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -365,7 +365,7 @@ export abstract class BaseCollection implements C8Collection {
         qs: opts,
         headers,
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -382,12 +382,12 @@ export abstract class BaseCollection implements C8Collection {
     return this._connection.request(
       {
         method: "DELETE",
-        path: `/${this._documentPath('')}`,
+        path: `/${this._documentPath("")}`,
         body: documents,
         qs: opts,
         headers,
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -396,7 +396,7 @@ export abstract class BaseCollection implements C8Collection {
     { type = "auto", ...opts }: ImportOptions = {}
   ): Promise<ImportResult> {
     if (Array.isArray(data)) {
-      data = data.map((line) => JSON.stringify(line)).join("\r\n") + "\r\n";
+      data = data.map(line => JSON.stringify(line)).join("\r\n") + "\r\n";
     }
     return this._connection.request(
       {
@@ -410,7 +410,7 @@ export abstract class BaseCollection implements C8Collection {
           collection: this.name,
         },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -420,14 +420,14 @@ export abstract class BaseCollection implements C8Collection {
         path: "/index",
         qs: { collection: this.name },
       },
-      (res) => res.body.indexes
+      res => res.body.indexes
     );
   }
 
   index(indexName: string) {
     return this._connection.request(
       { path: `/index/${this._idPrefix}${indexName}` },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -439,7 +439,7 @@ export abstract class BaseCollection implements C8Collection {
         body: details,
         qs: { collection: this.name },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -449,7 +449,7 @@ export abstract class BaseCollection implements C8Collection {
         method: "DELETE",
         path: `/index/${this._idPrefix}${indexName}`,
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -464,7 +464,7 @@ export abstract class BaseCollection implements C8Collection {
         body: { ...opts, type: "cap" },
         qs: { collection: this.name },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -482,7 +482,7 @@ export abstract class BaseCollection implements C8Collection {
         body: { unique: false, ...opts, type: "hash", fields: fields },
         qs: { collection: this.name },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -500,7 +500,7 @@ export abstract class BaseCollection implements C8Collection {
         body: { unique: false, ...opts, type: "skiplist", fields: fields },
         qs: { collection: this.name },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -518,7 +518,7 @@ export abstract class BaseCollection implements C8Collection {
         body: { unique: false, ...opts, type: "persistent", fields: fields },
         qs: { collection: this.name },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -533,7 +533,7 @@ export abstract class BaseCollection implements C8Collection {
         body: { ...opts, fields, type: "geo" },
         qs: { collection: this.name },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -548,11 +548,15 @@ export abstract class BaseCollection implements C8Collection {
         body: { ...opts, fields, type: "fulltext" },
         qs: { collection: this.name },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
-  createTtlIndex(fields: string[] | string, expireAfter: number, name?: string) {
+  createTtlIndex(
+    fields: string[] | string,
+    expireAfter: number,
+    name?: string
+  ) {
     if (typeof fields === "string") {
       fields = [fields];
     }
@@ -563,7 +567,7 @@ export abstract class BaseCollection implements C8Collection {
         body: { fields, expireAfter, type: "ttl", name },
         qs: { collection: this.name },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 }
@@ -598,7 +602,7 @@ export class DocumentCollection extends BaseCollection {
             collection: this.name,
           },
         },
-        (res) => res.body
+        res => res.body
       );
     }
 
@@ -609,7 +613,7 @@ export class DocumentCollection extends BaseCollection {
         body: data,
         qs: opts,
       },
-      (res) => res.body
+      res => res.body
     );
   }
 }
@@ -670,7 +674,7 @@ export class EdgeCollection extends BaseCollection {
             to: data._to,
           },
         },
-        (res) => res.body
+        res => res.body
       );
     }
 
@@ -684,7 +688,7 @@ export class EdgeCollection extends BaseCollection {
           collection: this.name,
         },
       },
-      (res) => res.body
+      res => res.body
     );
   }
 
@@ -697,7 +701,7 @@ export class EdgeCollection extends BaseCollection {
           vertex: this._documentHandle(documentHandle),
         },
       },
-      (res) => res.body.edges
+      res => res.body.edges
     );
   }
 
@@ -713,20 +717,21 @@ export class EdgeCollection extends BaseCollection {
     return this._edges(vertex, "out");
   }
 
-  traversal(startVertex: DocumentHandle, opts?: any) {
-    return this._connection.request(
-      {
-        method: "POST",
-        path: "/traversal",
-        body: {
-          ...opts,
-          startVertex,
-          edgeCollection: this.name,
-        },
-      },
-      (res) => res.body.result
-    );
-  }
+  // This endpoint and feature is not available at the moment
+  // traversal(startVertex: DocumentHandle, opts?: any) {
+  //   return this._connection.request(
+  //     {
+  //       method: "POST",
+  //       path: "/traversal",
+  //       body: {
+  //         ...opts,
+  //         startVertex,
+  //         edgeCollection: this.name,
+  //       },
+  //     },
+  //     (res) => res.body.result
+  //   );
+  // }
 }
 
 export function constructCollection(connection: Connection, data: any) {

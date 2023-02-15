@@ -6,6 +6,7 @@ const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 describe("validating redis apis", function() {
   dotenv.config();
+  // create fabric takes 11s in a standard cluster
   this.timeout(60000);
   let c8Client: C8Client;
 

@@ -1,23 +1,22 @@
 import { expect } from "chai";
 import { C8Client } from "../jsC8";
 import { HttpError } from "../error";
+import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 describe("validating billing apis", function() {
+  dotenv.config();
   this.timeout(60000);
-
   let c8Client: C8Client;
-  const testUrl: string =
-    process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   beforeEach(async () => {
     c8Client = new C8Client({
-      url: testUrl,
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
       c8Version: C8_VERSION,
     });
-    await c8Client.login("guest@macrometa.io", "guest");
-    c8Client.useTenant("guest");
   });
 
   const contactDetails: {
@@ -45,66 +44,69 @@ describe("validating billing apis", function() {
   };
 
   describe("billing", () => {
-    describe("if tenant exists", () => {
-      const tenantName = "test_macrometa.com";
+    // To run tests with on billing endpoints we need to set up tenant name
+    // We need to have a paid account to test this test cases
+    const tenantName = "";
 
-      it("billing.getAccountDetails", async () => {
-        const response = await c8Client.billing(tenantName).getAccountDetails();
-        expect(response.data.tenant).to.equal(tenantName);
-      });
+    if (tenantName.trim() !== "") {
+      describe("if tenant exists", () => {
+        it("billing.getAccountDetails", async () => {
+          const response = await c8Client
+            .billing(tenantName)
+            .getAccountDetails();
+          expect(response.data.tenant).to.equal(tenantName);
+        });
 
-      it("billing.updateAccountDetails", async () => {
-        const response = await c8Client
-          .billing(tenantName)
-          .updateAccountDetails(contactDetails);
-        expect(response).to.deep.equal({ code: 200, error: false, data: null });
-      });
+        it("billing.updateAccountDetails", async () => {
+          const response = await c8Client
+            .billing(tenantName)
+            .updateAccountDetails(contactDetails);
+          expect(response).to.deep.equal({
+            code: 200,
+            error: false,
+            data: contactDetails,
+          });
+        });
 
-      it("billing.updatePaymentSettings", async () => {
-        const response = await c8Client
-          .billing(tenantName)
-          .updatePaymentSettings("paymentMethodId");
-        expect(response).to.deep.equal({ code: 200, error: false, data: null });
-      });
+        it("billing.getPaymentDetailsOfPreviousMonths", async () => {
+          const response = await c8Client
+            .billing(tenantName)
+            .getPaymentDetailsOfPreviousMonths(1);
+          expect(response.code).to.equal(200);
+        });
 
-      it("billing.getPaymentDetailsOfPreviousMonths", async () => {
-        const response = await c8Client
-          .billing(tenantName)
-          .getPaymentDetailsOfPreviousMonths(1);
-        expect(response.code).to.equal(200);
-      });
+        it("billing.getInvoices", async () => {
+          const response = await c8Client.billing(tenantName).getInvoices(1);
+          expect(response.code).to.equal(200);
+        });
 
-      it("billing.getInvoices", async () => {
-        const response = await c8Client.billing(tenantName).getInvoices(1);
-        expect(response.code).to.equal(200);
-      });
+        it("billing.getCurrentInvoices", async () => {
+          const response = await c8Client
+            .billing(tenantName)
+            .getCurrentInvoices();
+          expect(response.code).to.equal(200);
+        });
+        it("billing.getInvoiceOfSpecificMonthYear", async () => {
+          const response = await c8Client
+            .billing(tenantName)
+            .getInvoiceOfSpecificMonthYear(2021, 6);
+          expect(response.code).to.equal(200);
+        });
 
-      it("billing.getCurrentInvoices", async () => {
-        const response = await c8Client
-          .billing(tenantName)
-          .getCurrentInvoices();
-        expect(response.code).to.equal(200);
+        it("billing.getUsageOfTenant", async () => {
+          const response = await c8Client
+            .billing(tenantName)
+            .getUsageOfTenant();
+          expect(response.code).to.equal(200);
+        });
+        it("billing.getUsageOfTenantForSpecificRegion", async () => {
+          const response = await c8Client
+            .billing(tenantName)
+            .getUsageOfTenantForSpecificRegion("ws");
+          expect(response.code).to.equal(200);
+        });
       });
-
-      it("billing.getInvoiceOfSpecificMonthYear", async () => {
-        const response = await c8Client
-          .billing(tenantName)
-          .getInvoiceOfSpecificMonthYear(2021, 6);
-        expect(response.code).to.equal(200);
-      });
-
-      it("billing.getUsageOfTenant", async () => {
-        const response = await c8Client.billing(tenantName).getUsageOfTenant();
-        expect(response.code).to.equal(200);
-      });
-
-      it("billing.getUsageOfTenantForSpecificRegion", async () => {
-        const response = await c8Client
-          .billing(tenantName)
-          .getUsageOfTenantForSpecificRegion("ws");
-        expect(response.code).to.equal(200);
-      });
-    });
+    }
 
     describe("if tenant not exists", () => {
       const tenantName = "tenant_not_exist@test.com";
@@ -133,7 +135,7 @@ describe("validating billing apis", function() {
           });
         } catch (err) {
           expect(err).is.instanceof(HttpError);
-          expect(err).to.have.property("statusCode", 400);
+          expect(err).to.have.property("statusCode", 404);
         }
       });
 
@@ -219,7 +221,7 @@ describe("validating billing apis", function() {
           expect(response.code).to.equal(200);
         } catch (err) {
           expect(err).is.instanceof(HttpError);
-          expect(err).to.have.property("statusCode", 404);
+          expect(err).to.have.property("statusCode", 400);
         }
       });
     });

@@ -988,20 +988,22 @@ export class C8Client extends Fabric {
     return search.getListOfAnalyzers();
   }
 
-  createAnalyzer(
-    analyzerName: string,
-    type: string,
-    properties?: object,
-    features?: Array<string>
-  ) {
-    const search = this.search({ analyzerName });
-    return search.createAnalyzer(type, properties, features);
-  }
+  // Creation of custom analyzer is not available at this moment
+  // createAnalyzer(
+  //   analyzerName: string,
+  //   type: string,
+  //   properties?: object,
+  //   features?: Array<string>
+  // ) {
+  //   const search = this.search({ analyzerName });
+  //   return search.createAnalyzer(type, properties, features);
+  // }
 
-  deleteAnalyzer(analyzerName: string, force?: boolean) {
-    const search = this.search({ analyzerName });
-    return search.deleteAnalyzer(force);
-  }
+  // Creation of custom analyzer is not available at this moment
+  // deleteAnalyzer(analyzerName: string, force?: boolean) {
+  //   const search = this.search({ analyzerName });
+  //   return search.deleteAnalyzer(force);
+  // }
 
   getAnalyzerDefinition(analyzerName: string) {
     const search = this.search({ analyzerName });

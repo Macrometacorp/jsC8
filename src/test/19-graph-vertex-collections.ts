@@ -1,52 +1,54 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 import { GraphVertexCollection } from "../graph";
 import { getDCListString } from "../util/helper";
+import * as dotenv from "dotenv";
+
+const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 describe("GraphVertexCollection API", function() {
+  dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
+  let c8Client: C8Client;
 
   const dbName = `testdb${Date.now()}`;
-  let fabric: Fabric;
-  const testUrl = process.env.TEST_C8_URL || "https://test.macrometa.io";
 
   let dcList: string;
   let collection: GraphVertexCollection;
   before(async () => {
-    fabric = new Fabric({
-      url: testUrl,
-      c8Version: Number(process.env.C8_VERSION || 30400)
+    c8Client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
+      c8Version: C8_VERSION,
     });
 
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
-
-    const response = await fabric.getAllEdgeLocations();
+    const response = await c8Client.getAllEdgeLocations();
     dcList = getDCListString(response);
 
-    await fabric.createFabric(dbName, ["root"], {
-      dcList: dcList
+    await c8Client.createFabric(dbName, ["root"], {
+      dcList: dcList,
     });
-    fabric.useFabric(dbName);
-    const graph = fabric.graph(`testgraph${Date.now()}`);
+    c8Client.useFabric(dbName);
+    const graph = c8Client.graph(`testgraph${Date.now()}`);
     await graph.create({
       edgeDefinitions: [
         {
           collection: "knows",
           from: ["person"],
-          to: ["person"]
-        }
-      ]
+          to: ["person"],
+        },
+      ],
     });
     collection = graph.vertexCollection("person");
   });
   after(async () => {
     try {
-      fabric.useFabric("_system");
-      await fabric.dropFabric(dbName);
+      c8Client.useFabric("_system");
+      await c8Client.dropFabric(dbName);
     } finally {
-      fabric.close();
+      c8Client.close();
     }
   });
   beforeEach(done => {
@@ -62,11 +64,11 @@ describe("GraphVertexCollection API", function() {
       meta = await collection.save(data);
     });
     it("returns a vertex in the collection", async () => {
-      const doc = await collection.vertex(meta._id);
+      const doc = await collection.vertex(meta.vertex._id);
       expect(doc).to.have.keys("_key", "_id", "_rev", "foo");
-      expect(doc._id).to.equal(meta._id);
-      expect(doc._key).to.equal(meta._key);
-      expect(doc._rev).to.equal(meta._rev);
+      expect(doc._id).to.equal(meta.vertex._id);
+      expect(doc._key).to.equal(meta.vertex._key);
+      expect(doc._rev).to.equal(meta.vertex._rev);
       expect(doc.foo).to.equal(data.foo);
     });
     it("does not throw on not found when graceful", async () => {
@@ -81,11 +83,11 @@ describe("GraphVertexCollection API", function() {
       meta = await collection.save(data);
     });
     it("returns a vertex in the collection", async () => {
-      const doc = await collection.document(meta._id);
+      const doc = await collection.document(meta.vertex._id);
       expect(doc).to.have.keys("_key", "_id", "_rev", "foo");
-      expect(doc._id).to.equal(meta._id);
-      expect(doc._key).to.equal(meta._key);
-      expect(doc._rev).to.equal(meta._rev);
+      expect(doc._id).to.equal(meta.vertex._id);
+      expect(doc._key).to.equal(meta.vertex._key);
+      expect(doc._rev).to.equal(meta.vertex._rev);
       expect(doc.foo).to.equal(data.foo);
     });
     it("does not throw on not found when graceful", async () => {
@@ -100,20 +102,20 @@ describe("GraphVertexCollection API", function() {
         .save(data)
         .then(meta => {
           expect(meta).to.be.an("object");
-          expect(meta)
+          expect(meta.vertex)
             .to.have.property("_id")
             .that.is.a("string");
-          expect(meta)
+          expect(meta.vertex)
             .to.have.property("_rev")
             .that.is.a("string");
-          expect(meta)
+          expect(meta.vertex)
             .to.have.property("_key")
             .that.is.a("string");
-          return collection.vertex(meta._id).then(doc => {
+          return collection.vertex(meta.vertex._id).then(doc => {
             expect(doc).to.have.keys("_key", "_id", "_rev", "foo");
-            expect(doc._id).to.equal(meta._id);
-            expect(doc._key).to.equal(meta._key);
-            expect(doc._rev).to.equal(meta._rev);
+            expect(doc._id).to.equal(meta.vertex._id);
+            expect(doc._key).to.equal(meta.vertex._key);
+            expect(doc._rev).to.equal(meta.vertex._rev);
             expect(doc.foo).to.equal(data.foo);
           });
         })
@@ -126,19 +128,19 @@ describe("GraphVertexCollection API", function() {
         .save(data)
         .then(meta => {
           expect(meta).to.be.an("object");
-          expect(meta)
+          expect(meta.vertex)
             .to.have.property("_id")
             .that.is.a("string");
-          expect(meta)
+          expect(meta.vertex)
             .to.have.property("_rev")
             .that.is.a("string");
-          expect(meta)
+          expect(meta.vertex)
             .to.have.property("_key")
             .that.equals(data._key);
-          return collection.vertex(meta._id).then(doc => {
+          return collection.vertex(meta.vertex._id).then(doc => {
             expect(doc).to.have.keys("_key", "_id", "_rev", "potato");
-            expect(doc._id).to.equal(meta._id);
-            expect(doc._rev).to.equal(meta._rev);
+            expect(doc._id).to.equal(meta.vertex._id);
+            expect(doc._rev).to.equal(meta.vertex._rev);
             expect(doc._key).to.equal(data._key);
             expect(doc.potato).to.equal(data.potato);
           });
@@ -155,9 +157,9 @@ describe("GraphVertexCollection API", function() {
         .then(meta => {
           delete meta.error;
           Object.assign(doc, meta);
-          return collection.replace(doc as any, { sup: "dawg" });
+          return collection.replace((doc as any).vertex, { sup: "dawg" });
         })
-        .then(() => collection.vertex((doc as any)._key))
+        .then(() => collection.vertex((doc as any).vertex._key))
         .then(data => {
           expect(data).not.to.have.property("potato");
           expect(data)
@@ -176,9 +178,12 @@ describe("GraphVertexCollection API", function() {
         .then(meta => {
           delete meta.error;
           Object.assign(doc, meta);
-          return collection.update(doc as any, { sup: "dawg", empty: null });
+          return collection.update((doc as any).vertex, {
+            sup: "dawg",
+            empty: null,
+          });
         })
-        .then(() => collection.vertex((doc as any)._key))
+        .then(() => collection.vertex((doc as any).vertex._key))
         .then(data => {
           expect(data)
             .to.have.property("potato")
@@ -201,12 +206,12 @@ describe("GraphVertexCollection API", function() {
           delete meta.error;
           Object.assign(doc, meta);
           return collection.update(
-            doc as any,
+            (doc as any).vertex,
             { sup: "dawg", empty: null },
             { keepNull: false }
           );
         })
-        .then(() => collection.vertex((doc as any)._key))
+        .then(() => collection.vertex((doc as any).vertex._key))
         .then(data => {
           expect(data)
             .to.have.property("potato")

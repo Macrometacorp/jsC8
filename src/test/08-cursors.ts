@@ -1,7 +1,9 @@
 import { expect } from "chai";
-import { Fabric } from "../jsC8";
+import { C8Client } from "../jsC8";
 import { ArrayCursor } from "../cursor";
+import * as dotenv from "dotenv";
 
+const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const c8qlQuery = "FOR i In 0..10 RETURN i";
 const c8qlResult = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -14,21 +16,22 @@ function sleep(ms: number) {
 }
 
 describe("Cursor API", () => {
-  let fabric: Fabric;
+  dotenv.config();
   let cursor: ArrayCursor;
+  let c8Client: C8Client;
   before(async () => {
-    fabric = new Fabric({
-      url: process.env.TEST_C8_URL || "https://test.macrometa.io",
-      c8Version: Number(process.env.C8_VERSION || 30400)
+    c8Client = new C8Client({
+      url: process.env.URL,
+      apiKey: process.env.API_KEY,
+      fabricName: process.env.FABRIC,
+      c8Version: C8_VERSION,
     });
-    await fabric.login("guest@macrometa.io", "guest");
-    fabric.useTenant("guest");
   });
   after(() => {
-    fabric.close();
+    c8Client.close();
   });
   beforeEach(async () => {
-    cursor = await fabric.query(c8qlQuery);
+    cursor = await c8Client.query(c8qlQuery);
   });
   describe("cursor.all", () => {
     it("returns an Array of all results", done => {
@@ -77,7 +80,7 @@ describe("Cursor API", () => {
         .catch(done);
     });
     it("returns true after first batch is consumed", done => {
-      fabric
+      c8Client
         .query(c8qlQuery, {}, { batchSize: 1 })
         .then(cursor => {
           expect((cursor as any)._result.length).to.equal(1);
@@ -89,7 +92,7 @@ describe("Cursor API", () => {
         .catch(done);
     });
     it("returns false after last batch is consumed", done => {
-      fabric
+      c8Client
         .query("FOR i In 0..1 RETURN i", {}, { batchSize: 1 })
         .then(cursor => {
           expect(cursor.hasNext()).to.equal(true);
@@ -112,7 +115,7 @@ describe("Cursor API", () => {
         .catch(done);
     });
     it("returns false after last result is consumed", done => {
-      fabric
+      c8Client
         .query("FOR i In 0..1 RETURN i")
         .then(cursor => {
           expect(cursor.hasNext()).to.equal(true);
@@ -135,7 +138,7 @@ describe("Cursor API", () => {
         .catch(done);
     });
     it.skip("returns 404 after timeout", done => {
-      fabric
+      c8Client
         .query("FOR i In 0..1 RETURN i", {}, { batchSize: 1, ttl: 1 })
         .then(cursor => {
           expect(cursor.hasNext()).to.equal(true);
@@ -172,7 +175,7 @@ describe("Cursor API", () => {
           })
           .catch(done);
       };
-      fabric
+      c8Client
         .query(`FOR i In 1..${EXPECTED_LENGTH} RETURN i`)
         .then(cursor => loadMore(cursor, 0))
         .catch(done);
