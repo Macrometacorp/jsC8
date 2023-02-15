@@ -5,6 +5,24 @@ coverage
 # Ignore all HTML files:
 *.html
 
+# Ignore settings files:
+.nyc_output/
+.vscode/settings.json
+
+# Ignore documentation files:
+docs/
+examples/
+fixtures/
+
+# Ignore readme files:
+CHANGELOG.md
+README.md
+CODE_OF_CONDUCT.md
+GETTING_STARTED.md
+ISSUE_TEMPLATE.md
+PULL_REQUEST_TEMPLATE.md
+
+
 /node_modules
 /lib
 .DS_Store
