@@ -69,7 +69,7 @@ describe("manipulating restql", function() {
       expect(response.error).to.be.false;
     });
   });
-
+  
   describe("client.createRestqlCursor", () => {
     //const query = "FOR x IN _routing RETURN x";
 

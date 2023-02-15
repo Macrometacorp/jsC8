@@ -174,12 +174,10 @@ describe.skip("validating function endpoints", function() {
       try {
         await c8Client.function.removeFunctionWorker("testSdkEvStreamAdhoc");
       } catch (err) {
-        let message;
         if (err instanceof Error) {
           expect(err).to.have.property("code", 403);
           expect(err).to.have.property("message", "Forbidden");
-        } else message = String(err);
-        console.log(message);
+        }
       }
     });
     it("function.deployStreamPublisherToEdgeWorker", async () => {
@@ -203,24 +201,20 @@ describe.skip("validating function endpoints", function() {
           limit: 1,
         });
       } catch (err) {
-        let message;
         if (err instanceof Error) {
           expect(err).to.have.property("code", 500);
           expect(err).to.have.property("message", "Internal Server Error");
-        } else message = String(err);
-        console.log(message);
+        }
       }
     });
     it("function.invokeFunctionWorkerWithoutQuery", async () => {
       try {
         await c8Client.function.invokeFunctionWorker("testSdkEv");
       } catch (err) {
-        let message;
         if (err instanceof Error) {
           expect(err).to.have.property("code", 400);
           expect(err).to.have.property("message", "query is empty");
-        } else message = String(err);
-        console.log(message);
+        }
       }
     });
 
@@ -230,12 +224,10 @@ describe.skip("validating function endpoints", function() {
           "testSdkEvStreamPublisher"
         );
       } catch (err) {
-        let message;
         if (err instanceof Error) {
           expect(err).to.have.property("code", 404);
           expect(err).to.have.property("message", "HTTP Source not found");
-        } else message = String(err);
-        console.log(message);
+        }
       }
     });
   });
