@@ -7,7 +7,7 @@ import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("Test Sql query functions", function() {
+describe("Test Sql query functions", function () {
   dotenv.config();
   this.timeout(60000);
   let c8Client: C8Client;
@@ -55,10 +55,10 @@ describe("Test Sql query functions", function() {
   });
 
   describe("Sql query with query() function", () => {
-    it("executes sql query with empty bindVars object", done => {
+    it("executes sql query with empty bindVars object", (done) => {
       c8Client
         .query("SELECT * FROM products", {}, { sql: true })
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           expect(cursor["_result"]).is.not.empty;
           done();
@@ -66,14 +66,14 @@ describe("Test Sql query functions", function() {
         .catch(done);
     });
 
-    it("executes sql query with named bindVars", done => {
+    it("executes sql query with named bindVars", (done) => {
       c8Client
         .query(
           "SELECT * FROM products where name = $1",
           { 1: "Kindle" },
           { sql: true }
         )
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           expect(cursor["_result"]).is.not.empty;
           expect(cursor["_result"][0]).includes({ name: "Kindle" });
@@ -82,12 +82,12 @@ describe("Test Sql query functions", function() {
         .catch(done);
     });
 
-    it("executes sql query with array", done => {
+    it("executes sql query with array", (done) => {
       c8Client
         .query("SELECT * FROM products where name = $1", ["Kindle"], {
           sql: true,
         })
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           expect(cursor["_result"]).is.not.empty;
           expect(cursor["_result"][0]).includes({ name: "Kindle" });
@@ -96,10 +96,10 @@ describe("Test Sql query functions", function() {
         .catch(done);
     });
 
-    it("executes sql query with empty array", done => {
+    it("executes sql query with empty array", (done) => {
       c8Client
         .query("SELECT * FROM products", [], { sql: true })
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           expect(cursor["_result"]).is.not.empty;
           done();
@@ -107,24 +107,24 @@ describe("Test Sql query functions", function() {
         .catch(done);
     });
 
-    it("executes sql query with options", done => {
+    it("executes sql query with options", (done) => {
       c8Client
         .query("SELECT * FROM products", [], { sql: true, count: true })
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor).to.have.property("count");
           done();
         })
         .catch(done);
     });
 
-    it("throws an exception on error", done => {
+    it("throws an exception on error", (done) => {
       c8Client
         .query("SELECT * FROM fakeProducts", undefined, { sql: true })
         .then(() => {
           expect.fail();
           done();
         })
-        .catch(err => {
+        .catch((err) => {
           expect(err).is.instanceof(C8Error);
           expect(err).to.have.property("statusCode", 404);
           expect(err).to.have.property("errorNum", 1203);
@@ -147,10 +147,10 @@ describe("Test Sql query functions", function() {
   });
 
   describe("Sql query with executeQuery() function", () => {
-    it("executes sql query with empty bindVars object", done => {
+    it("executes sql query with empty bindVars object", (done) => {
       c8Client
         .executeQuery("SELECT * FROM products", {}, { sql: true })
-        .then(result => {
+        .then((result) => {
           expect(result).is.not.empty;
           expect(result[0]).includes({ name: "Kindle" });
           done();
@@ -158,14 +158,14 @@ describe("Test Sql query functions", function() {
         .catch(done);
     });
 
-    it("executes sql query with named bindVars", done => {
+    it("executes sql query with named bindVars", (done) => {
       c8Client
         .executeQuery(
           "SELECT * FROM products where name = $1",
           { 1: "Kindle" },
           { sql: true }
         )
-        .then(result => {
+        .then((result) => {
           expect(result).is.not.empty;
           expect(result[0]).includes({ name: "Kindle" });
           done();
@@ -173,12 +173,12 @@ describe("Test Sql query functions", function() {
         .catch(done);
     });
 
-    it("executes sql query with array", done => {
+    it("executes sql query with array", (done) => {
       c8Client
         .executeQuery("SELECT * FROM products where name = $1", ["Kindle"], {
           sql: true,
         })
-        .then(result => {
+        .then((result) => {
           expect(result).is.not.empty;
           expect(result[0]).includes({ name: "Kindle" });
           done();
@@ -186,24 +186,24 @@ describe("Test Sql query functions", function() {
         .catch(done);
     });
 
-    it("executes sql query with empty array", done => {
+    it("executes sql query with empty array", (done) => {
       c8Client
         .executeQuery("SELECT * FROM products", [], { sql: true })
-        .then(result => {
+        .then((result) => {
           expect(result).is.not.empty;
           done();
         })
         .catch(done);
     });
 
-    it("throws an exception on error", done => {
+    it("throws an exception on error", (done) => {
       c8Client
         .executeQuery("SELECT * FROM fakeProducts", undefined, { sql: true })
         .then(() => {
           expect.fail();
           done();
         })
-        .catch(err => {
+        .catch((err) => {
           expect(err).is.instanceof(C8Error);
           expect(err).to.have.property("statusCode", 404);
           expect(err).to.have.property("errorNum", 1203);

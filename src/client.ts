@@ -294,7 +294,7 @@ export class C8Client extends Fabric {
   // validateQuery() { } already available
 
   executeQuery(query: string | C8QLLiteral, bindVars?: any, opts?: any) {
-    return this.query(query, bindVars, opts).then(cursor => cursor.all());
+    return this.query(query, bindVars, opts).then((cursor) => cursor.all());
   }
 
   // explainQuery() { } already available
@@ -363,8 +363,8 @@ export class C8Client extends Fabric {
     // If 200 api exits else api does not exist
 
     return this.getStreams(!local).then(
-      res => !!res.result.find((stream: any) => stream.topic === topic),
-      err => {
+      (res) => !!res.result.find((stream: any) => stream.topic === topic),
+      (err) => {
         throw err;
       }
     );

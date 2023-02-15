@@ -19,7 +19,7 @@ export class Route {
     else if (path.charAt(0) !== "/") path = `/${path}`;
     return new Route(this._connection, this._path + path, {
       ...this._headers,
-      ...headers
+      ...headers,
     });
   }
 
@@ -72,11 +72,7 @@ export class Route {
   delete(path?: string, qs?: Object): Promise<C8jsResponse>;
   delete(qs?: Object): Promise<C8jsResponse>;
   delete(qs?: Object, headers?: Object): Promise<C8jsResponse>;
-  delete(
-    path?: string,
-    qs?: Object,
-    headers?: Object
-  ): Promise<C8jsResponse>;
+  delete(path?: string, qs?: Object, headers?: Object): Promise<C8jsResponse>;
   delete(...args: any[]): Promise<C8jsResponse> {
     return this._request1("DELETE", ...args);
   }

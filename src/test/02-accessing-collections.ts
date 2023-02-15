@@ -9,7 +9,7 @@ const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 // Keep in mind that fabric extends C8Client
 // All the methods that fabric contains C8Client has as well
-describe("Accessing collections", function() {
+describe("Accessing collections", function () {
   dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(600000);
@@ -47,9 +47,7 @@ describe("Accessing collections", function() {
       let name = "potato";
       let collection = c8Client.collection(name);
       expect(collection).to.be.an.instanceof(DocumentCollection);
-      expect(collection)
-        .to.have.property("name")
-        .that.equals(name);
+      expect(collection).to.have.property("name").that.equals(name);
     });
   });
   describe("fabric.edgeCollection", () => {
@@ -57,17 +55,15 @@ describe("Accessing collections", function() {
       let name = "tomato";
       let collection = c8Client.edgeCollection(name);
       expect(collection).to.be.an.instanceof(EdgeCollection);
-      expect(collection)
-        .to.have.property("name")
-        .that.equals(name);
+      expect(collection).to.have.property("name").that.equals(name);
     });
   });
   describe("fabric.listCollections", async () => {
-    let nonSystemCollectionNames = range(4).map(i => `c${i}${Date.now()}`);
+    let nonSystemCollectionNames = range(4).map((i) => `c${i}${Date.now()}`);
     // let systemCollectionNames = range(4).map(i => `csys${i}${Date.now()}`);
     before(async () => {
       await Promise.all([
-        ...nonSystemCollectionNames.map(name =>
+        ...nonSystemCollectionNames.map((name) =>
           c8Client.collection(name).create()
         ),
         // ...systemCollectionNames.map(name =>
@@ -75,9 +71,9 @@ describe("Accessing collections", function() {
         // )
       ]);
     });
-    after(done => {
+    after((done) => {
       Promise.all([
-        ...nonSystemCollectionNames.map(name =>
+        ...nonSystemCollectionNames.map((name) =>
           c8Client.collection(name).drop()
         ),
         // ...systemCollectionNames.map(name =>
@@ -87,10 +83,10 @@ describe("Accessing collections", function() {
         .then(() => void done())
         .catch(done);
     });
-    it("fetches information about all non-system collections", done => {
+    it("fetches information about all non-system collections", (done) => {
       c8Client
         .listCollections()
-        .then(collections => {
+        .then((collections) => {
           expect(collections.length).to.equal(nonSystemCollectionNames.length);
           expect(collections.map((c: any) => c.name).sort()).to.eql(
             nonSystemCollectionNames
@@ -99,10 +95,10 @@ describe("Accessing collections", function() {
         })
         .catch(done);
     });
-    it("includes system collections if explicitly passed false", done => {
+    it("includes system collections if explicitly passed false", (done) => {
       c8Client
         .listCollections(false)
-        .then(collections => {
+        .then((collections) => {
           let allCollectionNames = nonSystemCollectionNames
             // .concat(systemCollectionNames)
             .concat(builtinSystemCollections)
@@ -117,37 +113,37 @@ describe("Accessing collections", function() {
     });
   });
   describe("fabric.collections", () => {
-    let documentCollectionNames = range(4).map(i => `dc${i}${Date.now()}`);
-    let edgeCollectionNames = range(4).map(i => `ec${i}${Date.now()}`);
+    let documentCollectionNames = range(4).map((i) => `dc${i}${Date.now()}`);
+    let edgeCollectionNames = range(4).map((i) => `ec${i}${Date.now()}`);
 
-    before(done => {
+    before((done) => {
       Promise.all([
-        ...documentCollectionNames.map(name =>
+        ...documentCollectionNames.map((name) =>
           c8Client.collection(name).create()
         ),
-        ...edgeCollectionNames.map(name =>
+        ...edgeCollectionNames.map((name) =>
           c8Client.edgeCollection(name).create()
         ),
       ])
         .then(() => void done())
         .catch(done);
     });
-    after(done => {
+    after((done) => {
       Promise.all([
-        ...documentCollectionNames.map(name =>
+        ...documentCollectionNames.map((name) =>
           c8Client.collection(name).drop()
         ),
-        ...edgeCollectionNames.map(name =>
+        ...edgeCollectionNames.map((name) =>
           c8Client.edgeCollection(name).drop()
         ),
       ])
         .then(() => void done())
         .catch(done);
     });
-    it("creates DocumentCollection and EdgeCollection instances", done => {
+    it("creates DocumentCollection and EdgeCollection instances", (done) => {
       c8Client
         .collections()
-        .then(collections => {
+        .then((collections) => {
           let documentCollections = collections
             .filter((c: any) => c instanceof DocumentCollection)
             .sort();
@@ -168,10 +164,10 @@ describe("Accessing collections", function() {
         })
         .catch(done);
     });
-    it("includes system collections if explicitly passed false", done => {
+    it("includes system collections if explicitly passed false", (done) => {
       c8Client
         .collections(false)
-        .then(collections => {
+        .then((collections) => {
           let documentCollections = collections.filter(
             (c: any) => c instanceof DocumentCollection
           );

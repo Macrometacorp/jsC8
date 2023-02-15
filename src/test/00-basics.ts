@@ -34,33 +34,33 @@ describe("Configuring the driver", () => {
     });
   });
   describe("with headers", () => {
-    it("applies the headers", done => {
+    it("applies the headers", (done) => {
       const conn = new Connection({
         headers: {
           "x-one": "1",
-          "x-two": "2"
-        }
+          "x-two": "2",
+        },
       });
       (conn as any)._hosts = [
         ({ headers }: any) => {
           expect(headers).to.have.property("x-one", "1");
           expect(headers).to.have.property("x-two", "2");
           done();
-        }
+        },
       ];
-      conn.request({ headers: {} }, () => { });
+      conn.request({ headers: {} }, () => {});
     });
   });
   describe("with an c8Version", () => {
-    it("sets the x-c8-version header", done => {
+    it("sets the x-c8-version header", (done) => {
       const conn = new Connection({ c8Version: 99999 });
       (conn as any)._hosts = [
         ({ headers }: any) => {
           expect(headers).to.have.property("x-c8-version", "99999");
           done();
-        }
+        },
       ];
-      conn.request({ headers: {} }, () => { });
+      conn.request({ headers: {} }, () => {});
     });
   });
   describe("with agentOptions", () => {
@@ -117,7 +117,7 @@ describe("Configuring the driver", () => {
           },
           end() {
             return this;
-          }
+          },
         };
       };
       (http as any).request = Request("http");
@@ -131,21 +131,21 @@ describe("Configuring the driver", () => {
       let agent = Symbol("agent");
       let conn;
       conn = new Connection({ agent }); // default: https
-      conn.request({ headers: {} }, () => { });
+      conn.request({ headers: {} }, () => {});
       expect(options).to.have.property("agent", agent);
       agent = Symbol("agent");
       conn = new Connection({ agent, url: "https://test.macrometa.io" });
-      conn.request({ headers: {} }, () => { });
+      conn.request({ headers: {} }, () => {});
       expect(options).to.have.property("agent", agent);
     });
     it("uses the request function for the protocol", () => {
       const agent = Symbol("agent");
       let conn;
       conn = new Connection({ agent }); // default: http
-      conn.request({ headers: {} }, () => { });
+      conn.request({ headers: {} }, () => {});
       expect(protocol).to.equal("https");
       conn = new Connection({ agent, url: "https://test.macrometa.io" });
-      conn.request({ headers: {} }, () => { });
+      conn.request({ headers: {} }, () => {});
       expect(protocol).to.equal("https");
     });
     it("calls Agent#destroy when the connection is closed", () => {
@@ -153,7 +153,7 @@ describe("Configuring the driver", () => {
         _destroyed: false,
         destroy() {
           this._destroyed = true;
-        }
+        },
       };
       const conn = new Connection({ agent });
       expect(agent._destroyed).to.equal(false);

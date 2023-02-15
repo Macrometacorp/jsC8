@@ -5,7 +5,7 @@ import { getDCListString } from "../util/helper";
 import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
-describe("Collection metadata", function() {
+describe("Collection metadata", function () {
   // create fabric takes 11s in a standard cluster
   dotenv.config();
   this.timeout(60000);
@@ -66,10 +66,10 @@ describe("Collection metadata", function() {
     });
   });
   describe("collection.properties", () => {
-    it("should return properties of a collection", done => {
+    it("should return properties of a collection", (done) => {
       collection
         .properties()
-        .then(properties => {
+        .then((properties) => {
           expect(properties).to.have.property("name", collectionName);
           expect(properties).to.have.property("waitForSync", false);
         })
@@ -78,10 +78,10 @@ describe("Collection metadata", function() {
     });
   });
   describe("collection.count", () => {
-    it("should return information about a collection", done => {
+    it("should return information about a collection", (done) => {
       collection
         .count()
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("name", collectionName);
           expect(info).to.have.property("count", 0);
         })

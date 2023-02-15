@@ -44,7 +44,7 @@ export class Function {
         path: "/_api/function",
         qs: type,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -55,7 +55,7 @@ export class Function {
         path: "/_api/function/generate",
         qs: parameters,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -68,7 +68,7 @@ export class Function {
         path: "/_api/function/generate/query",
         qs: parameters,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -81,7 +81,7 @@ export class Function {
         path: "/_api/function/generate/publisher",
         qs: parameters,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -91,7 +91,7 @@ export class Function {
         method: "GET",
         path: `/_api/function/${functionName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -101,7 +101,7 @@ export class Function {
         method: "DELETE",
         path: `/_api/function/${functionName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -116,7 +116,7 @@ export class Function {
         path: `/_api/function/invoke/${functionName}`,
         qs: queryParameters,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -126,7 +126,7 @@ export class Function {
         method: "GET",
         path: "/_api/function/metadata",
       },
-      res => res.body
+      (res) => res.body
     );
   }
   modifyEdgeWorkerMetadata(body: MetadataParameters) {
@@ -136,7 +136,7 @@ export class Function {
         path: "/_api/function/metadata",
         body: body,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -146,7 +146,7 @@ export class Function {
         method: "DELETE",
         path: "/_api/function/metadata",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -157,7 +157,7 @@ export class Function {
         path: "/_api/function/metadata",
         body: body,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 }

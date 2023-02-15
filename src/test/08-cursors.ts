@@ -34,10 +34,10 @@ describe("Cursor API", () => {
     cursor = await c8Client.query(c8qlQuery);
   });
   describe("cursor.all", () => {
-    it("returns an Array of all results", done => {
+    it("returns an Array of all results", (done) => {
       cursor
         .all()
-        .then(vals => {
+        .then((vals) => {
           expect(vals).to.eql(c8qlResult);
           done();
         })
@@ -45,14 +45,14 @@ describe("Cursor API", () => {
     });
   });
   describe("cursor.next", () => {
-    it("returns the next result of the Cursor", done => {
+    it("returns the next result of the Cursor", (done) => {
       cursor
         .next()
-        .then(val => {
+        .then((val) => {
           expect(val).to.equal(0);
           return cursor.next();
         })
-        .then(val => {
+        .then((val) => {
           expect(val).to.equal(1);
           done();
         })
@@ -60,17 +60,17 @@ describe("Cursor API", () => {
     });
   });
   describe("cursor.hasNext", () => {
-    it("returns true if the Cursor has more results", done => {
+    it("returns true if the Cursor has more results", (done) => {
       expect(cursor.hasNext()).to.equal(true);
       cursor
         .next()
-        .then(val => {
+        .then((val) => {
           expect(val).to.be.a("number");
           done();
         })
         .catch(done);
     });
-    it("returns false if the Cursor is empty", done => {
+    it("returns false if the Cursor is empty", (done) => {
       cursor
         .all()
         .then(() => {
@@ -79,10 +79,10 @@ describe("Cursor API", () => {
         })
         .catch(done);
     });
-    it("returns true after first batch is consumed", done => {
+    it("returns true after first batch is consumed", (done) => {
       c8Client
         .query(c8qlQuery, {}, { batchSize: 1 })
-        .then(cursor => {
+        .then((cursor) => {
           expect((cursor as any)._result.length).to.equal(1);
           cursor.next();
           expect((cursor as any)._result.length).to.equal(0);
@@ -91,21 +91,21 @@ describe("Cursor API", () => {
         })
         .catch(done);
     });
-    it("returns false after last batch is consumed", done => {
+    it("returns false after last batch is consumed", (done) => {
       c8Client
         .query("FOR i In 0..1 RETURN i", {}, { batchSize: 1 })
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor.hasNext()).to.equal(true);
           expect((cursor as any)._result.length).to.equal(1);
           cursor
             .next()
-            .then(val => {
+            .then((val) => {
               expect(val).to.equal(0);
               expect(cursor.hasNext()).to.equal(true);
               expect((cursor as any)._result.length).to.equal(0);
               return cursor.next();
             })
-            .then(val => {
+            .then((val) => {
               expect(val).to.equal(1);
               expect(cursor.hasNext()).to.equal(false);
               expect((cursor as any)._result.length).to.equal(0);
@@ -114,21 +114,21 @@ describe("Cursor API", () => {
         })
         .catch(done);
     });
-    it("returns false after last result is consumed", done => {
+    it("returns false after last result is consumed", (done) => {
       c8Client
         .query("FOR i In 0..1 RETURN i")
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor.hasNext()).to.equal(true);
           expect((cursor as any)._result.length).to.equal(2);
           cursor
             .next()
-            .then(val => {
+            .then((val) => {
               expect(val).to.equal(0);
               expect(cursor.hasNext()).to.equal(true);
               expect((cursor as any)._result.length).to.equal(1);
               return cursor.next();
             })
-            .then(val => {
+            .then((val) => {
               expect(val).to.equal(1);
               expect(cursor.hasNext()).to.equal(false);
               expect((cursor as any)._result.length).to.equal(0);
@@ -137,31 +137,31 @@ describe("Cursor API", () => {
         })
         .catch(done);
     });
-    it.skip("returns 404 after timeout", done => {
+    it.skip("returns 404 after timeout", (done) => {
       c8Client
         .query("FOR i In 0..1 RETURN i", {}, { batchSize: 1, ttl: 1 })
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor.hasNext()).to.equal(true);
           expect((cursor as any)._result.length).to.equal(1);
           cursor
             .next()
-            .then(val => {
+            .then((val) => {
               expect(val).to.equal(0);
               expect(cursor.hasNext()).to.equal(true);
               expect((cursor as any)._result.length).to.equal(0);
               sleep(3000);
               return cursor.next();
             })
-            .catch(err => {
+            .catch((err) => {
               expect(err.code).to.equal(404);
               done();
             });
         })
         .catch(done);
     });
-    it.skip("returns false after last result is consumed (with large amount of results)", done => {
+    it.skip("returns false after last result is consumed (with large amount of results)", (done) => {
       const EXPECTED_LENGTH = 100000;
-      const loadMore = function(cursor: any, totalLength: any) {
+      const loadMore = function (cursor: any, totalLength: any) {
         cursor
           .next()
           .then(() => {
@@ -177,15 +177,15 @@ describe("Cursor API", () => {
       };
       c8Client
         .query(`FOR i In 1..${EXPECTED_LENGTH} RETURN i`)
-        .then(cursor => loadMore(cursor, 0))
+        .then((cursor) => loadMore(cursor, 0))
         .catch(done);
     });
   });
   describe("cursor.each", () => {
-    it("invokes the callback for each value", done => {
+    it("invokes the callback for each value", (done) => {
       let results: any[] = [];
       cursor
-        .each(value => {
+        .each((value) => {
           results.push(value);
         })
         .then(() => {
@@ -194,7 +194,7 @@ describe("Cursor API", () => {
         })
         .catch(done);
     });
-    it("aborts if the callback returns false", done => {
+    it("aborts if the callback returns false", (done) => {
       let results: any[] = [];
       cursor
         .each((value: any) => {
@@ -210,25 +210,25 @@ describe("Cursor API", () => {
     });
   });
   describe("cursor.every", () => {
-    it("returns true if the callback returns a truthy value for every item", done => {
+    it("returns true if the callback returns a truthy value for every item", (done) => {
       let results: any[] = [];
       cursor
-        .every(value => {
+        .every((value) => {
           if (results.indexOf(value) !== -1) return false;
           results.push(value);
           return true;
         })
-        .then(result => {
+        .then((result) => {
           expect(results).to.eql(c8qlResult);
           expect(result).to.equal(true);
           done();
         })
         .catch(done);
     });
-    it("returns false if the callback returns a non-truthy value for any item", done => {
+    it("returns false if the callback returns a non-truthy value for any item", (done) => {
       let results: any[] = [];
       cursor
-        .every(value => {
+        .every((value) => {
           results.push(value);
           return value < 5;
         })
@@ -241,25 +241,25 @@ describe("Cursor API", () => {
     });
   });
   describe("cursor.some", () => {
-    it("returns false if the callback returns a non-truthy value for every item", done => {
+    it("returns false if the callback returns a non-truthy value for every item", (done) => {
       let results: any[] = [];
       cursor
-        .some(value => {
+        .some((value) => {
           if (results.indexOf(value) !== -1) return true;
           results.push(value);
           return false;
         })
-        .then(result => {
+        .then((result) => {
           expect(results).to.eql(c8qlResult);
           expect(result).to.equal(false);
           done();
         })
         .catch(done);
     });
-    it("returns true if the callback returns a truthy value for any item", done => {
+    it("returns true if the callback returns a truthy value for any item", (done) => {
       let results: any[] = [];
       cursor
-        .some(value => {
+        .some((value) => {
           results.push(value);
           return value >= 5;
         })
@@ -272,21 +272,21 @@ describe("Cursor API", () => {
     });
   });
   describe("cursor.map", () => {
-    it("maps all result values over the callback", done => {
+    it("maps all result values over the callback", (done) => {
       cursor
-        .map(value => value * 2)
-        .then(results => {
-          expect(results).to.eql(c8qlResult.map(value => value * 2));
+        .map((value) => value * 2)
+        .then((results) => {
+          expect(results).to.eql(c8qlResult.map((value) => value * 2));
           done();
         })
         .catch(done);
     });
   });
   describe("cursor.reduce", () => {
-    it("reduces the result values with the callback", done => {
+    it("reduces the result values with the callback", (done) => {
       cursor
         .reduce((a, b) => a + b)
-        .then(result => {
+        .then((result) => {
           expect(result).to.eql(c8qlResult.reduce((a, b) => a + b));
           done();
         })

@@ -163,7 +163,7 @@ export class Connection {
         ? config.url
         : [config.url]
       : ["https://play.macrometa.io/"];
-    const apiUrls = urls.map(url => {
+    const apiUrls = urls.map((url) => {
       return `https://api-${url.split("https://")[1]}`;
     });
     this.addToHostList(apiUrls);
@@ -277,17 +277,17 @@ export class Connection {
   }
 
   addToHostList(urls: string | string[]): number[] {
-    const cleanUrls = (Array.isArray(urls) ? urls : [urls]).map(url =>
+    const cleanUrls = (Array.isArray(urls) ? urls : [urls]).map((url) =>
       this._sanitizeEndpointUrl(url)
     );
-    const newUrls = cleanUrls.filter(url => this._urls.indexOf(url) === -1);
+    const newUrls = cleanUrls.filter((url) => this._urls.indexOf(url) === -1);
     this._urls.push(...newUrls);
     this._hosts.push(
       ...newUrls.map((url: string) =>
         createRequest(url, this._agentOptions, this._agent)
       )
     );
-    return cleanUrls.map(url => this._urls.indexOf(url));
+    return cleanUrls.map((url) => this._urls.indexOf(url));
   }
 
   get c8Major() {

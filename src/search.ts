@@ -45,7 +45,7 @@ export class Search {
         },
         body: {},
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -66,7 +66,7 @@ export class Search {
           ttl,
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -76,7 +76,7 @@ export class Search {
         method: "GET",
         path: `${this.viewUrlPrefix}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -95,7 +95,7 @@ export class Search {
           primarySort,
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -105,7 +105,7 @@ export class Search {
         method: "GET",
         path: `${this.viewUrlPrefix}/${this._viewName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -118,7 +118,7 @@ export class Search {
           name,
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -128,7 +128,7 @@ export class Search {
         method: "DELETE",
         path: `${this.viewUrlPrefix}/${this._viewName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -138,7 +138,7 @@ export class Search {
         method: "GET",
         path: `${this.viewUrlPrefix}/${this._viewName}/properties`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -149,7 +149,7 @@ export class Search {
         path: `${this.viewUrlPrefix}/${this._viewName}/properties`,
         body: properties,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -159,7 +159,7 @@ export class Search {
         method: "GET",
         path: `${this.analyzerUrlPrefix}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -186,7 +186,7 @@ export class Search {
         method: "GET",
         path: `${this.analyzerUrlPrefix}/${this._analyzerName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 

@@ -111,14 +111,14 @@ export class Fabric {
   get() {
     return this._connection.request(
       { path: "/database/current" },
-      res => res.body.result
+      (res) => res.body.result
     );
   }
 
   exists(): Promise<boolean> {
     return this.get().then(
       () => true,
-      err => {
+      (err) => {
         if (isC8Error(err) && err.errorNum === FABRIC_NOT_FOUND) {
           return false;
         }
@@ -137,21 +137,21 @@ export class Fabric {
         path: "/_api/database",
         body: { users: users || [], name: fabricName, options },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   listFabrics() {
     return this._connection.request(
       { path: "/database" },
-      res => res.body.result
+      (res) => res.body.result
     );
   }
 
   listUserFabrics() {
     return this._connection.request(
       { path: "/database/user" },
-      res => res.body.result
+      (res) => res.body.result
     );
   }
 
@@ -161,7 +161,7 @@ export class Fabric {
         method: "DELETE",
         path: `/database/${fabricName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -171,7 +171,7 @@ export class Fabric {
         method: "GET",
         path: "/database/metadata",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -182,7 +182,7 @@ export class Fabric {
         path: "/database/metadata",
         body: { metadata },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -193,7 +193,7 @@ export class Fabric {
         path: "/database/metadata",
         body: { metadata },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -205,7 +205,7 @@ export class Fabric {
         body: { email, password },
         absolutePath: true,
       },
-      res => {
+      (res) => {
         this.useBearerAuth(res.body.jwt);
         this.useTenant(res.body.tenant);
         return res.body;
@@ -224,7 +224,7 @@ export class Fabric {
         path: `_tenant/${tenantName}/_fabric/${fabricName}/database/${datacenter}`,
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -234,7 +234,7 @@ export class Fabric {
         method: "GET",
         path: `/events`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -245,7 +245,7 @@ export class Fabric {
         path: `/events`,
         body: JSON.stringify(eventIds),
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -269,7 +269,7 @@ export class Fabric {
         path: "/collection",
         qs: { excludeSystem },
       },
-      res =>
+      (res) =>
         this._connection.c8Major <= 2 ? res.body.collections : res.body.result
     );
   }
@@ -290,7 +290,7 @@ export class Fabric {
             method: "PUT",
             path: `/collection/${data.name}/truncate`,
           },
-          res => res.body
+          (res) => res.body
         )
       )
     );
@@ -305,7 +305,7 @@ export class Fabric {
   listGraphs() {
     return this._connection.request(
       { path: "/_api/graph" },
-      res => res.body.graphs
+      (res) => res.body.graphs
     );
   }
 
@@ -342,7 +342,7 @@ export class Fabric {
         path: apiPath,
         body: { ...opts, query, bindVars },
       },
-      res => new ArrayCursor(this._connection, res.body, res.host)
+      (res) => new ArrayCursor(this._connection, res.body, res.host)
     );
   }
 
@@ -350,7 +350,7 @@ export class Fabric {
     const cursorHandler = new ArrayCursor(this._connection, {
       id: cursorIdentifier,
     });
-    return cursorHandler.nextBatch().then(res => res.body);
+    return cursorHandler.nextBatch().then((res) => res.body);
   }
 
   deleteCursor(cursorIdentifier: number) {
@@ -367,7 +367,7 @@ export class Fabric {
         path: "/query",
         body: { query },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -378,7 +378,7 @@ export class Fabric {
         path: "/_api/explain",
         body: { ...explainQueryObj },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -387,7 +387,7 @@ export class Fabric {
       {
         path: "/query/current",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -397,7 +397,7 @@ export class Fabric {
         method: "DELETE",
         path: "/query/slow",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -406,7 +406,7 @@ export class Fabric {
       {
         path: "/query/slow",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -416,14 +416,17 @@ export class Fabric {
         method: "DELETE",
         path: `/query/${queryId}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
   // Function management
 
   listFunctions() {
-    return this._connection.request({ path: "/c8qlfunction" }, res => res.body);
+    return this._connection.request(
+      { path: "/c8qlfunction" },
+      (res) => res.body
+    );
   }
 
   createFunction(name: string, code: string, isDeterministic?: boolean) {
@@ -433,7 +436,7 @@ export class Fabric {
         path: "/c8qlfunction",
         body: { name, code, isDeterministic },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -447,7 +450,7 @@ export class Fabric {
         method: "DELETE",
         path,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -459,7 +462,7 @@ export class Fabric {
         absolutePath: true,
         qs: { details },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -481,7 +484,7 @@ export class Fabric {
         path: "/_api/tenants",
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -505,7 +508,7 @@ export class Fabric {
         path: "/_api/streams",
         qs: global === undefined ? "" : `global=${global}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -515,7 +518,7 @@ export class Fabric {
         method: "GET",
         path: "/_api/streams",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -528,7 +531,7 @@ export class Fabric {
         path: `/_api/streams/persistent`,
         qs: `local=${local}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -538,7 +541,7 @@ export class Fabric {
         method: "POST",
         path: "/_api/streams/clearbacklog",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -548,7 +551,7 @@ export class Fabric {
         method: "POST",
         path: `/_api/streams/clearbacklog/${subscription}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -558,7 +561,7 @@ export class Fabric {
         method: "POST",
         path: `/_api/streams/unsubscribe/${subscription}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -571,7 +574,7 @@ export class Fabric {
         path: "/datacenter/all",
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -582,7 +585,7 @@ export class Fabric {
         path: `/datacenter/_tenant/${this._connection.getTenantName()}`,
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -593,7 +596,7 @@ export class Fabric {
         path: "/datacenter/local",
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -604,7 +607,7 @@ export class Fabric {
         path: `_api/datacenter/${dcName}/${isSpot}`,
         absolutePath: true,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -620,7 +623,7 @@ export class Fabric {
         method: "GET",
         path: `/_admin/user`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -632,7 +635,7 @@ export class Fabric {
         method: "GET",
         path: `/restql/user`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -649,7 +652,7 @@ export class Fabric {
           },
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -662,7 +665,7 @@ export class Fabric {
           bindVars: bindVars,
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -678,7 +681,7 @@ export class Fabric {
           },
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -688,7 +691,7 @@ export class Fabric {
         method: "DELETE",
         path: `/restql/${queryName}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -698,7 +701,7 @@ export class Fabric {
         method: "PUT",
         path: `/restql/fetch/${id}`,
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -718,7 +721,7 @@ export class Fabric {
           regions: regions,
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -728,7 +731,7 @@ export class Fabric {
         method: "GET",
         path: "/_api/streamapps",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -741,7 +744,7 @@ export class Fabric {
           definition: appDefinition,
         },
       },
-      res => res.body
+      (res) => res.body
     );
   }
 
@@ -751,7 +754,7 @@ export class Fabric {
         method: "GET",
         path: "/_api/streamapps/samples",
       },
-      res => res.body
+      (res) => res.body
     );
   }
 }

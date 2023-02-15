@@ -8,7 +8,7 @@ const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const itPre34 = C8_VERSION < 30400 ? it : it.skip;
 const it34 = C8_VERSION >= 30400 ? it : it.skip;
 
-describe("Managing indexes", function() {
+describe("Managing indexes", function () {
   dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
@@ -45,13 +45,13 @@ describe("Managing indexes", function() {
     }
   });
   describe("collection.createIndex", () => {
-    it("should create a index of given type", done => {
+    it("should create a index of given type", (done) => {
       collection
         .createIndex({
           type: "hash",
           fields: ["value0"],
         })
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("id");
           expect(info).to.have.property("type", "hash");
           expect(info).to.have.property("fields");
@@ -63,11 +63,11 @@ describe("Managing indexes", function() {
     });
   });
   describe("collection.createHashIndex", () => {
-    it("should create a hash index", done => {
+    it("should create a hash index", (done) => {
       const indexName = `hash_${Date.now()}`;
       collection
         .createHashIndex(["value"], { name: indexName })
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("id");
           expect(info).to.have.property("type", "hash");
           expect(info).to.have.property("name", indexName);
@@ -80,11 +80,11 @@ describe("Managing indexes", function() {
     });
   });
   describe("collection.createSkipList", () => {
-    it("should create a skiplist index", done => {
+    it("should create a skiplist index", (done) => {
       const indexName = `skip_${Date.now()}`;
       collection
         .createSkipList(["value"], { name: indexName })
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("id");
           expect(info).to.have.property("type", "skiplist");
           expect(info).to.have.property("name", indexName);
@@ -97,11 +97,11 @@ describe("Managing indexes", function() {
     });
   });
   describe("collection.createPersistentIndex", () => {
-    it("should create a persistent index", done => {
+    it("should create a persistent index", (done) => {
       const indexName = `persistent_${Date.now()}`;
       collection
         .createPersistentIndex(["value"], { name: indexName })
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("id");
           expect(info).to.have.property("type", "persistent");
           expect(info).to.have.property("name", indexName);
@@ -114,11 +114,11 @@ describe("Managing indexes", function() {
     });
   });
   describe("collection.createGeoIndex", () => {
-    itPre34("should create a geo1 index for one field", done => {
+    itPre34("should create a geo1 index for one field", (done) => {
       const indexName = `geo_${Date.now()}`;
       collection
         .createGeoIndex(["value"], { name: indexName })
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("id");
           expect(info).to.have.property("type", "geo");
           expect(info).to.have.property("name", indexName);
@@ -129,10 +129,10 @@ describe("Managing indexes", function() {
         .then(() => done())
         .catch(done);
     });
-    itPre34("should create a geo2 index for two fields", done => {
+    itPre34("should create a geo2 index for two fields", (done) => {
       collection
         .createGeoIndex(["value1", "value2"])
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("id");
           expect(info).to.have.property("type", "geo");
           expect(info).to.have.property("fields");
@@ -142,10 +142,10 @@ describe("Managing indexes", function() {
         .then(() => done())
         .catch(done);
     });
-    it34("should create a geo index for one field", done => {
+    it34("should create a geo index for one field", (done) => {
       collection
         .createGeoIndex(["value"])
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("id");
           expect(info).to.have.property("type", "geo");
           expect(info).to.have.property("fields");
@@ -155,10 +155,10 @@ describe("Managing indexes", function() {
         .then(() => done())
         .catch(done);
     });
-    it34("should create a geo index for two fields", done => {
+    it34("should create a geo index for two fields", (done) => {
       collection
         .createGeoIndex(["value1", "value2"])
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("id");
           expect(info).to.have.property("type", "geo");
           expect(info).to.have.property("fields");
@@ -170,11 +170,11 @@ describe("Managing indexes", function() {
     });
   });
   describe("collection.createFulltextIndex", () => {
-    it("should create a fulltext index", done => {
+    it("should create a fulltext index", (done) => {
       const indexName = `fulltext_${Date.now()}`;
       collection
         .createFulltextIndex(["value"], { name: indexName })
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("id");
           expect(info).to.have.property("type", "fulltext");
           expect(info).to.have.property("name", indexName);
@@ -187,11 +187,11 @@ describe("Managing indexes", function() {
     });
   });
   describe("collection.index", () => {
-    it("should return information about a index", done => {
+    it("should return information about a index", (done) => {
       collection
         .createHashIndex(["test"])
-        .then(info => {
-          return collection.index(info.name).then(index => {
+        .then((info) => {
+          return collection.index(info.name).then((index) => {
             expect(index).to.have.property("id", info.id);
             expect(index).to.have.property("type", info.type);
           });
@@ -201,11 +201,11 @@ describe("Managing indexes", function() {
     });
   });
   describe("collection.indexes", () => {
-    it("should return a list of indexes", done => {
+    it("should return a list of indexes", (done) => {
       collection
         .createHashIndex(["test"])
-        .then(index => {
-          return collection.indexes().then(indexes => {
+        .then((index) => {
+          return collection.indexes().then((indexes) => {
             expect(indexes).to.be.instanceof(Array);
             expect(indexes).to.not.be.empty;
             expect(
@@ -218,14 +218,14 @@ describe("Managing indexes", function() {
     });
   });
   describe("collection.dropIndex", () => {
-    it("should drop existing index", done => {
+    it("should drop existing index", (done) => {
       const indexName = `hash_${Date.now()}`;
       collection
         .createHashIndex(["test2"], { name: indexName })
-        .then(info => {
-          return collection.dropIndex(indexName).then(index => {
+        .then((info) => {
+          return collection.dropIndex(indexName).then((index) => {
             expect(index).to.have.property("id", info.id);
-            return collection.indexes().then(indexes => {
+            return collection.indexes().then((indexes) => {
               expect(indexes).to.be.instanceof(Array);
               expect(indexes).to.not.be.empty;
               expect(
@@ -239,11 +239,11 @@ describe("Managing indexes", function() {
     });
   });
   describe("collection.createTtlIndex", () => {
-    it("should create a Ttl index", done => {
+    it("should create a Ttl index", (done) => {
       const indexName = `ttl_${Date.now()}`;
       collection
         .createTtlIndex(["value"], 0, indexName)
-        .then(info => {
+        .then((info) => {
           expect(info).to.have.property("id");
           expect(info).to.have.property("type", "ttl");
           expect(info).to.have.property("name", indexName);

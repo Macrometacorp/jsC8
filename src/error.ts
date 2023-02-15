@@ -43,7 +43,7 @@ const messages: { [key: string]: string } = {
   508: "Loop Detected",
   510: "Not Extended",
   511: "Network Authentication Required",
-  599: "Network Connect Timeout Error"
+  599: "Network Connect Timeout Error",
 };
 
 const nativeErrorKeys = [
@@ -52,7 +52,7 @@ const nativeErrorKeys = [
   "columnNumber",
   "stack",
   "description",
-  "number"
+  "number",
 ] as (keyof Error)[];
 
 export function isC8Error(err: any): err is C8Error {
@@ -76,7 +76,7 @@ export class C8Error extends ExtendableError {
     const err = new Error(this.message);
     err.name = this.name;
     for (const key of nativeErrorKeys) {
-      if (err[key]) this[key] = err[key] || '';
+      if (err[key]) this[key] = err[key] || "";
     }
   }
 }
@@ -95,7 +95,7 @@ export class HttpError extends ExtendableError {
     const err = new Error(this.message);
     err.name = this.name;
     for (const key of nativeErrorKeys) {
-      if (err[key]) this[key] = err[key] || '';
+      if (err[key]) this[key] = err[key] || "";
     }
   }
 }

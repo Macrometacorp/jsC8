@@ -9,7 +9,7 @@ const range = (n: number): number[] => Array.from(Array(n).keys());
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 const it2x = C8_VERSION < 30000 ? it : it.skip;
 
-describe("Manipulating fabrics", function() {
+describe("Manipulating fabrics", function () {
   // create fabric takes 11s in a standard cluster
   dotenv.config();
   this.timeout(60000);
@@ -147,8 +147,8 @@ describe("Manipulating fabrics", function() {
   // We need MM api key to run this test
   describe("fabric.truncate", () => {
     let name = `testfabric${Date.now()}`;
-    let nonSystemCollections = range(4).map(i => `c${i}${Date.now()}`);
-    let systemCollections = range(4).map(i => `_c${i}${Date.now()}${i}`);
+    let nonSystemCollections = range(4).map((i) => `c${i}${Date.now()}`);
+    let systemCollections = range(4).map((i) => `_c${i}${Date.now()}${i}`);
     beforeEach(async () => {
       const response = await c8Client.getAllEdgeLocations();
       let dcList: string = getDCListString(response);
@@ -157,12 +157,12 @@ describe("Manipulating fabrics", function() {
       });
       c8Client.useFabric(name);
       await Promise.all([
-        ...nonSystemCollections.map(async name => {
+        ...nonSystemCollections.map(async (name) => {
           let collection = c8Client.collection(name);
           await collection.create();
           await collection.save({ _key: "example" });
         }),
-        ...systemCollections.map(async name => {
+        ...systemCollections.map(async (name) => {
           let collection = c8Client.collection(name);
           await collection.create({ isSystem: true });
           await collection.save({ _key: "example" });
@@ -176,7 +176,7 @@ describe("Manipulating fabrics", function() {
     it("removes all documents from all non-system collections in the fabric", async () => {
       await c8Client.truncate();
       await Promise.all([
-        ...nonSystemCollections.map(async name => {
+        ...nonSystemCollections.map(async (name) => {
           try {
             await c8Client.collection(name).document("example");
             expect.fail("Expected document to be destroyed");
@@ -190,7 +190,7 @@ describe("Manipulating fabrics", function() {
             console.log(message);
           }
         }),
-        ...systemCollections.map(async name => {
+        ...systemCollections.map(async (name) => {
           try {
             await c8Client.collection(name).document("example");
             expect.fail("Expected document to be destroyed");
@@ -211,7 +211,7 @@ describe("Manipulating fabrics", function() {
       async () => {
         await c8Client.truncate(false);
         await Promise.all(
-          nonSystemCollections.map(async name => {
+          nonSystemCollections.map(async (name) => {
             let doc;
             try {
               doc = await c8Client.collection(name).document("example");

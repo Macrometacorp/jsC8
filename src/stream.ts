@@ -9,12 +9,12 @@ import { ws } from "./util/webSocket";
 import { wsEdgeWorker } from "./util/webSocket.edgeworker";
 
 export enum EdgeWorkerNames {
-  CLOUDFLARE = "cloudflare"
-};
+  CLOUDFLARE = "cloudflare",
+}
 
 export enum StreamConstants {
-  PERSISTENT = "persistent"
-};
+  PERSISTENT = "persistent",
+}
 
 export type wsCallbackObj = {
   onopen?: () => void;
@@ -48,7 +48,11 @@ export class Stream {
     this.name = name;
 
     let topic = this.name;
-    if (!this.isCollectionStream && !this.name.includes("c8locals") && !this.name.includes("c8globals")) {
+    if (
+      !this.isCollectionStream &&
+      !this.name.includes("c8locals") &&
+      !this.name.includes("c8globals")
+    ) {
       if (this.global) topic = `c8globals.${this.name}`;
       else topic = `c8locals.${this.name}`;
     }
@@ -184,8 +188,7 @@ export class Stream {
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
-    let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${this.topic
-      }/${subscriptionName}`;
+    let consumerUrl = `wss://api-${dcName}/_ws/ws/v2/consumer/${persist}/${tenant}/${region}.${dbName}/${this.topic}/${subscriptionName}`;
 
     // Appending query params to the url
     consumerUrl = `${consumerUrl}?${queryParams}`;
@@ -197,7 +200,11 @@ export class Stream {
     return ws(consumerUrl);
   }
 
-  producer(dcName: string, params: { [key: string]: any } = {}, edgeWorkerName?: EdgeWorkerNames) {
+  producer(
+    dcName: string,
+    params: { [key: string]: any } = {},
+    edgeWorkerName?: EdgeWorkerNames
+  ) {
     if (!dcName) throw "DC name not provided to establish producer connection";
 
     const lowerCaseUrl = dcName.toLocaleLowerCase();
@@ -212,8 +219,7 @@ export class Stream {
     if (!dbName || !tenant)
       throw "Set correct DB and/or tenant name before using.";
 
-    let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.topic
-      }`;
+    let producerUrl = `wss://api-${dcName}/_ws/ws/v2/producer/${persist}/${tenant}/${region}.${dbName}/${this.topic}`;
 
     // Appending query params to the url
     producerUrl = `${producerUrl}?${queryParams}`;

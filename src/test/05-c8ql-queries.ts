@@ -7,7 +7,7 @@ import * as dotenv from "dotenv";
 
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
-describe("C8QL queries", function() {
+describe("C8QL queries", function () {
   // create fabric takes 11s in a standard cluster
   dotenv.config();
   this.timeout(60000);
@@ -39,23 +39,23 @@ describe("C8QL queries", function() {
     }
   });
   describe("fabric.query", () => {
-    it("returns a cursor for the query result", done => {
+    it("returns a cursor for the query result", (done) => {
       c8Client
         .query("RETURN 23")
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor).to.be.an.instanceof(ArrayCursor);
           done();
         })
         .catch(done);
     });
-    it("throws an exception on error", done => {
+    it("throws an exception on error", (done) => {
       c8Client
         .query("FOR i IN no RETURN i")
         .then(() => {
           expect.fail();
           done();
         })
-        .catch(err => {
+        .catch((err) => {
           expect(err).is.instanceof(C8Error);
           expect(err).to.have.property("statusCode", 404);
           expect(err).to.have.property("errorNum", 1203);
@@ -72,67 +72,67 @@ describe("C8QL queries", function() {
         expect(err).to.have.property("errorNum", 1203);
       }
     });
-    it("supports bindVars", done => {
+    it("supports bindVars", (done) => {
       c8Client
         .query("RETURN @x", { x: 5 })
-        .then(cursor => cursor.next())
-        .then(value => {
+        .then((cursor) => cursor.next())
+        .then((value) => {
           expect(value).to.equal(5);
           done();
         })
         .catch(done);
     });
-    it("supports options", done => {
+    it("supports options", (done) => {
       c8Client
         .query("FOR x IN 1..10 RETURN x", undefined, {
           batchSize: 2,
           count: true,
         })
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor.count).to.equal(10);
           expect((cursor as any)._hasMore).to.equal(true);
           done();
         })
         .catch(done);
     });
-    it("supports AQB queries", done => {
+    it("supports AQB queries", (done) => {
       c8Client
         .query({ toC8QL: () => "RETURN 42" })
-        .then(cursor => cursor.next())
-        .then(value => {
+        .then((cursor) => cursor.next())
+        .then((value) => {
           expect(value).to.equal(42);
           done();
         })
         .catch(done);
     });
-    it("supports query objects", done => {
+    it("supports query objects", (done) => {
       c8Client
         .query({ query: "RETURN 1337", bindVars: {} })
-        .then(cursor => cursor.next())
-        .then(value => {
+        .then((cursor) => cursor.next())
+        .then((value) => {
           expect(value).to.equal(1337);
           done();
         })
         .catch(done);
     });
-    it("supports compact queries", done => {
+    it("supports compact queries", (done) => {
       c8Client
         .query({ query: "RETURN @potato", bindVars: { potato: "tomato" } })
-        .then(cursor => cursor.next())
-        .then(value => {
+        .then((cursor) => cursor.next())
+        .then((value) => {
           expect(value).to.equal("tomato");
           done();
         })
         .catch(done);
     });
-    it("supports compact queries with options", done => {
+    it("supports compact queries with options", (done) => {
       let query: any = {
         query: "FOR x IN RANGE(1, @max) RETURN x",
         bindVars: { max: 10 },
       };
       c8Client
         .query(query, { batchSize: 2, count: true })
-        .then(cursor => {
+        .then((cursor) => {
           expect(cursor.count).to.equal(10);
           expect((cursor as any)._hasMore).to.equal(true);
           done();
@@ -179,7 +179,7 @@ describe("C8QL queries", function() {
         "value9",
         "value10",
       ]);
-      expect(bindVarNames.map(k => query.bindVars[k])).to.eql(values);
+      expect(bindVarNames.map((k) => query.bindVars[k])).to.eql(values);
     });
     it("correctly handles jsC8 collection parameters", () => {
       let collection = c8Client.collection("potato");

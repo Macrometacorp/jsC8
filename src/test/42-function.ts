@@ -16,7 +16,7 @@ function assertCreateEv(response: any) {
 // When running from terminal or with npm run devtest function tests will
 // be skipped
 // To enable tests, remove skip flag from describe method
-describe.skip("validating function endpoints", function() {
+describe.skip("validating function endpoints", function () {
   dotenv.config();
   this.timeout(60000);
   let c8Client: C8Client;
@@ -160,14 +160,13 @@ describe.skip("validating function endpoints", function() {
       );
     });
     it("function.deployStreamAdhocQueryToEdgeWorker", async () => {
-      const response = await c8Client.function.deployStreamAdhocQueryToEdgeWorker(
-        {
+      const response =
+        await c8Client.function.deployStreamAdhocQueryToEdgeWorker({
           type: "akamai",
           name: "testSdkEvStreamAdhoc",
           streamWorkerName: "testSdkKvStreamAdhoc",
           environment: "PRODUCTION",
-        }
-      );
+        });
       assertCreateEv(response);
     });
     it("function.removeFunctionWorker", async () => {
@@ -181,15 +180,14 @@ describe.skip("validating function endpoints", function() {
       }
     });
     it("function.deployStreamPublisherToEdgeWorker", async () => {
-      const response = await c8Client.function.deployStreamPublisherToEdgeWorker(
-        {
+      const response =
+        await c8Client.function.deployStreamPublisherToEdgeWorker({
           type: "akamai",
           name: "testSdkEvStreamPublisher",
           streamWorkerName: "testSdkEvStreamPublisher",
           streamName: "testSdkKvStreamPublisher",
           environment: "PRODUCTION",
-        }
-      );
+        });
       assertCreateEv(response);
     });
   });

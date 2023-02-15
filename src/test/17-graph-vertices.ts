@@ -10,11 +10,11 @@ const range = (n: number): number[] => Array.from(Array(n).keys());
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 function createCollections(fabric: Fabric) {
-  let vertexCollectionNames = range(2).map(i => `vc${Date.now()}${i}`);
-  let edgeCollectionNames = range(2).map(i => `ec${Date.now()}${i}`);
+  let vertexCollectionNames = range(2).map((i) => `vc${Date.now()}${i}`);
+  let edgeCollectionNames = range(2).map((i) => `ec${Date.now()}${i}`);
   return Promise.all([
-    ...vertexCollectionNames.map(name => fabric.collection(name).create()),
-    ...edgeCollectionNames.map(name => fabric.edgeCollection(name).create()),
+    ...vertexCollectionNames.map((name) => fabric.collection(name).create()),
+    ...edgeCollectionNames.map((name) => fabric.edgeCollection(name).create()),
   ]).then(() => [vertexCollectionNames, edgeCollectionNames]);
 }
 
@@ -24,7 +24,7 @@ function createGraph(
   edgeCollectionNames: string[]
 ) {
   return graph.create({
-    edgeDefinitions: edgeCollectionNames.map(name => ({
+    edgeDefinitions: edgeCollectionNames.map((name) => ({
       collection: name,
       from: vertexCollectionNames,
       to: vertexCollectionNames,
@@ -32,7 +32,7 @@ function createGraph(
   });
 }
 
-describe("Manipulating graph vertices", function() {
+describe("Manipulating graph vertices", function () {
   dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(20000);
@@ -64,22 +64,22 @@ describe("Manipulating graph vertices", function() {
       c8Client.close();
     }
   });
-  beforeEach(done => {
+  beforeEach((done) => {
     graph = c8Client.graph(`g${Date.now()}`);
     createCollections(c8Client)
-      .then(names => {
+      .then((names) => {
         collectionNames = names.reduce((a, b) => a.concat(b));
         return createGraph(graph, names[0], names[1]);
       })
       .then(() => void done())
       .catch(done);
   });
-  afterEach(done => {
+  afterEach((done) => {
     graph
       .drop()
       .then(() =>
         Promise.all(
-          collectionNames.map(name => c8Client.collection(name).drop())
+          collectionNames.map((name) => c8Client.collection(name).drop())
         )
       )
       .then(() => void done())
@@ -90,30 +90,28 @@ describe("Manipulating graph vertices", function() {
       let name = "potato";
       let collection = graph.vertexCollection(name);
       expect(collection).to.be.an.instanceof(GraphVertexCollection);
-      expect(collection)
-        .to.have.property("name")
-        .that.equals(name);
+      expect(collection).to.have.property("name").that.equals(name);
     });
   });
   describe("graph.addVertexCollection", () => {
     let vertexCollection: BaseCollection;
-    beforeEach(done => {
+    beforeEach((done) => {
       vertexCollection = c8Client.collection(`coll${Date.now()}`);
       vertexCollection
         .create()
         .then(() => void done())
         .catch(done);
     });
-    afterEach(done => {
+    afterEach((done) => {
       vertexCollection
         .drop()
         .then(() => void done())
         .catch(done);
     });
-    it("adds the given vertex collection to the graph", done => {
+    it("adds the given vertex collection to the graph", (done) => {
       graph
         .addVertexCollection(vertexCollection.name)
-        .then(data => {
+        .then((data) => {
           expect(data.orphanCollections).to.contain(vertexCollection.name);
           done();
         })
@@ -122,7 +120,7 @@ describe("Manipulating graph vertices", function() {
   });
   describe("graph.removeVertexCollection", () => {
     let vertexCollection: BaseCollection;
-    beforeEach(done => {
+    beforeEach((done) => {
       vertexCollection = c8Client.collection(`xc${Date.now()}`);
       vertexCollection
         .create()
@@ -130,26 +128,26 @@ describe("Manipulating graph vertices", function() {
         .then(() => void done())
         .catch(done);
     });
-    it("removes the given vertex collection from the graph", done => {
+    it("removes the given vertex collection from the graph", (done) => {
       graph
         .removeVertexCollection(vertexCollection.name)
-        .then(data => {
+        .then((data) => {
           expect(data.orphanCollections).not.to.contain(vertexCollection.name);
           return vertexCollection.get();
         })
         .then(() => done())
         .catch(done);
     });
-    it("destroys the collection if explicitly passed true", done => {
+    it("destroys the collection if explicitly passed true", (done) => {
       graph
         .removeVertexCollection(vertexCollection.name, true)
-        .then(data => {
+        .then((data) => {
           expect(data.orphanCollections).not.to.contain(vertexCollection.name);
           return vertexCollection.get();
         })
         .then(
           () => Promise.reject(new Error("Should not succeed")),
-          err => {
+          (err) => {
             expect(err).to.be.an.instanceof(C8Error);
             done();
           }

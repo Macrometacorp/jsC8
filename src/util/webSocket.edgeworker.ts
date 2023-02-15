@@ -26,7 +26,7 @@ export function wsEdgeWorker(url: string) {
 
       return client;
     })
-    .catch(error => {
+    .catch((error) => {
       server.close();
       return error;
     });

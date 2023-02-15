@@ -8,11 +8,11 @@ const range = (n: number): number[] => Array.from(Array(n).keys());
 const C8_VERSION = Number(process.env.C8_VERSION || 30400);
 
 function createCollections(fabric: Fabric) {
-  let vertexCollectionNames = range(2).map(i => `vc${Date.now()}${i}`);
-  let edgeCollectionNames = range(2).map(i => `ec${Date.now()}${i}`);
+  let vertexCollectionNames = range(2).map((i) => `vc${Date.now()}${i}`);
+  let edgeCollectionNames = range(2).map((i) => `ec${Date.now()}${i}`);
   return Promise.all([
-    ...vertexCollectionNames.map(name => fabric.collection(name).create()),
-    ...edgeCollectionNames.map(name => fabric.edgeCollection(name).create()),
+    ...vertexCollectionNames.map((name) => fabric.collection(name).create()),
+    ...edgeCollectionNames.map((name) => fabric.edgeCollection(name).create()),
   ]).then(() => [vertexCollectionNames, edgeCollectionNames]);
 }
 
@@ -22,7 +22,7 @@ function createGraph(
   edgeCollectionNames: string[]
 ) {
   return graph.create({
-    edgeDefinitions: edgeCollectionNames.map(name => ({
+    edgeDefinitions: edgeCollectionNames.map((name) => ({
       collection: name,
       from: vertexCollectionNames,
       to: vertexCollectionNames,
@@ -30,7 +30,7 @@ function createGraph(
   });
 }
 
-describe("Graph API", function() {
+describe("Graph API", function () {
   dotenv.config();
   // create fabric takes 11s in a standard cluster
   this.timeout(60000);
@@ -63,31 +63,31 @@ describe("Graph API", function() {
   describe("graph.get", () => {
     let graph: Graph;
     let collectionNames: string[];
-    before(done => {
+    before((done) => {
       graph = c8Client.graph(`g${Date.now()}`);
       createCollections(c8Client)
-        .then(names => {
+        .then((names) => {
           collectionNames = names.reduce((a, b) => a.concat(b));
           return createGraph(graph, names[0], names[1]);
         })
         .then(() => void done())
         .catch(done);
     });
-    after(done => {
+    after((done) => {
       graph
         .drop()
         .then(() =>
           Promise.all(
-            collectionNames.map(name => c8Client.collection(name).drop())
+            collectionNames.map((name) => c8Client.collection(name).drop())
           )
         )
         .then(() => void done())
         .catch(done);
     });
-    it("fetches information about the graph", done => {
+    it("fetches information about the graph", (done) => {
       graph
         .get()
-        .then(data => {
+        .then((data) => {
           expect(data).to.have.property("name", graph.name);
           done();
         })
@@ -97,35 +97,35 @@ describe("Graph API", function() {
   describe("graph.create", () => {
     let edgeCollectionNames: string[];
     let vertexCollectionNames: string[];
-    before(done => {
+    before((done) => {
       createCollections(c8Client)
-        .then(names => {
+        .then((names) => {
           [vertexCollectionNames, edgeCollectionNames] = names;
           done();
         })
         .catch(done);
     });
-    after(done => {
+    after((done) => {
       Promise.all(
-        [...edgeCollectionNames, ...vertexCollectionNames].map(name =>
+        [...edgeCollectionNames, ...vertexCollectionNames].map((name) =>
           c8Client.collection(name).drop()
         )
       )
         .then(() => void done())
         .catch(done);
     });
-    it("creates the graph", done => {
+    it("creates the graph", (done) => {
       let graph = c8Client.graph(`g${Date.now()}`);
       graph
         .create({
-          edgeDefinitions: edgeCollectionNames.map(name => ({
+          edgeDefinitions: edgeCollectionNames.map((name) => ({
             collection: name,
             from: vertexCollectionNames,
             to: vertexCollectionNames,
           })),
         })
         .then(() => graph.get())
-        .then(data => {
+        .then((data) => {
           expect(data).to.have.property("name", graph.name);
           done();
         })
@@ -136,19 +136,19 @@ describe("Graph API", function() {
     let graph: Graph;
     let edgeCollectionNames: string[];
     let vertexCollectionNames: string[];
-    beforeEach(done => {
+    beforeEach((done) => {
       graph = c8Client.graph(`g${Date.now()}`);
       createCollections(c8Client)
-        .then(names => {
+        .then((names) => {
           [vertexCollectionNames, edgeCollectionNames] = names;
           return createGraph(graph, names[0], names[1]);
         })
         .then(() => void done())
         .catch(done);
     });
-    afterEach(done => {
+    afterEach((done) => {
       Promise.all(
-        [...edgeCollectionNames, ...vertexCollectionNames].map(name =>
+        [...edgeCollectionNames, ...vertexCollectionNames].map((name) =>
           c8Client
             .collection(name)
             .drop()
@@ -158,7 +158,7 @@ describe("Graph API", function() {
         .then(() => void done())
         .catch(done);
     });
-    it("destroys the graph if not passed true", done => {
+    it("destroys the graph if not passed true", (done) => {
       graph
         .drop()
         .then(() =>
@@ -168,7 +168,7 @@ describe("Graph API", function() {
           )
         )
         .then(() => c8Client.listCollections())
-        .then(collections => {
+        .then((collections) => {
           expect(collections.map((c: any) => c.name)).to.include.members([
             ...edgeCollectionNames,
             ...vertexCollectionNames,
@@ -177,7 +177,7 @@ describe("Graph API", function() {
         })
         .catch(done);
     });
-    it("additionally drops all of its collections if passed true", done => {
+    it("additionally drops all of its collections if passed true", (done) => {
       graph
         .drop(true)
         .then(() =>
@@ -187,7 +187,7 @@ describe("Graph API", function() {
           )
         )
         .then(() => c8Client.listCollections())
-        .then(collections => {
+        .then((collections) => {
           expect(collections.map((c: any) => c.name)).not.to.include.members([
             ...edgeCollectionNames,
             ...vertexCollectionNames,
