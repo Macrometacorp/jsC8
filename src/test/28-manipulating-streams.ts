@@ -3,8 +3,6 @@ import { C8Client } from "../jsC8";
 import { Stream } from "../stream";
 import * as dotenv from "dotenv";
 
-// TODO : @VIKAS Update Test cases
-
 describe("Manipulating streams", function () {
   dotenv.config();
   // create fabric takes 11s in a standard cluster
@@ -193,6 +191,22 @@ describe("Manipulating streams", function () {
       //     });
       //   });
       // });
+
+      describe("publish message to stream", async () => {
+        it("publishes message to stream", async () => {
+          const name = `stream${Date.now()}`;
+          stream = client.stream(name, false);
+          const response = await stream.createStream();
+          expect(response.error).to.be.false;
+          const messageResponse = await stream.publishMessage(
+            "Hello Macrometa stream!"
+          );
+          expect(messageResponse.code).to.equal(202);
+          expect(messageResponse.error).to.be.false;
+          const deleteStreamResponse = await stream.deleteStream();
+          expect(deleteStreamResponse.error).to.be.false;
+        });
+      });
 
       describe("stream.websocket", function () {
         let dcName: string;
