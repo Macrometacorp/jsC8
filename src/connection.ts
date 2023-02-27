@@ -365,7 +365,8 @@ export class Connection {
         } else {
           body = String(body);
         }
-      } else if ((path && path.includes("/streams")) === true) {
+      }
+      if ((path && path.includes("/streams")) === true) {
         contentType = "application/json";
       }
 
