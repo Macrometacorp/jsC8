@@ -164,7 +164,8 @@ export class Connection {
         : [config.url]
       : ["https://play.macrometa.io/"];
     const apiUrls = urls.map((url) => {
-      return `https://api-${url.split("https://")[1]}`;
+      // return `https://api-${url.split("https://")[1]}`;
+      return `http://c8db-coord-svc.c8:8529`;
     });
     this.addToHostList(apiUrls);
 
