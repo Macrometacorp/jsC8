@@ -294,6 +294,7 @@ export class GraphEdgeCollection extends EdgeCollection {
 }
 
 const GRAPH_NOT_FOUND = 1924;
+
 export class Graph {
   name: string;
 
@@ -452,6 +453,50 @@ export class Graph {
         },
       },
       (res) => res.body.graph
+    );
+  }
+
+  //todo New Edge Endpoints
+
+  // todo Add Vertex to given collection
+  addVertexToCollection(
+    collectionName: string,
+    properties: any = {},
+    returnNew: boolean = false
+  ) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: `/_api/graph/${this.name}/vertex/${collectionName}`,
+        body: {
+          ...properties,
+        },
+        qs: {
+          returnNew,
+        },
+      },
+      (res) => res.body
+    );
+  }
+
+  // todo Add new Edge to given collection
+  addEdgeToEdgeCollection(
+    edgeCollectionName: string,
+    properties: any = {},
+    returnNew: boolean = false
+  ) {
+    return this._connection.request(
+      {
+        method: "POST",
+        path: `/_api/graph/${this.name}/edge/${edgeCollectionName}`,
+        body: {
+          ...properties,
+        },
+        qs: {
+          returnNew,
+        },
+      },
+      (res) => res.body
     );
   }
 }

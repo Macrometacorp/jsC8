@@ -378,6 +378,7 @@ export class C8Client extends Fabric {
     const stream = this.stream(streamName, local, isCollectionStream);
     return stream;
   }
+
   //getStreams() { } // already present
   getStreamStats(
     streamName: string,
@@ -511,6 +512,12 @@ export class C8Client extends Fabric {
     return streamApp.activateStreamApplication(active);
   }
 
+  //************
+  // Graphs Methods
+  getGraphs(): Promise<Graph[]> {
+    return this.graphs();
+  }
+
   createGraph(graphName: string, properties: any = {}) {
     const graph = this.graph(graphName);
     return graph.create(properties);
@@ -521,18 +528,20 @@ export class C8Client extends Fabric {
     return graph.drop(dropCollections);
   }
 
-  hasGraph(graphName: string) {
-    const graph = this.graph(graphName);
-    return graph.exists();
-  }
-
   getGraph(graphName: string) {
     const graph = this.graph(graphName);
     return graph.get();
   }
 
-  getGraphs(): Promise<Graph[]> {
-    return this.graphs();
+  hasGraph(graphName: string) {
+    const graph = this.graph(graphName);
+    return graph.exists();
+  }
+
+  async getEdges(graphName: string) {
+    const graph = this.graph(graphName);
+    const graphDetails = await graph.get();
+    return graphDetails.edgeDefinitions;
   }
 
   insertEdge(graphName: string, definition: any) {
@@ -575,12 +584,6 @@ export class C8Client extends Fabric {
     return graphEdgeCollection.remove(documentHandle, opts);
   }
 
-  async getEdges(graphName: string) {
-    const graph = this.graph(graphName);
-    const graphDetails = await graph.get();
-    return graphDetails.edgeDefinitions;
-  }
-
   linkEdge(
     graphName: string,
     collectionName: string,
@@ -599,6 +602,33 @@ export class C8Client extends Fabric {
     });
   }
 
+  addEdgeToEdgeCollection(
+    graphName: string,
+    collectionName: string,
+    properties: any = {},
+    returnNew: boolean = false
+  ) {
+    const graph = this.graph(graphName);
+    return graph.addEdgeToEdgeCollection(collectionName, properties, returnNew);
+  }
+
+  async listVertexCollections(graphName: string) {
+    const graph = this.graph(graphName);
+    return graph.listVertexCollections();
+  }
+
+  addVertexToCollection(
+    graphName: string,
+    collectionName: string,
+    properties: any = {},
+    returnNew: boolean = false
+  ) {
+    const graph = this.graph(graphName);
+    return graph.addVertexToCollection(collectionName, properties, returnNew);
+  }
+
+  //************
+  // Users Methods
   hasUser(userName: string) {
     const user = this.user(userName);
     return user.hasUser();
@@ -803,6 +833,7 @@ export class C8Client extends Fabric {
     const apiKeys = this.apiKeys(keyid);
     return apiKeys.removeApiKey();
   }
+
   // ----------------------------------
   listAccessibleDatabases(keyid: string, full?: boolean) {
     const apiKeys = this.apiKeys(keyid);
@@ -827,6 +858,7 @@ export class C8Client extends Fabric {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.setDatabaseAccessLevel(permission);
   }
+
   // ----------------------------------
   listAccessibleCollections(keyid: string, dbName: string, full?: boolean) {
     const apiKeys = this.apiKeys(keyid, dbName);
@@ -860,6 +892,7 @@ export class C8Client extends Fabric {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.setCollectionAccessLevel(collectionName, permission);
   }
+
   // ----------------------------------
   listAccessibleStreams(keyid: string, dbName: string, full?: boolean) {
     const apiKeys = this.apiKeys(keyid, dbName);
@@ -885,6 +918,7 @@ export class C8Client extends Fabric {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.setStreamAccessLevel(streamName, permission);
   }
+
   // ----------------------------------
   getBillingAccessLevel(keyid: string) {
     const apiKeys = this.apiKeys(keyid);
