@@ -512,8 +512,7 @@ export class C8Client extends Fabric {
     return streamApp.activateStreamApplication(active);
   }
 
-  //************
-  // Graphs Methods
+  //------------ Graph ----------
   getGraphs(): Promise<Graph[]> {
     return this.graphs();
   }
@@ -547,6 +546,22 @@ export class C8Client extends Fabric {
   insertEdge(graphName: string, definition: any) {
     const graph = this.graph(graphName);
     return graph.addEdgeDefinition(definition);
+  }
+
+  removeEdgeDefinition(graphName: string, edgeCollectionName: string) {
+    const graph = this.graph(graphName);
+    return graph.removeEdgeDefinition(edgeCollectionName);
+  }
+
+  getEdge(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    opts: any = {}
+  ) {
+    const graph = this.graph(graphName);
+    const graphEdgeCollection = graph.edgeCollection(collectionName);
+    return graphEdgeCollection.document(documentHandle, opts);
   }
 
   updateEdge(
@@ -617,18 +632,83 @@ export class C8Client extends Fabric {
     return graph.listVertexCollections();
   }
 
-  addVertexToCollection(
+  async addVertexCollection(graphName: string, collectionName: string) {
+    const graph = this.graph(graphName);
+    return graph.addVertexCollection(collectionName);
+  }
+
+  async removeVertexCollection(
+    graphName: string,
+    collectionName: string,
+    dropCollection: boolean = false
+  ) {
+    const graph = this.graph(graphName);
+    return graph.removeVertexCollection(collectionName, dropCollection);
+  }
+
+  addVertexToVertexCollection(
     graphName: string,
     collectionName: string,
     properties: any = {},
     returnNew: boolean = false
   ) {
     const graph = this.graph(graphName);
-    return graph.addVertexToCollection(collectionName, properties, returnNew);
+    return graph.addVertexToVertexCollection(
+      collectionName,
+      properties,
+      returnNew
+    );
   }
 
-  //************
-  // Users Methods
+  removeVertexFromVertexCollection(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    opts: any = {}
+  ) {
+    const graph = this.graph(graphName);
+    return graph.vertexCollection(collectionName).remove(documentHandle, opts);
+  }
+
+  getVertexFromVertexCollection(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    opts: any = {}
+  ) {
+    const graph = this.graph(graphName);
+    return graph
+      .vertexCollection(collectionName)
+      .document(documentHandle, opts);
+  }
+
+  updateVertexFromVertexCollection(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    newValue: any,
+    opts: any = {}
+  ) {
+    const graph = this.graph(graphName);
+    return graph
+      .vertexCollection(collectionName)
+      .update(documentHandle, newValue, opts);
+  }
+
+  replaceVertexFromVertexCollection(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    newValue: any,
+    opts: any = {}
+  ) {
+    const graph = this.graph(graphName);
+    return graph
+      .vertexCollection(collectionName)
+      .replace(documentHandle, newValue, opts);
+  }
+
+  //------------ User ----------
   hasUser(userName: string) {
     const user = this.user(userName);
     return user.hasUser();

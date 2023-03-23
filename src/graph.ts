@@ -456,10 +456,7 @@ export class Graph {
     );
   }
 
-  //todo New Edge Endpoints
-
-  // todo Add Vertex to given collection
-  addVertexToCollection(
+  addVertexToVertexCollection(
     collectionName: string,
     properties: any = {},
     returnNew: boolean = false
@@ -479,7 +476,6 @@ export class Graph {
     );
   }
 
-  // todo Add new Edge to given collection
   addEdgeToEdgeCollection(
     edgeCollectionName: string,
     properties: any = {},
