@@ -378,6 +378,7 @@ export class C8Client extends Fabric {
     const stream = this.stream(streamName, local, isCollectionStream);
     return stream;
   }
+
   //getStreams() { } // already present
   getStreamStats(
     streamName: string,
@@ -511,6 +512,11 @@ export class C8Client extends Fabric {
     return streamApp.activateStreamApplication(active);
   }
 
+  //------------ Graph ----------
+  getGraphs(): Promise<Graph[]> {
+    return this.graphs();
+  }
+
   createGraph(graphName: string, properties: any = {}) {
     const graph = this.graph(graphName);
     return graph.create(properties);
@@ -521,23 +527,41 @@ export class C8Client extends Fabric {
     return graph.drop(dropCollections);
   }
 
-  hasGraph(graphName: string) {
-    const graph = this.graph(graphName);
-    return graph.exists();
-  }
-
   getGraph(graphName: string) {
     const graph = this.graph(graphName);
     return graph.get();
   }
 
-  getGraphs(): Promise<Graph[]> {
-    return this.graphs();
+  hasGraph(graphName: string) {
+    const graph = this.graph(graphName);
+    return graph.exists();
+  }
+
+  async getEdges(graphName: string) {
+    const graph = this.graph(graphName);
+    const graphDetails = await graph.get();
+    return graphDetails.edgeDefinitions;
   }
 
   insertEdge(graphName: string, definition: any) {
     const graph = this.graph(graphName);
     return graph.addEdgeDefinition(definition);
+  }
+
+  removeEdgeDefinition(graphName: string, edgeCollectionName: string) {
+    const graph = this.graph(graphName);
+    return graph.removeEdgeDefinition(edgeCollectionName);
+  }
+
+  getEdge(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    opts: any = {}
+  ) {
+    const graph = this.graph(graphName);
+    const graphEdgeCollection = graph.edgeCollection(collectionName);
+    return graphEdgeCollection.document(documentHandle, opts);
   }
 
   updateEdge(
@@ -575,12 +599,6 @@ export class C8Client extends Fabric {
     return graphEdgeCollection.remove(documentHandle, opts);
   }
 
-  async getEdges(graphName: string) {
-    const graph = this.graph(graphName);
-    const graphDetails = await graph.get();
-    return graphDetails.edgeDefinitions;
-  }
-
   linkEdge(
     graphName: string,
     collectionName: string,
@@ -599,6 +617,98 @@ export class C8Client extends Fabric {
     });
   }
 
+  addEdgeToEdgeCollection(
+    graphName: string,
+    collectionName: string,
+    properties: any = {},
+    returnNew: boolean = false
+  ) {
+    const graph = this.graph(graphName);
+    return graph.addEdgeToEdgeCollection(collectionName, properties, returnNew);
+  }
+
+  async listVertexCollections(graphName: string) {
+    const graph = this.graph(graphName);
+    return graph.listVertexCollections();
+  }
+
+  async addVertexCollection(graphName: string, collectionName: string) {
+    const graph = this.graph(graphName);
+    return graph.addVertexCollection(collectionName);
+  }
+
+  async removeVertexCollection(
+    graphName: string,
+    collectionName: string,
+    dropCollection: boolean = false
+  ) {
+    const graph = this.graph(graphName);
+    return graph.removeVertexCollection(collectionName, dropCollection);
+  }
+
+  addVertexToVertexCollection(
+    graphName: string,
+    collectionName: string,
+    properties: any = {},
+    returnNew: boolean = false
+  ) {
+    const graph = this.graph(graphName);
+    return graph.addVertexToVertexCollection(
+      collectionName,
+      properties,
+      returnNew
+    );
+  }
+
+  removeVertexFromVertexCollection(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    opts: any = {}
+  ) {
+    const graph = this.graph(graphName);
+    return graph.vertexCollection(collectionName).remove(documentHandle, opts);
+  }
+
+  getVertexFromVertexCollection(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    opts: any = {}
+  ) {
+    const graph = this.graph(graphName);
+    return graph
+      .vertexCollection(collectionName)
+      .document(documentHandle, opts);
+  }
+
+  updateVertexFromVertexCollection(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    newValue: any,
+    opts: any = {}
+  ) {
+    const graph = this.graph(graphName);
+    return graph
+      .vertexCollection(collectionName)
+      .update(documentHandle, newValue, opts);
+  }
+
+  replaceVertexFromVertexCollection(
+    graphName: string,
+    collectionName: string,
+    documentHandle: DocumentHandle,
+    newValue: any,
+    opts: any = {}
+  ) {
+    const graph = this.graph(graphName);
+    return graph
+      .vertexCollection(collectionName)
+      .replace(documentHandle, newValue, opts);
+  }
+
+  //------------ User ----------
   hasUser(userName: string) {
     const user = this.user(userName);
     return user.hasUser();
@@ -803,6 +913,7 @@ export class C8Client extends Fabric {
     const apiKeys = this.apiKeys(keyid);
     return apiKeys.removeApiKey();
   }
+
   // ----------------------------------
   listAccessibleDatabases(keyid: string, full?: boolean) {
     const apiKeys = this.apiKeys(keyid);
@@ -827,6 +938,7 @@ export class C8Client extends Fabric {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.setDatabaseAccessLevel(permission);
   }
+
   // ----------------------------------
   listAccessibleCollections(keyid: string, dbName: string, full?: boolean) {
     const apiKeys = this.apiKeys(keyid, dbName);
@@ -860,6 +972,7 @@ export class C8Client extends Fabric {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.setCollectionAccessLevel(collectionName, permission);
   }
+
   // ----------------------------------
   listAccessibleStreams(keyid: string, dbName: string, full?: boolean) {
     const apiKeys = this.apiKeys(keyid, dbName);
@@ -885,6 +998,7 @@ export class C8Client extends Fabric {
     const apiKeys = this.apiKeys(keyid, dbName);
     return apiKeys.setStreamAccessLevel(streamName, permission);
   }
+
   // ----------------------------------
   getBillingAccessLevel(keyid: string) {
     const apiKeys = this.apiKeys(keyid);
