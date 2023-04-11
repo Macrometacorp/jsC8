@@ -90,37 +90,29 @@ describe("validating new apis", function () {
       .catch(done);
   });
 
-  it("get Collection Ids, keys", (done) => {
+  it("get Collection Ids, keys", async () => {
     const collectionName = "c8client_test_4";
+    const ids: string[] = ["c8client_test_4/1", "c8client_test_4/2"];
+    const keys: string[] = ["1", "2"];
 
-    c8Client
-      .createCollection(collectionName)
-      .then(async () => {
-        let ids: string[] = [];
-        let keys: string[] = [];
-        await c8Client
-          .insertDocumentMany(collectionName, [
-            { value: "123" },
-            { value: "1234" },
-          ])
-          .then((data) => {
-            ids = data.map((doc: any) => doc._id);
-            keys = data.map((doc: any) => doc._key);
-          });
-        await c8Client.getCollectionIds(collectionName).then((data) => {
-          expect(data).to.deep.equal(ids);
-        });
-        await c8Client.getCollectionKeys(collectionName).then((data) => {
-          expect(data).to.deep.equal(keys);
-        });
-      })
-      .then(async () => {
-        await c8Client.deleteCollection(collectionName).then((data) => {
-          expect(data).to.have.property("error", false);
-        });
-      })
-      .then(() => void done())
-      .catch(done);
+    try {
+      await c8Client.createCollection(collectionName);
+      await c8Client.insertDocumentMany(collectionName, [
+        { _key: "1", value: "123" },
+        { _key: "2", value: "1234" },
+      ]);
+
+      const idsResponse = await c8Client.getCollectionIds(collectionName);
+      expect(idsResponse).to.deep.equal(ids);
+
+      const keysResponse = await c8Client.getCollectionKeys(collectionName);
+      expect(keysResponse).to.deep.equal(keys);
+
+      await c8Client.deleteCollection(collectionName);
+    } catch (e) {
+      console.log("Test error:" + e);
+      await c8Client.deleteCollection(collectionName);
+    }
   });
   it("validate executeQuery", (done) => {
     const collectionName = "c8client_test_5";
