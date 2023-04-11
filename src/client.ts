@@ -27,12 +27,14 @@ import { Redis } from "./redis";
 import { Function } from "./function";
 import { Integrations } from "./integrations";
 import { Transformations } from "./transformations";
+import { Connectors } from "./connectors";
 
 export class C8Client extends Fabric {
   redis: Redis;
   function: Function;
   integrations: Integrations;
   transformations: Transformations;
+  connectors: Connectors;
 
   constructor(config: Config) {
     super(config);
@@ -40,6 +42,7 @@ export class C8Client extends Fabric {
     this.function = new Function(config);
     this.integrations = new Integrations(config);
     this.transformations = new Transformations(config);
+    this.connectors = new Connectors(config);
   }
 
   useApiKeyAuth(apikey: string): this {
