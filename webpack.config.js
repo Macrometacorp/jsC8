@@ -2,6 +2,8 @@
 const path = require("path");
 const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   entry: [
@@ -66,11 +68,23 @@ module.exports = {
   },
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin({ extractComments: false })],
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false, // Don't extract comments to a separate file
+        terserOptions: {
+          output: {
+            comments: false, // Remove all comments
+          },
+        },
+      }),
+    ],
   },
   plugins: [
     new webpack.DefinePlugin({
       "process.env.NODE_ENV": JSON.stringify("production"), // changed process.env
     }),
+    ...(process.env.NODE_ENV === "development"
+      ? [new BundleAnalyzerPlugin()]
+      : []),
   ],
 };

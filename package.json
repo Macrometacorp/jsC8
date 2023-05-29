@@ -1,6 +1,6 @@
 {
   "name": "jsc8",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "license": "Apache-2.0",
   "description": "The official Macrometa JavaScript SDK.",
   "homepage": "https://github.com/macrometacorp/jsC8",
@@ -44,18 +44,13 @@
     "lib/cjs/util/*.*"
   ],
   "scripts": {
-    "pretest": "npm run dist",
-    "test": "env TEST_C8_URL=https://test.eng1.macrometa.io mocha --timeout 60000 --growl --reporter mochawesome --require source-map-support/register lib/async/test",
-    "ci": "mocha --reporter spec --require source-map-support/register --timeout 10000 lib/cjs/test",
-    "preci": "yarn install",
-    "jenkins": "yarn ci -- --timeout 0 --reporter xunit-file",
     "dist:cjs": "tsc -p . --outDir ./lib/cjs/ --declarationMap true && cp src/index.js lib/cjs/index.js && rsync -a src/test/mockFiles/ lib/async/test/mockFiles/",
     "dist:async": "tsc -p . --outDir ./lib/async/ --target es2018 --declarationMap true && cp src/index.js lib/async/index.js && rsync -a src/test/mockFiles/ lib/async/test/mockFiles/",
     "dist:web": "webpack",
     "dist": "rimraf lib && cpy src/index.all.js --rename index.js lib/ && mv lib/src/index.js lib/ && rm -rf lib/src && npm-run-all --parallel dist:* && mkdir -p lib ",
     "prepare": "npm run dist && node -e 'require(\".\");'",
-    "predevtest": "npm run dist",
     "lint": "prettier --write .",
+    "test-webpack": "NODE_ENV=development webpack --config webpack.config.js",
     "devtest": "nyc --reporter=html mocha --reporter spec --timeout 60000 lib/async/test/"
   },
   "dependencies": {
@@ -108,6 +103,7 @@
     "typescript": "^4.9.4",
     "url": "^0.11.0",
     "webpack": "^5.78.0",
+    "webpack-bundle-analyzer": "^4.8.0",
     "webpack-cli": "^5.0.1",
     "xunit-file": "^2.0.1"
   },

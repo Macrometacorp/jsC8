@@ -88,6 +88,41 @@ export class C8Client extends Fabric {
     return collection.create(properties);
   }
 
+  getCollectionInformation(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.getInformation();
+  }
+
+  getCollectionDocumentsNumber(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.getDocumentsNumber();
+  }
+
+  getCollectionFigures(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.getFigures();
+  }
+
+  getCollectionMetadata(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.getMetadata();
+  }
+
+  updateCollectionMetadata(collectionName: string, properties: any) {
+    const collection = this.collection(collectionName);
+    return collection.updateMetadata(properties);
+  }
+
+  getCollectionConnections(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.getConnections();
+  }
+
+  deleteCollectionConnection(collectionName: string, connectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.deleteConnection(connectionName);
+  }
+
   updateCollectionProperties(
     collectionName: string,
     properties: CollectionUpdateProperties
@@ -97,6 +132,16 @@ export class C8Client extends Fabric {
     }
     const collection = this.collection(collectionName);
     return collection.updateCollectionProperties(properties);
+  }
+
+  truncateCollection(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.truncate();
+  }
+
+  truncateAndReloadCollection(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.truncateAndReload();
   }
 
   deleteCollection(collectionName: string, opts?: any) {
