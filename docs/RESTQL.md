@@ -14,11 +14,9 @@ Creates the restql with restqlName and value.
 
 - **value**: `string`
 
-   The restql you want to create.
+  The restql you want to create.
 
-- **parameter**: `any`
-   
-   Parameters to the created restql. Default is `{}`.
+- **parameter**: `any` Parameters to the created restql. Default is `{}`.
 
 **Examples**
 
@@ -40,7 +38,7 @@ const listOfCreatedRestql = await client.getRestqls();
 
 ## client.executeRestql
 
-`client.executeRestql(restqlName, bindVars)`
+`client.executeRestql(restqlName, opts)`
 
 Executes a created restql
 
@@ -50,9 +48,10 @@ Executes a created restql
 
   The name of the restql to be executed.
 
-- **bindVars**: `any`
-
-  The variables you wish to pass to a restql.
+- **opts**: `object` (optional) Additional parameter object that will be passed
+  to the query API. Possible keys are `bindVars` and `batchSize` `bindVars`: The
+  variables you wish to pass to a restql `batchSize`: documet per query number,
+  default us 100 max is 1000 docs.
 
 **Examples**
 
@@ -85,7 +84,7 @@ Updates a restql that is already created.
 
 ```js
 const client = new jsc8();
-await client.updateRestql("testRestql", "FOR x IN _routing RETURN x" );
+await client.updateRestql("testRestql", "FOR x IN _routing RETURN x");
 ```
 
 ## client.deleteRestql
@@ -93,7 +92,6 @@ await client.updateRestql("testRestql", "FOR x IN _routing RETURN x" );
 `client.deleteRestql(restqlName) `
 
 Deletes the created restql.
-
 
 **Arguments**
 

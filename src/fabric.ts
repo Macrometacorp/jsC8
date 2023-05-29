@@ -656,13 +656,14 @@ export class Fabric {
     );
   }
 
-  executeSavedQuery(queryName: string, bindVars: any = {}) {
+  executeSavedQuery(queryName: string, opts: any = {}) {
     return this._connection.request(
       {
         method: "POST",
         path: `/restql/execute/${queryName}`,
         body: {
-          bindVars: bindVars,
+          bindVars: opts.bindVars,
+          batchSize: opts.batchSize,
         },
       },
       (res) => res.body
