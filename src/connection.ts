@@ -158,12 +158,15 @@ export class Connection {
       this._maxRetries = config.maxRetries || 0;
     }
 
+    this._useOriginalUrl = config.useOriginalUrl || false; //To use the original url as it is
     const urls = config.url
       ? Array.isArray(config.url)
         ? config.url
         : [config.url]
       : ["https://play.macrometa.io/"];
-    const apiUrls = urls.map((url) => {
+    const apiUrls = this._useOriginalUrl
+      ? urls
+      : urls.map((url) => {
       return `https://api-${url.split("https://")[1]}`;
     });
     this.addToHostList(apiUrls);
