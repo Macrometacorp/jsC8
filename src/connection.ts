@@ -69,18 +69,19 @@ export type Config =
   | string
   | string[]
   | Partial<{
-      url: string | string[];
-      fabricName: string;
-      apiKey: string;
-      token: string;
-      isAbsolute: boolean;
-      c8Version: number;
-      loadBalancingStrategy: LoadBalancingStrategy;
-      maxRetries: false | number;
-      agent: any;
-      agentOptions: { [key: string]: any };
-      headers: { [key: string]: string };
-    }>;
+    url: string | string[];
+    fabricName: string;
+    apiKey: string;
+    token: string;
+    isAbsolute: boolean;
+    c8Version: number;
+    loadBalancingStrategy: LoadBalancingStrategy;
+    maxRetries: false | number;
+    agent: any;
+    agentOptions: { [key: string]: any };
+    headers: { [key: string]: string };
+    useOriginalUrl?: boolean;
+  }>;
 
 export class Connection {
   private _activeTasks: number = 0;
@@ -99,6 +100,7 @@ export class Connection {
   private _hosts: RequestFunction[] = [];
   private _urls: string[] = [];
   private _activeHost: number;
+  private _useOriginalUrl: boolean;
 
   constructor(config: Config = {}) {
     if (typeof config === "string") config = { url: config };
@@ -121,11 +123,11 @@ export class Connection {
     this._agentOptions = isBrowser
       ? { ...config.agentOptions! }
       : {
-          maxSockets: 3,
-          keepAlive: true,
-          keepAliveMsecs: 1000,
-          ...config.agentOptions,
-        };
+        maxSockets: 3,
+        keepAlive: true,
+        keepAliveMsecs: 1000,
+        ...config.agentOptions,
+      };
     this._maxTasks = this._agentOptions.maxSockets || 3;
     if (this._agentOptions.keepAlive) this._maxTasks *= 2;
 
@@ -167,8 +169,8 @@ export class Connection {
     const apiUrls = this._useOriginalUrl
       ? urls
       : urls.map((url) => {
-      return `https://api-${url.split("https://")[1]}`;
-    });
+        return `https://api-${url.split("https://")[1]}`;
+      });
     this.addToHostList(apiUrls);
 
     if (this._loadBalancingStrategy === "ONE_RANDOM") {
