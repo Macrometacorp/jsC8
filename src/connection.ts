@@ -99,6 +99,7 @@ export class Connection {
   private _hosts: RequestFunction[] = [];
   private _urls: string[] = [];
   private _activeHost: number;
+  private _resultCallback: ((res: any) => void) | undefined;
 
   constructor(config: Config = {}) {
     if (typeof config === "string") config = { url: config };
@@ -328,6 +329,10 @@ export class Connection {
     this._headers[key] = value;
   }
 
+  setResultCallback(callback: ((res: any) => void) | undefined) {
+    this._resultCallback = callback;
+  }
+
   close() {
     for (const host of this._hosts) {
       if (host.close) host.close();
@@ -387,6 +392,10 @@ export class Connection {
         },
         reject,
         resolve: (res: any) => {
+          // Report the result to the callback function
+          if (typeof this._resultCallback === "function") {
+            this._resultCallback(res);
+          }
           if (isBrowser && this._agent) {
             res
               .json()
@@ -414,7 +423,6 @@ export class Connection {
           } else {
             const contentType = res.headers["content-type"];
             let parsedBody: any = undefined;
-
             if (
               res.body.length &&
               contentType &&

@@ -57,6 +57,10 @@ export class Redis {
     );
   }
 
+  setResultCallback(callback: ((res: any) => void) | undefined) {
+    this._connection.setResultCallback(callback);
+  }
+
   // Start of STRING commands
   set(key: string, value: string, collection: string, options: any[] = []) {
     const command: string = "SET";

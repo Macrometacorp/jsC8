@@ -50,6 +50,12 @@ export class C8Client extends Fabric {
     return this;
   }
 
+  setResultCallback(callback: ((res: any) => void) | undefined) {
+    this._connection.setResultCallback(callback);
+    this.redis.setResultCallback(callback);
+    this.function.setResultCallback(callback);
+  }
+
   async loginWithToken(jwt: string) {
     this.useBearerAuth(jwt);
     const { error, errorMessage, result } = await this.validateApiKey({ jwt });
