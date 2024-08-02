@@ -57,8 +57,8 @@ export class Redis {
     );
   }
 
-  setResultCallback(callback: ((res: any) => void) | undefined) {
-    this._connection.setResultCallback(callback);
+  setResultListener(callback: ((res: any) => void) | undefined) {
+    this._connection.setResultListener(callback);
   }
 
   // Start of STRING commands

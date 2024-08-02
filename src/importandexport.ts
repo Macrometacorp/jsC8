@@ -15,8 +15,8 @@ export class ImportAndExport {
     this.collectionName = collectionName;
   }
 
-  setResultCallback(callback: ((res: any) => void) | undefined) {
-    this._connection.setResultCallback(callback);
+  setResultListener(callback: ((res: any) => void) | undefined) {
+    this._connection.setResultListener(callback);
   }
 
   exportDataByQuery(query: string, bindVars?: Record<string, any>) {

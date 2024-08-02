@@ -329,7 +329,7 @@ export class Connection {
     this._headers[key] = value;
   }
 
-  setResultCallback(callback: ((res: any) => void) | undefined) {
+  setResultListener(callback: ((res: any) => void) | undefined) {
     this._resultCallback = callback;
   }
 

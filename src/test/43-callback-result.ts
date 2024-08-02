@@ -28,7 +28,7 @@ describe("DocumentCollection API", function () {
   });
   beforeEach((done) => {
     collection = c8Client.collection(`c${Date.now()}`);
-    collection.setResultCallback((res: any) => {
+    collection.setResultListener((res: any) => {
       expect([202, 200]).to.include(res.statusCode);
     });
     collection
@@ -38,7 +38,7 @@ describe("DocumentCollection API", function () {
   });
   afterEach((done) => {
     // Disable result callback
-    collection.setResultCallback(undefined);
+    collection.setResultListener(undefined);
     collection
       .drop()
       .then(() => void done())
@@ -54,7 +54,7 @@ describe("DocumentCollection API", function () {
       await collection.document(meta._id);
     });
     it("does not throw on not found when graceful", async () => {
-      collection.setResultCallback((res: any) => {
+      collection.setResultListener((res: any) => {
         expect([404]).to.include(res.statusCode);
       });
       const doc = await collection.document("doesnotexist", true);
@@ -64,7 +64,7 @@ describe("DocumentCollection API", function () {
 
   describe("fabric.useFabric", () => {
     it("getting version on fabric should return 200", async () => {
-      collection.setResultCallback((res: any) => {
+      collection.setResultListener((res: any) => {
         expect([200]).to.include(res.statusCode);
       });
       const response = await c8Client.version();
