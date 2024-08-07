@@ -129,7 +129,7 @@ export abstract class BaseCollection implements C8Collection {
   }
 
   protected _put(path: string, body: any) {
-    return this._connection.request(
+    let resp = this._connection.request(
       {
         method: "PUT",
         path: `/collection/${this.name}/${path}`,
@@ -137,6 +137,7 @@ export abstract class BaseCollection implements C8Collection {
       },
       (res) => res.body
     );
+    return resp;
   }
 
   get() {
@@ -173,6 +174,83 @@ export abstract class BaseCollection implements C8Collection {
     );
   }
 
+  getInformation() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/_api/collection/${this.name}`,
+      },
+      (res) => res.body
+    );
+  }
+
+  getDocumentsNumber() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/_api/collection/${this.name}/count`,
+      },
+      (res) => res.body
+    );
+  }
+
+  getFigures() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/_api/collection/${this.name}/figures`,
+      },
+      (res) => res.body
+    );
+  }
+
+  getMetadata() {
+    return this._connection.request(
+      {
+        method: "GET",
+        path: `/_api/collection/${this.name}/metadata`,
+      },
+      (res) => res.body
+    );
+  }
+
+  updateMetadata(properties: any) {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `/_api/collection/${this.name}/metadata`,
+        body: { ...properties },
+      },
+      (res) => res.body
+    );
+  }
+
+  getConnections() {
+    return this._connection
+      .request(
+        {
+          method: "GET",
+          path: `/_api/collection/${this.name}/connections`,
+        },
+        (res) => res.body
+      )
+      .catch((error) => {
+        console.error(error);
+        throw error; // Optional: Rethrow the error to handle it at a higher level
+      });
+  }
+
+  deleteConnection(connectionName: string) {
+    console.log("connectionName", connectionName);
+    return this._connection.request(
+      {
+        method: "DELETE",
+        path: `/_api/collection/${this.name}/connections/${connectionName}`,
+      },
+      (res) => res.body
+    );
+  }
+
   async onChange(dcName: string, subscriptionName: string = "subs") {
     const otp = await this.stream.getOtp();
     return this.stream.consumer(subscriptionName, dcName, { otp });
@@ -202,6 +280,16 @@ export abstract class BaseCollection implements C8Collection {
 
   truncate() {
     return this._put("truncate", undefined);
+  }
+
+  truncateAndReload() {
+    return this._connection.request(
+      {
+        method: "PUT",
+        path: `/_api/collection/${this.name}/reload`,
+      },
+      (res) => res.body
+    );
   }
 
   drop(opts?: any) {

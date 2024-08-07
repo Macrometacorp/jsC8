@@ -7,7 +7,6 @@ describe(" StreamApps ", function () {
   this.timeout(50000);
   dotenv.config();
   let client: C8Client;
-  let name = `testFabric-test`;
   // let dcList: string;
 
   client = new C8Client({
@@ -15,7 +14,6 @@ describe(" StreamApps ", function () {
     apiKey: process.env.API_KEY,
     fabricName: process.env.FABRIC,
   });
-  client.useFabric(name);
 
   // before(async () => {
   //   client = new C8Client({

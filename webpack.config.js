@@ -1,12 +1,19 @@
 "use strict";
-var resolve = require("path").resolve;
-var webpack = require("webpack");
+const path = require("path");
+const webpack = require("webpack");
+const TerserPlugin = require("terser-webpack-plugin");
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
-  entry: ["regenerator-runtime/runtime", resolve(__dirname, "src/index.js")],
+  entry: [
+    "regenerator-runtime/runtime",
+    path.resolve(__dirname, "src/index.js"),
+  ],
   devtool: "source-map",
+  mode: "production",
   output: {
-    path: resolve(__dirname, "lib"),
+    path: path.resolve(__dirname, "lib"),
     filename: "web.js",
     library: "jsC8",
     libraryTarget: "umd",
@@ -20,17 +27,20 @@ module.exports = {
         options: {
           presets: [
             [
-              "babel-preset-env",
+              "@babel/preset-env",
               {
-                target: {
+                targets: {
                   browsers: ["> 2%", "ie 11"],
                 },
+                useBuiltIns: "usage",
+                corejs: 3, // added corejs option
               },
             ],
           ],
           plugins: [
-            "babel-plugin-transform-class-properties",
-            "babel-plugin-transform-object-rest-spread",
+            "@babel/plugin-transform-runtime",
+            "@babel/plugin-proposal-object-rest-spread",
+            "@babel/plugin-transform-modules-commonjs",
           ],
         },
       },
@@ -46,15 +56,35 @@ module.exports = {
   },
   resolve: {
     extensions: [".web.js", ".web.ts", ".js", ".ts", ".json"],
+    fallback: {
+      querystring: require.resolve("querystring-es3"),
+      path: require.resolve("path-browserify"),
+      url: require.resolve("url"),
+    },
+    alias: {
+      "./async": path.resolve(__dirname, "lib/async"),
+      "./cjs": path.resolve(__dirname, "lib/cjs"),
+    },
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false, // Don't extract comments to a separate file
+        terserOptions: {
+          output: {
+            comments: false, // Remove all comments
+          },
+        },
+      }),
+    ],
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env": { NODE_ENV: '"production"' },
+      "process.env.NODE_ENV": JSON.stringify("production"), // changed process.env
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      minimize: true,
-      output: { comments: false },
-    }),
+    ...(process.env.NODE_ENV === "development"
+      ? [new BundleAnalyzerPlugin()]
+      : []),
   ],
 };

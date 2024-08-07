@@ -25,15 +25,24 @@ import { Graph } from "./graph";
 import { parseCSVToJSON } from "./util/parseCsv";
 import { Redis } from "./redis";
 import { Function } from "./function";
+import { Integrations } from "./integrations";
+import { Transformations } from "./transformations";
+import { Connectors } from "./connectors";
 
 export class C8Client extends Fabric {
   redis: Redis;
   function: Function;
+  integrations: Integrations;
+  transformations: Transformations;
+  connectors: Connectors;
 
   constructor(config: Config) {
     super(config);
     this.redis = new Redis(config);
     this.function = new Function(config);
+    this.integrations = new Integrations(config);
+    this.transformations = new Transformations(config);
+    this.connectors = new Connectors(config);
   }
 
   useApiKeyAuth(apikey: string): this {
@@ -79,6 +88,41 @@ export class C8Client extends Fabric {
     return collection.create(properties);
   }
 
+  getCollectionInformation(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.getInformation();
+  }
+
+  getCollectionDocumentsNumber(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.getDocumentsNumber();
+  }
+
+  getCollectionFigures(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.getFigures();
+  }
+
+  getCollectionMetadata(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.getMetadata();
+  }
+
+  updateCollectionMetadata(collectionName: string, properties: any) {
+    const collection = this.collection(collectionName);
+    return collection.updateMetadata(properties);
+  }
+
+  getCollectionConnections(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.getConnections();
+  }
+
+  deleteCollectionConnection(collectionName: string, connectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.deleteConnection(connectionName);
+  }
+
   updateCollectionProperties(
     collectionName: string,
     properties: CollectionUpdateProperties
@@ -88,6 +132,16 @@ export class C8Client extends Fabric {
     }
     const collection = this.collection(collectionName);
     return collection.updateCollectionProperties(properties);
+  }
+
+  truncateCollection(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.truncate();
+  }
+
+  truncateAndReloadCollection(collectionName: string) {
+    const collection = this.collection(collectionName);
+    return collection.truncateAndReload();
   }
 
   deleteCollection(collectionName: string, opts?: any) {
@@ -307,16 +361,26 @@ export class C8Client extends Fabric {
     return this.terminateRunningQuery(queryId);
   }
 
-  createRestql(restqlName: string, value: string, parameter: any = {}) {
-    return this.saveQuery(restqlName, parameter, value);
+  createRestql(
+    restqlName: string,
+    value: string,
+    parameter: any = {},
+    type: string = "c8ql"
+  ) {
+    return this.saveQuery(restqlName, parameter, value, type);
   }
 
   executeRestql(restqlName: string, opts: any = {}) {
     return this.executeSavedQuery(restqlName, opts);
   }
 
-  updateRestql(restqlName: string, value: string, parameter: any = {}) {
-    return this.updateSavedQuery(restqlName, parameter, value);
+  updateRestql(
+    restqlName: string,
+    value: string,
+    parameter: any = {},
+    type: string = "c8ql"
+  ) {
+    return this.updateSavedQuery(restqlName, parameter, value, type);
   }
 
   deleteRestql(restqlName: string) {

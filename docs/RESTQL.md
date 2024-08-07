@@ -84,7 +84,7 @@ Updates a restql that is already created.
 
 ```js
 const client = new jsc8();
-await client.updateRestql("testRestql", "FOR x IN _routing RETURN x");
+await client.updateRestql("testRestql", "FOR x IN _routing RETURN x","c8ql");
 ```
 
 ## client.deleteRestql
