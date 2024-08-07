@@ -361,8 +361,13 @@ export class C8Client extends Fabric {
     return this.terminateRunningQuery(queryId);
   }
 
-  createRestql(restqlName: string, value: string, parameter: any = {}) {
-    return this.saveQuery(restqlName, parameter, value);
+  createRestql(
+    restqlName: string,
+    value: string,
+    parameter: any = {},
+    type: string = "c8ql"
+  ) {
+    return this.saveQuery(restqlName, parameter, value, type);
   }
 
   executeRestql(restqlName: string, opts: any = {}) {

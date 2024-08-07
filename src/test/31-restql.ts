@@ -33,7 +33,8 @@ describe("manipulating restql", function () {
       const response: any = await client.saveQuery(
         queryName,
         {},
-        "for coll in _collections return coll"
+        "for coll in _collections return coll",
+        "c8ql"
       );
       expect(response.error).to.be.false;
       expect(response.result.name).to.equal(queryName);

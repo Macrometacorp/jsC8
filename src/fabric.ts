@@ -639,7 +639,7 @@ export class Fabric {
     );
   }
 
-  saveQuery(name: string, parameter: any = {}, value: string) {
+  saveQuery(name: string, parameter: any = {}, value: string, type: string) {
     return this._connection.request(
       {
         method: "POST",
@@ -649,6 +649,7 @@ export class Fabric {
             name: name,
             parameter: parameter,
             value: value,
+            type: type,
           },
         },
       },
