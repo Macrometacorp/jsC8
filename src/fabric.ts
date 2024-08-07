@@ -670,7 +670,12 @@ export class Fabric {
     );
   }
 
-  updateSavedQuery(queryName: string, parameter: any = {}, value: string) {
+  updateSavedQuery(
+    queryName: string,
+    parameter: any,
+    value: string,
+    type: string
+  ) {
     return this._connection.request(
       {
         method: "PUT",
@@ -679,6 +684,7 @@ export class Fabric {
           query: {
             parameter: parameter,
             value: value,
+            type: type,
           },
         },
       },
