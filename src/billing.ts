@@ -22,6 +22,10 @@ export class Billing {
     this.tenantName = tenantName;
   }
 
+  setResultListener(callback: ((res: any) => void) | undefined) {
+    this._connection.setResultListener(callback);
+  }
+
   getAccountDetails() {
     return this._connection.request(
       {

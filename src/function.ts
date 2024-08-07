@@ -37,6 +37,10 @@ export class Function {
     this._connection = new Connection(config);
   }
 
+  setResultListener(callback: ((res: any) => void) | undefined) {
+    this._connection.setResultListener(callback);
+  }
+
   listFunctionWorkers(type: string = "all") {
     return this._connection.request(
       {

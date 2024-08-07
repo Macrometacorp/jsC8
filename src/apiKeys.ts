@@ -20,6 +20,10 @@ export class ApiKeys {
     this.dbName = dbName;
   }
 
+  setResultListener(callback: ((res: any) => void) | undefined) {
+    this._connection.setResultListener(callback);
+  }
+
   validateApiKey(data: validateApiKeyHandle) {
     return this._connection.request(
       {

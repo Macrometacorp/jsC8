@@ -140,6 +140,10 @@ export abstract class BaseCollection implements C8Collection {
     return resp;
   }
 
+  setResultListener(callback: ((res: any) => void) | undefined) {
+    this._connection.setResultListener(callback);
+  }
+
   get() {
     return this._connection.request(
       { path: `/collection/${this.name}` },

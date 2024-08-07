@@ -108,6 +108,10 @@ export class Fabric {
     return this;
   }
 
+  setResultListener(callback: ((res: any) => void) | undefined) {
+    this._connection.setResultListener(callback);
+  }
+
   get() {
     return this._connection.request(
       { path: "/database/current" },
